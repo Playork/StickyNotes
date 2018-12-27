@@ -12,8 +12,19 @@ body{
     grid-template-rows: 1fr;
     user-select: none;
 }
+body:hover #titlebar{
+    height: 32px !important;
+    transition: height 0.1s ease-in-out;
+}
+#titlebar span{
+    display:none;
+    
+}
+body:hover #titlebar span{
+    display:flex;
+}
   .lightYellow {
-    margin-top:35px;
+    padding-top:35px;
     height:85vh;
     background-color: #FFFF00;
   }
@@ -28,9 +39,30 @@ body{
     outline: none;
     color:#3fe415;
     font-size:20px;
-    font-family: 'Lobster';
+    font-family:arial;
   }
   #titlebar {
+    transition: height 0.1s ease-in-out;
+    display: block;
+    position: fixed;
+    height: 0px;
+    width: 100%;
+    min-width:350px;
+    background:#cccc00;
+    padding: 4px !important;
+    color: #FFF;
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom: 100%;
+    z-index: 6;
+}
+body:active{
+    height:32px;
+}
+#titlebar1 {
+    transition: height 0.3s ease-in-out;
     display: block;
     position: fixed;
     height: 32px;
@@ -46,7 +78,7 @@ body{
     bottom: 100%;
     z-index: 6;
 }
-#titlebar #drag-region {
+#drag-region {
     width: 100% !important;
     height: 100%;
     -webkit-app-region: drag;
