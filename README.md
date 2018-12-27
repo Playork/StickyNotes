@@ -1,34 +1,26 @@
 ## Description
 
-![logo.png](images/playork.png)
-
 ![logo.png](Playork.png)
 
-![Screenshot](screen.png)
-
-### Playork is a Collection of Some Simple Tools and Games.
+### A Sticky Note Application.
 
 ### If you like my App please consider buying me a coffee at [HERE!](http://buymeacoff.ee/playork)
 
 ## Install
-
-### In linux Use Snap to install Stable version[[Link]](https://snapcraft.io/playork)
-
-### In windows Use Official Website to install Stable version[[Link]](http://playork.ml/download.html)
 
 ### For Development Version Follow the instuctions below 
 
 if you want to try it install [nodejs](https://nodejs.org), [git](https://git-scm.com/) and clone this repository
 
 ```bash
- git clone https://github.com/Playork/Playork
+ git clone https://github.com/Playork/Sticky-Note
 ```
 
 point to source directory
 
 
 ```bash
- cd /path/to/source/Playork
+ cd /path/to/source/of/Sticky-Note
 ```
 
 and install depencise by
