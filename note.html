@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+</head>
+<body>
+    <div>
+        <header id="titlebar" style="position:fixed;">
+                <div id="drag-region">
+                        <div id="window-title1">
+                            <a target="_blank" onclick="note()"><span>&#xE710;</span></a>
+                        </div>
+                        <div id="window-controls">
+                                <div class="button" id="min-button">
+                                  <span>&#xE921;</span>
+                                </div>
+                                <div class="button" id="close-button">
+                                  <span>&#xE8BB;</span>
+                                </div>
+                        </div>
+                </div>
+        </header>
+  <script>
+    require('./renderer.js')
+  </script>
+  <script>
+    function note(){
+        const remote = require('electron').remote;
+        const BrowserWindow = remote.BrowserWindow;
+        let win = new BrowserWindow({ width: 350, height: 375, icon:'playork.png',backgroundColor: '#FFFF00', title: "Playork Sticky Notes", frame: false})
+        win.loadURL(`file://${__dirname}/note.html`)
+        win.on('ready-to-show', function() { 
+        win.show(); 
+        win.focus();
+        });
+    };
+  </script>
+  </div>
+<div class='lightYellow'>
+    <textarea></textarea>
+</div>
+</body>
+</html>

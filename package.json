@@ -1,0 +1,44 @@
+{
+  "name": "playork-sticky-note",
+  "version": "2.0.0",
+  "description": "A Sticky Note Application",
+  "productName": "Playork Sticky Note",
+  "homepage": "http://playork.ml",
+  "copyright": "© 2018, Playork",
+  "scripts": {
+    "start": "electron index.js",
+    "dist": "build --ia32"
+  },
+  "author": "Ramnath <bekalshenoy@gmail.com>",
+  "license": "MIT",
+  "build": {
+    "appId": "ml.playork.sticky",
+    "win": {
+      "target": "NSIS",
+      "icon": "playork.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  },
+  "devDependencies": {
+    "electron": "latest",
+    "electron-builder": "latest"
+  },
+  "dependencies": {
+    "electron-context-menu": "latest",
+    "electron-dl": "latest",
+    "electron-is-dev": "latest",
+    "electron-updater": "latest",
+    "object": "latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/playork/sticky-note"
+  },
+  "bugs": {
+    "url": "https://github.com/playork/sticky-note/issues"
+  }
+}
