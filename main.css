@@ -13,6 +13,7 @@ body{
     user-select: none;
     margin:0;
     padding:0;
+    overflow: hidden;
 }
 body:hover #titlebar{
     height:32px;
@@ -36,10 +37,11 @@ body:hover #titlebar span{
     background-color: #FFFF00;
   }
   
-  textarea {
+  #editor {
     padding-top:35px;
     margin-bottom:40px;
     width:98%;
+    height:86%;
     margin-left: 2px;
     margin-top:5px;
     background-color: transparent;
@@ -185,7 +187,7 @@ body:hover #titlebar span{
   body{
     overflow:hidden;
   }
-  textarea {
+  #editor {
     overflow:hidden;
   }
 }
@@ -231,19 +233,19 @@ body:hover #color{
 .dark{
   background: #555;
 }
-textarea::-webkit-scrollbar {
+div #editor::-webkit-scrollbar {
     width: 0;
 }
-textarea::-webkit-scrollbar-track {
+div #editor::-webkit-scrollbar-track {
     box-shadow: none;
     -webkit-border-radius: 10px;
     background:none;
 }
-textarea::-webkit-scrollbar-thumb {
+div #editor::-webkit-scrollbar-thumb {
     -webkit-border-radius: 10px;
     background: #222; 
     box-shadow: none; 
 }
-body:hover textarea::-webkit-scrollbar {
+body:hover div #editor::-webkit-scrollbar {
     width: 6px;
 }

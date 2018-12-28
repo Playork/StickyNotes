@@ -41,8 +41,9 @@
     };
   </script>
   </div>
+  <link rel="stylesheet" href="quill.bubble.css" />
 <div class='lightYellow'>
-    <textarea placeholder="Add Your Note" id="editor" style="resize: none;"></textarea>
+    <div id="editor"></div>
 </div>
 <div id="color">
         <button class="yellow"></button>
@@ -84,6 +85,19 @@ $('.dark').click(function() {
                 $('.lightYellow').css('background', '#777');
                 $('textarea').css('color', '#fff');
 });
+</script>
+<script src="quill.min.js"></script>
+<script>
+  var quill = new Quill('#editor', {
+    modules: {
+      toolbar: [
+        [{ header: [1, 2, false] }],
+        ['bold', 'italic', 'underline','strike','blockquote']
+      ]
+    },
+    placeholder: 'Add Your Note',
+    theme: 'bubble'
+  });
 </script>
 </body>
 </html>
