@@ -32,6 +32,7 @@
     "electron-dl": "latest",
     "electron-is-dev": "latest",
     "electron-updater": "latest",
+    "jquery": "^3.3.1",
     "object": "latest"
   },
   "repository": {

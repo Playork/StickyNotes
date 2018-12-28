@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script>window.$ = window.jQuery = require('jquery');</script>
     <script src="main.js"></script>
 </head>
 <body>
@@ -43,5 +44,46 @@
 <div class='lightYellow'>
     <textarea placeholder="Add Your Note" id="editor"></textarea>
 </div>
+<div id="color">
+        <button class="yellow"></button>
+        <button class="green"></button>
+        <button class="blue"></button>
+        <button class="pink"></button>
+        <button class="gray"></button>
+        <button class="dark"></button>
+</div>
+<script>
+$('.yellow').click(function() {
+                $('#titlebar').css('background', '#cccc00');
+                $('.lightYellow').css('background', '#FFFF00');
+                $('textarea').css('color', '#000');
+});
+$('.green').click(function() {
+                $('#titlebar').css('background', '#8bff64');
+                $('.lightYellow').css('background', '#bef39e');
+                $('textarea').css('color', '#000');
+});
+$('.blue').click(function() {
+                $('#titlebar').css('background', '#4035ff');
+                $('.lightYellow').css('background', '#5b60f4');
+                $('textarea').css('color', '#fff');
+                $('textarea::placeholder').css('color', '#fff');
+});
+$('.pink').click(function() {
+                $('#titlebar').css('background', '#e930c9');
+                $('.lightYellow').css('background', '#e182df');
+                $('textarea').css('color', '#000');
+});
+$('.gray').click(function() {
+                $('#titlebar').css('background', '#aaa');
+                $('.lightYellow').css('background', '#ccc');
+                $('textarea').css('color', '#000');
+});
+$('.dark').click(function() {
+                $('#titlebar').css('background', '#444');
+                $('.lightYellow').css('background', '#777');
+                $('textarea').css('color', '#fff');
+});
+</script>
 </body>
 </html>

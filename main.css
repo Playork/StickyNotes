@@ -11,6 +11,8 @@ body{
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     user-select: none;
+    margin:0;
+    padding:0;
 }
 body:hover #titlebar{
     height: 32px !important;
@@ -25,21 +27,32 @@ body:hover #titlebar span{
 }
   .lightYellow {
     padding-top:35px;
-    height:85vh;
+    display:block;
+    position:absolute;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
     background-color: #FFFF00;
   }
   
   textarea {
-    width:99%;
-    height:100%;
+    padding-top:35px;
+    width:98%;
     margin-left: 2px;
     margin-top:5px;
     background-color: transparent;
     border: none;
     outline: none;
-    color:#3fe415;
+    color:#000;
     font-size:20px;
     font-family:arial;
+    display:block;
+    position:absolute;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
   }
   #titlebar {
     transition: height 0.1s ease-in-out;
@@ -57,9 +70,6 @@ body:hover #titlebar span{
     right:0;
     bottom: 100%;
     z-index: 6;
-}
-body:active{
-    height:32px;
 }
 #titlebar1 {
     transition: height 0.3s ease-in-out;
@@ -171,6 +181,7 @@ body:active{
 .body p, #window-title span{
   font-family: 'Lobster'
 }
+
 @media screen and (max-height: 374px) {
   body{
     overflow:hidden;
@@ -179,3 +190,46 @@ body:active{
     overflow:hidden;
   }
 }
+button{
+  width:100%;
+  height:100%;
+  padding:0;
+  margin:0;
+  border:none;
+}
+#color{
+  display:grid;
+  grid-template-columns: 16% 17% 17% 17% 17% 16%;;
+  position:absolute;
+  bottom:0;
+  z-index:6;
+  width:100%;
+  height:0;
+  min-width:300px;
+  padding:0;
+  margin:0;
+  transition: height 0.1s ease-in-out;
+}
+body:hover #color{
+  height:40px;
+  transition: height 0.1s ease-in-out;
+}
+.yellow{
+  background: #cccc00;
+}
+.green{
+  background: #8bff64;
+}
+.pink{
+  background: #e930c9;
+}
+.gray{
+  background: #aaa;
+}
+.blue{
+  background: #4035ff;
+}
+.dark{
+  background: #555;
+}
+textarea::placeholder{ color: inherit;opacity: 0.5;}
