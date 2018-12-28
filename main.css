@@ -15,7 +15,7 @@ body{
     padding:0;
 }
 body:hover #titlebar{
-    height: 32px !important;
+    height:32px;
     transition: height 0.1s ease-in-out;
 }
 #titlebar span{
@@ -38,6 +38,7 @@ body:hover #titlebar span{
   
   textarea {
     padding-top:35px;
+    margin-bottom:40px;
     width:98%;
     margin-left: 2px;
     margin-top:5px;
@@ -58,7 +59,7 @@ body:hover #titlebar span{
     transition: height 0.1s ease-in-out;
     display: block;
     position: fixed;
-    height: 0px;
+    height:0;
     width: 100%;
     min-width:350px;
     background:#cccc00;
@@ -97,7 +98,7 @@ body:hover #titlebar span{
 }
   #window-controls {
     display: grid;
-    grid-template-columns: repeat(2, 30px) !important;
+    grid-template-columns: repeat(2, 40px) !important;
     position: absolute;
     top: 0 !important;
     right: 15px !important;
@@ -121,11 +122,8 @@ body:hover #titlebar span{
   #window-controls #min-button {
     grid-column: 1;
   }
-  #window-controls #max-button, #window-controls #restore-button {
-    grid-column: 2;
-  }
   #window-controls #close-button {
-    grid-column: 3;
+    grid-column: 2;
   }
   #window-controls .button:hover {
     background: rgba(255,255,255,0.2);
@@ -154,8 +152,9 @@ body:hover #titlebar span{
     grid-row: 1 / span 1;
     font-size: 25px;
     font-family: segoe;
-    width: 45% ;
-    height: 45% ;
+    width: 40px;
+    height: 100% ;
+    justify-content: center;
     cursor: default;
     display: flex;
     align-items: center;
@@ -167,7 +166,7 @@ body:hover #titlebar span{
   #window-title1 span{
     -webkit-app-region: no-drag;
   }
-  #window-title1 span:hover{
+  #window-title1:hover{
     background: rgba(255,255,255,0.2);
     opacity: 1;
   }
@@ -232,4 +231,19 @@ body:hover #color{
 .dark{
   background: #555;
 }
-textarea::placeholder{ color: inherit;opacity: 0.5;}
+textarea::-webkit-scrollbar {
+    width: 0;
+}
+textarea::-webkit-scrollbar-track {
+    box-shadow: none;
+    -webkit-border-radius: 10px;
+    background:none;
+}
+textarea::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    background: #222; 
+    box-shadow: none; 
+}
+body:hover textarea::-webkit-scrollbar {
+    width: 6px;
+}
