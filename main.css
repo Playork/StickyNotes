@@ -164,6 +164,7 @@ body:hover #titlebar span{
     top: 0 !important;
     left: 10px !important;
     height: 100%;
+    -webkit-app-region: no-drag;
   }
   #window-title1 span{
     -webkit-app-region: no-drag;

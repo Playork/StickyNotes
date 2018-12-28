@@ -1,6 +1,7 @@
 ## Description
 
-![logo.png](Playork.png)
+![Logo](Playork.png)
+![ScreenShot](screen.png)
 
 ### A Sticky Note Application.
 
