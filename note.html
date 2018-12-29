@@ -91,8 +91,9 @@ $('.dark').click(function() {
   var quill = new Quill('#editor', {
     modules: {
       toolbar: [
-        [{ header: [1, 2, false] }],
-        ['bold', 'italic', 'underline','strike','blockquote','list']
+        [{ header: [1, 2,  false] }],
+        ['bold', 'italic', 'underline','strike'],
+        [{list: 'unordered'},{list: 'ordered'},'blockquote']
       ]
     },
     placeholder: 'Add Your Note',
