@@ -240,10 +240,12 @@ body:hover #color{
 }
 .ql-editor::-webkit-scrollbar-track {
     box-shadow: none;
+    border-radius: 10px;
     -webkit-border-radius: 10px;
     background:none;
 }
 .ql-editor::-webkit-scrollbar-thumb {
+    border-radius: 10px;
     -webkit-border-radius: 10px;
     background: #222; 
     box-shadow: none; 
