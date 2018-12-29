@@ -38,10 +38,10 @@ body:hover #titlebar span{
   }
   
   #editor {
-    padding-top:35px;
-    margin-bottom:40px;
+    padding-top:65px;
+    padding-bottom:40px;
     width:98%;
-    height:86%;
+    height:100%;
     margin-left: 2px;
     margin-top:5px;
     background-color: transparent;
