@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script>window.$ = window.jQuery = require('jquery');</script>
+    <script src="quill.min.js"></script>
     <script src="main.js"></script>
 </head>
 <body>
@@ -40,9 +42,19 @@
     };
   </script>
   </div>
-  <div class="body" style="background:#ccc !important;height:94vh;width:100%;">
-      <a target="_blank" onclick="note()" class="new"><span style="color:#333;font-size:100px;position:absolute;top:40vh;left:35vw;right:30vw;">&#xE710;</span></a>
+  <div class="body" style="font-family: 'Lobster';background:#ccc !important;">
+      <a target="_blank" onclick="note()"><span style="font-family: 'segoe';color:#333;font-size:100px;position:absolute;top:40vh;left:35vw;right:30vw;">&#xE710;</span></a>
       <p style="color:#333;position:absolute;top:85vh;left:40vw;right:30vw;">by Playork ©2018-19</p>
+  </div>
+  <span id="option" onclick="option()">&#xE713;</span>
+  <div class="options">
+    <span class="closeoption" onclick="closeoption()">&#xE711;</span>
+    <br>
+    <h2>Color Selection</h2>
+    <label class="switch">
+        <input type="checkbox" id="colorselection"  checked>
+        <span class="slider round"></span>
+    </label> 
   </div>
 </div>
 </body>

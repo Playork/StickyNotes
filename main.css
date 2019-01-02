@@ -3,30 +3,22 @@
     src: url(font/Lobster.woff2) format('woff2');
 }
 @font-face {
-    font-family: segoe;
+    font-family: 'segoe';
     src: url(font/SegMDL2.ttf);
 }
+@font-face {
+  font-family: 'ComicSans';
+  src: url(font/ComicSans.ttf);
+}
 body{
-    display:grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
     user-select: none;
     margin:0;
     padding:0;
     overflow: hidden;
+    height:100%;
+    width:100%;
 }
-body:hover #titlebar{
-    height:32px;
-    transition: height 0.1s ease-in-out;
-}
-#titlebar span{
-    display:none;
-    
-}
-body:hover #titlebar span{
-    display:flex;
-}
-  .lightYellow {
+  #lightYellow {
     padding-top:35px;
     display:block;
     position:absolute;
@@ -36,35 +28,13 @@ body:hover #titlebar span{
     left:0;
     background-color: #FFFF00;
   }
-  
-  #editor {
-    padding-top:65px;
-    padding-bottom:40px;
-    width:98%;
-    height:100%;
-    margin-left: 2px;
-    margin-top:5px;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    color:#000;
-    font-size:18px;
-    font-family:arial;
-    display:block;
-    position:absolute;
-    top:0;
-    bottom:0;
-    right:0;
-    left:0;
-  }
   #titlebar {
-    transition: height 0.1s ease-in-out;
     display: block;
     position: fixed;
-    height:25px;
+    height:32px;
     width: 100%;
     min-width:350px;
-    background:#cccc00;
+    background-color:#cccc00;
     padding: 4px !important;
     color: #FFF;
     position: absolute;
@@ -72,7 +42,7 @@ body:hover #titlebar span{
     left:0;
     right:0;
     bottom: 100%;
-    z-index: 6;
+    z-index: 8;
 }
 #titlebar1 {
     transition: height 0.3s ease-in-out;
@@ -89,7 +59,7 @@ body:hover #titlebar span{
     left:0;
     right:0;
     bottom: 100%;
-    z-index: 6;
+    z-index: 8;
 }
 #drag-region {
     width: 100% !important;
@@ -116,7 +86,7 @@ body:hover #titlebar span{
     align-items: center;
     width: 100% !important;
     height: 100% !important;
-    font-family: segoe !important;
+    font-family: 'segoe' !important;
     background: none;
     user-select: none;
     cursor: default;
@@ -153,7 +123,7 @@ body:hover #titlebar span{
   #window-title1 {
     grid-row: 1 / span 1;
     font-size: 25px;
-    font-family: segoe;
+    font-family: 'segoe';
     width: 40px;
     height: 100% ;
     justify-content: center;
@@ -180,19 +150,19 @@ body:hover #titlebar span{
 .new{
   font-family: segoe !important;
 }
-.body p, #window-title span{
+.html p, #window-title span{
   font-family: 'Lobster'
 }
 
 @media screen and (max-height: 374px) {
-  body{
+  html{
     overflow:hidden;
   }
   #editor {
     overflow:hidden;
   }
 }
-button{
+.buttons{
   width:100%;
   height:100%;
   padding:0;
@@ -201,21 +171,24 @@ button{
 }
 #color{
   display:grid;
-  grid-template-columns: 16% 17% 17% 17% 17% 16%;;
+  grid-template-columns: 15% 14% 14% 14% 14% 14% 15%;
   position:absolute;
   bottom:0;
   z-index:6;
   width:100%;
-  height:0;
+  height:40px;
   min-width:300px;
   padding:0;
   margin:0;
-  transition: height 0.1s ease-in-out;
-  z-index:10;
+  z-index:6;
 }
-body:hover #color{
-  height:40px;
-  transition: height 0.1s ease-in-out;
+.colors{
+  background: #000;
+}
+.colors span{
+  font-size: 20px;
+  font-family: 'segoe';
+  color:#fff;
 }
 .yellow{
   background: #cccc00;
@@ -235,21 +208,215 @@ body:hover #color{
 .dark{
   background: #555;
 }
-.ql-editor::-webkit-scrollbar {
-    width: 0;
+.ql-snow .ql-editor::-webkit-scrollbar {
+    width: 2px;
 }
-.ql-editor::-webkit-scrollbar-track {
+.ql-snow .ql-editor::-webkit-scrollbar-track {
     box-shadow: none;
     border-radius: 10px;
     -webkit-border-radius: 10px;
     background:none;
 }
-.ql-editor::-webkit-scrollbar-thumb {
+.ql-snow .ql-editor::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-border-radius: 10px;
     background: #222; 
     box-shadow: none; 
 }
-body:hover .ql-editor::-webkit-scrollbar {
+html:hover .ql-snow .ql-editor::-webkit-scrollbar {
     width: 6px;
+}
+.ql-snow .ql-editor {
+  margin-top:0 !important;
+  margin-bottom:40px !important;
+  width:98%;
+  height:calc(100% - 110px);
+  margin-left: 2px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color:#000;
+  font-size:18px;
+  font-family:arial;
+  display:block;
+  position:absolute;
+  top:0;
+  bottom:0;
+  right:0;
+  left:0;
+  transition: height 0.1s ease-in-out;
+}
+.ql-snow{
+  border:none !important;
+}
+#toolbar-container .ql-font span[data-label="Arial"]::before {
+  font-family: "Arial";
+}
+#toolbar-container .ql-font span[data-label="Lobster"]::before {
+  font-family: "Lobster";
+}
+#toolbar-container .ql-font span[data-label="ComicSans"]::before {
+  font-family: "ComicSans";
+}
+.ql-font-lobster {
+  font-family: "Lobster";
+}
+.ql-font-comicsans {
+  font-family: "ComicSans";
+}
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value='']::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value='']::before
+{
+  content: 'Arial';
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value='lobster']::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value='lobster']::before
+{
+  content: 'Lobster';
+  font-family: 'Lobster';
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value='comicsans']::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value='comicsans']::before
+{
+  content: 'ComicSans';
+  font-family: 'ComicSans';
+}
+.ql-font-lobster {
+  font-family: 'Lobster';
+}
+
+.ql-font-comicsans {
+  font-family: 'ComicSans';
+}
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="10px"]::before {
+  content: 'Small';
+  font-size: 10px !important;
+}
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="18px"]::before {
+  content: 'Normal';
+  font-size: 18px !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="27px"]::before {
+  content: 'Large';
+  font-size: 27px !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="37px"]::before {
+  content: 'Huge';
+  font-size: 37px !important;
+}
+button {
+  outline: none;
+}
+.choosecolor{
+  background:#ccc;
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  font-family: 'Lobster';
+  z-index:7;
+  padding-top:35px;
+  text-align: center;
+  display:none;
+}
+.button1 {
+  color: white;
+  background: #333;
+  font-size: 20px;
+  padding:8px 8px;
+  border-width: 0;
+  border-radius: 20px;
+  font-family: 'Lobster';
+}
+input[type="color"]{
+  border:none;
+  background:#ccc;
+  outline: none;
+}
+#option{
+  position:absolute;
+  top:45px;
+  left:93%;
+  font-size:20px;
+  color:#333;
+  font-family: 'segoe';
+}
+.options{
+  background:#ccc;
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  font-family: 'Lobster';
+  padding-top:45px;
+  text-align: center;
+  display:none;
+  z-index:5
+}
+.closeoption{
+  position:absolute;
+  top:45px;
+  left:1%;
+  font-size:20px;
+  color:#333;
+  font-family: 'segoe';
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 45px;
+  height: 20px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #aaa;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 15px;
+  width: 15px;
+  left:2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+.slider.round {
+  border-radius: 20px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }

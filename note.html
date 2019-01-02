@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <script>window.$ = window.jQuery = require('jquery');</script>
-    <script src="main.js"></script>
 </head>
 <body>
     <div>
@@ -25,80 +24,31 @@
                         </div>
                 </div>
         </header>
-  <script>
-    require('./renderer.js')
-  </script>
-  <script>
-    function note(){
-        const remote = require('electron').remote;
-        const BrowserWindow = remote.BrowserWindow;
-        let win = new BrowserWindow({ width: 350, height: 375, icon:'playork.png',backgroundColor: '#FFFF00', title: "Playork Sticky Notes", frame: false})
-        win.loadURL(`file://${__dirname}/note.html`)
-        win.on('ready-to-show', function() { 
-        win.show(); 
-        win.focus();
-        });
-    };
-  </script>
   </div>
-  <link rel="stylesheet" href="quill.bubble.css" />
-<div class='lightYellow'>
+  <link rel="stylesheet" href="quill.snow.css" />
+<div id='lightYellow'>
     <div id="editor"></div>
 </div>
 <div id="color">
-        <button class="yellow"></button>
-        <button class="green"></button>
-        <button class="blue"></button>
-        <button class="pink"></button>
-        <button class="gray"></button>
-        <button class="dark"></button>
+        <button class="yellow buttons"></button>
+        <button class="green buttons"></button>
+        <button class="blue buttons"></button>
+        <button class="pink buttons"></button>
+        <button class="gray buttons"></button>
+        <button class="dark buttons"></button>
+        <button class="colors buttons"><span>&#xE710;</span></button>
 </div>
-<script>
-$('.yellow').click(function() {
-                $('#titlebar').css('background', '#cccc00');
-                $('.lightYellow').css('background', '#FFFF00');
-                $('textarea').css('color', '#000');
-});
-$('.green').click(function() {
-                $('#titlebar').css('background', '#8bff64');
-                $('.lightYellow').css('background', '#bef39e');
-                $('textarea').css('color', '#000');
-});
-$('.blue').click(function() {
-                $('#titlebar').css('background', '#4035ff');
-                $('.lightYellow').css('background', '#5b60f4');
-                $('textarea').css('color', '#fff');
-                $('textarea::placeholder').css('color', '#fff');
-});
-$('.pink').click(function() {
-                $('#titlebar').css('background', '#e930c9');
-                $('.lightYellow').css('background', '#e182df');
-                $('textarea').css('color', '#000');
-});
-$('.gray').click(function() {
-                $('#titlebar').css('background', '#aaa');
-                $('.lightYellow').css('background', '#ccc');
-                $('textarea').css('color', '#000');
-});
-$('.dark').click(function() {
-                $('#titlebar').css('background', '#444');
-                $('.lightYellow').css('background', '#777');
-                $('textarea').css('color', '#fff');
-});
-</script>
-<script src="quill.min.js"></script>
-<script>
-  var quill = new Quill('#editor', {
-    modules: {
-      toolbar: [
-        ['bold', 'italic', 'underline','strike',{list: 'bullet'},{list: 'ordered'},'align',{align: 'center'},{align: 'right'}]
-      ]
-    },
-    placeholder: 'Add Your Note',
-    theme: 'bubble'
-  });
-</script>
-<script>
-</script>
+<div class="choosecolor">
+<h1>Titlebar</h1>
+Color:<input id='color1' type="color"/>
+<h1>Note</h1>
+Color:<input id='color2' type="color"/>
+<br>
+<button class="button1" onclick="cancel()">Cancel</button>
+<button class="button1" onclick='newColor()'>done</button>
+</div>
+  <script src="quill.min.js"></script>
+  <script src="main.js"></script>
+  <script>require('./renderer.js')</script>
 </body>
 </html>
