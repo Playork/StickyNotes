@@ -2,6 +2,7 @@ const {Menu} = require('electron')
 const electron = require('electron')
 const {app, BrowserWindow} = electron
 const { autoUpdater } = require('electron-updater');
+const { ipcMain } = require('electron')
 
 require('electron-context-menu')({
 	prepend: (params, browserWindow) => [{
@@ -27,3 +28,14 @@ autoUpdater.setFeedURL({
   protocol: 'https', 
   repo: 'Sticky-Note'
 });
+function createWindow () {
+  let win = new BrowserWindow({ width: 350, height: 375, icon:'playork.png',backgroundColor: '#FFFF00', title: "Playork Sticky Notes", nodeIntegration: true})
+  win.loadURL(`file://${__dirname}/note.html`)
+  win.on('ready-to-show', function() { 
+  win.show(); 
+  win.focus();
+  });
+}
+ipcMain.on('create-new-instance',()=>{
+  createWindow();
+})

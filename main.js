@@ -1,16 +1,9 @@
 function note(){
-        const remote = require('electron').remote;
-        const BrowserWindow = remote.BrowserWindow;
-        let win = new BrowserWindow({ width: 350, height: 375, icon:'playork.png',backgroundColor: '#FFFF00', title: "Playork Sticky Notes", frame: false, nodeIntegration: true})
-        win.loadURL(`file://${__dirname}/note.html`)
-        win.on('ready-to-show', function() { 
-        win.show(); 
-        win.focus();
-        });
+  var {ipcRenderer} = require('electron')
+  ipcRenderer.send('create-new-instance')
 };
 const remote = require('electron').remote;
 (function handleWindowControls() {
-    // When document has loaded, initialise
     document.onreadystatechange = () => {
         if (document.readyState == "complete") {
             init();
@@ -56,34 +49,34 @@ $('*,.ql-container > *').on('focusout', function () {
   $('.ql-snow .ql-editor').css('transition', 'height 0.1s ease-in-out');
   $('.ql-snow.ql-toolbar').hide();
 });
-var BackgroundClass = Quill.import('attributors/class/background');
-var ColorClass = Quill.import('attributors/class/color');
-var SizeStyle = Quill.import('attributors/style/size');
-SizeStyle.whitelist = ['10px', '18px', '27px', '37px'];
-Quill.register(BackgroundClass, true);
-Quill.register(ColorClass, true);
-Quill.register(SizeStyle, true);
-var Font = Quill.import('formats/font');
-Font.whitelist = ['lobster', 'comicsans'];
-Quill.register(Font, true);
-var quill = new Quill('#editor', {
-  modules: {
-    toolbar: [
-      [{ font: ['', 'lobster', 'comicsans'] }, { size: ['10px', '18px', '27px', '37px'] }, 'bold', 'italic', 'underline','strike', {color:['black','white','red','orange','yellow','green','blue','purple']}, {background:['black','white','red','orange','yellow','green','blue','purple']},{list: 'bullet'},{list: 'ordered'},{ align: '' },{align: 'center'},{align: 'right'},'clean','image','video']
-    ]
-  },
-  theme: 'snow'
-});
-//Below is not finished don't uncomment this if you don't know what it is
-/*const Store = require('electron-store');
-const store = new Store();
-quill.on('text-change', function() {
-  const text = quill.root.innerHTML;
-  const saveit = {"first":text};
-  store.set('save',saveit);
-});
-const item = store.get('save')
-text = item.first*/
+    var BackgroundClass = Quill.import('attributors/class/background');
+    var ColorClass = Quill.import('attributors/class/color');
+    var SizeStyle = Quill.import('attributors/style/size');
+    SizeStyle.whitelist = ['10px', '18px', '27px', '37px'];
+    Quill.register(BackgroundClass, true);
+    Quill.register(ColorClass, true);
+    Quill.register(SizeStyle, true);
+    var Font = Quill.import('formats/font');
+    Font.whitelist = ['lobster', 'comicsans'];
+    Quill.register(Font, true);
+    var quill = new Quill('#editor', {
+      modules: {
+        toolbar: [
+          [{ font: ['', 'lobster', 'comicsans'] }, { size: ['10px', '18px', '27px', '37px'] }, 'bold', 'italic', 'underline','strike', {color:['black','white','red','orange','yellow','green','blue','purple']}, {background:['black','white','red','orange','yellow','green','blue','purple']},{list: 'bullet'},{list: 'ordered'},{ align: '' },{align: 'center'},{align: 'right'},'clean','image','video']
+        ]
+      },
+      theme: 'snow'
+    });
+    //Below is not finished don't uncomment this if you don't know what it is
+    /*const Store = require('electron-store');
+    const store = new Store();
+    quill.on('text-change', function() {
+      const text = quill.root.innerHTML;
+      store.set('save',{"first":text});
+      console.log(stringid)
+    });
+    const item = store.get('save')
+    quill.root.innerHTML = item.first*/
 });
 function colors(){
 $('.yellow').click(function() {
