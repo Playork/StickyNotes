@@ -5,50 +5,44 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link rel="stylesheet" href="quill.snow.css" />
     <script>window.$ = window.jQuery = require('jquery');</script>
+    <script src="quill.min.js"></script>
+    <script src="main.js"></script>
 </head>
 <body>
-    <div>
-        <header id="titlebar" style="position:fixed;">
+        <div>
+            <header id="titlebar" style="position:fixed;">
                 <div id="drag-region">
-                        <div id="window-title1">
-                            <a target="_blank" onclick="note()"><span>&#xE710;</span></a>
+                    <div id="window-title1">
+                        <a target="_blank" onclick="note()"><span>&#xE710;</span></a>
+                    </div>
+                    <div id="option">
+                            <span onclick="option()">&#xE713;</span>
+                    </div>
+                    <div id="window-controls">
+                        <div class="button" id="min-button">
+                            <span>&#xE921;</span>
                         </div>
-                        <div id="window-controls">
-                                <div class="button" id="min-button">
-                                  <span>&#xE921;</span>
-                                </div>
-                                <div class="button" id="close-button">
-                                  <span>&#xE8BB;</span>
-                                </div>
+                        <div class="button" id="close-button">
+                            <span>&#xE8BB;</span>
                         </div>
+                    </div>
                 </div>
-        </header>
-  </div>
-  <link rel="stylesheet" href="quill.snow.css" />
-<div id='lightYellow'>
-    <div id="editor"></div>
-</div>
-<div id="color">
-        <button class="yellow buttons"></button>
-        <button class="green buttons"></button>
-        <button class="blue buttons"></button>
-        <button class="pink buttons"></button>
-        <button class="gray buttons"></button>
-        <button class="dark buttons"></button>
-        <button class="colors buttons"><span>&#xE710;</span></button>
-</div>
-<div class="choosecolor">
-<h1>Titlebar</h1>
-Color:<input id='color1' type="color"/>
-<h1>Note</h1>
-Color:<input id='color2' type="color"/>
-<br>
-<button class="button1" onclick="cancel()">Cancel</button>
-<button class="button1" onclick='newColor()'>done</button>
-</div>
-  <script src="quill.min.js"></script>
-  <script src="main.js"></script>
-  <script>require('./renderer.js')</script>
+            </header>
+        </div>
+        <div id="lightYellow">
+        <div id="editor"></div>
+        <div class="options"><span class="closeoption" onclick="closeoption()">&#xE711;</span>
+            <br>
+            <h2>Color Selection</h2>
+            <label class="switch">
+            <input type="checkbox" id="colorselection" onclick="colorselection()" checked>
+            <span class="slider round"></span>
+            </label> 
+        </div>
+        </div>
+        <div id="notehtml">
+        </div>
 </body>
 </html>
