@@ -17,9 +17,6 @@
                     <div id="window-title1">
                         <a target="_blank" onclick="note()"><span>&#xE710;</span></a>
                     </div>
-                    <div id="option">
-                            <span onclick="option()">&#xE713;</span>
-                    </div>
                     <div id="window-controls">
                         <div class="button" id="min-button">
                             <span>&#xE921;</span>
@@ -33,16 +30,24 @@
         </div>
         <div id="lightYellow">
         <div id="editor"></div>
-        <div class="options"><span class="closeoption" onclick="closeoption()">&#xE711;</span>
+        </div>
+        <div id="color" onclick="colors()">
+            <button class="yellow buttons"></button>
+            <button class="green buttons"></button>
+            <button class="blue buttons"></button>
+            <button class="pink buttons"></button>
+            <button class="gray buttons"></button>
+            <button class="dark buttons"></button>
+            <button class="colors buttons" onclick="showthis()"><span>&#xE710;</span></button>
+        </div>
+        <div class="choosecolor">
+            <h1>Titlebar</h1>
+            Color:<input type="color" id="color1"/>
+            <h1>Note</h1>
+            Color:<input type="color" id="color2"/>
             <br>
-            <h2>Color Selection</h2>
-            <label class="switch">
-            <input type="checkbox" id="colorselection" onclick="colorselection()" checked>
-            <span class="slider round"></span>
-            </label> 
-        </div>
-        </div>
-        <div id="notehtml">
+            <button class="button1" onclick="cancel()">Cancel</button>
+            <button class="button1" onclick='newColor()'>done</button>
         </div>
 </body>
 </html>

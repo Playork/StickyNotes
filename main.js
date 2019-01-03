@@ -36,35 +36,25 @@ const remote = require('electron').remote;
     }
 })();
 $( document ).ready(function(){
-var notehtml = document.getElementById('notehtml');
-var colorselection = document.getElementById('colorselection')
-if (colorselection.checked == true){
-  notehtml.innerHTML = '<div id="color" onclick="colors()"><button class="yellow buttons"></button><button class="green buttons"></button><button class="blue buttons"></button><button class="pink buttons"></button><button class="gray buttons"></button><button class="dark buttons"></button><button class="colors buttons"><span>&#xE710;</span></button></div><div class="choosecolor"><h1>Titlebar</h1>Color:<input type="color" id="color1"/><h1>Note</h1>Color:<input type="color" id="color2"/><br><button class="button1" onclick="cancel()">Cancel</button><button class="button1" onclick="newColor()">done</button></div>'
-} 
-if (colorselection.checked == false) {
-  notehtml.innerHTML = '<div></div>'
-}
-$('*').on('click focusin', function () {
+$('*,.ql-container > *').on('click hover focus', function () {
   $('#titlebar').css('height', '32px');
   $('#titlebar').css('transition', 'height 0.1s ease-in-out');
   $('#titlebar span').css('display', 'flex');
-  $('#color').css('height', '40px');
+  $('#color').css('height', '45px');
   $('#color').css('transition', 'height 0.1s ease-in-out');
-  $('.ql-snow .ql-editor').css('height', '100%').css('height', '-=110px');
-  $(".ql-snow .ql-editor").attr('style', 'margin-bottom: 40px !important');
+  $(".ql-snow .ql-editor").attr('style', 'height: calc(100% - 110xp) !important;');
   $('.ql-snow .ql-editor').css('transition', 'height 0.1s ease-in-out');
-  $('.ql-snow.ql-toolbar').show()
+  $('.ql-snow.ql-toolbar').show();
 });
-$('*').on('blur focusout', function () {
+$('*,.ql-container > *').on('focusout', function () {
   $('#titlebar').css('height', '25px');
   $('#titlebar').css('transition', 'height 0.1s ease-in-out');
   $('#titlebar span').css('display', 'none');
   $('#color').css('height', '0');
   $('#color').css('transition', 'height 0.1s ease-in-out');
-  $('.ql-snow .ql-editor').css('height', '100%');
-  $(".ql-snow .ql-editor").attr('style', 'margin-bottom: 0 !important');
+  $(".ql-snow .ql-editor").attr('style', 'height: 100% !important;');
   $('.ql-snow .ql-editor').css('transition', 'height 0.1s ease-in-out');
-  $('.ql-snow.ql-toolbar').hide()
+  $('.ql-snow.ql-toolbar').hide();
 });
 var BackgroundClass = Quill.import('attributors/class/background');
 var ColorClass = Quill.import('attributors/class/color');
@@ -84,7 +74,6 @@ var quill = new Quill('#editor', {
   },
   theme: 'snow'
 });
-    
 //Below is not finished don't uncomment this if you don't know what it is
 /*const Store = require('electron-store');
 const store = new Store();
@@ -130,17 +119,12 @@ function newColor()
   $('#lightYellow').css('background', backColor);
   $('.choosecolor').css('display', 'none');
 };
-$('.colors').on('click', function(){
-  $('.choosecolor').css('display', 'block');
-});
+function showthis(){
+  $('.colors').on('click', function(){
+    $('.choosecolor').css('display', 'block');
+  });
+};
 function cancel()
 {
   $('.choosecolor').css('display', 'none');
-};
-function option(){
-  $('.options').css('display', 'block');
-};
-function closeoption(){
-  $('.options').css('display', 'none');
-  $('#notehtml').load(location.href+" #notehtml>*","");
 };

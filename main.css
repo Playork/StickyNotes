@@ -143,29 +143,6 @@ body{
     background: rgba(255,255,255,0.2);
     opacity: 1;
   }
-  #option {
-    grid-row: 1 / span 1;
-    font-size: 25px;
-    font-family: 'segoe';
-    width: 40px;
-    height: 100% ;
-    justify-content: center;
-    cursor: default;
-    display: flex;
-    align-items: center;
-    position: absolute;
-    top: 0 !important;
-    left: 45px !important;
-    height: 100%;
-    -webkit-app-region: no-drag;
-  }
-  #option span{
-    -webkit-app-region: no-drag;
-  }
-  #option:hover{
-    background: rgba(255,255,255,0.2);
-    opacity: 1;
-  }
   a{
     text-decoration:none;
     color:white !important;
@@ -250,8 +227,6 @@ html:hover .ql-snow .ql-editor::-webkit-scrollbar {
     width: 6px;
 }
 .ql-snow .ql-editor {
-  margin-top:0 !important;
-  margin-bottom:40px !important;
   width:98%;
   height:calc(100% - 110px);
   margin-left: 2px;
@@ -268,6 +243,9 @@ html:hover .ql-snow .ql-editor::-webkit-scrollbar {
   right:0;
   left:0;
   transition: height 0.1s ease-in-out;
+}
+.ql-snow .ql-toolbar{
+  display: block;
 }
 .ql-snow{
   border:none !important;
@@ -360,78 +338,4 @@ input[type="color"]{
   border:none;
   background:#ccc;
   outline: none;
-}
-.options{
-  background:#ccc;
-  position:absolute;
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
-  font-family: 'Lobster';
-  padding-top:45px;
-  text-align: center;
-  display:none;
-  z-index:7;
-}
-.closeoption{
-  position:absolute;
-  top:45px;
-  left:1%;
-  font-size:20px;
-  color:#333;
-  font-family: 'segoe';
-}
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 45px;
-  height: 20px;
-}
-
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #aaa;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 15px;
-  width: 15px;
-  left:2px;
-  bottom: 2px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-.slider.round {
-  border-radius: 20px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
 }
