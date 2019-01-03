@@ -6,27 +6,14 @@ const remote = require('electron').remote;
 (function handleWindowControls() {
     document.onreadystatechange = () => {
         if (document.readyState == "complete") {
-            init();
+            let window = remote.getCurrentWindow();
+            const closeButton = document.getElementById('close-button');
+            closeButton.addEventListener("click", event => {
+                window = remote.getCurrentWindow();
+                window.close();
+            });
         }
     };
-
-    function init() {
-        let window = remote.getCurrentWindow();
-        const minButton = document.getElementById('min-button'),
-            closeButton = document.getElementById('close-button');
-
-        minButton.addEventListener("click", event => {
-            window = remote.getCurrentWindow();
-            window.minimize();
-        });
-
-
-        closeButton.addEventListener("click", event => {
-            window = remote.getCurrentWindow();
-            window.close();
-        });
-
-    }
 })();
 $( document ).ready(function(){
 $('*,.ql-container > *').on('click hover focus', function () {
@@ -37,7 +24,6 @@ $('*,.ql-container > *').on('click hover focus', function () {
   $('#color').css('transition', 'height 0.1s ease-in-out');
   $(".ql-snow .ql-editor").attr('style', 'height: calc(100% - 110xp) !important;');
   $('.ql-snow .ql-editor').css('transition', 'height 0.1s ease-in-out');
-  $('.ql-snow.ql-toolbar').show();
 });
 $('*,.ql-container > *').on('focusout', function () {
   $('#titlebar').css('height', '25px');
@@ -47,7 +33,6 @@ $('*,.ql-container > *').on('focusout', function () {
   $('#color').css('transition', 'height 0.1s ease-in-out');
   $(".ql-snow .ql-editor").attr('style', 'height: 100% !important;');
   $('.ql-snow .ql-editor').css('transition', 'height 0.1s ease-in-out');
-  $('.ql-snow.ql-toolbar').hide();
 });
     var BackgroundClass = Quill.import('attributors/class/background');
     var ColorClass = Quill.import('attributors/class/color');
@@ -77,6 +62,18 @@ $('*,.ql-container > *').on('focusout', function () {
     });
     const item = store.get('save')
     quill.root.innerHTML = item.first*/
+    $('.ql-snow.ql-toolbar').css('display', 'none');
+$('.more').click(function(){
+  var clicks = $(this).data('clicks');
+  if (clicks) {
+     $('.ql-snow.ql-toolbar').css('display', 'none');
+     $(".ql-snow .ql-editor").attr('style', 'height: calc(100% - 65xp) !important;');
+  } else {
+     $('.ql-snow.ql-toolbar').css('display', 'block');
+     $(".ql-snow .ql-editor").attr('style', 'height: calc(100% - 110xp) !important;');
+  }
+  $(this).data("clicks", !clicks);
+});
 });
 function colors(){
 $('.yellow').click(function() {

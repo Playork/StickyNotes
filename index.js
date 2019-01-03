@@ -29,7 +29,7 @@ autoUpdater.setFeedURL({
   repo: 'Sticky-Note'
 });
 function createWindow () {
-  let win = new BrowserWindow({ width: 350, height: 375, icon:'playork.png',backgroundColor: '#FFFF00', title: "Playork Sticky Notes", nodeIntegration: true})
+  let win = new BrowserWindow({ width: 350, height: 375, icon:'playork.png',backgroundColor: '#FFFF00', title: "Playork Sticky Notes", frame: false, nodeIntegration: true})
   win.loadURL(`file://${__dirname}/note.html`)
   win.on('ready-to-show', function() { 
   win.show(); 
