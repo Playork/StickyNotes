@@ -15,10 +15,8 @@
     "appId": "ml.playork.sticky",
     "win": {
       "target": "NSIS",
-      "icon": "playork.png"
     },
     "nsis": {
-      "oneClick": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true
     }
