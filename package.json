@@ -14,7 +14,7 @@
   "build": {
     "appId": "ml.playork.sticky",
     "win": {
-      "target": "NSIS",
+      "target": "NSIS"
     },
     "nsis": {
       "createDesktopShortcut": true,
@@ -22,13 +22,13 @@
     }
   },
   "devDependencies": {
-    "electron": "latest",
-    "electron-builder": "latest"
+    "electron": "4.0.0",
+    "electron-builder": "20.38.4"
   },
   "dependencies": {
     "electron-context-menu": "latest",
     "electron-store": "latest",
-    "electron-updater": "latest",
+    "electron-updater": "4.0.0",
     "jquery": "^3.3.1",
     "electron-is-dev": "latest",
     "electron-dl": "latest",
