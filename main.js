@@ -16,24 +16,6 @@ const remote = require('electron').remote;
     };
 })();
 $( document ).ready(function(){
-$('*,.ql-container > *').on('click hover focus', function () {
-  $('#titlebar').css('height', '32px');
-  $('#titlebar').css('transition', 'height 0.1s ease-in-out');
-  $('#titlebar span').css('display', 'flex');
-  $('#color').css('height', '45px');
-  $('#color').css('transition', 'height 0.1s ease-in-out');
-  $(".ql-snow .ql-editor").attr('style', 'height: calc(100% - 110xp) !important;');
-  $('.ql-snow .ql-editor').css('transition', 'height 0.1s ease-in-out');
-});
-$('*,.ql-container > *').on('focusout', function () {
-  $('#titlebar').css('height', '25px');
-  $('#titlebar').css('transition', 'height 0.1s ease-in-out');
-  $('#titlebar span').css('display', 'none');
-  $('#color').css('height', '0');
-  $('#color').css('transition', 'height 0.1s ease-in-out');
-  $(".ql-snow .ql-editor").attr('style', 'height: 100% !important;');
-  $('.ql-snow .ql-editor').css('transition', 'height 0.1s ease-in-out');
-});
     var BackgroundClass = Quill.import('attributors/class/background');
     var ColorClass = Quill.import('attributors/class/color');
     var SizeStyle = Quill.import('attributors/style/size');
@@ -52,6 +34,29 @@ $('*,.ql-container > *').on('focusout', function () {
       },
       theme: 'snow'
     });
+    $('#locks').click(function(){
+      var clicks = $(this).data('clicks');
+      if (clicks) {
+        quill.enable(true)
+        document.getElementById('lock').innerHTML = '&#xE785;'
+      } else {
+        quill.enable(false)
+        document.getElementById('lock').innerHTML = '&#xE72E;'
+      }
+      $(this).data("clicks", !clicks);
+    });
+    $('.ql-snow.ql-toolbar').css('display', 'none');
+    $('.more').click(function(){
+      var clicks = $(this).data('clicks');
+      if (clicks) {
+         $('.ql-snow.ql-toolbar').css('display', 'none');
+         $(".ql-snow .ql-editor").attr('style', 'height: calc(100% - 65xp) !important;');
+      } else {
+         $('.ql-snow.ql-toolbar').css('display', 'block');
+         $(".ql-snow .ql-editor").attr('style', 'height: calc(100% - 110xp) !important;');
+      }
+      $(this).data("clicks", !clicks);
+    });
     //Below is not finished don't uncomment this if you don't know what it is
     /*const Store = require('electron-store');
     const store = new Store();
@@ -62,18 +67,24 @@ $('*,.ql-container > *').on('focusout', function () {
     });
     const item = store.get('save')
     quill.root.innerHTML = item.first*/
-    $('.ql-snow.ql-toolbar').css('display', 'none');
-$('.more').click(function(){
-  var clicks = $(this).data('clicks');
-  if (clicks) {
-     $('.ql-snow.ql-toolbar').css('display', 'none');
-     $(".ql-snow .ql-editor").attr('style', 'height: calc(100% - 65xp) !important;');
-  } else {
-     $('.ql-snow.ql-toolbar').css('display', 'block');
-     $(".ql-snow .ql-editor").attr('style', 'height: calc(100% - 110xp) !important;');
-  }
-  $(this).data("clicks", !clicks);
 });
+$('*)').on('click hover focus', function () {
+  $('#titlebar').css('height', '32px');
+  $('#titlebar').css('transition', 'height 0.1s ease-in-out');
+  $('#titlebar span').css('display', 'flex');
+  $('#color').css('height', '45px');
+  $('#color').css('transition', 'height 0.1s ease-in-out');
+  $(".ql-snow .ql-editor").attr('style', 'height: calc(100% - 110xp) !important;');
+  $('.ql-snow .ql-editor').css('transition', 'height 0.1s ease-in-out');
+});
+$('*').on('focusout', function () {
+  $('#titlebar').css('height', '25px');
+  $('#titlebar').css('transition', 'height 0.1s ease-in-out');
+  $('#titlebar span').css('display', 'none');
+  $('#color').css('height', '0');
+  $('#color').css('transition', 'height 0.1s ease-in-out');
+  $(".ql-snow .ql-editor").attr('style', 'height: 100% !important;');
+  $('.ql-snow .ql-editor').css('transition', 'height 0.1s ease-in-out');
 });
 function colors(){
 $('.yellow').click(function() {

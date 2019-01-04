@@ -12,7 +12,7 @@ require('electron-context-menu')({
 });
 
 app.on('ready', () => {
-  let win = new BrowserWindow({ width: 350, height: 375, icon:'playork.png',backgroundColor: '#ccc', title: "Playork Sticky Notes", frame: false,resizable:false, nodeIntegration: true})
+  let win = new BrowserWindow({ width: 350, height: 375, icon:'playork.png',backgroundColor: '#ccc', title: "Playork Sticky Notes", frame: false, resizable:false, nodeIntegration: true})
   win.loadURL(`file://${__dirname}/index.html`)
   win.on('ready-to-show', function() { 
   win.show(); 
