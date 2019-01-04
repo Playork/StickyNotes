@@ -88,28 +88,28 @@ $('*').on('focusout', function () {
 });
 function colors(){
 $('.yellow').click(function() {
-                $('#titlebar').css('background', '#cccc00');
-                $('#lightYellow').css('background', '#FFFF00');
+                $('#titlebar').css('background', '#FFEB81');
+                $('#lightYellow').css('background', '#FFF2AB');
 });
 $('.green').click(function() {
-                $('#titlebar').css('background', '#8bff64');
-                $('#lightYellow').css('background', '#bef39e');
+                $('#titlebar').css('background', '#AFECA4');
+                $('#lightYellow').css('background', '#CBF1C4');
 });
 $('.blue').click(function() {
-                $('#titlebar').css('background', '#4035ff');
-                $('#lightYellow').css('background', '#5b60f4');              
+                $('#titlebar').css('background', '#B7DFFF');
+                $('#lightYellow').css('background', '#CDE9FF');              
 });
 $('.pink').click(function() {
-                $('#titlebar').css('background', '#e930c9');
-                $('#lightYellow').css('background', '#e182df');
+                $('#titlebar').css('background', '#DBB7FF');
+                $('#lightYellow').css('background', '#E7CFFF');
 });
 $('.gray').click(function() {
-                $('#titlebar').css('background', '#aaa');
-                $('#lightYellow').css('background', '#ccc');
+                $('#titlebar').css('background', '#E5E5E5');
+                $('#lightYellow').css('background', '#F9F9F9');
 });
 $('.dark').click(function() {
-                $('#titlebar').css('background', '#444');
-                $('#lightYellow').css('background', '#777');
+                $('#titlebar').css('background', '#3E3E3E');
+                $('#lightYellow').css('background', '#444444');
 });
 };
 function newColor()

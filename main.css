@@ -36,14 +36,13 @@ body{
     min-width:350px;
     background-color:#cccc00;
     padding: 4px !important;
-    color: #FFF;
+    color: #707070;
     position: absolute;
     top:0;
     left:0;
     right:0;
     bottom: 100%;
     z-index: 8;
-    box-shadow: 0px 0px 20px #000;
 }
 #titlebar1 {
     transition: height 0.3s ease-in-out;
@@ -99,14 +98,12 @@ body{
     grid-column: 2;
   }
   #window-controls .button:hover {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.4);
     opacity: 1;
   }
   #window-controls #close-button:hover {
     background: #E81123;
-  }
-  #restore-button,#max-button {
-    display: none;
+    color:#fff
   }
   #max-button,#restore-button,#min-button,#close-button{
     box-shadow: none;
@@ -114,7 +111,7 @@ body{
   #max-button,#restore-button{
     color:#999;
   }
-  #max-button:hover,#restore-button:hover,#min-button:hover,#close-button:hover{
+  #min-button:hover,#close-button:hover{
     box-shadow:none !important;
   }
   #max-button:hover,#restore-button:hover{
@@ -136,13 +133,15 @@ body{
     left: 10px !important;
     height: 100%;
     -webkit-app-region: no-drag;
+    color:#707070;
   }
   #window-title1 span{
     -webkit-app-region: no-drag;
   }
   #window-title1:hover{
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.4);
     opacity: 1;
+    color:#fff;
   }
   #locks {
     grid-row: 1 / span 1;
@@ -164,8 +163,12 @@ body{
     -webkit-app-region: no-drag;
   }
   #locks:hover{
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.4);
     opacity: 1;
+    color:#fff;
+  }
+  .button:hover{
+    color:#fff;
   }
   a{
     text-decoration:none;
@@ -204,7 +207,6 @@ body{
   padding:0;
   margin:0;
   z-index:6;
-  box-shadow: 0px 0px 5px #000;
 }
 .colors{
   background: #000;
@@ -215,22 +217,22 @@ body{
   color:#fff;
 }
 .yellow{
-  background: #cccc00;
+  background: #FFEB81;
 }
 .green{
-  background: #8bff64;
+  background: #AFECA4;
 }
 .pink{
-  background: #e930c9;
+  background: #DBB7FF;
 }
 .gray{
-  background: #aaa;
+  background: #E5E5E5;
 }
 .blue{
-  background: #4035ff;
+  background: #B7DFFF;
 }
 .dark{
-  background: #555;
+  background: #3E3E3E;
 }
 .ql-snow .ql-editor::-webkit-scrollbar {
     width: 2px;
