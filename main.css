@@ -26,7 +26,7 @@ body{
     bottom:0;
     right:0;
     left:0;
-    background-color: #FFFF00;
+    background-color: #FFF2AB;
   }
   #titlebar {
     display: block;
@@ -34,7 +34,7 @@ body{
     height:32px;
     width: 100%;
     min-width:350px;
-    background-color:#cccc00;
+    background-color:#FFEB81;
     padding: 4px !important;
     color: #707070;
     position: absolute;
