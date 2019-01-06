@@ -40,9 +40,12 @@ $( document ).ready(function(){
       if (clicks) {
         quill.enable(true)
         document.getElementById('lock').innerHTML = '&#xE785;'
+        $('.button,.buttons').css("pointer-events", "auto");
       } else {
         quill.enable(false)
         document.getElementById('lock').innerHTML = '&#xE72E;'
+        $('.button,.buttons').css("pointer-events", "none");
+        $('.ql-snow.ql-toolbar').css('display', 'none');
       }
       $(this).data("clicks", !clicks);
     });
