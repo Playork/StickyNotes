@@ -26,7 +26,7 @@ body{
     bottom:0;
     right:0;
     left:0;
-    background-color: #FFFF00;
+    background-color: #FFF2AB;
   }
   #titlebar {
     display: block;
@@ -34,9 +34,9 @@ body{
     height:32px;
     width: 100%;
     min-width:350px;
-    background-color:#cccc00;
+    background-color:#FFEB81;
     padding: 4px !important;
-    color: #FFF;
+    color: #707070;
     position: absolute;
     top:0;
     left:0;
@@ -98,14 +98,12 @@ body{
     grid-column: 2;
   }
   #window-controls .button:hover {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.4);
     opacity: 1;
   }
   #window-controls #close-button:hover {
     background: #E81123;
-  }
-  #restore-button,#max-button {
-    display: none;
+    color:#fff
   }
   #max-button,#restore-button,#min-button,#close-button{
     box-shadow: none;
@@ -113,7 +111,7 @@ body{
   #max-button,#restore-button{
     color:#999;
   }
-  #max-button:hover,#restore-button:hover,#min-button:hover,#close-button:hover{
+  #min-button:hover,#close-button:hover{
     box-shadow:none !important;
   }
   #max-button:hover,#restore-button:hover{
@@ -135,13 +133,42 @@ body{
     left: 10px !important;
     height: 100%;
     -webkit-app-region: no-drag;
+    color:#707070;
   }
   #window-title1 span{
     -webkit-app-region: no-drag;
   }
   #window-title1:hover{
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.4);
     opacity: 1;
+    color:#fff;
+  }
+  #locks {
+    grid-row: 1 / span 1;
+    font-size: 25px;
+    font-family: 'segoe';
+    width: 40px;
+    height: 100% ;
+    justify-content: center;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 0 !important;
+    left: 45px !important;
+    height: 100%;
+    -webkit-app-region: no-drag;
+  }
+  #locks span{
+    -webkit-app-region: no-drag;
+  }
+  #locks:hover{
+    background: rgba(255,255,255,0.4);
+    opacity: 1;
+    color:#fff;
+  }
+  .button:hover{
+    color:#fff;
   }
   a{
     text-decoration:none;
@@ -153,7 +180,6 @@ body{
 .html p, #window-title span{
   font-family: 'Lobster'
 }
-
 @media screen and (max-height: 374px) {
   html{
     overflow:hidden;
@@ -171,7 +197,7 @@ body{
 }
 #color{
   display:grid;
-  grid-template-columns: 15% 14% 14% 14% 14% 14% 15%;
+  grid-template-columns: 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5%;
   position:absolute;
   bottom:0;
   z-index:6;
@@ -191,22 +217,25 @@ body{
   color:#fff;
 }
 .yellow{
-  background: #cccc00;
+  background: #FFEB81;
 }
 .green{
-  background: #8bff64;
+  background: #AFECA4;
 }
 .pink{
-  background: #e930c9;
+  background: #FFBBDD;
+}
+.violet{
+  background: #DBB7FF;
 }
 .gray{
-  background: #aaa;
+  background: #E5E5E5;
 }
 .blue{
-  background: #4035ff;
+  background: #B7DFFF;
 }
 .dark{
-  background: #555;
+  background: #3E3E3E;
 }
 .ql-snow .ql-editor::-webkit-scrollbar {
     width: 2px;

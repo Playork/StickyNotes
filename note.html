@@ -14,12 +14,15 @@
         <div>
             <header id="titlebar" style="position:fixed;">
                 <div id="drag-region">
-                    <div class="id" id="window-title1">
-                        <a target="_blank"  onclick="note()"><span>&#xE710;</span></a>
+                    <div class="id" title="Add Note" id="window-title1" onclick="note()">
+                            <span>&#xE710;</span>
+                    </div>
+                    <div id="locks" title="Lock Note">
+                            <span id="lock">&#xE785;</span>
                     </div>
                     <div id="window-controls">
-                        <div class="button">
-                            <span id="more" class="more">&#xE712;</span>
+                        <div class="button" title="Edit Text">
+                            <span id="more" class="more">&#xE70F;</span>
                         </div>
                         <div class="button" id="close-button">
                             <span>&#xE8BB;</span>
@@ -36,9 +39,10 @@
             <button class="green buttons"></button>
             <button class="blue buttons"></button>
             <button class="pink buttons"></button>
+            <button class="violet buttons"></button>
             <button class="gray buttons"></button>
             <button class="dark buttons"></button>
-            <button class="colors buttons" onclick="showthis()"><span>&#xE710;</span></button>
+            <button class="colors buttons" onclick="showthis()" title="Choose Color"><span>&#xE710;</span></button>
         </div>
         <div class="choosecolor">
             <h1>Titlebar</h1>

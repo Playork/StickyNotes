@@ -14,27 +14,22 @@
   "build": {
     "appId": "ml.playork.sticky",
     "win": {
-      "target": "NSIS",
-      "icon": "playork.png"
+      "target": "NSIS"
     },
     "nsis": {
-      "oneClick": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true
     }
   },
   "devDependencies": {
-    "electron": "latest",
-    "electron-builder": "latest"
+    "electron": "4.0.1",
+    "electron-builder": "20.38.4"
   },
   "dependencies": {
     "electron-context-menu": "latest",
     "electron-store": "latest",
-    "electron-updater": "latest",
-    "jquery": "^3.3.1",
-    "electron-is-dev": "latest",
-    "electron-dl": "latest",
-    "object": "latest"
+    "electron-updater": "4.0.0",
+    "jquery": "^3.3.1"
   },
   "repository": {
     "type": "git",
