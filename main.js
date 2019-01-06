@@ -32,6 +32,7 @@ $( document ).ready(function(){
           [{ font: ['', 'lobster', 'comicsans'] }, { size: ['10px', '18px', '27px', '37px'] }, 'bold', 'italic', 'underline','strike', {color:['black','white','red','orange','yellow','green','blue','purple']}, {background:['black','white','red','orange','yellow','green','blue','purple']},{list: 'bullet'},{list: 'ordered'},{ align: '' },{align: 'center'},{align: 'right'},'clean','image','video']
         ]
       },
+      placeholder: 'Add Your Note',
       theme: 'snow'
     });
     $('#locks').click(function(){
@@ -68,7 +69,7 @@ $( document ).ready(function(){
     const item = store.get('save')
     quill.root.innerHTML = item.first*/
 });
-$('*)').on('click hover focus', function () {
+$('*').on('click focus focusin', function () {
   $('#titlebar').css('height', '32px');
   $('#titlebar').css('transition', 'height 0.1s ease-in-out');
   $('#titlebar span').css('display', 'flex');
@@ -77,7 +78,7 @@ $('*)').on('click hover focus', function () {
   $(".ql-snow .ql-editor").attr('style', 'height: calc(100% - 110xp) !important;');
   $('.ql-snow .ql-editor').css('transition', 'height 0.1s ease-in-out');
 });
-$('*').on('focusout', function () {
+$('*').on('focusout blur', function () {
   $('#titlebar').css('height', '25px');
   $('#titlebar').css('transition', 'height 0.1s ease-in-out');
   $('#titlebar span').css('display', 'none');
@@ -100,6 +101,10 @@ $('.blue').click(function() {
                 $('#lightYellow').css('background', '#CDE9FF');              
 });
 $('.pink').click(function() {
+                $('#titlebar').css('background', '#FFBBDD');
+                $('#lightYellow').css('background', '#FFCCE5');
+});
+$('.violet').click(function() {
                 $('#titlebar').css('background', '#DBB7FF');
                 $('#lightYellow').css('background', '#E7CFFF');
 });

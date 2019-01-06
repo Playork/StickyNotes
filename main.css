@@ -197,7 +197,7 @@ body{
 }
 #color{
   display:grid;
-  grid-template-columns: 15% 14% 14% 14% 14% 14% 15%;
+  grid-template-columns: 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5%;
   position:absolute;
   bottom:0;
   z-index:6;
@@ -223,6 +223,9 @@ body{
   background: #AFECA4;
 }
 .pink{
+  background: #FFBBDD;
+}
+.violet{
   background: #DBB7FF;
 }
 .gray{
