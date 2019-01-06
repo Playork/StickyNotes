@@ -1,8 +1,0 @@
-
-  name: sticky-note
-  version: '0.1.0'
-  summary: Stick To The Future
-  description: |
-    A Sticky Note Application For Linux By Playork
-  grade: devel # must be 'stable' to release into candidate/stable channels
-  confinement: devmode # use 'strict' once you have the right plugs and slots
