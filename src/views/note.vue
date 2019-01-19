@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div class="body" v-on:click="showhide">
     <titlebar v-bind:close="close" v-bind:note="note"/>
     <editor/>
     <colors/>
@@ -21,35 +21,36 @@ export default {
     colors,
     choosecolor
   },
-  showhide() {
-    $("*").on("focusin", function() {
-      $("#titlebar").css("height", "32px");
-      $("#titlebar").css("transition", "height 0.1s ease-in-out");
-      $("#titlebar span").css("display", "flex");
-      $("#color").css("height", "45px");
-      $("#color").css("transition", "height 0.1s ease-in-out");
-      $(".ql-snow .ql-editor").attr(
-        "style",
-        "height: calc(100% - 110xp) !important;"
-      );
-      $(".ql-snow .ql-editor").css("transition", "height 0.1s ease-in-out");
-    });
-    $("*").on("blur", function() {
-      $("#titlebar").css("height", "25px");
-      $("#titlebar").css("transition", "height 0.1s ease-in-out");
-      $("#titlebar span").css("display", "none");
-      $("#color").css("height", "0");
-      $("#color").css("transition", "height 0.1s ease-in-out");
-      $(".ql-snow .ql-editor").attr("style", "height: 100% !important;");
-      $(".ql-snow .ql-editor").css("transition", "height 0.1s ease-in-out");
-    });
-  },
   methods: {
     close: function() {
       remote.getCurrentWindow().close();
     },
     note: function() {
       ipcRenderer.send("create-new-instance");
+    },
+    showhide: function() {
+      $("*").on("click focusin", function() {
+        $("#titlebar").css("height", "32px");
+        $("#titlebar").css("transition", "height 0.1s ease-in-out");
+        $("#titlebar span").css("display", "flex");
+        $("#color").css("height", "45px");
+        $("#color").css("transition", "height 0.1s ease-in-out");
+        $(".ql-snow .ql-editor").attr(
+          "style",
+          "height: calc(100% - 110xp) !important;"
+        );
+        $(".ql-snow .ql-editor").css("transition", "height 0.1s ease-in-out");
+      });
+      $("*").on("focusout blur", function() {
+        $("#titlebar").css("height", "0");
+        $("#titlebar").css("transition", "height 0.1s ease-in-out");
+        $("#titlebar span").css("display", "none");
+        $("#color").css("height", "0");
+        $("#color").css("transition", "height 0.1s ease-in-out");
+        $(".ql-snow .ql-editor").attr("style", "height: 100% !important;");
+        $(".ql-snow .ql-editor").css("transition", "height 0.1s ease-in-out");
+        $(".ql-snow.ql-toolbar").css("display", "none");
+      });
     }
   }
 };

@@ -3,7 +3,7 @@
     <header id="titlebar" style="position:fixed;">
       <div id="drag-region">
         <div class="id" title="Add Note" id="window-title1" v-on:click="note">
-            <span>&#xE710;</span>
+          <span>&#xE710;</span>
         </div>
         <div id="locks" title="Lock Note" v-on:click="locks">
           <span id="lock">&#xE785;</span>
@@ -33,10 +33,10 @@ export default {
       var clicks = $(this).data("clicks");
       if (clicks) {
         document.getElementById("lock").innerHTML = "&#xE785;";
-        $(".button,.buttons,.ql-editor").css("pointer-events", "auto");
+        $(".button,.buttons,.ql-snow").css("pointer-events", "auto");
       } else {
         document.getElementById("lock").innerHTML = "&#xE72E;";
-        $(".button,.buttons,.ql-editor").css("pointer-events", "none");
+        $(".button,.buttons,.ql-snow").css("pointer-events", "none");
         $(".ql-snow.ql-toolbar").css("display", "none");
       }
       $(this).data("clicks", !clicks);
