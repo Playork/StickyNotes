@@ -1,41 +1,59 @@
 {
-  "name": "playork-sticky-note",
-  "version": "2.0.0",
-  "description": "A Sticky Note Application",
-  "productName": "Playork Sticky Note",
-  "homepage": "http://playork.ml",
-  "copyright": "© 2018, Playork",
+  "name": "sticky-notes",
+  "version": "0.1.0",
+  "description": "A Sticky Notes Application",
+  "author": "Ramnath Shenoy(bekalshenoy@gmail.com)",
+  "private": true,
   "scripts": {
-    "start": "electron index.js",
-    "dist": "build --ia32"
-  },
-  "author": "Ramnath <bekalshenoy@gmail.com>",
-  "license": "MIT",
-  "build": {
-    "appId": "ml.playork.sticky",
-    "win": {
-      "target": "NSIS"
-    },
-    "nsis": {
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
-    }
-  },
-  "devDependencies": {
-    "electron": "4.0.1",
-    "electron-builder": "20.38.4"
+    "start": "vue-cli-service electron:serve",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "electron:build": "vue-cli-service electron:build",
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
-    "electron-context-menu": "latest",
-    "electron-store": "latest",
-    "electron-updater": "4.0.0",
-    "jquery": "^3.3.1"
+    "jquery": "^3.3.1",
+    "quill": "latest",
+    "vue": "latest",
+    "vue-router": "latest",
+    "vuex": "latest"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/playork/sticky-note"
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "latest",
+    "@vue/cli-plugin-eslint": "latest",
+    "@vue/cli-service": "latest",
+    "@vue/eslint-config-prettier": "latest",
+    "babel-eslint": "latest",
+    "electron": "latest",
+    "eslint": "latest",
+    "eslint-plugin-vue": "latest",
+    "vue-cli-plugin-electron-builder": "latest",
+    "vue-template-compiler": "latest"
   },
-  "bugs": {
-    "url": "https://github.com/playork/sticky-note/issues"
-  }
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/prettier"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "main": "background.js"
 }
