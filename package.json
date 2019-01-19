@@ -30,17 +30,6 @@
     "vue-cli-plugin-electron-builder": "latest",
     "vue-template-compiler": "latest"
   },
-  "build": {
-    "appId": "ml.playork.stickynotes",
-    "win": {
-      "target": "NSIS",
-      "icon": "src/assets/logo.png"
-    },
-    "nsis": {
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
-    }
-  },
   "eslintConfig": {
     "root": true,
     "env": {
