@@ -1,12 +1,26 @@
 <template>
   <div id="color" v-on:click="colors">
-    <button class="yellow buttons"></button>
-    <button class="green buttons"></button>
-    <button class="blue buttons"></button>
-    <button class="pink buttons"></button>
-    <button class="violet buttons"></button>
-    <button class="gray buttons"></button>
-    <button class="dark buttons"></button>
+    <button class="yellow buttons">
+      <span class="selected select">&#xE73E;</span>
+    </button>
+    <button class="green buttons">
+      <span class="selected hide">&#xE73E;</span>
+    </button>
+    <button class="blue buttons">
+      <span class="selected hide">&#xE73E;</span>
+    </button>
+    <button class="pink buttons">
+      <span class="selected hide">&#xE73E;</span>
+    </button>
+    <button class="violet buttons">
+      <span class="selected hide">&#xE73E;</span>
+    </button>
+    <button class="gray buttons">
+      <span class="selected hide">&#xE73E;</span>
+    </button>
+    <button class="dark buttons">
+      <span class="selected hide">&#xE73E;</span>
+    </button>
     <button class="colors buttons" v-on:click="showthis" title="Choose Color">
       <span>&#xE710;</span>
     </button>
@@ -46,6 +60,11 @@ export default {
         $("#titlebar").css("background", "#3E3E3E");
         $("#lightYellow").css("background", "#444444");
       });
+      $(".buttons").click(function() {
+        $(".selected").removeClass("select");
+        $(".selected").addClass("hide");
+        $(".hide", this).toggleClass("select");
+      });
     },
     showthis: function() {
       $(".colors").on("click", function() {
@@ -57,8 +76,20 @@ export default {
 </script>
 <style>
 @font-face {
+  font-family: "segoe";
+  src: url(../assets/SegMDL2.ttf);
+}
+@font-face {
   font-family: "Lobster";
   src: url(../assets/Lobster.woff2) format("woff2");
+}
+.hide {
+  display: none;
+}
+.select {
+  font-size: 20px;
+  display: block;
+  font-family: "segoe";
 }
 #color {
   display: grid;
@@ -72,6 +103,7 @@ export default {
   padding: 0;
   margin: 0;
   z-index: 6;
+  transition: height 0.1s ease;
 }
 .colors {
   background: #000;

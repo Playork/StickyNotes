@@ -45,16 +45,8 @@ export default {
       var clicks = $(this).data("clicks");
       if (clicks) {
         $(".ql-snow.ql-toolbar").css("display", "none");
-        $(".ql-snow .ql-editor").attr(
-          "style",
-          "height: calc(100% - 65xp) !important;"
-        );
       } else {
         $(".ql-snow.ql-toolbar").css("display", "block");
-        $(".ql-snow .ql-editor").attr(
-          "style",
-          "height: calc(100% - 110xp) !important;"
-        );
       }
       $(this).data("clicks", !clicks);
     }
@@ -80,6 +72,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 100%;
+  transition: height 0.1s ease;
   z-index: 8;
 }
 #drag-region {
