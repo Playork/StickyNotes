@@ -1,9 +1,11 @@
 <template>
   <div class="body" v-on:click="showhide">
     <titlebar v-bind:close="close" v-bind:note="note"/>
-    <editor/>
-    <colors/>
-    <choosecolor/>
+    <div id="edit">
+      <editor/>
+      <colors/>
+      <choosecolor/>
+    </div>
   </div>
 </template>
 <script>
@@ -29,22 +31,26 @@ export default {
       ipcRenderer.send("create-new-instance");
     },
     showhide: function() {
-      $("*").on("click focusin", function() {
-        $("#titlebar").css("height", "32px");
-        $("#titlebar").css("transition", "height 0.1s ease");
-        $("#titlebar span").css("display", "flex");
-        $("#color").css("height", "40px");
-        $("#color").css("transition", "height 0.1s ease");
-        $(".ql-snow .ql-editor").css("transition", "height 0.1s ease");
+      $(document).on("click focus focusin", function() {
+        document.getElementById("titlebar").style.height = "32px";
+        document.getElementById("titlebar").style.transition =
+          "height 0.1s ease";
+        document.getElementById("drag-region").style.display = "flex";
+        document.getElementById("color").style.height = "40px";
+        document.getElementById("color").style.transition = "height 0.1s ease";
+        document.getElementsByClassName(".ql-editor").style.transition =
+          "height 0.1s ease";
       });
-      $("*").on("focusout blur", function() {
-        $("#titlebar").css("height", "0");
-        $("#titlebar").css("transition", "height 0.1s ease");
-        $("#titlebar span").css("display", "none");
-        $("#color").css("height", "0");
-        $("#color").css("transition", "height 0.1s ease");
-        $(".ql-snow .ql-editor").attr("style", "height: 100% !important;");
-        $(".ql-snow .ql-editor").css("transition", "height 0.1s ease");
+      $(document).on("focusout blur", function() {
+        document.getElementById("titlebar").style.height = "0";
+        document.getElementById("titlebar").style.transition =
+          "height 0.1s ease";
+        document.getElementById("drag-region").style.display = "none";
+        document.getElementById("color").style.height = "0";
+        document.getElementById("color").style.transition = "height 0.1s ease";
+        document.getElementsByClassName(".ql-editor").style.height = "100%";
+        document.getElementsByClassName(".ql-editor").style.transition =
+          "height 0.1s ease";
       });
     }
   }

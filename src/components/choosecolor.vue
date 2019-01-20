@@ -1,5 +1,5 @@
 <template>
-  <div class="choosecolor">
+  <section class="choosecolor">
     <h1>Titlebar</h1>Color:
     <input type="color" id="color1">
     <h1>Note</h1>Color:
@@ -7,22 +7,20 @@
     <br>
     <button class="button1" v-on:click="cancel">Cancel</button>
     <button class="button1" v-on:click="newColor">done</button>
-  </div>
+  </section>
 </template>
 <script>
-import JQuery from "jquery";
-let $ = JQuery;
 export default {
   methods: {
     newColor: function() {
       var titleColor = document.getElementById("color1").value;
       var backColor = document.getElementById("color2").value;
-      $("#titlebar").css("background", titleColor);
-      $("#lightYellow").css("background", backColor);
-      $(".choosecolor").css("display", "none");
+      document.getElementById("titlebar").style.background = titleColor;
+      document.getElementById("lightYellow").style.background = backColor;
+      document.querySelector("section").style.display = "none";
     },
     cancel: function() {
-      $(".choosecolor").css("display", "none");
+      document.querySelector("section").style.display = "none";
     }
   }
 };
