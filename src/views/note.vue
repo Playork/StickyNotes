@@ -31,25 +31,20 @@ export default {
     showhide: function() {
       $("*").on("click focusin", function() {
         $("#titlebar").css("height", "32px");
-        $("#titlebar").css("transition", "height 0.1s ease-in-out");
+        $("#titlebar").css("transition", "height 0.1s ease");
         $("#titlebar span").css("display", "flex");
-        $("#color").css("height", "45px");
-        $("#color").css("transition", "height 0.1s ease-in-out");
-        $(".ql-snow .ql-editor").attr(
-          "style",
-          "height: calc(100% - 110xp) !important;"
-        );
-        $(".ql-snow .ql-editor").css("transition", "height 0.1s ease-in-out");
+        $("#color").css("height", "40px");
+        $("#color").css("transition", "height 0.1s ease");
+        $(".ql-snow .ql-editor").css("transition", "height 0.1s ease");
       });
       $("*").on("focusout blur", function() {
         $("#titlebar").css("height", "0");
-        $("#titlebar").css("transition", "height 0.1s ease-in-out");
+        $("#titlebar").css("transition", "height 0.1s ease");
         $("#titlebar span").css("display", "none");
         $("#color").css("height", "0");
-        $("#color").css("transition", "height 0.1s ease-in-out");
+        $("#color").css("transition", "height 0.1s ease");
         $(".ql-snow .ql-editor").attr("style", "height: 100% !important;");
-        $(".ql-snow .ql-editor").css("transition", "height 0.1s ease-in-out");
-        $(".ql-snow.ql-toolbar").css("display", "none");
+        $(".ql-snow .ql-editor").css("transition", "height 0.1s ease");
       });
     }
   }
