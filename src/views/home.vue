@@ -1,17 +1,17 @@
 <template>
   <div id="body">
-    <titlebar1 v-bind:close="close"/>
-    <homebody v-bind:note="note"/>
+    <top v-bind:close="close"/>
+    <bottom v-bind:note="note"/>
   </div>
 </template>
 <script>
 import { remote, ipcRenderer } from "electron";
-import homebody from "../components/homebody.vue";
-import titlebar1 from "../components/titlebar1.vue";
+import top from "../components/top.vue";
+import bottom from "../components/bottom.vue";
 export default {
   components: {
-    titlebar1,
-    homebody
+    top,
+    bottom
   },
   methods: {
     close: function() {
@@ -24,6 +24,10 @@ export default {
 };
 </script>
 <style>
+@font-face {
+  font-family: "Lobster";
+  src: url(../assets/Lobster.woff2) format("woff2");
+}
 #body {
   user-select: none;
   margin: 0;
@@ -36,6 +40,8 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
+  font-family: "Lobster";
+  background: #202020;
 }
 button {
   outline: none;

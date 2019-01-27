@@ -6,7 +6,14 @@ import {
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
 const isDevelopment = process.env.NODE_ENV !== "production";
-
+require("electron-context-menu")({
+  prepend: (params, browserWindow) => [
+    {
+      label: "v0.1.0"
+    }
+  ],
+  showInspectElement: false
+});
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
@@ -47,7 +54,8 @@ function createNote() {
     backgroundColor: "#FFF2AB",
     title: "Playork Sticky Notes",
     frame: false,
-    nodeIntegration: true
+    nodeIntegration: true,
+    show: false
   });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -108,7 +116,6 @@ app.on("ready", async () => {
   }
   createWindow();
 });
-
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === "win32") {

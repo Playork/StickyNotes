@@ -27,7 +27,7 @@ export default {
 </script>
 <style>
 .choosecolor {
-  background: #ccc;
+  background: #202020;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -38,6 +38,7 @@ export default {
   padding-top: 35px;
   text-align: center;
   display: none;
+  color: #fff;
 }
 .button1 {
   color: white;
@@ -52,5 +53,6 @@ input[type="color"] {
   border: none;
   background: #ccc;
   outline: none;
+  background: #202020;
 }
 </style>

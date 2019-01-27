@@ -8,6 +8,9 @@
         <div id="locks" title="Lock Note" v-on:click="locks">
           <span id="lock">&#xE785;</span>
         </div>
+        <div id="speech" title="Speech" v-on:click="speech">
+          <span>&#xE720;</span>
+        </div>
         <div id="window-controls">
           <div class="button" title="Edit Text" v-on:click="showedit">
             <span id="more" class="more">&#xE70F;</span>
@@ -29,6 +32,21 @@ export default {
     note: Function
   },
   methods: {
+    speech: function() {
+      document.getElementById("speech").innerHTML = "&#xEC71;";
+      var recognition = new window.webkitSpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.start();
+      recognition.onresult = function(event) {
+        var last = event.results.length - 1;
+        var text = event.results[last][0].transcript;
+        document.getElementById("editor").innerHTML = text;
+      };
+      recognition.onspeechend = function() {
+        document.getElementById("speech").innerHTML = "&#xE720;";
+        recognition.stop();
+      };
+    },
     locks: function() {
       var clicks = $(this).data("clicks");
       if (clicks) {
@@ -171,6 +189,31 @@ export default {
   -webkit-app-region: no-drag;
 }
 #locks:hover {
+  background: rgba(255, 255, 255, 0.4);
+  opacity: 1;
+  color: #fff;
+}
+#speech {
+  grid-row: 1 / span 1;
+  font-size: 25px;
+  font-family: "segoe";
+  width: 40px;
+  height: 100%;
+  justify-content: center;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0 !important;
+  left: 80px !important;
+  height: 100%;
+  -webkit-app-region: no-drag;
+  color: #707070;
+}
+#speech span {
+  -webkit-app-region: no-drag;
+}
+#speech:hover {
   background: rgba(255, 255, 255, 0.4);
   opacity: 1;
   color: #fff;

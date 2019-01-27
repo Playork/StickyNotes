@@ -12,10 +12,40 @@
         </div>
       </div>
     </header>
+    <div id="options">
+      <span v-on:click="aboutshow">&#xE946;</span>
+      <span v-on:click="helpshow">&#xE897;</span>
+      <div id="about">
+        <div id="back">
+          <span v-on:click="hide">&#xE8BB;</span>
+        </div>
+      </div>
+      <div id="help">
+        <div id="back">
+          <span v-on:click="hide">&#xE8BB;</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-export default { props: { close: Function } };
+import JQuery from "jquery";
+let $ = JQuery;
+export default {
+  props: { close: Function },
+  methods: {
+    aboutshow: function() {
+      $("#about").css("display", "block");
+    },
+    helpshow: function() {
+      $("#help").css("display", "block");
+    },
+    hide: function() {
+      $("#about").css("display", "none");
+      $("#help").css("display", "none");
+    }
+  }
+};
 </script>
 <style>
 @font-face {
@@ -26,6 +56,7 @@ export default { props: { close: Function } };
   font-family: "segoe";
   src: url(../assets/SegMDL2.ttf);
 }
+
 #titlebar1 {
   transition: height 0.3s ease-in-out;
   display: block;
@@ -106,5 +137,45 @@ export default { props: { close: Function } };
   padding: 0;
   margin: 0;
   border: none;
+}
+#options {
+  position: absolute;
+  top: 45px;
+  bottom: 100%;
+  left: 88%;
+}
+#options span {
+  color: #fff;
+  padding-right: 5px;
+  font-family: "segoe";
+}
+#about {
+  display: none;
+}
+#help {
+  display: none;
+}
+
+#back {
+  background: #202020;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-family: "Lobster";
+  z-index: 7;
+  padding-top: 35px;
+  text-align: center;
+  display: none;
+  color: #fff;
+}
+#back span {
+  position: absolute;
+  top: 45px;
+  bottom: 100%;
+  left: 5px;
+  color: #fff;
+  font-family: "segoe";
 }
 </style>
