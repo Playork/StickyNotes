@@ -4,8 +4,8 @@
   "description": "A Sticky Notes Application",
   "author": "Ramnath Shenoy(bekalshenoy@gmail.com)",
   "scripts": {
-    "start": "vue-cli-service electron:serve",
-    "serve": "vue-cli-service serve",
+    "start": "vue-cli-service electron:serve  --https",
+    "serve": "vue-cli-service serve  --https",
     "build": "vue-cli-service build",
     "electron:build": "vue-cli-service electron:build",
     "postinstall": "electron-builder install-app-deps"
