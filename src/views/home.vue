@@ -139,6 +139,9 @@ button {
   -webkit-app-region: no-drag;
   align-items: center;
 }
+a {
+  text-decoration: none;
+}
 .button {
   grid-row: 1 / span 1;
   display: flex;

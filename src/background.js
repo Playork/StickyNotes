@@ -57,9 +57,10 @@ function createNote() {
     nodeIntegration: true,
     show: false
   });
+
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    win.loadURL("https://localhost:8080/#/note");
+    win.loadURL("http://localhost:8080/#/note");
     if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
     createProtocol("app");
