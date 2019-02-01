@@ -1,33 +1,40 @@
 {
   "name": "sticky-notes",
   "version": "0.1.0",
-  "description": "A Sticky Notes Application",
-  "author": "Ramnath Shenoy(bekalshenoy@gmail.com)",
+  "description": "A Sticky Note Application",
+  "productName": "Playork Sticky Note",
+  "homepage": "https://github.com/playork/sticky-note",
+  "copyright": "© 2018, Playork",
   "scripts": {
-    "start": "vue-cli-service electron:serve",
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "electron:build": "vue-cli-service electron:build",
-    "postinstall": "electron-builder install-app-deps"
+    "start": "electron index.js",
+    "dist": "build --ia32"
   },
-  "dependencies": {
-    "jquery": "^3.3.1",
-    "quill": "latest",
-    "vue": "latest",
-    "vue-router": "latest",
-    "electron-context-menu": "latest",
-    "electron-store": "latest"
-  },
-  "devDependencies": {
-    "@vue/cli-service": "latest",
-    "electron": "latest",
-    "vue-cli-plugin-electron-builder": "latest",
-    "vue-template-compiler": "latest"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
+  "author": "B. Ramnath Shenoy <bekalshenoy@gmail.com>",
+  "license": "MIT",
+  "build": {
+    "appId": "ml.playork.sticky",
+    "win": {
+      "target": "NSIS"
+    },
+    "nsis": {
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
     }
   },
-  "main": "background.js"
+  "devDependencies": {
+    "electron": "latest",
+    "electron-builder": "latest"
+  },
+  "dependencies": {
+    "electron-context-menu": "latest",
+    "electron-store": "latest",
+    "electron-updater": "latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/playork/sticky-note"
+  },
+  "bugs": {
+    "url": "https://github.com/playork/sticky-note/issues"
+  }
 }
