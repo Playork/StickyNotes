@@ -1,58 +1,31 @@
 {
-  "name": "sticky-notes",
+  "name": "stickynotes",
   "version": "0.1.0",
-  "description": "A Sticky Notes Application",
-  "author": "Ramnath Shenoy(bekalshenoy@gmail.com)",
+  "author": "B. Ramnath Shenoy <bekalshenoy@gmail.com>",
   "private": true,
+  "description": "A Sticky Note Application.",
   "scripts": {
     "start": "vue-cli-service electron:serve",
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build",
-    "postinstall": "electron-builder install-app-deps"
+    "build": "vue-cli-service electron:build",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps"
   },
   "dependencies": {
-    "jquery": "^3.3.1",
     "quill": "latest",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "electron-context-menu": "latest"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "latest",
-    "@vue/cli-plugin-eslint": "latest",
     "@vue/cli-service": "latest",
-    "@vue/eslint-config-prettier": "latest",
-    "babel-eslint": "latest",
     "electron": "latest",
-    "eslint": "latest",
-    "eslint-plugin-vue": "latest",
     "vue-cli-plugin-electron-builder": "latest",
     "vue-template-compiler": "latest"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "@vue/prettier"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
   },
   "postcss": {
     "plugins": {
       "autoprefixer": {}
     }
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ],
   "main": "background.js"
 }

@@ -1,19 +1,18 @@
 <template>
-  <div class="body" v-on:click="showhide">
+  <div class="note" v-on:click="showhide">
     <titlebar v-bind:close="close" v-bind:note="note"/>
     <editor/>
     <colors/>
     <choosecolor/>
   </div>
 </template>
+
 <script>
-import JQuery from "jquery";
-let $ = JQuery;
 import { remote, ipcRenderer } from "electron";
-import editor from "../components/editor.vue";
-import titlebar from "../components/titlebar.vue";
-import colors from "../components/colors.vue";
-import choosecolor from "../components/choosecolor.vue";
+import editor from "../components/note/editor.vue";
+import titlebar from "../components/note/titlebar.vue";
+import colors from "../components/note/colors.vue";
+import choosecolor from "../components/note/choosecolor.vue";
 export default {
   components: {
     titlebar,
@@ -29,45 +28,55 @@ export default {
       ipcRenderer.send("create-new-instance");
     },
     showhide: function() {
-      $("*").on("click focusin", function() {
-        $("#titlebar").css("height", "32px");
-        $("#titlebar").css("transition", "height 0.1s ease");
-        $("#titlebar span").css("display", "flex");
-        $("#color").css("height", "40px");
-        $("#color").css("transition", "height 0.1s ease");
-        $(".ql-snow .ql-editor").css("transition", "height 0.1s ease");
-      });
-      $("*").on("focusout blur", function() {
-        $("#titlebar").css("height", "0");
-        $("#titlebar").css("transition", "height 0.1s ease");
-        $("#titlebar span").css("display", "none");
-        $("#color").css("height", "0");
-        $("#color").css("transition", "height 0.1s ease");
-        $(".ql-snow .ql-editor").attr("style", "height: 100% !important;");
-        $(".ql-snow .ql-editor").css("transition", "height 0.1s ease");
-      });
+      document.addEventListener(
+        "focus",
+        () => {
+          document.getElementById("titlebar").style.height = "32px";
+          if (
+            document.querySelector(".ql-snow.ql-toolbar").style.display !=
+              "block"
+          ) {
+            document.getElementById("color").style.height = "40px";
+          }
+          document.getElementById("lock").style.display = "flex";
+          document.getElementById("lock").style.display = "flex";
+          document.getElementById("add").style.display = "flex";
+          document.getElementById("more").style.display = "flex";
+          document.getElementById("close").style.display = "flex";
+        },
+        true
+      );
+      document.addEventListener(
+        "click",
+        () => {
+          document.getElementById("titlebar").style.height = "32px";
+          if (
+            document.querySelector(".ql-snow.ql-toolbar").style.display !=
+              "block"
+          ) {
+            document.getElementById("color").style.height = "40px";
+          }
+          document.getElementById("lock").style.display = "flex";
+          document.getElementById("lock").style.display = "flex";
+          document.getElementById("add").style.display = "flex";
+          document.getElementById("more").style.display = "flex";
+          document.getElementById("close").style.display = "flex";
+        },
+        true
+      );
+      document.addEventListener(
+        "blur",
+        () => {
+          document.getElementById("titlebar").style.height = "0";
+          document.getElementById("color").style.height = "0";
+          document.getElementById("lock").style.display = "none";
+          document.getElementById("add").style.display = "none";
+          document.getElementById("more").style.display = "none";
+          document.getElementById("close").style.display = "none";
+        },
+        true
+      );
     }
   }
 };
 </script>
-<style>
-.body {
-  user-select: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-button {
-  outline: none;
-}
-a {
-  text-decoration: none;
-}
-</style>

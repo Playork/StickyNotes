@@ -5,6 +5,16 @@ import {
   createProtocol,
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
+
+require("electron-context-menu")({
+  prepend: () => [
+    {
+      label: "v0.1.0"
+    }
+  ],
+  showInspectElement: false
+});
+
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -19,11 +29,10 @@ function createWindow() {
     width: 350,
     height: 375,
     icon: "public/favicon.ico",
-    backgroundColor: "#ccc",
+    backgroundColor: "#202020",
     title: "Playork Sticky Notes",
     frame: false,
-    resizable: false,
-    nodeIntegration: true
+    resizable: false
   });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -44,10 +53,9 @@ function createNote() {
     width: 350,
     height: 375,
     icon: "public/favicon.ico",
-    backgroundColor: "#FFF2AB",
+    backgroundColor: "#202020",
     title: "Playork Sticky Notes",
-    frame: false,
-    nodeIntegration: true
+    frame: false
   });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode

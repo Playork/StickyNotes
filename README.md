@@ -1,54 +1,53 @@
-# sticky-notes
+## Description
 
-## Project setup
+![Logo](src/assets/logo.png)
+![ScreenShot](screen.png)
 
-```
-npm install
-```
+### A Sticky Note Application.
 
-### Compiles and hot-reloads for development
+### If you like my App please consider buying me a coffee at [HERE!](http://buymeacoff.ee/playork)
 
-```
-npm start
-```
+## Install
 
-### Compiles and minifies for production
+### For Development Version Follow the instuctions below 
 
-```
-npm run build
-```
+if you want to try it install [nodejs](https://nodejs.org), [git](https://git-scm.com/) and clone this repository
 
-### Run your tests
-
-```
-npm run test
+```bash
+ git clone https://github.com/Playork/Sticky-Note
 ```
 
-### Lints and fixes files
+point to source directory
 
+
+```bash
+ cd /path/to/source/of/Sticky-Note
 ```
-npm run lint
+
+and install depencise by
+
+```bash
+ npm install
 ```
 
-#License
-MIT License
+after this start this application by this command
 
-Copyright (c) 2018 Playork
+```bash
+ npm start
+```
+build for production by this command
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+```bash
+ npm run build
+```
+## Licence
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+MIT License (MIT)
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Copyright (c) 2019 Playork
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

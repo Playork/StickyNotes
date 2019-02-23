@@ -1,0 +1,101 @@
+.buttons {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+#choosecolor {
+  background: #202020;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-family: "Lobster";
+  z-index: 7;
+  padding-top: 35px;
+  text-align: center;
+  display: none;
+  color: white;
+}
+.button1 {
+  color: white;
+  background: #0078d7;
+  font-size: 14px;
+  border: none;
+  font-family: "Lobster";
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 5px;
+  height: 32px;
+  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
+}
+.button1:hover {
+  border: 2px solid rgba(0, 0, 0, 0.4);
+}
+.button1:focus {
+  border: 2px solid #000;
+}
+.button1:active {
+  border: none;
+  background: rgba(0, 0, 0, 0.4);
+  color: #000;
+}
+input[type="color"] {
+  border: none;
+  background: rgba(0, 0, 0, 0);
+  outline: none;
+  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
+}
+.hide {
+  display: none;
+}
+.select {
+  font-size: 20px;
+  display: block;
+  font-family: "segoe";
+}
+#color {
+  display: grid;
+  grid-template-columns: 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 13%;
+  position: fixed;
+  bottom: 0;
+  z-index: 6;
+  width: 100%;
+  height: 40px;
+  min-width: 300px;
+  padding: 0;
+  margin: 0;
+  transition: height 0.1s ease;
+  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
+}
+#colors {
+  background: #000;
+}
+#colors span {
+  font-size: 20px;
+  font-family: "segoe";
+  color: #fff;
+}
+#yellow {
+  background: #ffeb81;
+}
+#green {
+  background: #afeca4;
+}
+#pink {
+  background: #fbd;
+}
+#violet {
+  background: #dbb7ff;
+}
+#gray {
+  background: #e5e5e5;
+}
+#blue {
+  background: #b7dfff;
+}
+#dark {
+  background: #3e3e3e;
+}
