@@ -14,7 +14,7 @@
 if you want to try it install [nodejs](https://nodejs.org), [git](https://git-scm.com/) and clone this repository
 
 ```bash
- git clone https://github.com/Playork/Sticky-Note
+ git clone https://github.com/Playork/StickyNotes
 ```
 
 point to source directory
