@@ -1,0 +1,103 @@
+#lightYellow {
+  padding-top: 35px;
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: #fff2ab;
+}
+@media screen and (max-height: 374px) {
+  #editor {
+    overflow: hidden;
+  }
+}
+.ql-snow {
+  border: none !important;
+}
+.ql-snow .ql-editor {
+  width: 98%;
+  height: calc(100% - 60px);
+  margin-left: 2px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #000;
+  font-size: 18px;
+  font-family: arial;
+}
+.ql-snow .ql-editor::-webkit-scrollbar {
+  width: 2px;
+}
+.ql-snow .ql-editor::-webkit-scrollbar-track {
+  box-shadow: none;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  background: none;
+}
+.ql-snow .ql-editor::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  background: #222;
+  box-shadow: none;
+}
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=""]::before {
+  content: "Arial";
+}
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=""]::before {
+  content: "Arial";
+}
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="lobster"]::before {
+  content: "Lobster";
+  font-family: "Lobster";
+}
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="lobster"]::before {
+  content: "Lobster";
+  font-family: "Lobster";
+}
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="comicsans"]::before {
+  content: "ComicSans";
+  font-family: "ComicSans";
+}
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="comicsans"]::before {
+  content: "ComicSans";
+  font-family: "ComicSans";
+}
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="10px"]::before {
+  content: "Small";
+  font-size: 10px !important;
+}
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="18px"]::before {
+  content: "Normal";
+  font-size: 18px !important;
+}
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="27px"]::before {
+  content: "Large";
+  font-size: 27px !important;
+}
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="37px"]::before {
+  content: "Huge";
+  font-size: 37px !important;
+}
+.body:hover .ql-snow .ql-editor::-webkit-scrollbar {
+  width: 6px;
+}
+.ql-snow.ql-toolbar {
+  display: none;
+}
+#toolbar-container .ql-font span[data-label="Arial"]::before {
+  font-family: "Arial";
+}
+#toolbar-container .ql-font span[data-label="Lobster"]::before {
+  font-family: "Lobster";
+}
+#toolbar-container .ql-font span[data-label="ComicSans"]::before {
+  font-family: "ComicSans";
+}
+.ql-font-lobster {
+  font-family: "Lobster";
+}
+.ql-font-comicsans {
+  font-family: "ComicSans";
+}

@@ -1,0 +1,104 @@
+.note,
+.home {
+  user-select: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-family: "Lobster";
+}
+.help {
+  user-select: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-family: "Lobster";
+}
+button {
+  outline: none;
+}
+a {
+  text-decoration: none;
+  color: #fff;
+}
+.start span {
+  font-family: "segoe";
+  color: #fff;
+  font-size: 150px;
+  position: absolute;
+  top: 35%;
+  left: 30%;
+}
+#help {
+  display: none;
+}
+#options {
+  float: left;
+  position: absolute;
+  top: 45px;
+  bottom: 100%;
+  left: 88%;
+  font-family: "segoe";
+  color: #fff;
+}
+#options span {
+  padding-right: 5px;
+}
+#about {
+  display: none;
+  background: #202020;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-family: "Lobster";
+  z-index: 7;
+  padding-top: 35px;
+  text-align: center;
+  color: #fff;
+}
+#about span {
+  position: absolute;
+  top: 45px;
+  bottom: 100%;
+  left: 5px;
+  color: #fff;
+  font-family: "segoe";
+}
+
+#helppage {
+  font-family: "Lobster";
+  padding-top: 20px;
+  text-align: center;
+  color: #000;
+  padding: 10px;
+}
+
+.help span {
+  position: absolute;
+  top: 5px;
+  bottom: 100%;
+  right: 5px;
+  color: #fff;
+  font-family: "segoe";
+}
+
+#content {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  row-gap: 20px;
+  color: #fff;
+}

@@ -1,0 +1,135 @@
+#titlebar1 {
+  background: #333 !important;
+  transition: height 0.3s ease-in-out;
+  display: block;
+  height: 32px;
+  width: 100%;
+  min-width: 300px;
+  background: #cc0;
+  padding: 4px !important;
+  color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  z-index: 8;
+  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
+}
+#close-button {
+  grid-column: 2;
+}
+#close-button:hover {
+  box-shadow: none !important;
+  background: #e81123;
+  color: #fff;
+}
+.button {
+  grid-row: 1 / span 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100% !important;
+  height: 100% !important;
+  font-family: "segoe" !important;
+  background: none;
+  user-select: none;
+  cursor: default;
+}
+.button:hover {
+  background: rgba(255, 255, 255, 0.4);
+  opacity: 1;
+  color: #fff;
+}
+
+#titlebar {
+  display: block;
+  height: 32px;
+  width: 100%;
+  min-width: 350px;
+  background-color: #ffeb81;
+  padding: 4px !important;
+  color: #707070;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  transition: height 0.1s ease;
+  z-index: 8;
+  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
+}
+#drag-region {
+  width: 100% !important;
+  height: 100%;
+  -webkit-app-region: drag;
+  display: grid;
+  grid-template-columns: auto 138px;
+}
+#window-controls {
+  display: grid;
+  grid-template-columns: repeat(2, 40px) !important;
+  position: absolute;
+  top: 0 !important;
+  right: 15px !important;
+  height: 100%;
+  font-size: 25px;
+  -webkit-app-region: no-drag;
+  align-items: center;
+}
+#min-button {
+  grid-column: 1;
+}
+#window-title1 {
+  grid-row: 1 / span 1;
+  font-size: 25px;
+  font-family: "segoe";
+  width: 40px;
+  justify-content: center;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0 !important;
+  left: 10px !important;
+  height: 100%;
+  -webkit-app-region: no-drag;
+}
+#window-title1 span {
+  -webkit-app-region: no-drag;
+  color: #707070;
+}
+#window-title1 span:hover {
+  color: #fff;
+}
+#window-title1:hover {
+  background: rgba(255, 255, 255, 0.4);
+  opacity: 1;
+}
+#window-title span {
+  font-family: "Lobster";
+}
+#locks {
+  grid-row: 1 / span 1;
+  font-size: 25px;
+  font-family: "segoe";
+  width: 40px;
+  justify-content: center;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0 !important;
+  left: 45px !important;
+  height: 100%;
+  -webkit-app-region: no-drag;
+  color: #707070;
+}
+#locks:hover {
+  background: rgba(255, 255, 255, 0.4);
+  opacity: 1;
+  color: #fff;
+}
+#lock {
+  -webkit-app-region: no-drag;
+}
