@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-on:click="savenote">
     <div>
       <div id="options">
         <span v-on:click="aboutshow">&#xE946;</span>
@@ -21,7 +21,7 @@
     </div>
     <div class="start">
       <span v-on:click="note">&#xE710;</span>
-      <div id="notes" v-on:click="savenote"></div>
+      <div id="notes"></div>
     </div>
   </div>
 </template>
@@ -35,7 +35,7 @@ export default {
     savenote: function() {
       stores.each((value, key) => {
         if (key != "id") {
-          document.getElementById("notes").innerHTML = `${key} = ${value}`;
+          document.getElementById("notes").innerHTML = value.first;
         }
       });
     },
