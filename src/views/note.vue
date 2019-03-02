@@ -9,7 +9,7 @@
 
 <script>
 import { remote, ipcRenderer } from "electron";
-import stores from "store"
+import stores from "store";
 import editor from "../components/note/editor.vue";
 import titlebar from "../components/note/titlebar.vue";
 import colors from "../components/note/colors.vue";

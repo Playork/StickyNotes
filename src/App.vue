@@ -27,14 +27,28 @@ SOFTWARE.
   </div>
 </template>
 <script>
+import "./assets/css/quill.min.css";
+import "./assets/css/main.css";
+import "./assets/css/titlebar.css";
+import "./assets/css/editor.css";
+import "./assets/css/color.css";
 export default {};
 </script>
 
 <style>
-@import url("assets/css/import.css");
+@font-face {
+  font-family: "Lobster";
+  src: url(assets/fonts/Lobster.woff2) format("woff2");
+}
+@font-face {
+  font-family: "segoe";
+  src: url(assets/fonts/SegMDL2.ttf);
+}
+@font-face {
+  font-family: "ComicSans";
+  src: url(assets/fonts/ComicSans.ttf);
+}
 #app {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
   position: absolute;

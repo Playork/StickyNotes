@@ -332,84 +332,84 @@
 .ql-editor li.ql-indent-9.ql-direction-rtl.ql-align-right {
   padding-right: 28.5em;
 }
-.ql-editor .ql-video {
+.ql-video {
   display: block;
   max-width: 100%;
 }
-.ql-editor .ql-video.ql-align-center {
+.ql-video.ql-align-center {
   margin: 0 auto;
 }
-.ql-editor .ql-video.ql-align-right {
+.ql-video.ql-align-right {
   margin: 0 0 0 auto;
 }
-.ql-editor .ql-bg-black {
-  background-color: #000;
+.ql-bg-black {
+  background-color: #000 !important;
 }
-.ql-editor .ql-bg-red {
-  background-color: #e60000;
+.ql-bg-red {
+  background-color: #e60000 !important;
 }
-.ql-editor .ql-bg-orange {
-  background-color: #f90;
+.ql-bg-orange {
+  background-color: #f90 !important;
 }
-.ql-editor .ql-bg-yellow {
-  background-color: #ff0;
+.ql-bg-yellow {
+  background-color: #ff0 !important;
 }
-.ql-editor .ql-bg-green {
-  background-color: #008a00;
+.ql-bg-green {
+  background-color: #008a00 !important;
 }
-.ql-editor .ql-bg-blue {
-  background-color: #06c;
+.ql-bg-blue {
+  background-color: #06c !important;
 }
-.ql-editor .ql-bg-purple {
-  background-color: #93f;
+.ql-bg-purple {
+  background-color: #93f !important;
 }
-.ql-editor .ql-color-white {
-  color: #fff;
+.ql-color-white {
+  color: #fff !important;
 }
-.ql-editor .ql-color-red {
-  color: #e60000;
+.ql-color-red {
+  color: #e60000 !important;
 }
-.ql-editor .ql-color-orange {
-  color: #f90;
+.ql-color-orange {
+  color: #f90 !important;
 }
-.ql-editor .ql-color-yellow {
-  color: #ff0;
+.ql-color-yellow {
+  color: #ff0 !important;
 }
-.ql-editor .ql-color-green {
-  color: #008a00;
+.ql-color-green {
+  color: #008a00 !important;
 }
-.ql-editor .ql-color-blue {
-  color: #06c;
+.ql-color-blue {
+  color: #06c !important;
 }
-.ql-editor .ql-color-purple {
-  color: #93f;
+.ql-color-purple {
+  color: #93f !important;
 }
-.ql-editor .ql-font-serif {
+.ql-font-serif {
   font-family: Georgia, Times New Roman, serif;
 }
-.ql-editor .ql-font-monospace {
+.ql-font-monospace {
   font-family: Monaco, Courier New, monospace;
 }
-.ql-editor .ql-size-small {
+.ql-size-small {
   font-size: 0.75em;
 }
-.ql-editor .ql-size-large {
+.ql-size-large {
   font-size: 1.5em;
 }
-.ql-editor .ql-size-huge {
+.ql-size-huge {
   font-size: 2.5em;
 }
-.ql-editor .ql-direction-rtl {
+.ql-direction-rtl {
   direction: rtl;
   text-align: inherit;
 }
-.ql-editor .ql-align-center {
+.ql-align-center {
   text-align: center;
 }
-.ql-editor .ql-align-justify {
+.ql-align-justify {
   text-align: justify;
 }
-.ql-editor .ql-align-right {
+.ql-align-right {
   text-align: right;
 }
 .ql-editor.ql-blank::before {

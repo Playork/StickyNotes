@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "description": "A Sticky Note Application.",
   "author": "B. Ramnath Shenoy <bekalshenoy@gmail.com>",
+  "homepage": "https://github.com/Playork/StickyNotes",
   "scripts": {
-    "build": "vue-cli-service electron:build",
+    "build": "vue-cli-service electron:build --config",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "start": "vue-cli-service electron:serve"

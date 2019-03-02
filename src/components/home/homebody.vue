@@ -1,5 +1,6 @@
 <template>
   <div v-on:click="savenote">
+    <div id="notes"></div>
     <div>
       <div id="options">
         <span v-on:click="aboutshow">&#xE946;</span>
@@ -21,7 +22,6 @@
     </div>
     <div class="start">
       <span v-on:click="note">&#xE710;</span>
-      <div id="notes"></div>
     </div>
   </div>
 </template>
@@ -33,9 +33,12 @@ export default {
   },
   methods: {
     savenote: function() {
+      document.getElementById("notes").innerHTML = "";
       stores.each((value, key) => {
-        if (key != "id") {
-          document.getElementById("notes").innerHTML = value.first;
+        if (key != "id" && key != "loglevel:webpack-dev-server") {
+          document
+            .getElementById("notes")
+            .insertAdjacentHTML("afterbegin", value.first);
         }
       });
     },
