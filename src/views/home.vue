@@ -16,8 +16,8 @@ export default {
   },
   methods: {
     savenote: function() {
-      document.onfocus = () => {
-      document.getElementById("notes").innerHTML = "";
+      document.addEventListener("focus",() => {
+         document.getElementById("notes").innerHTML = "";
       stores.each((value, key) => {
         if (key != "id" && key != "loglevel:webpack-dev-server") {
           document
@@ -25,7 +25,7 @@ export default {
             .insertAdjacentHTML("afterbegin", value.first);
         }
       });
-      }
+      });
     },
     close: function() {
       remote.getCurrentWindow().close();
