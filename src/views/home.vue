@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home"  v-on:click="savenote">
     <titlebar1 v-bind:close="close"/>
     <homebody v-bind:note="note"/>
   </div>
@@ -15,6 +15,18 @@ export default {
     homebody
   },
   methods: {
+    savenote: function() {
+      document.onfocus = () => {
+      document.getElementById("notes").innerHTML = "";
+      stores.each((value, key) => {
+        if (key != "id" && key != "loglevel:webpack-dev-server") {
+          document
+            .getElementById("notes")
+            .insertAdjacentHTML("afterbegin", value.first);
+        }
+      });
+      }
+    },
     close: function() {
       remote.getCurrentWindow().close();
     },

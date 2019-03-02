@@ -1,5 +1,5 @@
 <template>
-  <div v-on:click="savenote">
+  <div>
     <div id="notes"></div>
     <div>
       <div id="options">
@@ -26,22 +26,11 @@
   </div>
 </template>
 <script>
-import stores from "store";
 export default {
   props: {
     note: Function
   },
   methods: {
-    savenote: function() {
-      document.getElementById("notes").innerHTML = "";
-      stores.each((value, key) => {
-        if (key != "id" && key != "loglevel:webpack-dev-server") {
-          document
-            .getElementById("notes")
-            .insertAdjacentHTML("afterbegin", value.first);
-        }
-      });
-    },
     aboutshow: function() {
       let id = document.getElementById("about");
       id.style.display = "block";
