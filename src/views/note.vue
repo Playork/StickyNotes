@@ -22,14 +22,13 @@ export default {
     choosecolor
   },
   mounted() {
-    let func = () => {
-      if (stores.get(stores.get("id").ids) == undefined) {
-        return "";
-      } else {
-        return stores.get(stores.get("id").ids).first;
-      }
-    };
-    document.querySelector(".ql-snow .ql-editor").innerHTML = func();
+    try{
+    document.querySelector(".ql-snow .ql-editor").innerHTML = stores.get(stores.get("id").ids).first;
+    }catch{}
+    if(document.querySelector(".ql-snow .ql-editor").innerHTML != "<p><br></p>"){
+      let id = Number(stores.get("id").ids) + 10
+      stores.set("id",{ids : id.toString()})
+    }
   },
   methods: {
     close: function() {

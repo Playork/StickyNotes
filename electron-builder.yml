@@ -6,4 +6,5 @@ nsis:
   createDesktopShortcut: true
   createStartMenuShortcut: true
 linux:
+  target: "deb"
   icon: "src/assets/logo.png"

@@ -14,6 +14,7 @@ export default {
     titlebar1,
     homebody
   },
+  mounted() {},
   methods: {
     savenote: function() {
       document.getElementById("notes").innerHTML = "";
@@ -23,14 +24,26 @@ export default {
             .getElementById("notes")
             .insertAdjacentHTML(
               "afterbegin",
-              `<div id="notetext"><span id="startnote">&#xE710;</span><span id="deletenote"></span>${value.first}</div>`
+              `<div id="notetext"><span id="startnote">&#xE710;</span><span id="deletenote"></span>${
+                value.first
+              }</div>`
             );
           document.getElementById("startnote").onclick = () => {
             stores.set("id", { ids: key });
             ipcRenderer.send("create-new-instance");
           };
           document.getElementById("deletenote").onclick = () => {
-            stores.remove(key);
+            const options = {
+              type: "warning",
+              title: "Delete?",
+              message: "Do You Want To Delete The Note?",
+              buttons: ["Yes", "No"]
+            };
+            remote.dialog.showMessageBox(options, index => {
+              if (index === 0) {
+                stores.remove(key);
+              }
+            });
           };
         }
       });

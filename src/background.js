@@ -37,9 +37,6 @@ function createWindow() {
     app.quit();
     win.destroy();
   });
-  win.on("closed", () => {
-    win = null;
-  });
 }
 function createNote() {
   let win = new BrowserWindow({
