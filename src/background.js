@@ -32,6 +32,11 @@ function createWindow() {
     createProtocol("app");
     win.loadURL("app://./index.html");
   }
+  win.on("close", e => {
+    e.preventDefault();
+    app.quit();
+    win.destroy();
+  });
   win.on("closed", () => {
     win = null;
   });

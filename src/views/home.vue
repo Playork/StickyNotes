@@ -23,8 +23,7 @@ export default {
             .getElementById("notes")
             .insertAdjacentHTML(
               "afterbegin",
-              "<span id='startnote'>&#xE710;</span><span id='deletenote'></span>" +
-                value.first
+              `<div id="notetext"><span id="startnote">&#xE710;</span><span id="deletenote"></span>${value.first}</div>`
             );
           document.getElementById("startnote").onclick = () => {
             stores.set("id", { ids: key });
@@ -44,7 +43,7 @@ export default {
           }
         }
       });
-      remote.app.quit();
+      remote.getCurrentWindow().close();
     },
     note: function() {
       let func = obj => {

@@ -26,7 +26,7 @@ export default {
       if (stores.get(stores.get("id").ids) == undefined) {
         return "";
       } else {
-        return stores.get(stores.get("id").ids);
+        return stores.get(stores.get("id").ids).first;
       }
     };
     document.querySelector(".ql-snow .ql-editor").innerHTML = func();
