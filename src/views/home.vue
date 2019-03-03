@@ -1,5 +1,5 @@
 <template>
-  <div class="home" v-on:click="savenote">
+  <div id="home" v-on:click="savenote">
     <titlebar1 v-bind:close="close"/>
     <homebody v-bind:note="note"/>
   </div>

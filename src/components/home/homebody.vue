@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="start">
-      <span v-on:click="note">&#xE710;</span>
+      <div>Sticky Notes</div>
     </div>
   </div>
 </template>
@@ -34,10 +34,12 @@ export default {
     aboutshow: function() {
       let id = document.getElementById("about");
       id.style.display = "block";
+      document.getElementById("home").style.overflowY = "hidden";
     },
     hide: function() {
       let id = document.getElementById("about");
       id.style.display = "none";
+      document.getElementById("home").style.overflowY = "auto";
     }
   }
 };

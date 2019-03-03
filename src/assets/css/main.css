@@ -1,14 +1,16 @@
 .note,
-.home {
+#home {
+  overflow-x: hidden;
+  overflow-y: auto;
   margin: 0;
   padding: 0;
-  overflow: hidden;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   font-family: "Arial";
+  user-select: none;
 }
 .help {
   user-select: none;
@@ -30,13 +32,16 @@ a {
   text-decoration: none;
   color: #fff;
 }
-.start span {
-  font-family: "segoe";
+.start {
+  z-index: 10;
+}
+.start div {
+  font-family: "Lobster";
   color: #fff;
-  font-size: 150px;
+  font-size: 50px;
   position: absolute;
-  top: 35%;
-  left: 30%;
+  top: 40%;
+  left: 15%;
   user-select: none;
 }
 #help {
@@ -100,6 +105,22 @@ a {
   row-gap: 20px;
   color: #fff;
 }
+#notes {
+  margin-top: 40px;
+  height: 100%;
+  z-index: 20;
+}
 #notes span {
   font-family: "segoe";
+  padding: 5px;
+}
+#notes #notetext {
+  padding: 5px;
+  margin: 5px;
+  border-radius: 20px;
+  width: 80%;
+  word-wrap: break-word;
+  background: #ffeb81;
+  min-height: 80px;
+  user-select: text;
 }
