@@ -1,5 +1,5 @@
 "use strict";
-import { app, protocol, BrowserWindow, ipcMain, dialog } from "electron";
+import { app, protocol, BrowserWindow, ipcMain } from "electron";
 import {
   createProtocol,
   installVueDevtools
@@ -55,20 +55,6 @@ function createNote() {
   win.on("ready-to-show", () => {
     win.show();
     win.focus();
-  });
-  win.on("close", event => {
-    event.preventDefault();
-    const options = {
-      type: "warning",
-      title: "Delete?",
-      message: "Do You Want To Delete The Note?",
-      buttons: ["Yes", "No"]
-    };
-    dialog.showMessageBox(options, index => {
-      if (index === 0) {
-        win.destroy();
-      }
-    });
   });
 }
 ipcMain.on("create-new-instance", () => {

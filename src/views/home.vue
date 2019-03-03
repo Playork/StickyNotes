@@ -1,5 +1,5 @@
 <template>
-  <div class="home"  v-on:click="savenote">
+  <div class="home" v-on:click="savenote">
     <titlebar1 v-bind:close="close"/>
     <homebody v-bind:note="note"/>
   </div>
@@ -16,8 +16,7 @@ export default {
   },
   methods: {
     savenote: function() {
-      document.addEventListener("focus",() => {
-         document.getElementById("notes").innerHTML = "";
+      document.getElementById("notes").innerHTML = "";
       stores.each((value, key) => {
         if (key != "id" && key != "loglevel:webpack-dev-server") {
           document
@@ -25,10 +24,9 @@ export default {
             .insertAdjacentHTML("afterbegin", value.first);
         }
       });
-      });
     },
     close: function() {
-      remote.getCurrentWindow().close();
+      remote.app.quit();
     },
     note: function() {
       let func = obj => {

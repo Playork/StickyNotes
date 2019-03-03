@@ -23,7 +23,18 @@ export default {
   },
   methods: {
     close: function() {
-      remote.getCurrentWindow().close();
+      const options = {
+        type: "warning",
+        title: "Delete?",
+        message: "Do You Want To Delete The Note?",
+        buttons: ["Yes", "No"]
+      };
+      remote.dialog.showMessageBox(options, index => {
+        if (index === 0) {
+          stores.remove(stores.get("id").ids);
+          remote.getCurrentWindow().close();
+        }
+      });
     },
     note: function() {
       let func = obj => {
