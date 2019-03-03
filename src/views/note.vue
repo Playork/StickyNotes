@@ -31,15 +31,16 @@ export default {
       };
       remote.dialog.showMessageBox(options, index => {
         if (index === 0) {
-          if (
-            document.querySelectorAll(".ql-editor").innerHTML ==
-            stores.get(stores.get("id").ids).first
-          ) {
-            stores.remove(stores.get("id").ids);
-          } else {
-            let id = Number(stores.get("id").ids) - 1;
-            stores.remove(id.toString());
-          }
+          stores.each((value, key) => {
+            if (key != "id" && key != "loglevel:webpack-dev-server") {
+              if (
+                value.first ==
+                document.querySelector(".ql-snow .ql-editor").innerHTML
+              ) {
+                stores.remove(key);
+              }
+            }
+          });
           remote.getCurrentWindow().close();
         }
       });

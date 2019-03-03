@@ -67,7 +67,7 @@ export default {
       theme: "snow"
     });
     let func = obj => {
-      let text = quill.root.innerHTML;
+      let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
       stores.set(obj.toString(), { first: text });
     };
     try {

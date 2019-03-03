@@ -26,6 +26,13 @@ export default {
       });
     },
     close: function() {
+      stores.each((value, key) => {
+        if (key != "id" && key != "loglevel:webpack-dev-server") {
+          if (value.first == "<p><br></p>") {
+            stores.remove(key);
+          }
+        }
+      });
       remote.app.quit();
     },
     note: function() {
