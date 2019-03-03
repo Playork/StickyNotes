@@ -1,20 +1,22 @@
 {
   "name": "stickynotes",
   "version": "0.1.0",
-  "author": "B. Ramnath Shenoy <bekalshenoy@gmail.com>",
-  "private": true,
   "description": "A Sticky Note Application.",
+  "author": "B. Ramnath Shenoy <bekalshenoy@gmail.com>",
+  "homepage": "https://github.com/Playork/StickyNotes",
   "scripts": {
-    "start": "vue-cli-service electron:serve",
-    "build": "vue-cli-service electron:build",
+    "build": "vue-cli-service electron:build --config",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps"
+    "postuninstall": "electron-builder install-app-deps",
+    "start": "vue-cli-service electron:serve"
   },
   "dependencies": {
+    "electron-context-menu": "latest",
     "quill": "latest",
+    "store": "latest",
     "vue": "latest",
     "vue-router": "latest",
-    "electron-context-menu": "latest"
+    "vuex": "latest"
   },
   "devDependencies": {
     "@vue/cli-service": "latest",

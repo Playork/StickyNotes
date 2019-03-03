@@ -1,0 +1,10 @@
+appId: "ml.playork.stickynotes"
+win:
+  target: "NSIS"
+  icon: "public/favicon.ico"
+nsis:
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+linux:
+  target: "deb"
+  icon: "src/assets/logo.png"

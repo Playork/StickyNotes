@@ -9,37 +9,38 @@
 
 ## Install
 
-### For Development Version Follow the instuctions below 
+### For Development Version Follow the instuctions below
 
 if you want to try it install [nodejs](https://nodejs.org), [git](https://git-scm.com/) and clone this repository
 
 ```bash
- git clone https://github.com/Playork/StickyNotes
+git clone https://github.com/Playork/StickyNotes
 ```
 
 point to source directory
 
-
 ```bash
- cd /path/to/source/of/Sticky-Note
+cd /path/to/source/of/Sticky-Note
 ```
 
 and install depencise by
 
 ```bash
- npm install
+npm install
 ```
 
 after this start this application by this command
 
 ```bash
- npm start
+npm start
 ```
+
 build for production by this command
 
 ```bash
- npm run build
+npm run build
 ```
+
 ## Licence
 
 MIT License (MIT)

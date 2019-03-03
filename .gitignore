@@ -19,7 +19,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
-*.config.js
 
 #Electron-builder output
 /dist_electron

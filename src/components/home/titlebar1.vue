@@ -2,8 +2,8 @@
   <div>
     <header id="titlebar1">
       <div id="drag-region">
-        <div id="window-title">
-          <span style="color:#fff;font-size:25px;">Sticky Note</span>
+        <div class="id" id="window-title1" title="Add Note" v-on:click="note">
+          <span id="add">&#xE710;</span>
         </div>
         <div id="window-controls">
           <div class="button" v-on:click="close" id="close-button">
@@ -17,7 +17,8 @@
 <script>
 export default {
   props: {
-    close: Function
+    close: Function,
+    note: Function
   }
 };
 </script>

@@ -5,12 +5,8 @@
 </template>
 <script>
 import Quill from "quill";
+import stores from "store";
 export default {
-  data() {
-    return {
-      editor: null
-    };
-  },
   mounted() {
     var BackgroundClass = Quill.import("attributors/class/background");
     var ColorClass = Quill.import("attributors/class/color");
@@ -22,7 +18,7 @@ export default {
     var Font = Quill.import("formats/font");
     Font.whitelist = ["lobster", "comicsans"];
     Quill.register(Font, true);
-    this.editor = new Quill("#editor", {
+    let quill = new Quill("#editor", {
       modules: {
         toolbar: [
           [
@@ -70,6 +66,19 @@ export default {
       placeholder: "Add Your Note",
       theme: "snow"
     });
+    let func = obj => {
+      quill.on("text-change", function() {
+        let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
+        stores.set(obj.toString(), { first: text });
+      });
+    };
+    try {
+      let id = Number(stores.get("id").ids);
+      func(id);
+    } catch {
+      let id = 1;
+      func(id);
+    }
   }
 };
 </script>

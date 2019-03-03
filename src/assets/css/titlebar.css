@@ -1,14 +1,13 @@
 #titlebar1 {
-  background: #333 !important;
+  background: #333;
   transition: height 0.3s ease-in-out;
   display: block;
   height: 32px;
   width: 100%;
   min-width: 300px;
-  background: #cc0;
   padding: 4px !important;
   color: #fff;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -105,9 +104,6 @@
 #window-title1:hover {
   background: rgba(255, 255, 255, 0.4);
   opacity: 1;
-}
-#window-title span {
-  font-family: "Lobster";
 }
 #locks {
   grid-row: 1 / span 1;

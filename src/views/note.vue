@@ -9,6 +9,7 @@
 
 <script>
 import { remote, ipcRenderer } from "electron";
+import stores from "store";
 import editor from "../components/note/editor.vue";
 import titlebar from "../components/note/titlebar.vue";
 import colors from "../components/note/colors.vue";
@@ -20,11 +21,51 @@ export default {
     colors,
     choosecolor
   },
+  mounted() {
+    try{
+    document.querySelector(".ql-snow .ql-editor").innerHTML = stores.get(stores.get("id").ids).first;
+    }catch{}
+    if(document.querySelector(".ql-snow .ql-editor").innerHTML != "<p><br></p>"){
+      let id = Number(stores.get("id").ids) + 10
+      stores.set("id",{ids : id.toString()})
+    }
+  },
   methods: {
     close: function() {
-      remote.getCurrentWindow().close();
+      const options = {
+        type: "warning",
+        title: "Delete?",
+        message: "Do You Want To Delete The Note?",
+        buttons: ["Yes", "No"]
+      };
+      remote.dialog.showMessageBox(options, index => {
+        if (index === 0) {
+          stores.each((value, key) => {
+            if (key != "id" && key != "loglevel:webpack-dev-server") {
+              if (
+                value.first ==
+                document.querySelector(".ql-snow .ql-editor").innerHTML
+              ) {
+                stores.remove(key);
+              }
+            }
+          });
+          remote.getCurrentWindow().close();
+        }
+      });
     },
     note: function() {
+      let func = obj => {
+        obj++;
+        stores.set("id", { ids: obj.toString() });
+      };
+      try {
+        let id = Number(stores.get("id").ids);
+        func(id);
+      } catch {
+        let id = 1;
+        func(id);
+      }
       ipcRenderer.send("create-new-instance");
     },
     showhide: function() {
@@ -34,7 +75,7 @@ export default {
           document.getElementById("titlebar").style.height = "32px";
           if (
             document.querySelector(".ql-snow.ql-toolbar").style.display !=
-              "block"
+            "block"
           ) {
             document.getElementById("color").style.height = "40px";
           }
@@ -52,7 +93,7 @@ export default {
           document.getElementById("titlebar").style.height = "32px";
           if (
             document.querySelector(".ql-snow.ql-toolbar").style.display !=
-              "block"
+            "block"
           ) {
             document.getElementById("color").style.height = "40px";
           }
