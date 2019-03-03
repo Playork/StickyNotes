@@ -21,6 +21,16 @@ export default {
     colors,
     choosecolor
   },
+  mounted() {
+    let func = () => {
+      if (stores.get(stores.get("id").ids) == undefined) {
+        return "";
+      } else {
+        return stores.get(stores.get("id").ids);
+      }
+    };
+    document.querySelector(".ql-snow .ql-editor").innerHTML = func();
+  },
   methods: {
     close: function() {
       const options = {

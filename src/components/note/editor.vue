@@ -67,19 +67,17 @@ export default {
       theme: "snow"
     });
     let func = obj => {
-      let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
-      stores.set(obj.toString(), { first: text });
+      quill.on("text-change", function() {
+        let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
+        stores.set(obj.toString(), { first: text });
+      });
     };
     try {
       let id = Number(stores.get("id").ids);
-      quill.on("text-change", function() {
-        func(id);
-      });
+      func(id);
     } catch {
       let id = 1;
-      quill.on("text-change", function() {
-        func(id);
-      });
+      func(id);
     }
   }
 };

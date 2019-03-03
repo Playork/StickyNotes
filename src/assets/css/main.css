@@ -100,3 +100,6 @@ a {
   row-gap: 20px;
   color: #fff;
 }
+#notes span {
+  font-family: "segoe";
+}
