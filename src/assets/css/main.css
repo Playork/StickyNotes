@@ -1,7 +1,5 @@
 .note,
 #home {
-  overflow-x: hidden;
-  overflow-y: auto;
   margin: 0;
   padding: 0;
   position: absolute;
@@ -11,6 +9,13 @@
   bottom: 0;
   font-family: "Arial";
   user-select: none;
+}
+#home{
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.note{
+  overflow: hidden;
 }
 .help {
   user-select: none;
@@ -40,7 +45,7 @@ span .button .buttons button {
 }
 .start div {
   font-family: "Lobster";
-  color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.05);
   font-size: 50px;
   position: absolute;
   top: 40%;
@@ -55,7 +60,7 @@ span .button .buttons button {
   position: absolute;
   top: 45px;
   bottom: 100%;
-  left: 88%;
+  left: 82%;
   font-family: "segoe";
   color: #fff;
   user-select: none;
@@ -109,7 +114,7 @@ span .button .buttons button {
   color: #fff;
 }
 #notes {
-  margin-top: 50px;
+  margin-top: 60px;
   height: 100%;
   z-index: 20;
 }

@@ -1,7 +1,7 @@
 <template>
   <div id="home" v-on:click="savenote">
-    <titlebar1 v-bind:close="close"/>
-    <homebody v-bind:note="note"/>
+    <titlebar1 v-bind:close="close" v-bind:note="note"/>
+    <homebody/>
   </div>
 </template>
 <script>
