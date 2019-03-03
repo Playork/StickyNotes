@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" v-on:click="savenote">
     <titlebar1 v-bind:close="close"/>
     <homebody v-bind:note="note"/>
   </div>
@@ -14,28 +14,28 @@ export default {
     titlebar1,
     homebody
   },
-  mounted() {
-    document.getElementById("notes").innerHTML = "";
-    stores.each((value, key) => {
-      if (key != "id" && key != "loglevel:webpack-dev-server") {
-        document
-          .getElementById("notes")
-          .insertAdjacentHTML(
-            "afterbegin",
-            "<span id='startnote'>&#xE710;</span><span id='deletenote'></span>" +
-              value.first
-          );
-        document.getElementById("startnote").onclick = () => {
-          stores.set("id", { ids: key });
-          ipcRenderer.send("create-new-instance");
-        };
-        document.getElementById("deletenote").onclick = () => {
-          stores.remove(key);
-        };
-      }
-    });
-  },
   methods: {
+    savenote: function() {
+      document.getElementById("notes").innerHTML = "";
+      stores.each((value, key) => {
+        if (key != "id" && key != "loglevel:webpack-dev-server") {
+          document
+            .getElementById("notes")
+            .insertAdjacentHTML(
+              "afterbegin",
+              "<span id='startnote'>&#xE710;</span><span id='deletenote'></span>" +
+                value.first
+            );
+          document.getElementById("startnote").onclick = () => {
+            stores.set("id", { ids: key });
+            ipcRenderer.send("create-new-instance");
+          };
+          document.getElementById("deletenote").onclick = () => {
+            stores.remove(key);
+          };
+        }
+      });
+    },
     close: function() {
       stores.each((value, key) => {
         if (key != "id" && key != "loglevel:webpack-dev-server") {
