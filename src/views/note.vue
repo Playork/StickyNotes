@@ -22,12 +22,17 @@ export default {
     choosecolor
   },
   mounted() {
-    try{
-    document.querySelector(".ql-snow .ql-editor").innerHTML = stores.get(stores.get("id").ids).first;
-    }catch{}
-    if(document.querySelector(".ql-snow .ql-editor").innerHTML != "<p><br></p>"){
-      let id = Number(stores.get("id").ids) + 10
-      stores.set("id",{ids : id.toString()})
+    try {
+      let text = stores.get(stores.get("id").ids);
+      document.querySelector(".ql-snow .ql-editor").innerHTML = text.first;
+      document.getElementById("lightYellow").style.backgroundColor = text.back;
+      document.getElementById("titlebar").style.backgroundColor = text.title;
+    } catch {}
+    if (
+      document.querySelector(".ql-snow .ql-editor").innerHTML != "<p><br></p>"
+    ) {
+      let id = Number(stores.get("id").ids) + 10;
+      stores.set("id", { ids: id.toString() });
     }
   },
   methods: {

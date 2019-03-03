@@ -69,7 +69,17 @@ export default {
     let func = obj => {
       quill.on("text-change", function() {
         let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
-        stores.set(obj.toString(), { first: text });
+        let color1 = window
+          .getComputedStyle(document.getElementById("lightYellow"))
+          .getPropertyValue("background-color");
+        let color2 = window
+          .getComputedStyle(document.getElementById("titlebar"))
+          .getPropertyValue("background-color");
+        stores.set(obj.toString(), {
+          first: text,
+          back: color1,
+          title: color2
+        });
       });
     };
     try {

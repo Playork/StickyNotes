@@ -18,7 +18,7 @@ protocol.registerStandardSchemes(["app"], { secure: true });
 function createWindow() {
   win = new BrowserWindow({
     width: 350,
-    height: 375,
+    height: 600,
     icon: "public/favicon.ico",
     backgroundColor: "#202020",
     title: "Playork Sticky Notes",

@@ -45,6 +45,10 @@ export default {
               }
             });
           };
+          document.getElementById("notetext").style.backgroundColor =
+            value.back;
+          document.getElementById("notetext").style.border =
+            "5px solid " + value.title;
         }
       });
     },

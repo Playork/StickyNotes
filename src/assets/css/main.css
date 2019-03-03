@@ -10,11 +10,11 @@
   font-family: "Arial";
   user-select: none;
 }
-#home{
+#home {
   overflow-x: hidden;
   overflow-y: auto;
 }
-.note{
+.note {
   overflow: hidden;
 }
 .help {
@@ -114,7 +114,7 @@ span .button .buttons button {
   color: #fff;
 }
 #notes {
-  margin-top: 60px;
+  margin-top: 65px;
   height: 100%;
   z-index: 20;
 }
@@ -128,7 +128,6 @@ span .button .buttons button {
   border-radius: 20px;
   width: 80%;
   word-wrap: break-word;
-  background: #ffeb81;
   min-height: 80px;
   user-select: text;
 }
