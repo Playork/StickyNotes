@@ -7,7 +7,7 @@
   min-width: 300px;
   padding: 4px !important;
   color: #fff;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;

@@ -35,9 +35,12 @@ a {
 .start {
   z-index: 10;
 }
+span .button .buttons button {
+  cursor: pointer;
+}
 .start div {
   font-family: "Lobster";
-  color: #fff;
+  color: rgba(255, 255, 255, 0.1);
   font-size: 50px;
   position: absolute;
   top: 40%;
@@ -106,7 +109,7 @@ a {
   color: #fff;
 }
 #notes {
-  margin-top: 40px;
+  margin-top: 50px;
   height: 100%;
   z-index: 20;
 }

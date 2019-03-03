@@ -3,6 +3,7 @@
     <div id="notes"></div>
     <div>
       <div id="options">
+        <span v-on:click="deleteall">&#xE74D;</span>
         <span v-on:click="aboutshow">&#xE946;</span>
         <a href="#help" target="_blank">
           <span>&#xE897;</span>
@@ -26,11 +27,23 @@
   </div>
 </template>
 <script>
+import stores from "store";
+import { remote } from "electron";
 export default {
-  props: {
-    note: Function
-  },
   methods: {
+    deleteall: function() {
+      const options = {
+        type: "warning",
+        title: "Delete?",
+        message: "Do You Want To Delete All The Notes?",
+        buttons: ["Yes", "No"]
+      };
+      remote.dialog.showMessageBox(options, index => {
+        if (index === 0) {
+          stores.clearAll();
+        }
+      });
+    },
     aboutshow: function() {
       let id = document.getElementById("about");
       id.style.display = "block";

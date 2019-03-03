@@ -24,7 +24,7 @@ export default {
             .getElementById("notes")
             .insertAdjacentHTML(
               "afterbegin",
-              `<div id="notetext"><span id="startnote">&#xE710;</span><span id="deletenote"></span>${
+              `<div id="notetext"><span id="startnote">&#xE710;</span><span id="deletenote">&#xE74D;</span>${
                 value.first
               }</div>`
             );

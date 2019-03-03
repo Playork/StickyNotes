@@ -17,7 +17,8 @@
 <script>
 export default {
   props: {
-    close: Function
+    close: Function,
+    note: Function
   }
 };
 </script>
