@@ -60,7 +60,6 @@ export default {
             { align: "right" },
             "clean",
             "image",
-            "video"
           ]
         ]
       },
