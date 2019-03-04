@@ -1,21 +1,21 @@
 .note,
 #home {
+  user-select: none;
   margin: 0;
   padding: 0;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   font-family: "Arial";
-  user-select: none;
 }
 #home {
   overflow-x: hidden;
   overflow-y: auto;
-}
-.note {
-  overflow: hidden;
 }
 .help {
   user-select: none;

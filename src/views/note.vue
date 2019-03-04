@@ -89,6 +89,7 @@ export default {
           document.getElementById("add").style.display = "flex";
           document.getElementById("more").style.display = "flex";
           document.getElementById("close").style.display = "flex";
+          document.getElementById("emoji").style.display = "flex";
         },
         true
       );
@@ -107,6 +108,7 @@ export default {
           document.getElementById("add").style.display = "flex";
           document.getElementById("more").style.display = "flex";
           document.getElementById("close").style.display = "flex";
+          document.getElementById("emoji").style.display = "flex";
         },
         true
       );
@@ -119,6 +121,7 @@ export default {
           document.getElementById("add").style.display = "none";
           document.getElementById("more").style.display = "none";
           document.getElementById("close").style.display = "none";
+          document.getElementById("emoji").style.display = "none";
         },
         true
       );

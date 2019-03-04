@@ -1,5 +1,6 @@
 #lightYellow {
   padding-top: 35px;
+  padding-bottom: 65px;
   display: block;
   position: absolute;
   top: 0;
@@ -7,6 +8,12 @@
   right: 0;
   left: 0;
   background-color: #fff2ab;
+  height: calc(100% - 65px);
+  overflow: auto;
+  width: 100%;
+}
+#editor {
+  padding-top: 10px;
 }
 @media screen and (max-height: 374px) {
   #editor {
@@ -27,16 +34,16 @@
   font-size: 18px;
   font-family: arial;
 }
-.ql-snow .ql-editor::-webkit-scrollbar {
+#lightYellow::-webkit-scrollbar {
   width: 2px;
 }
-.ql-snow .ql-editor::-webkit-scrollbar-track {
+#lightYellow::-webkit-scrollbar-track {
   box-shadow: none;
   border-radius: 10px;
   -webkit-border-radius: 10px;
   background: none;
 }
-.ql-snow .ql-editor::-webkit-scrollbar-thumb {
+#lightYellow::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-border-radius: 10px;
   background: #222;
