@@ -17,7 +17,6 @@
   border: none !important;
 }
 .ql-snow .ql-editor {
-  padding-top: 5px;
   width: 98%;
   height: calc(100% - 60px);
   margin-left: 2px;

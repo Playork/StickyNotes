@@ -63,24 +63,7 @@ let $ = JQuery;
       value: function generateElements(emojiInput) {
 
         var clickLink = function clickLink(event) {
-          // Is inserting via CKEditor
-          if ($(emojiInput).parent('div').siblings('.cke').length) {
-              CKEDITOR.instances.bodyEditor.insertText(event.target.innerHTML);
-          }
-          else {
-              var caretPos = emojiInput.selectionStart;
-              if (caretPos != null) {
-                  emojiInput.value = emojiInput.value.substring(0, caretPos) + " " + event.target.innerHTML + emojiInput.value.substring(caretPos);
-              }
-              else { // is probably contentEditable or something else
-                  $(emojiInput).append(event.target.innerHTML);
-              }
-          }
-
-          //trigger ng-change for angular
-          if (typeof angular !== "undefined") {
-            angular.element(emojiInput).triggerHandler("change");
-          }
+                  document.querySelector(".ql-snow .ql-editor").innerHTML += event.target.innerHTML;
         };
 
         var clickCategory = function clickCategory(event) {
@@ -130,7 +113,7 @@ let $ = JQuery;
           emojiPicker.style.right = "0px";
           emojiPicker.style.top = "30px";
           emojiPicker.style.display = "none";
-          emojiPicker.style.width = "400px";
+          emojiPicker.style.width = "300px";
         }
         emojiPicker.style.zIndex = "999";
         emojiPicker.style.overflow = "hidden";
