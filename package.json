@@ -11,6 +11,7 @@
     "start": "vue-cli-service electron:serve"
   },
   "dependencies": {
+    "jquery": "^3.3.1",
     "electron-context-menu": "latest",
     "quill": "latest",
     "store": "latest",

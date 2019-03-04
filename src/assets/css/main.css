@@ -130,4 +130,5 @@ span .button .buttons button {
   word-wrap: break-word;
   min-height: 80px;
   user-select: text;
+  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }

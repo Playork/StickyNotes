@@ -1,11 +1,12 @@
 <template>
   <div id="lightYellow">
-    <div id="editor"></div>
+    <div id="editor" data-meteor-emoji="true"></div>
   </div>
 </template>
 <script>
 import Quill from "quill";
 import stores from "store";
+import emoji from "./../../assets/meteorEmoji.js";
 export default {
   mounted() {
     var BackgroundClass = Quill.import("attributors/class/background");
@@ -81,6 +82,22 @@ export default {
           title: color2
         });
       });
+      document.getElementById("color").addEventListener("click", () => {
+        let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
+        if (text != "<p><br></p>") {
+          let color1 = window
+            .getComputedStyle(document.getElementById("lightYellow"))
+            .getPropertyValue("background-color");
+          let color2 = window
+            .getComputedStyle(document.getElementById("titlebar"))
+            .getPropertyValue("background-color");
+          stores.set(obj.toString(), {
+            first: text,
+            back: color1,
+            title: color2
+          });
+        }
+      });
     };
     try {
       let id = Number(stores.get("id").ids);
@@ -89,6 +106,7 @@ export default {
       let id = 1;
       func(id);
     }
+    new emoji();
   }
 };
 </script>

@@ -3,7 +3,7 @@
     <div id="notes"></div>
     <div>
       <div id="options">
-        <span v-on:click="deleteall">&#xE74D;</span>
+        <span v-on:click="deleteall" title="Delete All Notes And Quit">&#xE74D;</span>
         <span v-on:click="aboutshow">&#xE946;</span>
         <a href="#help" target="_blank">
           <span>&#xE897;</span>
@@ -28,7 +28,7 @@
 </template>
 <script>
 import stores from "store";
-import { remote } from "electron";
+import { remote, ipcRenderer } from "electron";
 export default {
   methods: {
     deleteall: function() {
@@ -41,6 +41,7 @@ export default {
       remote.dialog.showMessageBox(options, index => {
         if (index === 0) {
           stores.clearAll();
+          ipcRenderer.send("closeall");
         }
       });
     },

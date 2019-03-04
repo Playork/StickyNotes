@@ -59,6 +59,9 @@ function createNote() {
     win.focus();
   });
 }
+ipcMain.on("closeall", () => {
+  app.quit();
+});
 ipcMain.on("create-new-instance", () => {
   createNote();
 });
