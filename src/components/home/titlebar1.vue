@@ -6,7 +6,7 @@
           <span id="add">&#xE710;</span>
         </div>
         <div id="window-controls">
-          <div class="button" v-on:click="close" id="close-button">
+          <div title="Close All Notes" class="button" v-on:click="close" id="close-button">
             <span>&#xE8BB;</span>
           </div>
         </div>

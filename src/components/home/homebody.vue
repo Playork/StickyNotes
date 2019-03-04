@@ -4,8 +4,8 @@
     <div>
       <div id="options">
         <span v-on:click="deleteall" title="Delete All Notes And Quit">&#xE74D;</span>
-        <span v-on:click="aboutshow">&#xE946;</span>
-        <a href="#help" target="_blank">
+        <span v-on:click="aboutshow" title="About">&#xE946;</span>
+        <a href="#help" target="_blank" title="help">
           <span>&#xE897;</span>
         </a>
       </div>

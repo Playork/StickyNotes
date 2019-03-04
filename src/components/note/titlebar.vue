@@ -73,9 +73,11 @@ export default {
       if (select.style.display == "none" || select.style.display == "") {
         select.style.display = "block";
         select0.style.height = "0";
+        document.getElementById("emoji").style.display = "flex";
       } else {
         select.style.display = "none";
         select0.style.height = "40px";
+        document.getElementById("emoji").style.display = "none";
       }
     }
   }

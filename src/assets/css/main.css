@@ -1,4 +1,4 @@
-.note,
+#note,
 #home {
   user-select: none;
   margin: 0;
@@ -40,7 +40,10 @@ a {
 .start {
   z-index: 10;
 }
-span .button .buttons button {
+span,
+.button,
+.buttons,
+button {
   cursor: pointer;
 }
 .start div {
@@ -131,4 +134,7 @@ span .button .buttons button {
   min-height: 80px;
   user-select: text;
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
+}
+#emoji {
+  display: none;
 }

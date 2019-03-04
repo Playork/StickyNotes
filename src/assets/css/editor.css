@@ -1,6 +1,6 @@
 #lightYellow {
-  padding-top: 35px;
-  padding-bottom: 65px;
+  padding-top: 30px;
+  padding-bottom: 60px;
   display: block;
   position: absolute;
   top: 0;
@@ -8,7 +8,7 @@
   right: 0;
   left: 0;
   background-color: #fff2ab;
-  height: calc(100% - 65px);
+  height: calc(100% - 60px);
   overflow: auto;
   width: 100%;
 }
@@ -25,7 +25,6 @@
 }
 .ql-snow .ql-editor {
   width: 98%;
-  height: calc(100% - 60px);
   margin-left: 2px;
   background-color: transparent;
   border: none;
@@ -34,19 +33,25 @@
   font-size: 18px;
   font-family: arial;
 }
-#lightYellow::-webkit-scrollbar {
-  width: 2px;
+#lightYellow::-webkit-scrollbar,
+.help::-webkit-scrollbar,
+#home::-webkit-scrollbar {
+  width: 6px;
 }
-#lightYellow::-webkit-scrollbar-track {
+#lightYellow::-webkit-scrollbar-track,
+.help::-webkit-scrollbar-track,
+#home::-webkit-scrollbar-track {
   box-shadow: none;
   border-radius: 10px;
   -webkit-border-radius: 10px;
   background: none;
 }
-#lightYellow::-webkit-scrollbar-thumb {
+#lightYellow::-webkit-scrollbar-thumb,
+.help::-webkit-scrollbar-thumb,
+#home::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-border-radius: 10px;
-  background: #222;
+  background: #111;
   box-shadow: none;
 }
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value=""]::before {
