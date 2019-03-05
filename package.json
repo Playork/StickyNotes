@@ -15,11 +15,12 @@
     "electron-context-menu": "latest",
     "quill": "latest",
     "store": "latest",
-    "vue": "latest",
-    "vue-router": "latest",
-    "vuex": "latest"
+    "electron-updater": "latest"
   },
   "devDependencies": {
+    "vue": "latest",
+    "vue-router": "latest",
+    "vuex": "latest",
     "@vue/cli-service": "latest",
     "electron": "latest",
     "vue-cli-plugin-electron-builder": "latest",
