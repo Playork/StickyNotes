@@ -4,6 +4,8 @@ import {
   createProtocol,
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
+import { autoUpdater } from "electron-updater";
+autoUpdater.checkForUpdatesAndNotify();
 require("electron-context-menu")({
   prepend: () => [
     {
@@ -11,6 +13,9 @@ require("electron-context-menu")({
     }
   ],
   showInspectElement: false
+});
+app.setLoginItemSettings({
+  openAtLogin: true
 });
 const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
