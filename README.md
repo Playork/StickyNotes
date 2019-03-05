@@ -3,15 +3,22 @@
 ![Logo](src/assets/logo.png)
 ![ScreenShot](screen.png)
 
-### A Sticky Note Application.
+### A Open Source Sticky Note Application.
 ### Emoji Selecter
 ### Automatically Save Notes
 ### Choose Background And Title Bar Color You Like
 ### Editing Options Like Font,Bold,Size,.etc
 ### Add Images To Note From Local Drive
+### Lock The Note
+### Electron Based
+### Using Quill Editing Capability
+### Uses Some jQuery
+### Electron-Context-Menu for Context Menu
+### Using Store For Saving Notes
+### Using Vue As Front End Framework
 
 ### If you like my App please consider buying me a coffee at [HERE!](http://buymeacoff.ee/playork)
-
+### Fell Free To Fork Or Clone
 ## Install
 
 ### For Development Version Follow the instuctions below
