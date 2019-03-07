@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "A Sticky Note Application.",
   "author": "B. Ramnath Shenoy <bekalshenoy@gmail.com>",
-  "homepage": "https://github.com/Playork/StickyNotes",
   "scripts": {
     "build": "vue-cli-service electron:build --config",
     "postinstall": "electron-builder install-app-deps",
@@ -11,25 +10,26 @@
     "start": "vue-cli-service electron:serve"
   },
   "dependencies": {
-    "jquery": "^3.3.1",
     "electron-context-menu": "latest",
+    "electron-updater": "latest",
+    "jquery": "^3.3.1",
     "quill": "latest",
-    "store": "latest",
-    "electron-updater": "latest"
+    "store": "latest"
   },
   "devDependencies": {
-    "vue": "latest",
-    "vue-router": "latest",
-    "vuex": "latest",
     "@vue/cli-service": "latest",
     "electron": "latest",
+    "vue": "latest",
     "vue-cli-plugin-electron-builder": "latest",
-    "vue-template-compiler": "latest"
+    "vue-router": "latest",
+    "vue-template-compiler": "latest",
+    "vuex": "latest"
   },
   "postcss": {
     "plugins": {
       "autoprefixer": {}
     }
   },
+  "homepage": "https://github.com/Playork/StickyNotes",
   "main": "background.js"
 }
