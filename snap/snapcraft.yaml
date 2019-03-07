@@ -13,6 +13,7 @@
   grade: stable
   confinement: strict
   parts:
-    my-part:
-      plugin: nil
+    this-app:
+      source: 
+      plugin: autotools
   
