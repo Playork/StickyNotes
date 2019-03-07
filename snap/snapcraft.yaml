@@ -14,5 +14,5 @@
   confinement: strict
   parts:
     this-app:
-      plugin: null
+      plugin: nil
   
