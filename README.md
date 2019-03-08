@@ -16,7 +16,7 @@
 ### Electron-Context-Menu for Context Menu
 ### Using Store For Saving Notes
 ### Using Vue As Front End Framework
-
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/stickynotes)
 ### If you like my App please consider buying me a coffee at [HERE!](http://buymeacoff.ee/playork)
 ### Fell Free To Fork Or Clone
 ## Install
