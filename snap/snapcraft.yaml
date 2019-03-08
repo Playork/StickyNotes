@@ -16,3 +16,6 @@
     sfb:
       plugin: dump
       source: https://github.com/Playork/StickyNotes/releases/download/v0.1.0/stickynotes-0.1.0.tar.gz
+  apps:
+    thisapp:
+      command: stickynotes
