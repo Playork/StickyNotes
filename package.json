@@ -7,7 +7,7 @@
     "build": "vue-cli-service electron:build --config",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "start": "vue-cli-service electron:serve",
+    "start": "vue-cli-service electron:serve"
   },
   "dependencies": {
     "electron-context-menu": "latest",
