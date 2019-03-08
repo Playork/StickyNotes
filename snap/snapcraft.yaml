@@ -13,9 +13,6 @@
   grade: stable
   confinement: strict
   parts:
-    ttb:
-      source: https://github.com/Playork/StickyNotes/releases/download/v0.1.0/stickynotes-0.1.0.tar.gz
-      plugin: autotools
     sfb:
-      source: https://github.com/Playork/StickyNotes/releases/download/v0.1.0/stickynotes-0.1.0-ia32.tar.gz
+      source: https://github.com/Playork/StickyNotes/releases/download/v0.1.0/stickynotes-0.1.0.tar.gz
       plugin: autotools
