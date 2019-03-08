@@ -14,9 +14,11 @@ require("electron-context-menu")({
   ],
   showInspectElement: false
 });
-app.setLoginItemSettings({
-  openAtLogin: true
-});
+if (app.isPackaged) {
+  app.setLoginItemSettings({
+    openAtLogin: true
+  });
+}
 const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
 protocol.registerStandardSchemes(["app"], { secure: true });
