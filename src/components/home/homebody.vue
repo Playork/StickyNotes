@@ -28,18 +28,19 @@
 </template>
 <script>
 import stores from "store";
-import { remote, ipcRenderer } from "electron";
+import { ipcRenderer } from "electron";
+import swal from "sweetalert";
 export default {
   methods: {
     deleteall: function() {
-      const options = {
-        type: "warning",
-        title: "Delete?",
-        message: "Do You Want To Delete All The Notes?",
-        buttons: ["Yes", "No"]
-      };
-      remote.dialog.showMessageBox(options, index => {
-        if (index === 0) {
+      swal({
+        title: "Are you sure?",
+        text: "Want To Delete All Notes!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+      }).then(willDelete => {
+        if (willDelete) {
           stores.clearAll();
           ipcRenderer.send("closeall");
         }

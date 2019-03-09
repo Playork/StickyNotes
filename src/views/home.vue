@@ -6,6 +6,7 @@
 </template>
 <script>
 import { remote, ipcRenderer } from "electron";
+import swal from "sweetalert";
 import homebody from "../components/home/homebody.vue";
 import titlebar1 from "../components/home/titlebar1.vue";
 import stores from "store";
@@ -33,14 +34,14 @@ export default {
             ipcRenderer.send("create-new-instance");
           };
           document.getElementById("deletenote").onclick = () => {
-            const options = {
-              type: "warning",
-              title: "Delete?",
-              message: "Do You Want To Delete The Note?",
-              buttons: ["Yes", "No"]
-            };
-            remote.dialog.showMessageBox(options, index => {
-              if (index === 0) {
+            swal({
+              title: "Are you sure?",
+              text: "Want To Delete Your Note!",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true
+            }).then(willDelete => {
+              if (willDelete) {
                 stores.remove(key);
               }
             });

@@ -9,6 +9,7 @@
 
 <script>
 import { remote, ipcRenderer } from "electron";
+import swal from "sweetalert";
 import stores from "store";
 import editor from "../components/note/editor.vue";
 import titlebar from "../components/note/titlebar.vue";
@@ -37,14 +38,14 @@ export default {
   },
   methods: {
     close: function() {
-      const options = {
-        type: "warning",
-        title: "Delete?",
-        message: "Do You Want To Delete The Note?",
-        buttons: ["Yes", "No"]
-      };
-      remote.dialog.showMessageBox(options, index => {
-        if (index === 0) {
+      swal({
+        title: "Are you sure?",
+        text: "Want To Delete Your Note!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+      }).then(willDelete => {
+        if (willDelete) {
           stores.each((value, key) => {
             if (key != "id" && key != "loglevel:webpack-dev-server") {
               if (
