@@ -35,7 +35,6 @@
           <div style="font-size:20px;">11-Align Text Center Or Left Or Right</div>
           <div style="font-size:20px;">12-Remove Text Stylings</div>
           <div style="font-size:20px;">13-Add Image Frome Local Drive</div>
-          <div style="font-size:20px;">14-Add Embed Video</div>
         </div>
       </div>
     </div>

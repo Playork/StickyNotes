@@ -59,7 +59,7 @@ export default {
             { align: "center" },
             { align: "right" },
             "clean",
-            "image",
+            "image"
           ]
         ]
       },
@@ -90,6 +90,18 @@ export default {
           let color2 = window
             .getComputedStyle(document.getElementById("titlebar"))
             .getPropertyValue("background-color");
+          stores.set(obj.toString(), {
+            first: text,
+            back: color1,
+            title: color2
+          });
+        }
+      });
+      document.getElementById("cc").addEventListener("click", () => {
+        let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
+        if (text != "<p><br></p>") {
+          let color1 = document.getElementById("color2").value;
+          let color2 = document.getElementById("color1").value;
           stores.set(obj.toString(), {
             first: text,
             back: color1,
