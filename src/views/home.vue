@@ -1,5 +1,5 @@
 <template>
-  <div id="home" v-on:click="savenote">
+  <div id="home">
     <titlebar1 v-bind:close="close" v-bind:note="note"/>
     <homebody/>
   </div>
@@ -9,51 +9,51 @@ import { remote, ipcRenderer } from "electron";
 import homebody from "../components/home/homebody.vue";
 import titlebar1 from "../components/home/titlebar1.vue";
 import stores from "store";
+import { setTimeout } from "timers";
 export default {
   components: {
     titlebar1,
     homebody
   },
-  mounted() {},
+  mounted() {
+    window.setInterval(() => {
+      document.getElementById("notes").innerHTML = "";
+      stores.each((value, key) => {
+        if (key != "id" && key != "loglevel:webpack-dev-server") {
+          document
+            .getElementById("notes")
+            .insertAdjacentHTML(
+              "afterbegin",
+              `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span>${
+                value.first
+              }</div>`
+            );
+          document.getElementById("startnote").onclick = () => {
+            stores.set("id", { ids: key });
+            ipcRenderer.send("create-new-instance");
+          };
+          document.getElementById("deletenote").onclick = () => {
+            const options = {
+              type: "warning",
+              title: "Delete?",
+              message: "Do You Want To Delete The Note?",
+              buttons: ["Yes", "No"]
+            };
+            remote.dialog.showMessageBox(options, index => {
+              if (index === 0) {
+                stores.remove(key);
+              }
+            });
+          };
+          document.getElementById("notetext").style.backgroundColor =
+            value.back;
+          document.getElementById("notetext").style.border =
+            "5px solid " + value.title;
+        }
+      });
+    }, 1000);
+  },
   methods: {
-    savenote: function() {
-      for (let i = 0; i < -1; i++) {
-        document.getElementById("notes").innerHTML = "";
-        stores.each((value, key) => {
-          if (key != "id" && key != "loglevel:webpack-dev-server") {
-            document
-              .getElementById("notes")
-              .insertAdjacentHTML(
-                "afterbegin",
-                `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span>${
-                  value.first
-                }</div>`
-              );
-            document.getElementById("startnote").onclick = () => {
-              stores.set("id", { ids: key });
-              ipcRenderer.send("create-new-instance");
-            };
-            document.getElementById("deletenote").onclick = () => {
-              const options = {
-                type: "warning",
-                title: "Delete?",
-                message: "Do You Want To Delete The Note?",
-                buttons: ["Yes", "No"]
-              };
-              remote.dialog.showMessageBox(options, index => {
-                if (index === 0) {
-                  stores.remove(key);
-                }
-              });
-            };
-            document.getElementById("notetext").style.backgroundColor =
-              value.back;
-            document.getElementById("notetext").style.border =
-              "5px solid " + value.title;
-          }
-        });
-      }
-    },
     close: function() {
       stores.each((value, key) => {
         if (key != "id" && key != "loglevel:webpack-dev-server") {

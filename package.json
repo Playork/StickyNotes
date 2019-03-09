@@ -1,6 +1,6 @@
 {
   "name": "stickynotes",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Sticky Note Application.",
   "author": "B. Ramnath Shenoy <bekalshenoy@gmail.com>",
   "scripts": {
