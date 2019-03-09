@@ -59,12 +59,28 @@ export default {
         select1.style.pointerEvents = "none";
         select2.style.pointerEvents = "none";
         select3.style.display = "none";
+        document.getElementById("titlebar").style.height = "0";
+        document.getElementById("color").style.height = "0";
+        document.getElementById("lock").style.fontSize = "20px";
+        document.getElementById("lock").style.marginTop = "35px";
+        document.getElementById("lock").style.marginLeft = "-100px";
+        document.getElementById("add").style.display = "none";
+        document.getElementById("more").style.display = "none";
+        document.getElementById("close").style.display = "none";
       } else {
         id.innerHTML = "&#xE785;";
         select.style.pointerEvents = "auto";
         select0.style.pointerEvents = "auto";
         select1.style.pointerEvents = "auto";
         select2.style.pointerEvents = "auto";
+        document.getElementById("titlebar").style.height = "32px";
+        document.getElementById("color").style.height = "40px";
+        document.getElementById("lock").style.fontSize = "25px";
+        document.getElementById("lock").style.marginTop = "0";
+        document.getElementById("lock").style.marginLeft = "0";
+        document.getElementById("add").style.display = "flex";
+        document.getElementById("more").style.display = "flex";
+        document.getElementById("close").style.display = "flex";
       }
     },
     showedit: function() {
