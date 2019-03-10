@@ -123,7 +123,7 @@ let $ = JQuery;
                   key: "generateElements",
                   value: function generateElements(emojiInput) {
                     var clickLink = function clickLink(event) {
-                      document.querySelector(".ql-snow .ql-editor").innerHTML +=
+                      document.querySelector(".ql-snow .ql-editor p").innerHTML +=
                         event.target.innerHTML;
                     };
 
