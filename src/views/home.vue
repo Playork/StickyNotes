@@ -52,12 +52,12 @@ export default {
         }
       });
     }, 2500);
-    store.each((value, key) => {
+    /*store.each((value, key) => {
       if (key != "id" && key != "loglevel:webpack-dev-server") {
         store.set("id", { ids: key });
         ipcRenderer.send("create-new-instance");
       }
-    });
+    });*/
   },
   methods: {
     close: function() {
