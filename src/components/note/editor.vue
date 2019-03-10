@@ -5,7 +5,7 @@
 </template>
 <script>
 import Quill from "quill";
-import stores from "store";
+import store from "store";
 import emoji from "./../../assets/meteorEmoji.js";
 export default {
   mounted() {
@@ -76,9 +76,9 @@ export default {
         let color2 = window
           .getComputedStyle(document.getElementById("titlebar"))
           .getPropertyValue("background-color");
-        let winwidth = window.innerHeight;
-        let winheight = window.innerHeight;
-        stores.set(obj.toString(), {
+        let winwidth = window.innerWidth.toString();
+        let winheight = window.innerHeight.toString();
+        store.set(obj.toString(), {
           first: text,
           back: color1,
           title: color2,
@@ -93,20 +93,11 @@ export default {
         repeafunc();
       });
       document.getElementById("cc").addEventListener("click", () => {
-        let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
-        if (text != "<p><br></p>") {
-          let color1 = document.getElementById("color2").value;
-          let color2 = document.getElementById("color1").value;
-          stores.set(obj.toString(), {
-            first: text,
-            back: color1,
-            title: color2
-          });
-        }
+        repeafunc();
       });
     };
     try {
-      let id = Number(stores.get("id").ids);
+      let id = Number(store.get("id").ids);
       func(id);
     } catch {
       let id = 1;

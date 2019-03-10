@@ -9,7 +9,7 @@ import { remote, ipcRenderer } from "electron";
 import swal from "sweetalert";
 import homebody from "../components/home/homebody.vue";
 import titlebar1 from "../components/home/titlebar1.vue";
-import stores from "store";
+import store from "store";
 export default {
   components: {
     titlebar1,
@@ -18,7 +18,7 @@ export default {
   mounted() {
     window.setInterval(() => {
       document.getElementById("notes").innerHTML = "";
-      stores.each((value, key) => {
+      store.each((value, key) => {
         if (key != "id" && key != "loglevel:webpack-dev-server") {
           document
             .getElementById("notes")
@@ -29,7 +29,7 @@ export default {
               }</div>`
             );
           document.getElementById("startnote").onclick = () => {
-            stores.set("id", { ids: key });
+            store.set("id", { ids: key });
             ipcRenderer.send("create-new-instance");
           };
           document.getElementById("deletenote").onclick = () => {
@@ -41,7 +41,7 @@ export default {
               dangerMode: true
             }).then(willDelete => {
               if (willDelete) {
-                stores.remove(key);
+                store.remove(key);
               }
             });
           };
@@ -51,14 +51,20 @@ export default {
             "5px solid " + value.title;
         }
       });
-    }, 1000);
+    }, 2500);
+    store.each((value, key) => {
+      if (key != "id" && key != "loglevel:webpack-dev-server") {
+        store.set("id", { ids: key });
+        ipcRenderer.send("create-new-instance");
+      }
+    });
   },
   methods: {
     close: function() {
-      stores.each((value, key) => {
+      store.each((value, key) => {
         if (key != "id" && key != "loglevel:webpack-dev-server") {
           if (value.first == "<p><br></p>") {
-            stores.remove(key);
+            store.remove(key);
           }
         }
       });
@@ -67,10 +73,10 @@ export default {
     note: function() {
       let func = obj => {
         obj++;
-        stores.set("id", { ids: obj.toString() });
+        store.set("id", { ids: obj.toString() });
       };
       try {
-        let id = Number(stores.get("id").ids);
+        let id = Number(store.get("id").ids);
         func(id);
       } catch {
         let id = 0;

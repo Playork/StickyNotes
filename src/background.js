@@ -1,11 +1,12 @@
 "use strict";
+
 import { app, protocol, BrowserWindow, ipcMain } from "electron";
 import {
   createProtocol,
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
-import stores from "store";
 import { autoUpdater } from "electron-updater";
+
 autoUpdater.checkForUpdatesAndNotify();
 require("electron-context-menu")({
   prepend: () => [
@@ -15,11 +16,13 @@ require("electron-context-menu")({
   ],
   showInspectElement: false
 });
+
 if (app.isPackaged) {
   app.setLoginItemSettings({
     openAtLogin: true
   });
 }
+
 const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
 protocol.registerStandardSchemes(["app"], { secure: true });
@@ -51,29 +54,18 @@ function createWindow() {
     win.destroy();
   });
 }
+
 function createNote() {
   let win;
-  try {
-    win = new BrowserWindow({
-      width: Number(stores.get(stores.get("id").ids).wid),
-      height: Number(stores.get(stores.get("id").ids).hei),
-      icon: "public/favicon.ico",
-      backgroundColor: "#202020",
-      title: "Playork Sticky Notes",
-      frame: false,
-      show: false
-    });
-  } catch {
-    win = new BrowserWindow({
-      width: 350,
-      height: 375,
-      icon: "public/favicon.ico",
-      backgroundColor: "#202020",
-      title: "Playork Sticky Notes",
-      frame: false,
-      show: false
-    });
-  }
+  win = new BrowserWindow({
+    width: 350,
+    height: 375,
+    icon: "public/favicon.ico",
+    backgroundColor: "#202020",
+    title: "Playork Sticky Notes",
+    frame: false,
+    show: false
+  });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     win.loadURL("http://localhost:8080/#/note");
     if (!process.env.IS_TEST) win.webContents.openDevTools();
@@ -86,29 +78,28 @@ function createNote() {
     win.focus();
   });
 }
-stores.each((value, key) => {
-  if (key != "id" && key != "loglevel:webpack-dev-server") {
-    stores.set("id", { ids: key });
-    createNote();
-  }
-});
+
 ipcMain.on("closeall", () => {
   app.quit();
 });
+
 ipcMain.on("create-new-instance", () => {
   createNote();
 });
+
 app.on("activate", () => {
   if (win === null) {
     createWindow();
   }
 });
+
 app.on("ready", async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     await installVueDevtools();
   }
   createWindow();
 });
+
 if (isDevelopment) {
   if (process.platform === "win32") {
     process.on("message", data => {

@@ -23,8 +23,7 @@
     "vue": "latest",
     "vue-cli-plugin-electron-builder": "latest",
     "vue-router": "latest",
-    "vue-template-compiler": "latest",
-    "vuex": "latest"
+    "vue-template-compiler": "latest"
   },
   "postcss": {
     "plugins": {

@@ -10,7 +10,7 @@
 <script>
 import { remote, ipcRenderer } from "electron";
 import swal from "sweetalert";
-import stores from "store";
+import store from "store";
 import editor from "../components/note/editor.vue";
 import titlebar from "../components/note/titlebar.vue";
 import colors from "../components/note/colors.vue";
@@ -23,8 +23,10 @@ export default {
     choosecolor
   },
   mounted() {
+    try{window.resizeTo(Number(store.get(store.get("id").ids).wid), Number(store.get(store.get("id").ids).hei));}
+    catch{window.resizeTo(350,375)}
     try {
-      let text = stores.get(stores.get("id").ids);
+      let text = store.get(store.get("id").ids);
       document.querySelector(".ql-snow .ql-editor").innerHTML = text.first;
       document.getElementById("lightYellow").style.backgroundColor = text.back;
       document.getElementById("titlebar").style.backgroundColor = text.title;
@@ -32,8 +34,8 @@ export default {
     if (
       document.querySelector(".ql-snow .ql-editor").innerHTML != "<p><br></p>"
     ) {
-      let id = Number(stores.get("id").ids) + 10;
-      stores.set("id", { ids: id.toString() });
+      let id = Number(store.get("id").ids) + 10;
+      store.set("id", { ids: id.toString() });
     }
   },
   methods: {
@@ -46,13 +48,13 @@ export default {
         dangerMode: true
       }).then(willDelete => {
         if (willDelete) {
-          stores.each((value, key) => {
+          store.each((value, key) => {
             if (key != "id" && key != "loglevel:webpack-dev-server") {
               if (
                 value.first ==
                 document.querySelector(".ql-snow .ql-editor").innerHTML
               ) {
-                stores.remove(key);
+                store.remove(key);
               }
             }
           });
@@ -63,10 +65,10 @@ export default {
     note: function() {
       let func = obj => {
         obj++;
-        stores.set("id", { ids: obj.toString() });
+        store.set("id", { ids: obj.toString() });
       };
       try {
-        let id = Number(stores.get("id").ids);
+        let id = Number(store.get("id").ids);
         func(id);
       } catch {
         let id = 1;

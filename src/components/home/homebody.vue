@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import stores from "store";
+import store from "store";
 import { ipcRenderer } from "electron";
 import swal from "sweetalert";
 export default {
@@ -41,7 +41,7 @@ export default {
         dangerMode: true
       }).then(willDelete => {
         if (willDelete) {
-          stores.clearAll();
+          store.clearAll();
           ipcRenderer.send("closeall");
         }
       });
