@@ -32,5 +32,6 @@
     }
   },
   "homepage": "https://github.com/Playork/StickyNotes",
+  "repository": "https://github.com/Playork/StickyNotes",
   "main": "background.js"
 }

@@ -75,56 +75,52 @@ export default {
       ipcRenderer.send("create-new-instance");
     },
     showhide: function() {
-      if (document.getElementById("lock").innerHTML == "&#xE72E;") {
-        document.addEventListener(
-          "focus",
-          () => {
-            document.getElementById("titlebar").style.height = "32px";
-            if (
-              document.querySelector(".ql-snow.ql-toolbar").style.display !=
-              "block"
-            ) {
-              document.getElementById("color").style.height = "40px";
-            }
-            document.getElementById("lock").style.display = "flex";
-            document.getElementById("add").style.display = "flex";
-            document.getElementById("more").style.display = "flex";
-            document.getElementById("close").style.display = "flex";
-          },
-          true
-        );
-
-        document.addEventListener(
-          "click",
-          () => {
-            document.getElementById("titlebar").style.height = "32px";
-            if (
-              document.querySelector(".ql-snow.ql-toolbar").style.display !=
-              "block"
-            ) {
-              document.getElementById("color").style.height = "40px";
-            }
-            document.getElementById("lock").style.display = "flex";
-            document.getElementById("add").style.display = "flex";
-            document.getElementById("more").style.display = "flex";
-            document.getElementById("close").style.display = "flex";
-          },
-          true
-        );
-      
-        document.addEventListener(
-          "blur",
-          () => {
-            document.getElementById("titlebar").style.height = "0";
-            document.getElementById("color").style.height = "0";
-            document.getElementById("lock").style.display = "none";
-            document.getElementById("add").style.display = "none";
-            document.getElementById("more").style.display = "none";
-            document.getElementById("close").style.display = "none";
-          },
-          true
-        );
-      }
+      document.addEventListener(
+        "focus",
+        () => {
+          document.getElementById("titlebar").style.height = "32px";
+          if (
+            document.querySelector(".ql-snow.ql-toolbar").style.display !=
+            "block"
+          ) {
+            document.getElementById("color").style.height = "40px";
+          }
+          document.getElementById("lock").style.display = "flex";
+          document.getElementById("add").style.display = "flex";
+          document.getElementById("more").style.display = "flex";
+          document.getElementById("close").style.display = "flex";
+        },
+        true
+      );
+      document.addEventListener(
+        "click",
+        () => {
+          document.getElementById("titlebar").style.height = "32px";
+          if (
+            document.querySelector(".ql-snow.ql-toolbar").style.display !=
+            "block"
+          ) {
+            document.getElementById("color").style.height = "40px";
+          }
+          document.getElementById("lock").style.display = "flex";
+          document.getElementById("add").style.display = "flex";
+          document.getElementById("more").style.display = "flex";
+          document.getElementById("close").style.display = "flex";
+        },
+        true
+      );
+      document.addEventListener(
+        "blur",
+        () => {
+          document.getElementById("titlebar").style.height = "0";
+          document.getElementById("color").style.height = "0";
+          document.getElementById("lock").style.display = "none";
+          document.getElementById("add").style.display = "none";
+          document.getElementById("more").style.display = "none";
+          document.getElementById("close").style.display = "none";
+        },
+        true
+      );
     }
   }
 };

@@ -10,7 +10,6 @@ import swal from "sweetalert";
 import homebody from "../components/home/homebody.vue";
 import titlebar1 from "../components/home/titlebar1.vue";
 import stores from "store";
-import { setTimeout } from "timers";
 export default {
   components: {
     titlebar1,

@@ -66,8 +66,9 @@ export default {
       placeholder: "Add Your Note",
       theme: "snow"
     });
+
     let func = obj => {
-      quill.on("text-change", function() {
+      let repeafunc = () => {
         let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
         let color1 = window
           .getComputedStyle(document.getElementById("lightYellow"))
@@ -75,27 +76,21 @@ export default {
         let color2 = window
           .getComputedStyle(document.getElementById("titlebar"))
           .getPropertyValue("background-color");
+        let winwidth = window.innerHeight;
+        let winheight = window.innerHeight;
         stores.set(obj.toString(), {
           first: text,
           back: color1,
-          title: color2
+          title: color2,
+          wid: winwidth,
+          hei: winheight
         });
+      };
+      quill.on("text-change", function() {
+        repeafunc();
       });
       document.getElementById("color").addEventListener("click", () => {
-        let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
-        if (text != "<p><br></p>") {
-          let color1 = window
-            .getComputedStyle(document.getElementById("lightYellow"))
-            .getPropertyValue("background-color");
-          let color2 = window
-            .getComputedStyle(document.getElementById("titlebar"))
-            .getPropertyValue("background-color");
-          stores.set(obj.toString(), {
-            first: text,
-            back: color1,
-            title: color2
-          });
-        }
+        repeafunc();
       });
       document.getElementById("cc").addEventListener("click", () => {
         let text = document.querySelector(".ql-snow .ql-editor").innerHTML;

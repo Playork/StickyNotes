@@ -21,6 +21,7 @@
   </div>
 </template>
 <script>
+import { setInterval, setTimeout } from "timers";
 export default {
   props: {
     close: Function,
@@ -49,6 +50,7 @@ export default {
       let select1 = document.getElementById("color");
       let select2 = document.getElementById("editor");
       let select3 = document.querySelector(".ql-snow.ql-toolbar");
+
       if (
         select.style.pointerEvents == "auto" ||
         select.style.pointerEvents == ""
@@ -59,28 +61,34 @@ export default {
         select1.style.pointerEvents = "none";
         select2.style.pointerEvents = "none";
         select3.style.display = "none";
-        document.getElementById("titlebar").style.height = "0";
-        document.getElementById("color").style.height = "0";
-        document.getElementById("lock").style.fontSize = "20px";
-        document.getElementById("lock").style.marginTop = "35px";
-        document.getElementById("lock").style.marginLeft = "-100px";
-        document.getElementById("add").style.display = "none";
-        document.getElementById("more").style.display = "none";
-        document.getElementById("close").style.display = "none";
+        let clearint = window.setInterval(() => {
+          document.getElementById("titlebar").style.height = "0";
+          document.getElementById("color").style.height = "0";
+          document.getElementById("lock").style.fontSize = "20px";
+          document.getElementById("lock").style.marginTop = "35px";
+          document.getElementById("lock").style.marginLeft = "-100px";
+          document.getElementById("add").style.display = "none";
+          document.getElementById("more").style.display = "none";
+          document.getElementById("close").style.display = "none";
+          if (select.style.pointerEvents == "auto") {
+            document.getElementById("titlebar").style.height = "32px";
+            document.getElementById("color").style.height = "40px";
+            document.getElementById("lock").style.fontSize = "25px";
+            document.getElementById("lock").style.marginTop = "0";
+            document.getElementById("lock").style.marginLeft = "0";
+            document.getElementById("add").style.display = "flex";
+            document.getElementById("more").style.display = "flex";
+            document.getElementById("close").style.display = "flex";
+            clearInterval(clearint);
+          }
+        }, 0.001);
+        clearint;
       } else {
         id.innerHTML = "&#xE785;";
         select.style.pointerEvents = "auto";
         select0.style.pointerEvents = "auto";
         select1.style.pointerEvents = "auto";
         select2.style.pointerEvents = "auto";
-        document.getElementById("titlebar").style.height = "32px";
-        document.getElementById("color").style.height = "40px";
-        document.getElementById("lock").style.fontSize = "25px";
-        document.getElementById("lock").style.marginTop = "0";
-        document.getElementById("lock").style.marginLeft = "0";
-        document.getElementById("add").style.display = "flex";
-        document.getElementById("more").style.display = "flex";
-        document.getElementById("close").style.display = "flex";
       }
     },
     showedit: function() {

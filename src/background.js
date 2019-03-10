@@ -4,6 +4,7 @@ import {
   createProtocol,
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
+import stores from "store";
 import { autoUpdater } from "electron-updater";
 autoUpdater.checkForUpdatesAndNotify();
 require("electron-context-menu")({
@@ -30,7 +31,8 @@ function createWindow() {
     backgroundColor: "#202020",
     title: "Playork Sticky Notes",
     frame: false,
-    resizable: false
+    resizable: false,
+    show: false
   });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
@@ -39,6 +41,10 @@ function createWindow() {
     createProtocol("app");
     win.loadURL("app://./index.html");
   }
+  win.on("ready-to-show", () => {
+    win.show();
+    win.focus();
+  });
   win.on("close", e => {
     e.preventDefault();
     app.quit();
@@ -46,14 +52,28 @@ function createWindow() {
   });
 }
 function createNote() {
-  let win = new BrowserWindow({
-    width: 350,
-    height: 375,
-    icon: "public/favicon.ico",
-    backgroundColor: "#202020",
-    title: "Playork Sticky Notes",
-    frame: false
-  });
+  let win;
+  try {
+    win = new BrowserWindow({
+      width: Number(stores.get(stores.get("id").ids).wid),
+      height: Number(stores.get(stores.get("id").ids).hei),
+      icon: "public/favicon.ico",
+      backgroundColor: "#202020",
+      title: "Playork Sticky Notes",
+      frame: false,
+      show: false
+    });
+  } catch {
+    win = new BrowserWindow({
+      width: 350,
+      height: 375,
+      icon: "public/favicon.ico",
+      backgroundColor: "#202020",
+      title: "Playork Sticky Notes",
+      frame: false,
+      show: false
+    });
+  }
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     win.loadURL("http://localhost:8080/#/note");
     if (!process.env.IS_TEST) win.webContents.openDevTools();
@@ -66,6 +86,12 @@ function createNote() {
     win.focus();
   });
 }
+stores.each((value, key) => {
+  if (key != "id" && key != "loglevel:webpack-dev-server") {
+    stores.set("id", { ids: key });
+    createNote();
+  }
+});
 ipcMain.on("closeall", () => {
   app.quit();
 });
