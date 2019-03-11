@@ -1,8 +1,14 @@
 <template>
-  <span>&#xEC4F;</span>
-  <input type="file" id="selectsong">
-  <div id="lightYellow">
-    <div id="editor" data-meteor-emoji="true"></div>
+  <div>
+    <div id="selectmedia">
+      <span id="songselect" v-on:click="clicksong">&#xEC4F;</span>
+      <input type="file" id="selectsong">
+      <span id="videoselect" v-on:click="clickvideo">&#xE714;</span>
+    </div>
+    <input type="file" id="videosong">
+    <div id="lightYellow">
+      <div id="editor" data-meteor-emoji="true"></div>
+    </div>
   </div>
 </template>
 <script>
@@ -115,6 +121,16 @@ export default {
       func(id);
     }
     new emoji();
+  },
+  methods: {
+    clicksong: function() {
+      document.getElementById("selectsong").click();
+      let song = document.getElementById("selectsong").value;
+    },
+    clickvideo: function() {
+      document.getElementById("selectvideo").click();
+      let video = document.getElementById("selectvideo").value;
+    }
   }
 };
 </script>

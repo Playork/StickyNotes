@@ -69,7 +69,9 @@ export default {
           document.getElementById("lock").style.marginLeft = "-100px";
           document.getElementById("add").style.display = "none";
           document.getElementById("more").style.display = "none";
+          document.getElementById("selectmedia").style.display = "none";
           document.getElementById("close").style.display = "none";
+          document.getElementById("emoji").style.display = "none";
           if (select.style.pointerEvents == "auto") {
             document.getElementById("titlebar").style.height = "32px";
             document.getElementById("color").style.height = "40px";
@@ -98,10 +100,12 @@ export default {
         select.style.display = "block";
         select0.style.height = "0";
         document.getElementById("emoji").style.display = "flex";
+        document.getElementById("selectmedia").style.display = "flex";
       } else {
         select.style.display = "none";
         select0.style.height = "40px";
         document.getElementById("emoji").style.display = "none";
+        document.getElementById("selectmedia").style.display = "none";
       }
     }
   }

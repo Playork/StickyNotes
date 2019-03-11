@@ -138,3 +138,24 @@ button {
 #emoji {
   display: none;
 }
+#songselect {
+  position: absolute;
+  color: #000;
+  top: 95px;
+  left: 10px;
+  z-index: 50;
+  font-family: "segoe";
+  font-size: 20px;
+}
+#videoselect {
+  position: absolute;
+  color: #000;
+  top: 95px;
+  z-index: 50;
+  font-family: "segoe";
+  font-size: 20px;
+  left: 35px;
+}
+#selectmedia {
+  display: none;
+}
