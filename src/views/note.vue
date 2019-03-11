@@ -23,8 +23,14 @@ export default {
     choosecolor
   },
   mounted() {
-    try{window.resizeTo(Number(store.get(store.get("id").ids).wid), Number(store.get(store.get("id").ids).hei));}
-    catch{window.resizeTo(350,375)}
+    try {
+      window.resizeTo(
+        Number(store.get(store.get("id").ids).wid),
+        Number(store.get(store.get("id").ids).hei)
+      );
+    } catch {
+      window.resizeTo(350, 375);
+    }
     try {
       let text = store.get(store.get("id").ids);
       document.querySelector(".ql-snow .ql-editor").innerHTML = text.first;

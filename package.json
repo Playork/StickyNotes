@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "description": "A Sticky Note Application.",
   "author": "B. Ramnath Shenoy <bekalshenoy@gmail.com>",
+  "license": "MIT",
   "scripts": {
     "build": "vue-cli-service electron:build --config",
     "postinstall": "electron-builder install-app-deps",
@@ -12,7 +13,6 @@
   "dependencies": {
     "electron-context-menu": "latest",
     "electron-updater": "^4.0.0",
-    "jquery": "^3.3.1",
     "quill": "latest",
     "store": "latest",
     "sweetalert": "^2.1.2"

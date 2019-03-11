@@ -1,4 +1,6 @@
 <template>
+  <span>&#xEC4F;</span>
+  <input type="file" id="selectsong">
   <div id="lightYellow">
     <div id="editor" data-meteor-emoji="true"></div>
   </div>
@@ -95,7 +97,16 @@ export default {
       document.getElementById("cc").addEventListener("click", () => {
         repeafunc();
       });
+      window.addEventListener("resize", () => {
+        repeafunc();
+      });
+      if (
+        document.querySelector(".ql-snow .ql-editor").innerHTML != "<p><br></p>"
+      ) {
+        repeafunc();
+      }
     };
+
     try {
       let id = Number(store.get("id").ids);
       func(id);

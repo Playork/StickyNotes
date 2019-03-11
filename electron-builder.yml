@@ -6,5 +6,5 @@ nsis:
   createDesktopShortcut: true
   createStartMenuShortcut: true
 linux:
-  target: "deb"
+  target: "snap"
   icon: "src/assets/logo.png"

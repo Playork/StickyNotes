@@ -1,5 +1,3 @@
-let JQuery = require("jquery");
-let $ = JQuery;
 (function(f) {
   if (typeof exports === "object" && typeof module !== "undefined") {
     module.exports = f();
@@ -123,8 +121,9 @@ let $ = JQuery;
                   key: "generateElements",
                   value: function generateElements(emojiInput) {
                     var clickLink = function clickLink(event) {
-                      document.querySelector(".ql-snow .ql-editor p").innerHTML +=
-                        event.target.innerHTML;
+                      document.querySelector(
+                        ".ql-snow .ql-editor p"
+                      ).innerHTML += event.target.innerHTML;
                     };
 
                     var clickCategory = function clickCategory(event) {
