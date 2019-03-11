@@ -13,6 +13,7 @@
   "dependencies": {
     "electron-context-menu": "latest",
     "electron-updater": "^4.0.0",
+    "mediaelement": "^4.2.9",
     "quill": "latest",
     "store": "latest",
     "sweetalert": "^2.1.2"
