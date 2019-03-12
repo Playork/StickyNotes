@@ -13,6 +13,8 @@
 import Quill from "quill";
 import store from "store";
 import emoji from "./../../assets/meteorEmoji.js";
+import JQuery from "jquery";
+let $ = JQuery;
 import Media from "mediaelement/standalone";
 import { remote } from "electron";
 export default {
