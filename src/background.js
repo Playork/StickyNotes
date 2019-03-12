@@ -57,6 +57,7 @@ function createWindow() {
 
 function createNote() {
   let win;
+  app.commandLine.appendSwitch("disable-web-security");
   win = new BrowserWindow({
     width: 350,
     height: 375,
@@ -64,7 +65,10 @@ function createNote() {
     backgroundColor: "#202020",
     title: "Playork Sticky Notes",
     frame: false,
-    show: false
+    show: false,
+    webPreferences: {
+      webSecurity: false
+    }
   });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     win.loadURL("http://localhost:8080/#/note");
