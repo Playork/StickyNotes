@@ -137,6 +137,14 @@ button {
 }
 #emoji {
   display: none;
+  position:fixed !important;
+  top:80px !important;
+  left:10px !important;
+}
+.ql-toolbar {
+  position: fixed !important;
+  top:5px !important;
+  background: #202020;
 }
 #songselect {
   position: absolute;
