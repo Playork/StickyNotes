@@ -27,13 +27,14 @@ SOFTWARE.
   </div>
 </template>
 <script>
+import "./assets/css/audio.css";
+import "./assets/css/video.css";
 import "./assets/css/quill.min.css";
 import "./assets/css/main.css";
 import "./assets/css/titlebar.css";
 import "./assets/css/editor.css";
 import "./assets/css/color.css";
-import "./assets/css/audio.css";
-import "./assets/css/video.css";
+
 export default {};
 </script>
 

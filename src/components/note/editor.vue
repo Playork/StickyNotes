@@ -139,9 +139,11 @@ export default {
           if (audios === undefined) return;
           var audiofile = audios[0];
           document.querySelector(
-            "#editor"
-          ).innerHTML += `<audio src=${audiofile} id="audio"></audio>`;
-          new Audio("#audio");
+            ".ql-snow .ql-editor"
+          ).innerHTML += `<div id="audio"><audio crossorigin><source src=${audiofile}></audio>`;
+          document.addEventListener("DOMContentLoaded", function() {
+            new Audio("#audio");
+          });
         }
       );
     },

@@ -1,4 +1,4 @@
-(function(document, window) {
+(function (document, window) {
   "use strict";
 
   /**
@@ -58,8 +58,8 @@
         }
       ],
       containerClass: "",
-      onInit: function() {},
-      beforeDestroy: function() {}
+      onInit: function () { },
+      beforeDestroy: function () { }
     };
 
     var elVideo = document.querySelector(selector);
@@ -74,7 +74,7 @@
   }
 
   Video.prototype = {
-    init: function() {
+    init: function () {
       this.stateControls = this.el.controls;
       this.el.controls = false;
       this._createVideoElements();
@@ -96,7 +96,7 @@
 
       this.options.onInit.call(this);
     },
-    destroy: function() {
+    destroy: function () {
       this.options.beforeDestroy.call(this);
 
       var videoEl = this.el.cloneNode(true);
@@ -106,7 +106,7 @@
       parentVideo.removeChild(this.videoElements.wrapperVideo);
     },
 
-    _createVideoElements: function() {
+    _createVideoElements: function () {
       //create video wrapper
       var parent = this.el.parentNode;
       this.videoElements.wrapperVideo = document.createElement("div");
@@ -308,7 +308,7 @@
 
       this.videoElements.wrapperVideo.appendChild(dfVideoElements);
     },
-    _registerEvents: function() {
+    _registerEvents: function () {
       this.videoElements.fullscreenButton.addEventListener(
         "click",
         this.switchFullscreen.bind(this)
@@ -350,19 +350,19 @@
       );
 
       //ProgressHandle
-      ["mousedown", "touchstart"].map(function(e) {
+      ["mousedown", "touchstart"].map(function (e) {
         this.videoElements.playProgressHandle.addEventListener(
           e,
           this.startDraggingPlayHandle.bind(this)
         );
       }, this);
-      ["mousemove", "touchmove"].map(function(e) {
+      ["mousemove", "touchmove"].map(function (e) {
         this.videoElements.wrapperVideo.addEventListener(
           e,
           this.draggingPlayHandle.bind(this)
         );
       }, this);
-      ["mouseup", "touchend", "touchcancel"].map(function(e) {
+      ["mouseup", "touchend", "touchcancel"].map(function (e) {
         this.videoElements.wrapperVideo.addEventListener(
           e,
           this.endDraggingPlayHandle.bind(this)
@@ -371,19 +371,19 @@
       //ProgressHandle end
 
       //soundVolumeHandle
-      ["mousedown", "touchstart"].map(function(e) {
+      ["mousedown", "touchstart"].map(function (e) {
         this.videoElements.soundVolumeHandle.addEventListener(
           e,
           this.startDraggingVolumeHandle.bind(this)
         );
       }, this);
-      ["mousemove", "touchmove"].map(function(e) {
+      ["mousemove", "touchmove"].map(function (e) {
         this.videoElements.wrapperVideo.addEventListener(
           e,
           this.draggingVolumeHandle.bind(this)
         );
       }, this);
-      ["mouseup", "touchend", "touchcancel"].map(function(e) {
+      ["mouseup", "touchend", "touchcancel"].map(function (e) {
         this.videoElements.wrapperVideo.addEventListener(
           e,
           this.endDraggingVolumeHandle.bind(this)
@@ -425,7 +425,7 @@
         this.closeSettingsMenu.bind(this)
       );
 
-      this.videoElements.settingsWrap.addEventListener("click", function(
+      this.videoElements.settingsWrap.addEventListener("click", function (
         event
       ) {
         event.stopPropagation();
@@ -443,17 +443,17 @@
         this.toggleRepeat.bind(this)
       );
     },
-    startDraggingVolumeHandle: function() {
+    startDraggingVolumeHandle: function () {
       addClass(this.videoElements.soundVolumeHandle, "draggingVolumeHandle");
     },
-    draggingVolumeHandle: function(event) {
+    draggingVolumeHandle: function (event) {
       if (
         hasClass(this.videoElements.soundVolumeHandle, "draggingVolumeHandle")
       ) {
         this.changeVolume(event);
       }
     },
-    endDraggingVolumeHandle: function() {
+    endDraggingVolumeHandle: function () {
       if (
         hasClass(this.videoElements.soundVolumeHandle, "draggingVolumeHandle")
       ) {
@@ -463,17 +463,17 @@
         );
       }
     },
-    startDraggingPlayHandle: function() {
+    startDraggingPlayHandle: function () {
       addClass(this.videoElements.playProgressHandle, "draggingPlayHandle");
     },
-    draggingPlayHandle: function(event) {
+    draggingPlayHandle: function (event) {
       if (
         hasClass(this.videoElements.playProgressHandle, "draggingPlayHandle")
       ) {
         this.changeCurrentTime(event);
       }
     },
-    endDraggingPlayHandle: function() {
+    endDraggingPlayHandle: function () {
       if (
         hasClass(this.videoElements.playProgressHandle, "draggingPlayHandle")
       ) {
@@ -483,7 +483,7 @@
         );
       }
     },
-    setKeyboardEvents: function(event) {
+    setKeyboardEvents: function (event) {
       if (
         this.options.keyboard &&
         hasClass(this.videoElements.wrapperVideo, "active-p")
@@ -533,7 +533,7 @@
         }
       }
     },
-    toggleMute: function() {
+    toggleMute: function () {
       if (this.el.muted) {
         this.el.muted = false;
         removeClass(this.videoElements.volumePanel, "mute");
@@ -543,7 +543,7 @@
       }
       this.showVolume();
     },
-    videoPlayPause: function() {
+    videoPlayPause: function () {
       if (this.el.paused) {
         this.el.play();
       } else {
@@ -552,21 +552,21 @@
       this.closeSettingsMenu();
       this.closeSpeedMenu();
     },
-    _playVideo: function() {
+    _playVideo: function () {
       this.videoElements.btnPlayPause.innerHTML = this.options.pauseBtnHTML;
       addClass(this.videoElements.wrapperVideo, "play");
       this.showProgress();
     },
-    _pauseVideo: function() {
+    _pauseVideo: function () {
       this.videoElements.btnPlayPause.innerHTML = this.options.playBtnHTML;
       removeClass(this.videoElements.wrapperVideo, "play");
       this.videoElements.loader.style.display = "none";
     },
-    endedVideo: function() {
+    endedVideo: function () {
       this.videoElements.btnPlayPause.innerHTML = this.options.playBtnHTML;
       removeClass(this.videoElements.wrapperVideo, "play");
     },
-    changeCurrentTime: function(event) {
+    changeCurrentTime: function (event) {
       var pageX = event.pageX ? event.pageX : event.touches[0].pageX;
       var pageY = event.pageY ? event.pageY : event.touches[0].pageY;
       var pbOffset = getOffset(this.videoElements.progressBarContainer);
@@ -580,7 +580,7 @@
         (mousePos.x / progressBarContainerWidth) * this.el.duration;
       this.showProgress();
     },
-    showProgress: function() {
+    showProgress: function () {
       var playProgressWidth =
         (this.el.currentTime / this.el.duration) * 100 + "%";
       this.videoElements.playProgress.style.width = playProgressWidth;
@@ -591,7 +591,7 @@
 
       this.showBufferedProgress();
     },
-    showBufferedProgress: function() {
+    showBufferedProgress: function () {
       if (this.el.duration > 0) {
         for (var i = 0; i < this.el.buffered.length; i++) {
           if (
@@ -601,14 +601,14 @@
             this.videoElements.bufferedProgress.style.width =
               (this.el.buffered.end(this.el.buffered.length - 1 - i) /
                 this.el.duration) *
-                100 +
+              100 +
               "%";
             break;
           }
         }
       }
     },
-    showHoverProgress: function(event) {
+    showHoverProgress: function (event) {
       var pageX = event.pageX ? event.pageX : event.touches[0].pageX;
       var pageY = event.pageY ? event.pageY : event.touches[0].pageY;
       var pbOffset = getOffset(this.videoElements.progressBarContainer);
@@ -621,23 +621,23 @@
       this.videoElements.hoverProgress.style.width =
         (mousePos.x / progressBarContainerWidth) * 100 + "%";
     },
-    hideHoverProgress: function() {
+    hideHoverProgress: function () {
       this.videoElements.hoverProgress.style.width = 0;
     },
-    toggleHoverVideo: function() {
+    toggleHoverVideo: function () {
       if (this.hoverInterval) {
         clearInterval(this.hoverInterval);
       }
       addClass(this.videoElements.wrapperVideo, "hover");
       this.showProgress();
       this.hoverInterval = setTimeout(
-        function() {
+        function () {
           removeClass(this.videoElements.wrapperVideo, "hover");
         }.bind(this),
         900
       );
     },
-    setActiveVideo: function(event) {
+    setActiveVideo: function (event) {
       var activeVideos = document.querySelector(
         ".kwg-video-player-container.active-p"
       );
@@ -648,10 +648,10 @@
       addClass(this.videoElements.wrapperVideo, "active-p");
       event.stopPropagation();
     },
-    unsetActiveVideo: function() {
+    unsetActiveVideo: function () {
       removeClass(this.videoElements.wrapperVideo, "active-p");
     },
-    showVolume: function() {
+    showVolume: function () {
       var cVol = this.el.volume * 100;
       this.videoElements.soundVolume.style.width = cVol + "%";
       var classVolumeLevel;
@@ -675,7 +675,7 @@
       removeClass(this.videoElements.volumePanel, "level4");
       addClass(this.videoElements.volumePanel, classVolumeLevel);
     },
-    changeVolume: function(event) {
+    changeVolume: function (event) {
       var pageX = event.pageX ? event.pageX : event.touches[0].pageX;
       var pageY = event.pageY ? event.pageY : event.touches[0].pageY;
       var vsOffset = getOffset(this.videoElements.volumeSlider);
@@ -698,7 +698,7 @@
         removeClass(this.videoElements.volumePanel, "mute");
       }
     },
-    showHoverVolume: function(event) {
+    showHoverVolume: function (event) {
       var pageX = event.pageX ? event.pageX : event.touches[0].pageX;
       var pageY = event.pageY ? event.pageY : event.touches[0].pageY;
       var vsOffset = getOffset(this.videoElements.volumeSlider);
@@ -711,10 +711,10 @@
       this.videoElements.soundHover.style.width =
         (mousePos.x / volumeSliderWidth) * 100 + "%";
     },
-    hideHoverVolume: function() {
+    hideHoverVolume: function () {
       this.videoElements.soundHover.style.width = 0;
     },
-    toggleSettingsMenu: function() {
+    toggleSettingsMenu: function () {
       if (hasClass(this.videoElements.settingsMenu, "open")) {
         removeClass(this.videoElements.settingsMenu, "open");
       } else {
@@ -722,20 +722,20 @@
       }
       this.closeSpeedMenu();
     },
-    closeSettingsMenu: function() {
+    closeSettingsMenu: function () {
       if (hasClass(this.videoElements.settingsMenu, "open")) {
         removeClass(this.videoElements.settingsMenu, "open");
       }
     },
-    openSpeedMenu: function() {
+    openSpeedMenu: function () {
       addClass(this.videoElements.speedMenu, "open");
     },
-    closeSpeedMenu: function() {
+    closeSpeedMenu: function () {
       if (hasClass(this.videoElements.speedMenu, "open")) {
         removeClass(this.videoElements.speedMenu, "open");
       }
     },
-    changeSpeed: function(event) {
+    changeSpeed: function (event) {
       if (event.target.tagName != "LI") {
         return;
       }
@@ -754,7 +754,7 @@
       }
       this.closeSpeedMenu();
     },
-    setSpeedLabel: function() {
+    setSpeedLabel: function () {
       var speedLis = this.videoElements.speedMenu.children;
       var speedLislength = speedLis.length;
       for (var i = 0; i < speedLislength; i++) {
@@ -767,17 +767,17 @@
         }
       }
     },
-    toggleRepeat: function() {
+    toggleRepeat: function () {
       this.el.loop = !this.el.loop;
       this.setRepeatMark();
       setTimeout(
-        function() {
+        function () {
           this.closeSettingsMenu();
         }.bind(this),
         250
       );
     },
-    setRepeatMark: function() {
+    setRepeatMark: function () {
       if (this.el.loop) {
         this.videoElements.repeatOption.getElementsByClassName(
           "item-content"
@@ -788,7 +788,7 @@
         )[0].innerHTML = "";
       }
     },
-    switchFullscreen: function() {
+    switchFullscreen: function () {
       if (!isFullscreenEnabled()) {
         return false;
       }
@@ -799,10 +799,10 @@
       }
       handleFullscreen();
     },
-    showLoader: function() {
+    showLoader: function () {
       this.videoElements.loader.style.display = "block";
     },
-    hideLoader: function() {
+    hideLoader: function () {
       this.videoElements.loader.style.display = "none";
     }
   };
@@ -905,7 +905,7 @@
 
     arrayClasses = el.className.split(" ");
     arrayClasses.push(className);
-    arrayClasses = arrayClasses.filter(function(value, index) {
+    arrayClasses = arrayClasses.filter(function (value, index) {
       return arrayClasses.indexOf(value) == index && value != "";
     });
     el.className = arrayClasses.join(" ");
@@ -915,7 +915,7 @@
     className = className.trim();
 
     arrayClasses = el.className.split(" ");
-    arrayClasses = arrayClasses.filter(function(value, index) {
+    arrayClasses = arrayClasses.filter(function (value, index) {
       return arrayClasses.indexOf(value) == index && value != "";
     });
     var index = arrayClasses.indexOf(className);
@@ -929,7 +929,7 @@
     var arrayClasses;
     className = className.trim();
     arrayClasses = el.className.split(" ");
-    arrayClasses = arrayClasses.filter(function(value, index) {
+    arrayClasses = arrayClasses.filter(function (value, index) {
       return arrayClasses.indexOf(value) == index && value != "";
     });
     if (arrayClasses.indexOf(className) > -1) {
@@ -937,19 +937,19 @@
     }
     return false;
   }
-  document.addEventListener("fullscreenchange", function() {
+  document.addEventListener("fullscreenchange", function () {
     removeFullscreenData();
   });
-  document.addEventListener("webkitfullscreenchange", function() {
+  document.addEventListener("webkitfullscreenchange", function () {
     removeFullscreenData();
   });
-  document.addEventListener("mozfullscreenchange", function() {
+  document.addEventListener("mozfullscreenchange", function () {
     removeFullscreenData();
   });
-  document.addEventListener("msfullscreenchange", function() {
+  document.addEventListener("msfullscreenchange", function () {
     removeFullscreenData();
   });
-  document.addEventListener("MSFullscreenChange", function() {
+  document.addEventListener("MSFullscreenChange", function () {
     removeFullscreenData();
   });
 
