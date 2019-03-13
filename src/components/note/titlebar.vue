@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import { setInterval, setTimeout } from "timers";
+import { setInterval } from "timers";
 export default {
   props: {
     close: Function,
@@ -101,11 +101,13 @@ export default {
         select0.style.height = "0";
         document.getElementById("emoji").style.display = "flex";
         document.getElementById("selectmedia").style.display = "flex";
+        document.getElementById("lightYellow").style.paddingTop = "90px";
       } else {
         select.style.display = "none";
         select0.style.height = "40px";
         document.getElementById("emoji").style.display = "none";
         document.getElementById("selectmedia").style.display = "none";
+        document.getElementById("lightYellow").style.paddingTop = "30px";
       }
     }
   }

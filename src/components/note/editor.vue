@@ -1,22 +1,21 @@
 <template>
   <div>
-    <!-- <div id="selectmedia">
+    <div id="selectmedia">
       <span id="songselect" v-on:click="clicksong">&#xEC4F;</span>
       <span id="videoselect" v-on:click="clickvideo">&#xE714;</span>
-    </div> -->
+    </div>
     <div id="lightYellow">
       <div id="editor" data-meteor-emoji="true"></div>
     </div>
   </div>
 </template>
 <script>
+import { remote } from "electron";
 import Quill from "quill";
 import store from "store";
-import emoji from "./../../assets/meteorEmoji.js";
-// import { remote } from "electron";
-// import JQuery from "jquery";
-// let $ = JQuery;
-// import Media from "mediaelement";
+import emoji from "./../../assets/script/emoji.js";
+import Audio from "./../../assets/script/audio.js";
+import Video from "./../../assets/script/video.js";
 
 export default {
   mounted() {
@@ -124,56 +123,57 @@ export default {
       func(id);
     }
     new emoji();
+  },
+  methods: {
+    clicksong: function() {
+      remote.dialog.showOpenDialog(
+        {
+          filters: [
+            {
+              name: "Audo Files",
+              extensions: ["mp3", "MP3", "wav", "WAV", "ogg", "OGG"]
+            }
+          ]
+        },
+        audios => {
+          if (audios === undefined) return;
+          var audiofile = audios[0];
+          document.querySelector(
+            "#editor"
+          ).innerHTML += `<audio src=${audiofile} id="audio"></audio>`;
+          new Audio("#audio");
+        }
+      );
+    },
+    clickvideo: function() {
+      remote.dialog.showOpenDialog(
+        {
+          filters: [
+            {
+              name: "Video Files",
+              extensions: [
+                "mp4",
+                "MP4",
+                "webm",
+                "WEBM",
+                "WebM",
+                "ogg",
+                "OGG",
+                "Ogg"
+              ]
+            }
+          ]
+        },
+        videos => {
+          if (videos === undefined) return;
+          var videofile = videos[0];
+          document.querySelector(
+            "#editor"
+          ).innerHTML += `<video src=${videofile} width="80%" id="video"  controls></video>`;
+          new Video("#video");
+        }
+      );
+    }
   }
-  // ,
-  // methods: {
-  //   clicksong: function() {
-  //     remote.dialog.showOpenDialog(
-  //       {
-  //         filters: [
-  //           {
-  //             name: "Audo Files",
-  //             extensions: ["mp3", "MP3", "wav", "WAV", "ogg", "OGG"]
-  //           }
-  //         ]
-  //       },
-  //       songs => {
-  //         if (songs === undefined) return;
-  //         var song = songs[0];
-  //         document.querySelector(
-  //           ".ql-snow .ql-editor"
-  //         ).innerHTML += "<audio src=" + song + " class='mejs__player' data-mejsoptions='{" + "'alwaysShowControls'" + ": " + "'true'" + "}'></audio>";
-  //       }
-  //     );
-  //   },
-  //   clickvideo: function() {
-  //     remote.dialog.showOpenDialog(
-  //       {
-  //         filters: [
-  //           {
-  //             name: "Video Files",
-  //             extensions: [
-  //               "mp4",
-  //               "MP4",
-  //               "webm",
-  //               "WEBM",
-  //               "WebM",
-  //               "ogg",
-  //               "OGG",
-  //               "Ogg"
-  //             ]
-  //           }
-  //         ]
-  //       },
-  //       videos => {
-  //         if (videos === undefined) return;
-  //         var video = videos[0];
-  //         document.querySelector(
-  //           ".ql-snow .ql-editor"
-  //         ).innerHTML += "<video src=" + video + " class='mejs__player' data-mejsoptions='{" + "'alwaysShowControls'" + ": " + "'true'" + "}'></video>";
-  //       }
-  //     );
-  //   }
-  // }
 };
 </script>

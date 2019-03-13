@@ -137,20 +137,23 @@ button {
 }
 #emoji {
   display: none;
-  position:fixed !important;
-  top:80px !important;
-  left:10px !important;
+  position: fixed !important;
+  top: 72px !important;
+  right: 10px !important;
+  z-index: 7;
 }
 .ql-toolbar {
   position: fixed !important;
-  top:5px !important;
+  top: 0 !important;
   background: #202020;
+  z-index: 6;
+  padding-top: 40px !important;
 }
 #songselect {
   position: absolute;
   color: #000;
-  top: 95px;
-  left: 10px;
+  top: 72px;
+  right: 35px;
   z-index: 50;
   font-family: "segoe";
   font-size: 20px;
@@ -158,12 +161,29 @@ button {
 #videoselect {
   position: absolute;
   color: #000;
-  top: 95px;
+  top: 72px;
   z-index: 50;
   font-family: "segoe";
   font-size: 20px;
-  left: 35px;
+  right: 60px;
 }
 #selectmedia {
   display: none;
+}
+@media screen and (min-width: 690px) {
+  #songselect {
+    position: absolute;
+    top: 50px;
+    right: 35px;
+  }
+  #videoselect {
+    position: absolute;
+    top: 50px;
+    right: 60px;
+  }
+  #emoji {
+    position: fixed !important;
+    top: 50px !important;
+    right: 10px !important;
+  }
 }

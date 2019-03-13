@@ -32,13 +32,7 @@ export default {
             store.set("id", { ids: key });
             ipcRenderer.send("create-new-instance");
           };
-          
-          document.getElementById("notetext").style.backgroundColor =
-            value.back;
-          document.getElementById("notetext").style.border =
-            "5px solid " + value.title;
-        }
-        document.getElementById("deletenote").onclick = () => {
+          document.getElementById("deletenote").onclick = () => {
             swal({
               title: "Are you sure?",
               text: "Want To Delete Your Note!",
@@ -51,6 +45,11 @@ export default {
               }
             });
           };
+          document.getElementById("notetext").style.backgroundColor =
+            value.back;
+          document.getElementById("notetext").style.border =
+            "5px solid " + value.title;
+        };
       });
       
     }, 2500);
