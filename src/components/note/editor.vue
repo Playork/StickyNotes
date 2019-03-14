@@ -14,8 +14,6 @@ import { remote } from "electron";
 import Quill from "quill";
 import store from "store";
 import emoji from "./../../assets/script/emoji.js";
-import Audio from "./../../assets/script/audio.js";
-import Video from "./../../assets/script/video.js";
 
 export default {
   mounted() {
@@ -140,10 +138,7 @@ export default {
           var audiofile = audios[0];
           document.querySelector(
             ".ql-snow .ql-editor"
-          ).innerHTML += `<div id="audio"><audio crossorigin><source src=${audiofile}></audio>`;
-          document.addEventListener("DOMContentLoaded", function() {
-            new Audio("#audio");
-          });
+          ).innerHTML += `<iframe id="audio" src="file:///${audiofile}"></iframe>`;
         }
       );
     },
@@ -170,9 +165,8 @@ export default {
           if (videos === undefined) return;
           var videofile = videos[0];
           document.querySelector(
-            "#editor"
-          ).innerHTML += `<video src=${videofile} width="80%" id="video"  controls></video>`;
-          new Video("#video");
+            ".ql-snow .ql-editor"
+          ).innerHTML += `<iframe src="file:///${videofile}" id="video"></iframe>`;
         }
       );
     }

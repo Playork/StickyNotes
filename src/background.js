@@ -11,7 +11,7 @@ autoUpdater.checkForUpdatesAndNotify();
 require("electron-context-menu")({
   prepend: () => [
     {
-      label: "v0.1.0"
+      label: "v0.2.0"
     }
   ],
   showInspectElement: false

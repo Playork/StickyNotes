@@ -7,7 +7,7 @@
   }
 }
 
-.audio {
+.song {
   width: 400px;
   min-width: 300px;
   height: 56px;
@@ -21,15 +21,15 @@
   user-select: none;
   background-color: #fff;
 }
-.audio svg,
-.audio img {
+.song svg,
+.song img {
   display: block;
 }
-.audio .play-pause-btn {
+.song .play-pause-btn {
   display: none;
   cursor: pointer;
 }
-.audio .loading .loading__spinner {
+.song .loading .loading__spinner {
   width: 16px;
   height: 16px;
   border: 2px solid #b0b0b0;
@@ -37,19 +37,19 @@
   border-radius: 50%;
   animation: spin 0.4s linear infinite;
 }
-.audio .slider {
+.song .slider {
   flex-grow: 1;
   background-color: #d8d8d8;
   cursor: pointer;
   position: relative;
 }
-.audio .slider .progress {
+.song .slider .progress {
   background-color: #44bfa3;
   border-radius: inherit;
   position: absolute;
   pointer-events: none;
 }
-.audio .slider .progress .pin {
+.song .slider .progress .pin {
   height: 16px;
   width: 16px;
   border-radius: 8px;
@@ -58,7 +58,7 @@
   pointer-events: all;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.32);
 }
-.audio .controls {
+.song .controls {
   font-family: "Roboto", sans-serif;
   font-size: 16px;
   line-height: 18px;
@@ -70,33 +70,33 @@
   margin-left: 24px;
   margin-right: 24px;
 }
-.audio .controls .controls__slider {
+.song .controls .controls__slider {
   margin-left: 16px;
   margin-right: 16px;
   border-radius: 2px;
   height: 4px;
 }
-.audio .controls .controls__slider .controls__progress {
+.song .controls .controls__slider .controls__progress {
   width: 0;
   height: 100%;
 }
-.audio .controls .controls__slider .controls__progress .progress__pin {
+.song .controls .controls__slider .controls__progress .progress__pin {
   right: -8px;
   top: -6px;
 }
-.audio .controls span {
+.song .controls span {
   cursor: default;
 }
-.audio .volume {
+.song .volume {
   position: relative;
 }
-.audio .volume .volume__button {
+.song .volume .volume__button {
   cursor: pointer;
 }
-.audio .volume .volume__button.open path {
+.song .volume .volume__button.open path {
   fill: #44bfa3;
 }
-.audio .volume .volume__controls {
+.song .volume .volume__controls {
   width: 30px;
   height: 135px;
   background-color: rgba(0, 0, 0, 0.62);
@@ -108,38 +108,33 @@
   align-items: center;
   display: flex;
 }
-.audio .volume .volume__controls.hidden {
+.song .volume .volume__controls.hidden {
   display: none;
 }
-.audio .volume .volume__controls.top {
+.song .volume .volume__controls.top {
   bottom: 52px;
   left: -3px;
 }
-.audio .volume .volume__controls.middle {
+.song .volume .volume__controls.middle {
   bottom: -54px;
   left: 54px;
 }
-.audio .volume .volume__controls.bottom {
+.song .volume .volume__controls.bottom {
   bottom: -164px;
   left: -3px;
 }
-.audio .volume .volume__controls .volume__slider {
+.song .volume .volume__controls .volume__slider {
   margin-top: 12px;
   margin-bottom: 12px;
   width: 6px;
   border-radius: 3px;
 }
-.audio .volume .volume__controls .volume__slider .volume__progress {
+.song .volume .volume__controls .volume__slider .volume__progress {
   bottom: 0;
   height: 100%;
   width: 6px;
 }
-.audio
-  .volume
-  .volume__controls
-  .volume__slider
-  .volume__progress
-  .volume__pin {
+.song .volume .volume__controls .volume__slider .volume__progress .volume__pin {
   left: -5px;
   top: -8px;
 }

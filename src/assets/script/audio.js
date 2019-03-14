@@ -219,36 +219,6 @@
                             false
                           );
                         }
-                      }); // for mobile touches
-
-                      self.audioPlayer.addEventListener("touchstart", function(
-                        event
-                      ) {
-                        if (self.isDraggable(event.target)) {
-                          var _event$targetTouches = _slicedToArray(
-                            event.targetTouches,
-                            1
-                          );
-
-                          self.currentlyDragged = _event$targetTouches[0];
-                          var handleMethod =
-                            self.currentlyDragged.target.dataset.method;
-                          var listener = self[handleMethod].bind(self);
-                          window.addEventListener("touchmove", listener, false);
-                          window.addEventListener(
-                            "touchend",
-                            function() {
-                              self.currentlyDragged = false;
-                              window.removeEventListener(
-                                "touchmove",
-                                listener,
-                                false
-                              );
-                            },
-                            false
-                          );
-                          event.preventDefault();
-                        }
                       });
                       this.playPauseBtn.addEventListener(
                         "click",
@@ -317,34 +287,7 @@
                     }
                   },
                   {
-                    key: "inRange",
-                    value: function inRange(event) {
-                      var touch = "touches" in event; // instanceof TouchEvent may also be used
-
-                      var rangeBox = this.getRangeBox(event);
-                      var rect = rangeBox.getBoundingClientRect();
-                      var direction = rangeBox.dataset.direction;
-                      var min = null;
-                      var max = null;
-
-                      if (direction === "horizontal") {
-                        min = rangeBox.offsetLeft;
-                        max = min + rangeBox.offsetWidth;
-                        var clientX = touch
-                          ? event.touches[0].clientX
-                          : event.clientX;
-                        if (clientX < min || clientX > max) return false;
-                      } else {
-                        min = rect.top;
-                        max = min + rangeBox.offsetHeight;
-                        var clientY = touch
-                          ? event.touches[0].clientY
-                          : event.clientY;
-                        if (clientY < min || clientY > max) return false;
-                      }
-
-                      return true;
-                    }
+                    key: "inRange"
                   },
                   {
                     key: "updateProgress",
@@ -395,41 +338,11 @@
                         rangeBox = el.parentElement.parentElement;
                       }
 
-                      if (event.type === "touchmove") {
-                        rangeBox = el.target.parentElement.parentElement;
-                      }
-
                       return rangeBox;
                     }
                   },
                   {
-                    key: "getCoefficient",
-                    value: function getCoefficient(event) {
-                      var touch = "touches" in event; // instanceof TouchEvent may also be used
-
-                      var slider = this.getRangeBox(event);
-                      var rect = slider.getBoundingClientRect();
-                      var K = 0;
-
-                      if (slider.dataset.direction === "horizontal") {
-                        // if event is touch
-                        var clientX = touch
-                          ? event.touches[0].clientX
-                          : event.clientX;
-                        var offsetX = clientX - slider.offsetLeft;
-                        var width = slider.clientWidth;
-                        K = offsetX / width;
-                      } else if (slider.dataset.direction === "vertical") {
-                        var height = slider.clientHeight;
-                        var clientY = touch
-                          ? event.touches[0].clientY
-                          : event.clientY;
-                        var offsetY = clientY - rect.top;
-                        K = 1 - offsetY / height;
-                      }
-
-                      return K;
-                    }
+                    key: "getCoefficient"
                   },
                   {
                     key: "rewind",

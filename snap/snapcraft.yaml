@@ -1,17 +1,17 @@
-
-  name: stickynotes
-  version: '0.1.1'
-  summary: A Sticky Notes Application For Linux
-  description:
-    A New And Open source Sticky Notes For Linux
-    Emoji Selecter
-    Automatically Save Notes
-    Choose Background And Title Bar Color You Like
-    Editing Options Like Font,Bold,Size,.etc
-    Add Images To Note From Local Drive
-    Lock The Note
-  grade: stable
-  confinement: strict
-  parts:
-    thisapp:
-      plugin: nil
+name: stickynotes
+version: "0.2.0"
+summary: A Sticky Notes Application For Linux
+description: A New And Open source Sticky Notes For Linux
+  Emoji Selecter
+  Automatically Save Notes
+  Choose Background And Title Bar Color You Like
+  Editing Options Like Font,Bold,Size,.etc
+  Add Images To Note From Local Drive
+  Add Audio To Note From Local Drive
+  Add Video To Note From Local Drive
+  Lock The Note
+grade: stable
+confinement: strict
+parts:
+  thisapp:
+    plugin: nil

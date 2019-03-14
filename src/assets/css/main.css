@@ -187,3 +187,10 @@ button {
     right: 10px !important;
   }
 }
+#video {
+  border: none;
+}
+#audio {
+  border: none;
+  border-radius: 30px;
+}

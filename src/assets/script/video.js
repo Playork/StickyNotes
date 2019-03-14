@@ -1,4 +1,4 @@
-(function (document, window) {
+export default (function (document, window) {
   "use strict";
 
   /**
@@ -9,7 +9,7 @@
    * @param {object} options
    * @returns {video object}
    */
-  function Video(selector, options) {
+   function Video(selector, options) {
     var defaults = {
       playBtnHTML:
         '<svg width="12" height="15"><path d="M0 0 L12 7.5 L0 15 Z" /></svg>',
