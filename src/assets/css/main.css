@@ -189,8 +189,12 @@ button {
 }
 #video {
   border: none;
+  height: 150px;
+  width: 300px;
 }
 #audio {
   border: none;
   border-radius: 30px;
+  width: 300px;
+  height: 50px;
 }

@@ -138,7 +138,7 @@ export default {
           var audiofile = audios[0];
           document.querySelector(
             ".ql-snow .ql-editor"
-          ).innerHTML += `<iframe id="audio" src="file:///${audiofile}"></iframe>`;
+          ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///${audiofile}' controls></audio>"></iframe>`;
         }
       );
     },
@@ -166,7 +166,7 @@ export default {
           var videofile = videos[0];
           document.querySelector(
             ".ql-snow .ql-editor"
-          ).innerHTML += `<iframe src="file:///${videofile}" id="video"></iframe>`;
+          ).innerHTML += `<iframe srcdoc="<video style="height:100%;" src='file:///${videofile}' controls></video>" id="video"></iframe>`;
         }
       );
     }
