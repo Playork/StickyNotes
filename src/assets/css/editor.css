@@ -25,6 +25,7 @@
 }
 .ql-snow .ql-editor {
   width: 98%;
+  overflow-x: hidden;
   margin-left: 2px;
   background-color: transparent;
   border: none;

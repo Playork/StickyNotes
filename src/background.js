@@ -28,7 +28,7 @@ let win;
 protocol.registerStandardSchemes(["app"], { secure: true });
 function createWindow() {
   win = new BrowserWindow({
-    width: 350,
+    width: 400,
     height: 600,
     icon: "public/favicon.ico",
     backgroundColor: "#202020",

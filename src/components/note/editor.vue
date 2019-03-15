@@ -93,6 +93,7 @@ export default {
           wid: winwidth,
           hei: winheight
         });
+        document.querySelector(".ql-toolbar").style.backgroundColor = store.get(store.get("id").ids).back;
       };
       quill.on("text-change", function() {
         repeafunc();
@@ -166,7 +167,7 @@ export default {
           var videofile = videos[0];
           document.querySelector(
             ".ql-snow .ql-editor"
-          ).innerHTML += `<iframe srcdoc="<video src='file:///${videofile}' height='150px' controls preload="none"></video>" id="video"></iframe>`;
+          ).innerHTML += `<iframe srcdoc="<video src='file:///${videofile}' height='150px' controls preload='none'></video>" id="video"></iframe>`;
         }
       );
     }

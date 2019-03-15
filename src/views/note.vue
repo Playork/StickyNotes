@@ -25,16 +25,14 @@ export default {
   mounted() {
     try {
       let text = store.get(store.get("id").ids);
-      window.resizeTo(
-        Number(text.wid),
-        Number(text.hei)
-      );
+      window.resizeTo(Number(text.wid), Number(text.hei));
       document.querySelector(".ql-snow .ql-editor").innerHTML = text.first;
       document.getElementById("lightYellow").style.backgroundColor = text.back;
       document.getElementById("titlebar").style.backgroundColor = text.title;
       document.querySelector(".ql-toolbar").style.backgroundColor = text.back;
     } catch {
       window.resizeTo(350, 375);
+      document.querySelector(".ql-toolbar").style.backgroundColor = "#FFF2AB";
     }
     if (
       document.querySelector(".ql-snow .ql-editor").innerHTML != "<p><br></p>"

@@ -124,15 +124,16 @@ button {
 #notes span {
   font-family: "segoe";
   padding: 5px;
+  pointer-events: all;
 }
 #notes #notetext {
   padding: 5px;
   margin: 5px;
   border-radius: 20px;
-  width: 80%;
+  width: 91%;
   word-wrap: break-word;
   min-height: 80px;
-  user-select: text;
+  pointer-events: none;
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }
 #emoji {
