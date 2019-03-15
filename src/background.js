@@ -35,7 +35,10 @@ function createWindow() {
     title: "Playork Sticky Notes",
     frame: false,
     resizable: false,
-    show: false
+    show: false,
+    webPreferences: {
+      webSecurity: false
+    }
   });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
@@ -55,9 +58,10 @@ function createWindow() {
   });
 }
 
+app.commandLine.appendSwitch("disable-web-security");
+
 function createNote() {
   let win;
-  app.commandLine.appendSwitch("disable-web-security");
   win = new BrowserWindow({
     width: 350,
     height: 375,

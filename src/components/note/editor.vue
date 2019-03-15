@@ -166,7 +166,7 @@ export default {
           var videofile = videos[0];
           document.querySelector(
             ".ql-snow .ql-editor"
-          ).innerHTML += `<iframe srcdoc="<video style="height:100%;" src='file:///${videofile}' controls></video>" id="video"></iframe>`;
+          ).innerHTML += `<iframe srcdoc="<video src='file:///${videofile}' height='150px' controls preload="none"></video>" id="video"></iframe>`;
         }
       );
     }

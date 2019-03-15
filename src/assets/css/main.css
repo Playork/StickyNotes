@@ -145,7 +145,6 @@ button {
 .ql-toolbar {
   position: fixed !important;
   top: 0 !important;
-  background: #202020;
   z-index: 6;
   padding-top: 40px !important;
 }
@@ -189,12 +188,13 @@ button {
 }
 #video {
   border: none;
-  height: 150px;
-  width: 300px;
+  height: 200px;
+  width: 350px;
 }
 #audio {
   border: none;
   border-radius: 30px;
-  width: 300px;
-  height: 50px;
+  width: 350px;
+  height: 100px;
+  overflow: hidden;
 }
