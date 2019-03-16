@@ -29,7 +29,7 @@
 <script>
 import store from "store";
 import { ipcRenderer } from "electron";
-import swal from "sweetalert";
+import swal from "./../../assets/script/sweetalert.js";
 export default {
   methods: {
     deleteall: function() {

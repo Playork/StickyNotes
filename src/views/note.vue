@@ -9,7 +9,7 @@
 
 <script>
 import { remote, ipcRenderer } from "electron";
-import swal from "sweetalert";
+import swal from "./../assets/script/sweetalert.js";
 import store from "store";
 import editor from "../components/note/editor.vue";
 import titlebar from "../components/note/titlebar.vue";

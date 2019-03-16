@@ -6,7 +6,7 @@
 </template>
 <script>
 import { remote, ipcRenderer } from "electron";
-import swal from "sweetalert";
+import swal from "./../assets/script/sweetalert.js";
 import homebody from "../components/home/homebody.vue";
 import titlebar1 from "../components/home/titlebar1.vue";
 import store from "store";
@@ -30,7 +30,7 @@ export default {
             );
 
           if (store.get(key).closed == "yes") {
-            document.getElementById("startnote").style.display = "block";
+            document.getElementById("startnote").style.display = "inline";
           }
           if (store.get(key).closed == "no") {
             document.getElementById("startnote").style.display = "none";
