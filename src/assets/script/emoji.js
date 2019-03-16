@@ -14,7 +14,7 @@
     } else {
       g = this;
     }
-    g.MeteorEmoji = f();
+    g.Emoji = f();
   }
 })(function() {
   var define, module, exports;
@@ -65,7 +65,7 @@
                 exports: {}
               };
               factory(mod);
-              global.meteorEmoji = mod.exports;
+              global.Emoji = mod.exports;
             }
           })(this, function(module) {
             "use strict";
@@ -95,14 +95,14 @@
               };
             })();
 
-            var MeteorEmoji = (function() {
-              function MeteorEmoji() {
-                _classCallCheck(this, MeteorEmoji);
+            var Emoji = (function() {
+              function Emoji() {
+                _classCallCheck(this, Emoji);
 
                 this.initiate();
               }
 
-              _createClass(MeteorEmoji, [
+              _createClass(Emoji, [
                 {
                   key: "initiate",
                   value: function initiate() {
@@ -121,9 +121,9 @@
                   key: "generateElements",
                   value: function generateElements(emojiInput) {
                     var clickLink = function clickLink(event) {
-                      document.querySelector(
-                        ".ql-snow .ql-editor p"
-                      ).innerHTML += event.target.innerHTML;
+                      document
+                        .querySelector(".ql-snow .ql-editor p")
+                        .innerHTML += event.target.innerHTML;
                     };
 
                     var clickCategory = function clickCategory(event) {
@@ -671,10 +671,10 @@
                 }
               ]);
 
-              return MeteorEmoji;
+              return Emoji;
             })();
 
-            module.exports = MeteorEmoji;
+            module.exports = Emoji;
           });
         },
         {}
