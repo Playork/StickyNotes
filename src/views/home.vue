@@ -28,6 +28,13 @@ export default {
                 value.first
               }</div>`
             );
+
+          if (store.get(key).closed == "yes") {
+            document.getElementById("startnote").style.display = "block";
+          }
+          if (store.get(key).closed == "no") {
+            document.getElementById("startnote").style.display = "none";
+          }
           document.getElementById("startnote").onclick = () => {
             store.set("id", { ids: key });
             ipcRenderer.send("create-new-instance");
@@ -41,7 +48,12 @@ export default {
               dangerMode: true
             }).then(willDelete => {
               if (willDelete) {
-                store.remove(key);
+                if (store.get(key).closed == "no") {
+                  store.set(key, { deleted: "yes" });
+                }
+                if (store.get(key).closed == "yes") {
+                  store.remove(key);
+                }
               }
             });
           };
@@ -49,9 +61,8 @@ export default {
             value.back;
           document.getElementById("notetext").style.border =
             "5px solid " + value.title;
-        };
+        }
       });
-      
     }, 2500);
     /*store.each((value, key) => {
       if (key != "id" && key != "loglevel:webpack-dev-server") {

@@ -11,7 +11,7 @@
 </template>
 <script>
 import { remote } from "electron";
-import Quill from "quill";
+import Quill from "./../../assets/script/quill";
 import store from "store";
 import emoji from "./../../assets/script/emoji.js";
 
@@ -91,9 +91,27 @@ export default {
           back: color1,
           title: color2,
           wid: winwidth,
-          hei: winheight
+          hei: winheight,
+          deleted: "no",
+          closed: "no"
         });
-        document.querySelector(".ql-toolbar").style.backgroundColor = store.get(store.get("id").ids).back;
+        document.querySelector(".ql-toolbar").style.backgroundColor = color1;
+        remote.getCurrentWindow().on("close", () => {
+          if (store.get(obj.toString()).deleted != "yes") {
+            store.set(obj.toString(), {
+              first: text,
+              back: color1,
+              title: color2,
+              wid: winwidth,
+              hei: winheight,
+              deleted: "no",
+              closed: "yes"
+            });
+          }
+          if (store.get(obj.toString()).deleted != "no"){
+            remot.getCurrentWindow().close()
+          }
+        });
       };
       quill.on("text-change", function() {
         repeafunc();
@@ -112,8 +130,17 @@ export default {
       ) {
         repeafunc();
       }
+      try {
+        window.setInterval(() => {
+          if (store.get(obj.toString()).deleted == "yes") {
+            store.remove(obj.toString());
+            if (store.get(obj.toString()) == undefined) {
+              remote.getCurrentWindow().close();
+            }
+          }
+        }, 1);
+      } catch {}
     };
-
     try {
       let id = Number(store.get("id").ids);
       func(id);

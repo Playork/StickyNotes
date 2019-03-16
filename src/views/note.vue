@@ -43,27 +43,7 @@ export default {
   },
   methods: {
     close: function() {
-      swal({
-        title: "Are you sure?",
-        text: "Want To Delete Your Note!",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true
-      }).then(willDelete => {
-        if (willDelete) {
-          store.each((value, key) => {
-            if (key != "id" && key != "loglevel:webpack-dev-server") {
-              if (
-                value.first ==
-                document.querySelector(".ql-snow .ql-editor").innerHTML
-              ) {
-                store.remove(key);
-              }
-            }
-          });
-          remote.getCurrentWindow().close();
-        }
-      });
+      remote.getCurrentWindow().close();
     },
     note: function() {
       let func = obj => {
