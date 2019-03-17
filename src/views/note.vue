@@ -48,9 +48,11 @@ export default {
   },
   mounted() {
     window.setInterval(() => {
+      try{
       if (store.get("closed").closed == "yes") {
         remote.getCurrentWindow().close();
       }
+      }catch{}
     }, 1);
     try {
       let text = store.get(store.get("id").ids);

@@ -28,7 +28,6 @@ import {
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
-import store from "store";
 
 autoUpdater.checkForUpdatesAndNotify();
 require("electron-context-menu")({
@@ -103,10 +102,6 @@ function createNote() {
     winnote.focus();
   });
 }
-
-ipcMain.on("closeall", () => {
-  app.quit();
-});
 
 ipcMain.on("create-new-instance", () => {
   createNote();
