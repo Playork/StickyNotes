@@ -1,14 +1,50 @@
+<<<<<<< HEAD
+<!--
+MIT License
+
+Copyright (c) 2019 Playork
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+
+<template>
+  <div>
+    <div id="selectmedia">
+      <span id="songselect" title="Select Audio" v-on:click="clicksong">&#xEC4F;</span>
+      <span id="videoselect" title="Select Video" v-on:click="clickvideo">&#xE714;</span>
+=======
 <template>
   <div>
     <div id="selectmedia">
       <span id="songselect" v-on:click="clicksong">&#xEC4F;</span>
       <span id="videoselect" v-on:click="clickvideo">&#xE714;</span>
+>>>>>>> 71fe5a3dcd4bcaca7ecd643c9b3539e7ac377425
     </div>
     <div id="lightYellow">
       <div id="editor" data-meteor-emoji="true"></div>
     </div>
   </div>
 </template>
+<<<<<<< HEAD
+
+=======
+>>>>>>> 71fe5a3dcd4bcaca7ecd643c9b3539e7ac377425
 <script>
 import { remote } from "electron";
 import Quill from "./../../assets/script/quill";
@@ -97,7 +133,11 @@ export default {
         });
         document.querySelector(".ql-toolbar").style.backgroundColor = color1;
         remote.getCurrentWindow().on("close", () => {
+<<<<<<< HEAD
+          if (store.get(obj.toString()).deleted == "no") {
+=======
           if (store.get(obj.toString()).deleted != "yes") {
+>>>>>>> 71fe5a3dcd4bcaca7ecd643c9b3539e7ac377425
             store.set(obj.toString(), {
               first: text,
               back: color1,
@@ -108,10 +148,27 @@ export default {
               closed: "yes"
             });
           }
+<<<<<<< HEAD
+          if (store.get(obj.toString()).deleted == "yes") {
+            remot.getCurrentWindow().close();
+          }
+        });
+        try {
+          window.setInterval(() => {
+            if (store.get(obj.toString()).deleted == "yes") {
+              store.remove(obj.toString());
+              if (store.get(obj.toString()) == undefined) {
+                remote.getCurrentWindow().close();
+              }
+            }
+          }, 1);
+        } catch {}
+=======
           if (store.get(obj.toString()).deleted != "no"){
             remot.getCurrentWindow().close()
           }
         });
+>>>>>>> 71fe5a3dcd4bcaca7ecd643c9b3539e7ac377425
       };
       quill.on("text-change", function() {
         repeafunc();
@@ -130,6 +187,8 @@ export default {
       ) {
         repeafunc();
       }
+<<<<<<< HEAD
+=======
       try {
         window.setInterval(() => {
           if (store.get(obj.toString()).deleted == "yes") {
@@ -140,6 +199,7 @@ export default {
           }
         }, 1);
       } catch {}
+>>>>>>> 71fe5a3dcd4bcaca7ecd643c9b3539e7ac377425
     };
     try {
       let id = Number(store.get("id").ids);
