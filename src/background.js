@@ -1,3 +1,25 @@
+/* MIT License
+
+Copyright (c) 2019 Playork
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. */
+
 "use strict";
 
 import { app, protocol, BrowserWindow, ipcMain } from "electron";
@@ -6,6 +28,7 @@ import {
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
+import store from "store";
 
 autoUpdater.checkForUpdatesAndNotify();
 require("electron-context-menu")({
@@ -51,18 +74,12 @@ function createWindow() {
     win.show();
     win.focus();
   });
-  win.on("close", e => {
-    e.preventDefault();
-    app.quit();
-    win.destroy();
-  });
 }
 
 app.commandLine.appendSwitch("disable-web-security");
-
+let winnote;
 function createNote() {
-  let win;
-  win = new BrowserWindow({
+  winnote = new BrowserWindow({
     width: 350,
     height: 375,
     icon: "public/favicon.ico",
@@ -75,15 +92,15 @@ function createNote() {
     }
   });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    win.loadURL("http://localhost:8080/#/note");
-    if (!process.env.IS_TEST) win.webContents.openDevTools();
+    winnote.loadURL("http://localhost:8080/#/note");
+    if (!process.env.IS_TEST) winnote.webContents.openDevTools();
   } else {
     createProtocol("app");
-    win.loadURL("app://./index.html#note");
+    winnote.loadURL("app://./index.html#note");
   }
-  win.on("ready-to-show", () => {
-    win.show();
-    win.focus();
+  winnote.on("ready-to-show", () => {
+    winnote.show();
+    winnote.focus();
   });
 }
 
