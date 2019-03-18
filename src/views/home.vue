@@ -35,6 +35,8 @@ import swal from "./../assets/script/sweetalert.js";
 import homebody from "../components/home/homebody.vue";
 import titlebar1 from "../components/home/titlebar1.vue";
 import store from "store";
+import { setTimeout } from "timers";
+import fs from "fs";
 export default {
   components: {
     titlebar1,
@@ -42,10 +44,21 @@ export default {
   },
   mounted() {
     store.remove("closed");
+    if (process.platform == "linux") {
+      try {
+        fs.readFile("note.txt", (err, data) => {
+          document.getElementById("notes").innerHTML = data;
+        });
+      } catch {}
+    }
     window.setInterval(() => {
       document.getElementById("notes").innerHTML = "";
       store.each((value, key) => {
-        if (key != "id" && key != "loglevel:webpack-dev-server") {
+        if (
+          key != "id" &&
+          key != "loglevel:webpack-dev-server" &&
+          key != "closed"
+        ) {
           document
             .getElementById("notes")
             .insertAdjacentHTML(
@@ -107,6 +120,13 @@ export default {
         }
       });
       store.set("closed", { closed: "yes" });
+      if (process.platform == "linux") {
+        fs.writeFile(
+          "note.txt",
+          document.getElementById("notes").innerHTML,
+          () => {}
+        );
+      }
       remote.getCurrentWindow().close();
     },
     note: function() {
