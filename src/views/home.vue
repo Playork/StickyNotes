@@ -46,7 +46,7 @@ export default {
     store.remove("closed");
     if (process.platform == "linux") {
       try {
-        fs.readFile("note.txt", (err, data) => {
+        fs.readFile("note", (err, data) => {
           document.getElementById("notes").innerHTML = data;
         });
       } catch {}
@@ -103,7 +103,12 @@ export default {
         }
       });
     }, 2500);
-    /*store.each((value, key) => {
+    /*try {
+      window.setTimeout(() => {
+        document.getElementById(`startnote`).click();
+      }, 100);
+    } catch {}
+    store.each((value, key) => {
       if (key != "id" && key != "loglevel:webpack-dev-server") {
         store.set("id", { ids: key });
         ipcRenderer.send("create-new-instance");
@@ -122,7 +127,7 @@ export default {
       store.set("closed", { closed: "yes" });
       if (process.platform == "linux") {
         fs.writeFile(
-          "note.txt",
+          "note",
           document.getElementById("notes").innerHTML,
           () => {}
         );
