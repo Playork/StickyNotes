@@ -55,6 +55,7 @@ SOFTWARE.
 import store from "store";
 import swal from "./../../assets/script/sweetalert.js";
 import { setTimeout } from "timers";
+import fs from "fs";
 export default {
   methods: {
     deleteall: function() {
@@ -71,6 +72,9 @@ export default {
             window.setTimeout(() => {
               store.clearAll();
             }, 100);
+          }
+          if (os.platform() == "linux") {
+            fs.writeFile("note", "", () => {});
           }
         }
       });

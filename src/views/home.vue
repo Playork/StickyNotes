@@ -37,6 +37,7 @@ import titlebar1 from "../components/home/titlebar1.vue";
 import store from "store";
 import { setTimeout } from "timers";
 import fs from "fs";
+import os from "os";
 export default {
   components: {
     titlebar1,
@@ -44,7 +45,7 @@ export default {
   },
   mounted() {
     store.remove("closed");
-    if (process.platform == "linux") {
+    if (os.platform() == "linux") {
       try {
         fs.readFile("note", (err, data) => {
           document.getElementById("notes").innerHTML = data;
@@ -125,7 +126,7 @@ export default {
         }
       });
       store.set("closed", { closed: "yes" });
-      if (process.platform == "linux") {
+      if (os.platform() == "linux") {
         fs.writeFile(
           "note",
           document.getElementById("notes").innerHTML,
