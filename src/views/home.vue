@@ -53,7 +53,16 @@ export default {
       } catch {}
     }
     window.setInterval(() => {
+      if(os.platform() != "linux"){
       document.getElementById("notes").innerHTML = "";
+      }
+      if(os.platform() == "linux"){
+        try {
+        fs.readFile("note", (err, data) => {
+          document.getElementById("notes").innerHTML = data;
+        });
+      } catch {}
+      }
       store.each((value, key) => {
         if (
           key != "id" &&
