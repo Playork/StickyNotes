@@ -61,7 +61,9 @@ export default {
         fs.readFile("note", (err, data) => {
           document.getElementById("notes").innerHTML = data;
         });
-      } catch {}
+      } catch {
+        document.getElementById("notes").innerHTML = "";
+      }
       }
       store.each((value, key) => {
         if (
