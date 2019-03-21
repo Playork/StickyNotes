@@ -47,7 +47,7 @@ export default {
     store.remove("closed");
     let noteih;
     try {
-      fs.readFile("./note", (err, data) => {
+      fs.readFile("./note.txt", (err, data) => {
         noteih = data;
       });
     } catch {
@@ -140,12 +140,14 @@ export default {
       store.set("closed", { closed: "yes" });
       if (os.platform() == "linux") {
         fs.writeFile(
-          "./note",
+          "./note.txt",
           document.getElementById("notes").innerHTML,
           () => {}
         );
       }
-      remote.getCurrentWindow().close();
+      window.setTimeout(() => {
+        remote.getCurrentWindow().close();
+      }, 1000);
     },
     note: function() {
       let func = obj => {
