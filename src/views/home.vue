@@ -45,18 +45,10 @@ export default {
   },
   mounted() {
     store.remove("closed");
-    if (os.platform() == "linux") {
-      try {
-        fs.readFile("note", (err, data) => {
-          document.getElementById("notes").innerHTML = data;
-        });
-      } catch {}
-    }
     let noteih;
     try {
       fs.readFile("note", (err, data) => {
         noteih = data;
-        document.getElementById("notes").innerHTML = noteih;
       });
     } catch {
       noteih = "";
@@ -93,9 +85,11 @@ export default {
             let id = store.get("id").ids;
             store.set("id", { ids: key });
             ipcRenderer.send("create-new-instance");
-            if (store.get(key).closed == "no") {
-              store.set("id", { ids: id });
-            }
+            window.setTimeout(() => {
+              if (store.get(key).closed == "no") {
+                store.set("id", { ids: id });
+              }
+            }, 700);
           };
           document.getElementById("deletenote").onclick = () => {
             swal({
