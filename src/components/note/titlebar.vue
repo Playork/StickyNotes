@@ -96,7 +96,7 @@ export default {
           document.getElementById("more").style.display = "none";
           document.getElementById("selectmedia").style.display = "none";
           document.getElementById("close").style.display = "none";
-          document.getElementById("emoji").style.display = "none";
+          // document.getElementById("emoji").style.display = "none";
           if (select.style.pointerEvents == "auto") {
             document.getElementById("titlebar").style.height = "32px";
             document.getElementById("color").style.height = "40px";
@@ -124,13 +124,13 @@ export default {
       if (select.style.display == "none" || select.style.display == "") {
         select.style.display = "block";
         select0.style.height = "0";
-        document.getElementById("emoji").style.display = "flex";
+        // document.getElementById("emoji").style.display = "flex";
         document.getElementById("selectmedia").style.display = "flex";
         document.getElementById("lightYellow").style.paddingTop = "90px";
       } else {
         select.style.display = "none";
         select0.style.height = "40px";
-        document.getElementById("emoji").style.display = "none";
+        // document.getElementById("emoji").style.display = "none";
         document.getElementById("selectmedia").style.display = "none";
         document.getElementById("lightYellow").style.paddingTop = "30px";
       }

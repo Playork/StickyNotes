@@ -174,8 +174,8 @@ button {
 #songselect {
   position: absolute;
   color: #000;
-  top: 72px;
-  right: 35px;
+  top: 67px;
+  right: 28px;
   z-index: 50;
   font-family: "segoe";
   font-size: 20px;
@@ -183,24 +183,24 @@ button {
 #videoselect {
   position: absolute;
   color: #000;
-  top: 72px;
+  top: 67px;
   z-index: 50;
   font-family: "segoe";
   font-size: 20px;
-  right: 60px;
+  right: 55px;
 }
 #selectmedia {
   display: none;
 }
-@media screen and (min-width: 690px) {
+@media screen and (min-width: 660px) {
   #songselect {
     position: absolute;
-    top: 50px;
+    top: 43px;
     right: 35px;
   }
   #videoselect {
     position: absolute;
-    top: 50px;
+    top: 43px;
     right: 60px;
   }
   #emoji {
