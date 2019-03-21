@@ -37,6 +37,7 @@ import titlebar1 from "../components/home/titlebar1.vue";
 import store from "store";
 import { setTimeout } from "timers";
 import fs from "fs";
+import os from "os";
 export default {
   components: {
     titlebar1,
@@ -44,15 +45,29 @@ export default {
   },
   mounted() {
     store.remove("closed");
-    if (process.platform == "linux") {
+    if (os.platform() == "linux") {
       try {
         fs.readFile("note", (err, data) => {
           document.getElementById("notes").innerHTML = data;
         });
       } catch {}
     }
+    let noteih;
+    try {
+      fs.readFile("note", (err, data) => {
+        noteih = data;
+        document.getElementById("notes").innerHTML = noteih;
+      });
+    } catch {
+      noteih = "";
+    }
     window.setInterval(() => {
-      document.getElementById("notes").innerHTML = "";
+      if (os.platform() != "linux") {
+        document.getElementById("notes").innerHTML = "";
+      }
+      if (os.platform() == "linux") {
+        document.getElementById("notes").innerHTML = noteih;
+      }
       store.each((value, key) => {
         if (
           key != "id" &&
@@ -75,8 +90,12 @@ export default {
             document.getElementById("startnote").style.display = "none";
           }
           document.getElementById("startnote").onclick = () => {
+            let id = store.get("id").ids;
             store.set("id", { ids: key });
             ipcRenderer.send("create-new-instance");
+            if (store.get(key).closed == "no") {
+              store.set("id", { ids: id });
+            }
           };
           document.getElementById("deletenote").onclick = () => {
             swal({
@@ -125,7 +144,7 @@ export default {
         }
       });
       store.set("closed", { closed: "yes" });
-      if (process.platform == "linux") {
+      if (os.platform() == "linux") {
         fs.writeFile(
           "note",
           document.getElementById("notes").innerHTML,

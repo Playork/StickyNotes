@@ -29,7 +29,8 @@ SOFTWARE.
       <span id="videoselect" title="Select Video" v-on:click="clickvideo">&#xE714;</span>
     </div>
     <div id="lightYellow">
-      <div id="editor" data-meteor-emoji="true"></div>
+      <!--<div id="editor" data-meteor-emoji="true"></div>-->
+      <div id="editor"></div>
     </div>
   </div>
 </template>

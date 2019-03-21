@@ -19,7 +19,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
-*.txt
 note
 
 #Electron-builder output
