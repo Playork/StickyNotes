@@ -36,7 +36,6 @@ import homebody from "../components/home/homebody.vue";
 import titlebar1 from "../components/home/titlebar1.vue";
 import store from "store";
 import { setTimeout } from "timers";
-import fs from "fs";
 import os from "os";
 export default {
   components: {
@@ -45,21 +44,8 @@ export default {
   },
   mounted() {
     store.remove("closed");
-    let noteih;
-    try {
-      fs.readFile("./note.txt", (err, data) => {
-        noteih = data;
-      });
-    } catch {
-      noteih = "";
-    }
     window.setInterval(() => {
-      if (os.platform() != "linux") {
-        document.getElementById("notes").innerHTML = "";
-      }
-      if (os.platform() == "linux") {
-        document.getElementById("notes").innerHTML = noteih;
-      }
+      document.getElementById("notes").innerHTML = "";
       store.each((value, key) => {
         if (
           key != "id" &&
@@ -138,16 +124,9 @@ export default {
         }
       });
       store.set("closed", { closed: "yes" });
-      if (os.platform() == "linux") {
-        fs.writeFile(
-          "./note.txt",
-          document.getElementById("notes").innerHTML,
-          () => {}
-        );
-      }
       window.setTimeout(() => {
         remote.getCurrentWindow().close();
-      }, 1000);
+      }, 700);
     },
     note: function() {
       let func = obj => {
