@@ -74,7 +74,7 @@ export default {
             }, 100);
           }
           if (os.platform() == "linux") {
-            fs.writeFile("note", "", () => {});
+            fs.writeFile("./note", "", () => {});
           }
         }
       });

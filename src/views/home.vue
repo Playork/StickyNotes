@@ -47,7 +47,7 @@ export default {
     store.remove("closed");
     let noteih;
     try {
-      fs.readFile("note", (err, data) => {
+      fs.readFile("./note", (err, data) => {
         noteih = data;
       });
     } catch {
@@ -140,7 +140,7 @@ export default {
       store.set("closed", { closed: "yes" });
       if (os.platform() == "linux") {
         fs.writeFile(
-          "note",
+          "./note",
           document.getElementById("notes").innerHTML,
           () => {}
         );
