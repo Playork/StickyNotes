@@ -122,7 +122,8 @@ export default {
           closed: "no"
         });
         document.querySelector(".ql-toolbar").style.backgroundColor = color1;
-        remote.getCurrentWindow().on("close", () => {
+        remote.getCurrentWindow().on("close", e => {
+          e.preventDefault();
           if (store.get(obj.toString()).deleted == "no") {
             store.set(obj.toString(), {
               first: text,
@@ -134,9 +135,9 @@ export default {
               closed: "yes"
             });
           }
-          if (store.get(obj.toString()).deleted == "yes") {
+          window.setTimeout(() => {
             remot.getCurrentWindow().close();
-          }
+          }, 500);
         });
         try {
           window.setInterval(() => {

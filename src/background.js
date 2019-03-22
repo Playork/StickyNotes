@@ -28,6 +28,7 @@ import {
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
+import AutoLaunch from "auto-launch"
 
 autoUpdater.checkForUpdatesAndNotify();
 require("electron-context-menu")({
@@ -40,9 +41,10 @@ require("electron-context-menu")({
 });
 
 if (app.isPackaged) {
-  app.setLoginItemSettings({
-    openAtLogin: true
+  let launchonstart = new AutoLaunch({
+    name: 'StickyNotes',
   });
+  launchonstart.enable();
 }
 
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -73,6 +75,13 @@ function createWindow() {
     win.show();
     win.focus();
   });
+  win.on("close",(e) => {
+    e.preventDefault()
+    window.setTimeout(() => {
+      app.quit()
+      win.destroy()
+    },200)
+  })
 }
 
 app.commandLine.appendSwitch("disable-web-security");

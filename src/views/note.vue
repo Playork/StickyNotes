@@ -48,11 +48,11 @@ export default {
   },
   mounted() {
     window.setInterval(() => {
-      try{
-      if (store.get("closed").closed == "yes") {
-        remote.getCurrentWindow().close();
-      }
-      }catch{}
+      try {
+        if (store.get("closed").closed == "yes") {
+          remote.getCurrentWindow().close();
+        }
+      } catch {}
     }, 1);
     try {
       let text = store.get(store.get("id").ids);
@@ -68,7 +68,7 @@ export default {
     if (
       document.querySelector(".ql-snow .ql-editor").innerHTML != "<p><br></p>"
     ) {
-      document.getElementById("window-title1").style.pointerEvents = "none"
+      document.getElementById("window-title1").style.pointerEvents = "none";
     }
   },
   methods: {

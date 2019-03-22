@@ -13,7 +13,8 @@
   "dependencies": {
     "electron-context-menu": "latest",
     "electron-updater": "^4.0.0",
-    "store": "latest"
+    "store": "latest",
+    "auto-launch": "latest"
   },
   "devDependencies": {
     "@vue/cli-service": "latest",
