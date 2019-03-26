@@ -103,6 +103,7 @@ export default {
             document.getElementById("add").style.display = "flex";
             document.getElementById("more").style.display = "flex";
             document.getElementById("close").style.display = "flex";
+            remote.getCurrentWindow().setMaximumSize(100000, 100000);
             clearInterval(clearint);
           }
         }, 0.001);
@@ -114,7 +115,6 @@ export default {
         select1.style.pointerEvents = "auto";
         select2.style.pointerEvents = "auto";
         select4.style.pointerEvents = "auto";
-        remote.getCurrentWindow().setMaximumSize(100000, 100000);
       }
     },
     showedit: function() {
