@@ -38,11 +38,6 @@ export default new Router({
       path: "/note",
       name: "note",
       component: () => import("./views/note.vue")
-    },
-    {
-      path: "/help",
-      name: "help",
-      component: () => import("./views/help.vue")
     }
   ]
 });

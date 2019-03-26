@@ -37,9 +37,8 @@ SOFTWARE.
 
 <script>
 import { remote } from "electron";
-import Quill from "./../../assets/script/quill";
+import Quill from "quill";
 import store from "store";
-import emoji from "./../../assets/script/emoji.js";
 
 export default {
   mounted() {
@@ -124,7 +123,11 @@ export default {
         document.querySelector(".ql-toolbar").style.backgroundColor = color1;
         remote.getCurrentWindow().on("close", e => {
           e.preventDefault();
-          if (store.get(obj.toString()).deleted == "no") {
+          if (
+            store.get(obj.toString()).deleted == "no" &&
+            document.querySelector(".ql-snow .ql-editor").innerHTML !=
+              "<p><br></p>"
+          ) {
             store.set(obj.toString(), {
               first: text,
               back: color1,
@@ -136,7 +139,7 @@ export default {
             });
           }
           window.setTimeout(() => {
-            remot.getCurrentWindow().close();
+            remote.getCurrentWindow().destroy();
           }, 500);
         });
         try {
@@ -175,7 +178,6 @@ export default {
       let id = 1;
       func(id);
     }
-    new emoji();
   },
   methods: {
     clicksong: function() {

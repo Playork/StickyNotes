@@ -31,7 +31,7 @@ SOFTWARE.
 
 <script>
 import { remote, ipcRenderer } from "electron";
-import swal from "./../assets/script/sweetalert.js";
+import swal from "sweetalert";
 import homebody from "../components/home/homebody.vue";
 import titlebar1 from "../components/home/titlebar1.vue";
 import store from "store";

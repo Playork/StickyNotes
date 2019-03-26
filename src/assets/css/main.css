@@ -39,19 +39,6 @@ SOFTWARE. */
   overflow-x: hidden;
   overflow-y: auto;
 }
-.help {
-  user-select: none;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  font-family: "Lobster";
-}
 button {
   outline: none;
 }
@@ -85,7 +72,7 @@ button {
   position: absolute;
   top: 45px;
   bottom: 100%;
-  left: 82%;
+  left: 90%;
   font-family: "segoe";
   color: #fff;
   user-select: none;
@@ -115,28 +102,11 @@ button {
   color: #fff;
   font-family: "segoe";
 }
-
 #helppage {
   font-family: "Lobster";
   padding-top: 20px;
   text-align: center;
   padding: 10px;
-}
-
-.help span {
-  position: absolute;
-  top: 5px;
-  bottom: 100%;
-  right: 5px;
-  color: #fff;
-  font-family: "segoe";
-}
-
-#content {
-  display: grid;
-  grid-template-columns: 50% 50%;
-  row-gap: 20px;
-  color: #fff;
 }
 #notes {
   margin-top: 65px;

@@ -29,7 +29,7 @@ import {
 } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import AutoLaunch from "auto-launch"
-
+import { setTimeout } from "timers"
 autoUpdater.checkForUpdatesAndNotify();
 require("electron-context-menu")({
   prepend: () => [
@@ -77,10 +77,10 @@ function createWindow() {
   });
   win.on("close",(e) => {
     e.preventDefault()
-    window.setTimeout(() => {
+    setTimeout(() => {
       app.quit()
       win.destroy()
-    },200)
+    },1000)
   })
 }
 
@@ -110,6 +110,7 @@ function createNote() {
     winnote.show();
     winnote.focus();
   });
+  winnote.setMinimumSize(350, 375)
 }
 
 ipcMain.on("create-new-instance", () => {

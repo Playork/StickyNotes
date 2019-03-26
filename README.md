@@ -5,8 +5,6 @@
 
 ### A Open Source Sticky Note Application.
 
-### Emoji Selecter
-
 ### Automatically Save Notes
 
 ### Choose Background And Title Bar Color You Like

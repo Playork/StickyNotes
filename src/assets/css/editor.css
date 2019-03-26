@@ -57,13 +57,11 @@ SOFTWARE. */
   font-family: arial;
 }
 #lightYellow::-webkit-scrollbar,
-.help::-webkit-scrollbar,
 #home::-webkit-scrollbar,
 .ql-snow .ql-editor::-webkit-scrollbar {
   width: 6px;
 }
 #lightYellow::-webkit-scrollbar-track,
-.help::-webkit-scrollbar-track,
 #home::-webkit-scrollbar-track,
 .ql-snow .ql-editor::-webkit-scrollbar-track {
   box-shadow: none;
@@ -72,7 +70,6 @@ SOFTWARE. */
   background: none;
 }
 #lightYellow::-webkit-scrollbar-thumb,
-.help::-webkit-scrollbar-thumb,
 #home::-webkit-scrollbar-thumb,
 .ql-snow .ql-editor:-webkit-scrollbar-thumb {
   border-radius: 10px;

@@ -1,8 +1,8 @@
 name: stickynotes
 version: "0.2.0"
 summary: A Sticky Notes Application For Linux
-description: A New And Open source Sticky Notes For Linux
-  Emoji Selecter
+description: |
+  A New And Open source Sticky Notes For Linux
   Automatically Save Notes
   Choose Background And Title Bar Color You Like
   Editing Options Like Font,Bold,Size,.etc

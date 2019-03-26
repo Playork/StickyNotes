@@ -87,21 +87,14 @@ export default {
         select2.style.pointerEvents = "none";
         select3.style.display = "none";
         let clearint = window.setInterval(() => {
-          document.getElementById("titlebar").style.height = "0";
           document.getElementById("color").style.height = "0";
-          document.getElementById("lock").style.fontSize = "20px";
-          document.getElementById("lock").style.marginTop = "35px";
           document.getElementById("lock").style.marginLeft = "-100px";
           document.getElementById("add").style.display = "none";
           document.getElementById("more").style.display = "none";
           document.getElementById("selectmedia").style.display = "none";
           document.getElementById("close").style.display = "none";
-          // document.getElementById("emoji").style.display = "none";
           if (select.style.pointerEvents == "auto") {
-            document.getElementById("titlebar").style.height = "32px";
             document.getElementById("color").style.height = "40px";
-            document.getElementById("lock").style.fontSize = "25px";
-            document.getElementById("lock").style.marginTop = "0";
             document.getElementById("lock").style.marginLeft = "0";
             document.getElementById("add").style.display = "flex";
             document.getElementById("more").style.display = "flex";
@@ -124,13 +117,11 @@ export default {
       if (select.style.display == "none" || select.style.display == "") {
         select.style.display = "block";
         select0.style.height = "0";
-        // document.getElementById("emoji").style.display = "flex";
         document.getElementById("selectmedia").style.display = "flex";
         document.getElementById("lightYellow").style.paddingTop = "90px";
       } else {
         select.style.display = "none";
         select0.style.height = "40px";
-        // document.getElementById("emoji").style.display = "none";
         document.getElementById("selectmedia").style.display = "none";
         document.getElementById("lightYellow").style.paddingTop = "30px";
       }

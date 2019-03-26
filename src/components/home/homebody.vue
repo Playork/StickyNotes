@@ -29,9 +29,6 @@ SOFTWARE.
       <div id="options">
         <span v-on:click="deleteall" title="Delete All Notes And Quit">&#xE74D;</span>
         <span v-on:click="aboutshow" title="About">&#xE946;</span>
-        <a href="#help" target="_blank" title="help">
-          <span>&#xE897;</span>
-        </a>
       </div>
       <div id="about">
         <span v-on:click="hide">&#xE8BB;</span>
@@ -53,7 +50,7 @@ SOFTWARE.
 
 <script>
 import store from "store";
-import swal from "./../../assets/script/sweetalert.js";
+import swal from "sweetalert";
 import { setTimeout } from "timers";
 export default {
   methods: {
