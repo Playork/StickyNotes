@@ -46,6 +46,7 @@ SOFTWARE.
 </template>
 
 <script>
+import { remote } from "electron";
 import { setInterval } from "timers";
 export default {
   props: {
@@ -75,6 +76,7 @@ export default {
       let select1 = document.getElementById("color");
       let select2 = document.getElementById("editor");
       let select3 = document.querySelector(".ql-snow.ql-toolbar");
+      let select4 = document.getElementById("window-title1");
 
       if (
         select.style.pointerEvents == "auto" ||
@@ -86,16 +88,18 @@ export default {
         select1.style.pointerEvents = "none";
         select2.style.pointerEvents = "none";
         select3.style.display = "none";
+        select4.style.pointerEvents = "none";
         let clearint = window.setInterval(() => {
           document.getElementById("color").style.height = "0";
-          document.getElementById("lock").style.marginLeft = "-100px";
+          document.getElementById("locks").style.marginLeft = "-35px";
           document.getElementById("add").style.display = "none";
           document.getElementById("more").style.display = "none";
           document.getElementById("selectmedia").style.display = "none";
           document.getElementById("close").style.display = "none";
+          remote.getCurrentWindow().setMaximumSize(350, 375);
           if (select.style.pointerEvents == "auto") {
             document.getElementById("color").style.height = "40px";
-            document.getElementById("lock").style.marginLeft = "0";
+            document.getElementById("locks").style.marginLeft = "0";
             document.getElementById("add").style.display = "flex";
             document.getElementById("more").style.display = "flex";
             document.getElementById("close").style.display = "flex";
@@ -109,6 +113,8 @@ export default {
         select0.style.pointerEvents = "auto";
         select1.style.pointerEvents = "auto";
         select2.style.pointerEvents = "auto";
+        select4.style.pointerEvents = "auto";
+        remote.getCurrentWindow().setMaximumSize(100000, 100000);
       }
     },
     showedit: function() {

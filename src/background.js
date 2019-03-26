@@ -80,7 +80,7 @@ function createWindow() {
     setTimeout(() => {
       app.quit()
       win.destroy()
-    },1000)
+    },750)
   })
 }
 
