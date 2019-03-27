@@ -110,17 +110,16 @@ export default {
         }
       });
     }, 2500);
-    /*try {
-      window.setTimeout(() => {
-        document.getElementById(`startnote`).click();
-      }, 100);
-    } catch {}
+    let start = "";
     store.each((value, key) => {
       if (key != "id" && key != "loglevel:webpack-dev-server") {
-        store.set("id", { ids: key });
-        ipcRenderer.send("create-new-instance");
+        if (start == "" || store.get(start).closed == "no") {
+          store.set("id", { ids: key });
+          ipcRenderer.send("create-new-instance");
+          start = key;
+        }
       }
-    });*/
+    });
   },
   methods: {
     close: function() {
