@@ -28,8 +28,7 @@ import {
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
-import AutoLaunch from "auto-launch"
-import { setTimeout } from "timers"
+import AutoLaunch from "auto-launch";
 autoUpdater.checkForUpdatesAndNotify();
 require("electron-context-menu")({
   prepend: () => [
@@ -42,7 +41,7 @@ require("electron-context-menu")({
 
 if (app.isPackaged) {
   let launchonstart = new AutoLaunch({
-    name: 'StickyNotes',
+    name: "StickyNotes"
   });
   launchonstart.enable();
 }
@@ -75,13 +74,11 @@ function createWindow() {
     win.show();
     win.focus();
   });
-  win.on("close",(e) => {
-    e.preventDefault()
-    setTimeout(() => {
-      app.quit()
-      win.destroy()
-    },750)
-  })
+  win.on("close", e => {
+    e.preventDefault();
+    app.quit();
+    win.destroy();
+  });
 }
 
 app.commandLine.appendSwitch("disable-web-security");
@@ -110,7 +107,7 @@ function createNote() {
     winnote.show();
     winnote.focus();
   });
-  winnote.setMinimumSize(350, 375)
+  winnote.setMinimumSize(350, 375);
 }
 
 ipcMain.on("create-new-instance", () => {

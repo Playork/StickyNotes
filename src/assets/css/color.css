@@ -43,6 +43,7 @@ SOFTWARE. */
 }
 .swal-button--cancel,
 .swal-button--danger,
+.swal-button,
 .button1 {
   color: white !important;
   background: #0078d7 !important;
@@ -58,6 +59,7 @@ SOFTWARE. */
 }
 .swal-button--cancel:hover,
 .swal-button--danger:hover,
+.swal-button:hover,
 .button1:hover {
   font-size: 14px !important;
   font-family: "Lobster" !important;
@@ -72,6 +74,7 @@ SOFTWARE. */
 }
 .swal-button--cancel:focus,
 .swal-button--danger:focus,
+.swal-button:focus,
 .button1:focus {
   background: #0078d7 !important;
   border: 2px solid #000 !important;
@@ -86,6 +89,7 @@ SOFTWARE. */
 }
 .swal-button--cancel:active,
 .swal-button--danger:active,
+.swal-button:active,
 .button1:active {
   border: none !important;
   background: rgba(0, 0, 0, 0.4) !important;

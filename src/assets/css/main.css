@@ -116,7 +116,6 @@ button {
 #notes span {
   font-family: "segoe";
   padding: 5px;
-  pointer-events: all;
 }
 #notes #notetext {
   padding: 5px;
@@ -127,13 +126,6 @@ button {
   min-height: 80px;
   pointer-events: none;
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
-}
-#emoji {
-  display: none;
-  position: fixed !important;
-  top: 72px !important;
-  right: 10px !important;
-  z-index: 7;
 }
 .ql-toolbar {
   position: fixed !important;

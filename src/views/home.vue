@@ -67,6 +67,14 @@ export default {
           if (store.get(key).closed == "no") {
             document.getElementById("startnote").style.display = "none";
           }
+          if (store.get(key).locked == "yes") {
+            document.getElementById("deletenote").style.pointerEvents = "none";
+            document.getElementById("deleteall").style.pointerEvents = "none";
+          }
+          if (store.get(key).locked == "no") {
+            document.getElementById("deletenote").style.pointerEvents = "auto";
+            document.getElementById("deleteall").style.pointerEvents = "auto";
+          }
           document.getElementById("startnote").onclick = () => {
             let id = store.get("id").ids;
             store.set("id", { ids: key });
@@ -124,9 +132,13 @@ export default {
         }
       });
       store.set("closed", { closed: "yes" });
-      window.setTimeout(() => {
-        remote.getCurrentWindow().close();
-      }, 700);
+      if (document.getElementById("deleteall").style.pointerEvents != "none") {
+        window.setTimeout(() => {
+          remote.getCurrentWindow().close();
+        }, 700);
+      } else {
+        swal("Can't Close Note Is Locked");
+      }
     },
     note: function() {
       let func = obj => {

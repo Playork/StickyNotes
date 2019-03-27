@@ -27,7 +27,7 @@ SOFTWARE.
     <div id="notes"></div>
     <div>
       <div id="options">
-        <span v-on:click="deleteall" title="Delete All Notes And Quit">&#xE74D;</span>
+        <span id="deleteall" v-on:click="deleteall" title="Delete All Notes And Quit">&#xE74D;</span>
         <span v-on:click="aboutshow" title="About">&#xE946;</span>
       </div>
       <div id="about">

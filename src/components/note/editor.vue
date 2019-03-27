@@ -39,7 +39,7 @@ SOFTWARE.
 import { remote } from "electron";
 import Quill from "quill";
 import store from "store";
-
+import swal from "sweetalert";
 export default {
   mounted() {
     var BackgroundClass = Quill.import("attributors/class/background");
@@ -102,56 +102,79 @@ export default {
 
     let func = obj => {
       let repeafunc = () => {
-        let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
-        let color1 = window
-          .getComputedStyle(document.getElementById("lightYellow"))
-          .getPropertyValue("background-color");
-        let color2 = window
-          .getComputedStyle(document.getElementById("titlebar"))
-          .getPropertyValue("background-color");
-        let winwidth = window.innerWidth.toString();
-        let winheight = window.innerHeight.toString();
-        store.set(obj.toString(), {
-          first: text,
-          back: color1,
-          title: color2,
-          wid: winwidth,
-          hei: winheight,
-          deleted: "no",
-          closed: "no"
-        });
-        document.querySelector(".ql-toolbar").style.backgroundColor = color1;
-        remote.getCurrentWindow().on("close", e => {
-          e.preventDefault();
+        if (
+          document.querySelector(".ql-snow .ql-editor").innerHTML !=
+          "<p><br></p>"
+        ) {
+          let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
+          let color1 = window
+            .getComputedStyle(document.getElementById("lightYellow"))
+            .getPropertyValue("background-color");
+          let color2 = window
+            .getComputedStyle(document.getElementById("titlebar"))
+            .getPropertyValue("background-color");
+          let winwidth = window.innerWidth.toString();
+          let winheight = window.innerHeight.toString();
+          let lock;
           if (
-            store.get(obj.toString()).deleted == "no" &&
-            document.querySelector(".ql-snow .ql-editor").innerHTML !=
-              "<p><br></p>"
+            document.getElementById("close-button").style.pointerEvents ==
+            "none"
           ) {
-            store.set(obj.toString(), {
-              first: text,
-              back: color1,
-              title: color2,
-              wid: winwidth,
-              hei: winheight,
-              deleted: "no",
-              closed: "yes"
-            });
+            lock = "yes";
+          } else {
+            lock = "no";
           }
-          window.setTimeout(() => {
-            remote.getCurrentWindow().destroy();
-          }, 500);
-        });
-        try {
-          window.setInterval(() => {
-            if (store.get(obj.toString()).deleted == "yes") {
-              store.remove(obj.toString());
-              if (store.get(obj.toString()) == undefined) {
-                remote.getCurrentWindow().close();
-              }
+          store.set(obj.toString(), {
+            first: text,
+            back: color1,
+            title: color2,
+            wid: winwidth,
+            hei: winheight,
+            deleted: "no",
+            closed: "no",
+            locked: lock
+          });
+          document.querySelector(".ql-toolbar").style.backgroundColor = color1;
+          remote.getCurrentWindow().on("close", e => {
+            e.preventDefault();
+            if (
+              store.get(obj.toString()).deleted == "no" &&
+              document.querySelector(".ql-snow .ql-editor").innerHTML !=
+                "<p><br></p>"
+            ) {
+              store.set(obj.toString(), {
+                first: text,
+                back: color1,
+                title: color2,
+                wid: winwidth,
+                hei: winheight,
+                deleted: "no",
+                closed: "yes",
+                locked: lock
+              });
             }
-          }, 1);
-        } catch {}
+            if (
+              document.getElementById("close-button").style.pointerEvents !=
+              "none"
+            ) {
+              window.setTimeout(() => {
+                remote.getCurrentWindow().destroy();
+              }, 500);
+            } else {
+              swal("Can't Close Note Is Locked");
+            }
+          });
+          try {
+            window.setInterval(() => {
+              if (store.get(obj.toString()).deleted == "yes") {
+                store.remove(obj.toString());
+                if (store.get(obj.toString()) == undefined) {
+                  remote.getCurrentWindow().close();
+                }
+              }
+            }, 1);
+          } catch {}
+        }
       };
       quill.on("text-change", function() {
         repeafunc();
@@ -160,6 +183,9 @@ export default {
         repeafunc();
       });
       document.getElementById("cc").addEventListener("click", () => {
+        repeafunc();
+      });
+      document.getElementById("locks").addEventListener("click", () => {
         repeafunc();
       });
       window.addEventListener("resize", () => {
