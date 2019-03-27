@@ -22,13 +22,15 @@ SOFTWARE. */
 
 "use strict";
 
-import { app, protocol, BrowserWindow, ipcMain } from "electron";
+import { app, protocol, BrowserWindow, ipcMain, dialog } from "electron";
 import {
   createProtocol,
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import AutoLaunch from "auto-launch";
+import store from "store";
+import { setInterval } from "timers";
 autoUpdater.checkForUpdatesAndNotify();
 require("electron-context-menu")({
   prepend: () => [
@@ -76,8 +78,32 @@ function createWindow() {
   });
   win.on("close", e => {
     e.preventDefault();
-    app.quit();
-    win.destroy();
+    let yes = "";
+    setInterval(() => {
+      store.each((value, key) => {
+        if (
+          key != "id" &&
+          key != "loglevel:webpack-dev-server" &&
+          key != "closed"
+        ) {
+          if (value.locked != "yes") {
+            yes = "yes";
+          } else {
+            yes = "";
+          }
+        }
+      });
+    }, 1);
+    if (yes == "yes") {
+      app.quit();
+      win.destroy();
+    } else {
+      dialog.showMessageBox({
+        type: "info",
+        buttons: ["OK"],
+        message: "Can't Close Note Is Locked"
+      });
+    }
   });
 }
 

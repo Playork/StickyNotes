@@ -61,17 +61,17 @@ export default {
               }</div>`
             );
 
-          if (store.get(key).closed == "yes") {
+          if (value.closed == "yes") {
             document.getElementById("startnote").style.display = "inline";
           }
-          if (store.get(key).closed == "no") {
+          if (value.closed == "no") {
             document.getElementById("startnote").style.display = "none";
           }
-          if (store.get(key).locked == "yes") {
+          if (value.locked == "yes") {
             document.getElementById("deletenote").style.pointerEvents = "none";
             document.getElementById("deleteall").style.pointerEvents = "none";
           }
-          if (store.get(key).locked == "no") {
+          if (value.locked == "no") {
             document.getElementById("deletenote").style.pointerEvents = "auto";
             document.getElementById("deleteall").style.pointerEvents = "auto";
           }
@@ -80,7 +80,7 @@ export default {
             store.set("id", { ids: key });
             ipcRenderer.send("create-new-instance");
             window.setTimeout(() => {
-              if (store.get(key).closed == "no") {
+              if (value.closed == "no") {
                 store.set("id", { ids: id });
               }
             }, 700);
@@ -94,10 +94,10 @@ export default {
               dangerMode: true
             }).then(willDelete => {
               if (willDelete) {
-                if (store.get(key).closed == "no") {
+                if (value.closed == "no") {
                   store.set(key, { deleted: "yes" });
                 }
-                if (store.get(key).closed == "yes") {
+                if (value.closed == "yes") {
                   store.remove(key);
                 }
               }
@@ -123,15 +123,16 @@ export default {
   },
   methods: {
     close: function() {
-      store.each((value, key) => {
-        if (key != "id" && key != "loglevel:webpack-dev-server") {
-          if (value.first == "<p><br></p>") {
-            store.remove(key);
-          }
-        }
-      });
-      store.set("closed", { closed: "yes" });
       if (document.getElementById("deleteall").style.pointerEvents != "none") {
+        store.each((value, key) => {
+          if (key != "id" && key != "loglevel:webpack-dev-server") {
+            if (value.first == "<p><br></p>") {
+              store.remove(key);
+            }
+          }
+        });
+        store.set("closed", { closed: "yes" });
+
         window.setTimeout(() => {
           remote.getCurrentWindow().close();
         }, 700);

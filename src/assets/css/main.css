@@ -117,6 +117,9 @@ button {
   font-family: "segoe";
   padding: 5px;
 }
+#startnote {
+  pointer-events: all;
+}
 #notes #notetext {
   padding: 5px;
   margin: 5px;
