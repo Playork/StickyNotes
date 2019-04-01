@@ -88,7 +88,7 @@ export default {
         select1.style.pointerEvents = "none";
         select2.style.pointerEvents = "none";
         select3.style.display = "none";
-        select4.style.pointerEvents = "none";
+        select4.style.display = "none";
         let clearint = window.setInterval(() => {
           document.getElementById("color").style.height = "0";
           document.getElementById("locks").style.marginLeft = "-35px";
@@ -114,7 +114,7 @@ export default {
         select0.style.pointerEvents = "auto";
         select1.style.pointerEvents = "auto";
         select2.style.pointerEvents = "auto";
-        select4.style.pointerEvents = "auto";
+        select4.style.display = "flex";
       }
     },
     showedit: function() {

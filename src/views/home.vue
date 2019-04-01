@@ -68,7 +68,7 @@ export default {
             document.getElementById("startnote").style.display = "none";
           }
           if (value.locked == "yes") {
-            document.querySelector("deletenote").style.pointerEvents = "none";
+            document.getElementById("deletenote").style.pointerEvents = "none";
             document.getElementById("deleteall").style.pointerEvents = "none";
           }
           if (value.locked == "no") {
