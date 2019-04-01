@@ -77,7 +77,7 @@ function createWindow() {
   win.on("close", () => {
     setTimeout(() => {
       app.quit();
-    }, 1000);
+    }, 750);
   });
 }
 

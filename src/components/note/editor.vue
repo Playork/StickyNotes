@@ -155,7 +155,7 @@ export default {
             }
             window.setTimeout(() => {
               remote.getCurrentWindow().destroy();
-            }, 500);
+            }, 730);
           });
           try {
             window.setInterval(() => {

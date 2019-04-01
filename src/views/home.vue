@@ -110,16 +110,16 @@ export default {
         }
       });
     }, 2500);
-    let start = "";
-    store.each((value, key) => {
-      if (key != "id" && key != "loglevel:webpack-dev-server") {
-        if (start == "" || store.get(start).closed == "no") {
-          store.set("id", { ids: key });
-          ipcRenderer.send("create-new-instance");
-          start = key;
-        }
-      }
-    });
+    // let start = "";
+    // store.each((value, key) => {
+    //   if (key != "id" && key != "loglevel:webpack-dev-server") {
+    //     if (start == "" || store.get(start).closed == "no") {
+    //       store.set("id", { ids: key });
+    //       ipcRenderer.send("create-new-instance");
+    //       start = key;
+    //     }
+    //   }
+    // });
   },
   methods: {
     close: function() {
@@ -135,7 +135,7 @@ export default {
 
         window.setTimeout(() => {
           remote.getCurrentWindow().close();
-        }, 700);
+        }, 740);
       } else {
         swal("Can't Close Note Is Locked");
       }
