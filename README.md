@@ -19,17 +19,7 @@
 
 ### Lock The Note
 
-### Electron Based
-
-### Using Quill Editing Capability
-
-### Uses Some jQuery
-
-### Electron-Context-Menu for Context Menu
-
-### Using Store For Saving Notes
-
-### Using Vue As Front End Framework
+### Text Suggetions
 
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/stickynotes)
 

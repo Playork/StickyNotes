@@ -60,6 +60,7 @@ SOFTWARE. */
 #home::-webkit-scrollbar,
 .ql-snow .ql-editor::-webkit-scrollbar {
   width: 6px;
+  z-index: 200;
 }
 #lightYellow::-webkit-scrollbar-track,
 #home::-webkit-scrollbar-track,
@@ -68,6 +69,7 @@ SOFTWARE. */
   border-radius: 10px;
   -webkit-border-radius: 10px;
   background: none;
+  z-index: 200;
 }
 #lightYellow::-webkit-scrollbar-thumb,
 #home::-webkit-scrollbar-thumb,
@@ -76,6 +78,7 @@ SOFTWARE. */
   -webkit-border-radius: 10px;
   background: #111;
   box-shadow: none;
+  z-index: 200;
 }
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value=""]::before {
   content: "Arial";

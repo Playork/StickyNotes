@@ -186,3 +186,19 @@ button {
   height: 100px;
   overflow: hidden;
 }
+.dropdown-menu,
+.textcomplete-dropdown {
+  background: #202020;
+  border-radius: 10px;
+  text-align: center;
+  list-style: none;
+  padding: 10px;
+  font-family: "Arial";
+  border: #000 4px solid;
+}
+.textcomplete-item {
+  cursor: pointer;
+}
+.textcomplete-item a:hover {
+  color: #000 !important;
+}
