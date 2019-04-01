@@ -10,12 +10,13 @@
     "start": "vue-cli-service electron:serve"
   },
   "dependencies": {
-    "quill": "latest",
-    "sweetalert": "latest",
+    "an-array-of-english-words": "^1.3.1",
+    "auto-launch": "latest",
     "electron-context-menu": "latest",
     "electron-updater": "^4.0.0",
+    "quill": "latest",
     "store": "latest",
-    "auto-launch": "latest"
+    "sweetalert": "latest"
   },
   "devDependencies": {
     "@vue/cli-service": "latest",

@@ -132,7 +132,6 @@ export default {
           }
         });
         store.set("closed", { closed: "yes" });
-
         window.setTimeout(() => {
           remote.getCurrentWindow().close();
         }, 740);

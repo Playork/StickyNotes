@@ -40,8 +40,11 @@ import { remote } from "electron";
 import Quill from "quill";
 import store from "store";
 import swal from "sweetalert";
+import $ from "./../../assets/script/jquery.js";
+import wordsarray from "an-array-of-english-words";
 export default {
   mounted() {
+    let words = wordsarray.filter(word => word.match(/^/i));
     var BackgroundClass = Quill.import("attributors/class/background");
     var ColorClass = Quill.import("attributors/class/color");
     var SizeStyle = Quill.import("attributors/style/size");
@@ -137,11 +140,7 @@ export default {
           document.querySelector(".ql-toolbar").style.backgroundColor = color1;
           remote.getCurrentWindow().on("close", e => {
             e.preventDefault();
-            if (
-              store.get(obj.toString()).deleted == "no" &&
-              document.querySelector(".ql-snow .ql-editor").innerHTML !=
-                "<p><br></p>"
-            ) {
+            if (store.get(obj.toString()).deleted == "no") {
               store.set(obj.toString(), {
                 first: text,
                 back: color1,
@@ -197,6 +196,23 @@ export default {
       let id = 1;
       func(id);
     }
+    window.setTimeout(() => {
+      $(".ql-snow .ql-editor").textcomplete([
+        {
+          match: /(^|\b)(\w{2,})$/,
+          search: function(term, callback) {
+            callback(
+              $.map(words, function(word) {
+                return word.indexOf(term) === 0 ? word : null;
+              })
+            );
+          },
+          replace: function(word) {
+            return word + " ";
+          }
+        }
+      ]);
+    }, 1000);
   },
   methods: {
     clicksong: function() {
