@@ -29,8 +29,6 @@ import {
 } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import AutoLaunch from "auto-launch";
-import store from "store";
-import { setInterval } from "timers";
 autoUpdater.checkForUpdatesAndNotify();
 require("electron-context-menu")({
   prepend: () => [
@@ -76,34 +74,11 @@ function createWindow() {
     win.show();
     win.focus();
   });
-  win.on("close", e => {
-    e.preventDefault();
-    let yes = "";
-    setInterval(() => {
-      store.each((value, key) => {
-        if (
-          key != "id" &&
-          key != "loglevel:webpack-dev-server" &&
-          key != "closed"
-        ) {
-          if (value.locked != "yes") {
-            yes = "yes";
-          } else {
-            yes = "";
-          }
-        }
-      });
-    }, 1);
-    if (yes == "yes") {
+  win.on("close", () => {
+    setTimeout(() => {
       app.quit();
       win.destroy();
-    } else {
-      dialog.showMessageBox({
-        type: "info",
-        buttons: ["OK"],
-        message: "Can't Close Note Is Locked"
-      });
-    }
+    }, 750);
   });
 }
 
