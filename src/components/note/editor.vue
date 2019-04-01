@@ -153,16 +153,9 @@ export default {
                 locked: lock
               });
             }
-            if (
-              document.getElementById("close-button").style.pointerEvents !=
-              "none"
-            ) {
-              window.setTimeout(() => {
-                remote.getCurrentWindow().destroy();
-              }, 500);
-            } else {
-              swal("Can't Close Note Is Locked");
-            }
+            window.setTimeout(() => {
+              remote.getCurrentWindow().destroy();
+            }, 500);
           });
           try {
             window.setInterval(() => {
