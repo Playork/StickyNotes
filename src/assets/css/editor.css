@@ -56,29 +56,20 @@ SOFTWARE. */
   font-size: 18px;
   font-family: arial;
 }
-#lightYellow::-webkit-scrollbar,
-#home::-webkit-scrollbar,
-.ql-snow .ql-editor::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: 6px;
-  z-index: 200;
 }
-#lightYellow::-webkit-scrollbar-track,
-#home::-webkit-scrollbar-track,
-.ql-snow .ql-editor::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
   box-shadow: none;
   border-radius: 10px;
   -webkit-border-radius: 10px;
   background: none;
-  z-index: 200;
 }
-#lightYellow::-webkit-scrollbar-thumb,
-#home::-webkit-scrollbar-thumb,
-.ql-snow .ql-editor:-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-border-radius: 10px;
-  background: #111;
+  background: #000;
   box-shadow: none;
-  z-index: 200;
 }
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value=""]::before {
   content: "Arial";

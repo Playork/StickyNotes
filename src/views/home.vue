@@ -110,13 +110,12 @@ export default {
         }
       });
     }, 2500);
-    // let start = "";
+    // let start = store.get("id").ids;
     // store.each((value, key) => {
     //   if (key != "id" && key != "loglevel:webpack-dev-server") {
-    //     if (start == "" || store.get(start).closed == "no") {
+    //     if (store.get("id").ids == start) {
     //       store.set("id", { ids: key });
     //       ipcRenderer.send("create-new-instance");
-    //       start = key;
     //     }
     //   }
     // });

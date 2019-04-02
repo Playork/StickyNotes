@@ -25,8 +25,6 @@
 
 ### If you like my App please consider buying me a coffee at [HERE!](http://buymeacoff.ee/playork)
 
-### Fell Free To Fork Or Clone
-
 ## Install
 
 ### For Development Version Follow the instuctions below
@@ -40,7 +38,7 @@ git clone https://github.com/Playork/StickyNotes
 point to source directory
 
 ```bash
-cd /path/to/source/of/Sticky-Note
+cd /path/to/source/of/StickyNotes
 ```
 
 and install depencise by

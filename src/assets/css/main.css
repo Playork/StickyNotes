@@ -195,6 +195,7 @@ button {
   padding: 10px;
   font-family: "Arial";
   border: #000 4px solid;
+  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }
 .textcomplete-item {
   cursor: pointer;
