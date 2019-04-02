@@ -138,8 +138,8 @@ export default {
             locked: lock
           });
           document.querySelector(".ql-toolbar").style.backgroundColor = color1;
-          remote.getCurrentWindow().on("close", e => {
-            e.preventDefault();
+          window.onbeforeunload = e => {
+            e.returnValue = true;
             if (store.get(obj.toString()).deleted == "no") {
               store.set(obj.toString(), {
                 first: text,
@@ -153,9 +153,14 @@ export default {
               });
             }
             window.setTimeout(() => {
-              remote.getCurrentWindow().destroy();
-            }, 730);
-          });
+              if (
+                store.get(obj.toString()).closed == "yes" ||
+                store.get(obj.toString()).deleted == "yes"
+              ) {
+                remote.getCurrentWindow().destroy();
+              }
+            }, 300);
+          };
           try {
             window.setInterval(() => {
               if (store.get(obj.toString()).deleted == "yes") {
@@ -220,7 +225,7 @@ export default {
         {
           filters: [
             {
-              name: "Audo Files",
+              name: "Audo Files(mp3,wav,ogg)",
               extensions: ["mp3", "MP3", "wav", "WAV", "ogg", "OGG"]
             }
           ]
@@ -239,7 +244,7 @@ export default {
         {
           filters: [
             {
-              name: "Video Files",
+              name: "Video Files(mp4,webm,ogg)",
               extensions: [
                 "mp4",
                 "MP4",

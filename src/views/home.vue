@@ -83,7 +83,7 @@ export default {
               if (value.closed == "no") {
                 store.set("id", { ids: id });
               }
-            }, 700);
+            }, 500);
           };
           document.getElementById("deletenote").onclick = () => {
             swal({
@@ -133,7 +133,7 @@ export default {
         store.set("closed", { closed: "yes" });
         window.setTimeout(() => {
           remote.getCurrentWindow().close();
-        }, 740);
+        }, 350);
       } else {
         swal("Can't Close Note Is Locked");
       }

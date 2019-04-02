@@ -38,13 +38,10 @@ require("electron-context-menu")({
   ],
   showInspectElement: false
 });
-
-if (app.isPackaged) {
-  let launchonstart = new AutoLaunch({
-    name: "StickyNotes"
-  });
-  launchonstart.enable();
-}
+let launchonstart = new AutoLaunch({
+  name: "StickyNotes"
+});
+launchonstart.enable();
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
@@ -77,7 +74,7 @@ function createWindow() {
   win.on("close", () => {
     setTimeout(() => {
       app.quit();
-    }, 750);
+    }, 400);
   });
 }
 

@@ -36,7 +36,6 @@ SOFTWARE.
           <img src="../../assets/logo.png" style="padding-top:20px;" width="150px">
           <div style="font-size:30px;">Playork</div>
           <div style="font-size:40px;">Sticky Notes</div>
-          <div style="font-size:20px;">Author: B. Ramnath Shenoy</div>
           <div style="font-size:20px;">bekalshenoy@gmail.com</div>
           <div id="view" style="font-size:20px;">©2019</div>
         </div>
