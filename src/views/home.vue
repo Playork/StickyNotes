@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 
+<!-- Home Page -->
+<!-- Html -->
 <template>
   <div id="home">
     <titlebar1 v-bind:close="close" v-bind:note="note"/>
@@ -29,7 +31,9 @@ SOFTWARE.
   </div>
 </template>
 
+<!-- Javascript -->
 <script>
+// Import Required Packages
 import { remote, ipcRenderer } from "electron";
 import swal from "sweetalert";
 import homebody from "../components/home/homebody.vue";
@@ -37,13 +41,21 @@ import titlebar1 from "../components/home/titlebar1.vue";
 import store from "store";
 import { setTimeout } from "timers";
 import os from "os";
+
+// Vue Class
 export default {
+  // Components
   components: {
     titlebar1,
     homebody
   },
+
+  // Do On Start
   mounted() {
+    // Remove Closed
     store.remove("closed");
+
+    // Load Saved Notes
     window.setInterval(() => {
       document.getElementById("notes").innerHTML = "";
       store.each((value, key) => {
@@ -120,7 +132,10 @@ export default {
     //   }
     // });
   },
+
+  // Functions
   methods: {
+    // Close Function
     close() {
       if (document.getElementById("deleteall").style.pointerEvents != "none") {
         store.each((value, key) => {
@@ -138,6 +153,8 @@ export default {
         swal("Can't Close Note Is Locked");
       }
     },
+
+    // Start New Note
     note() {
       let func = obj => {
         obj++;

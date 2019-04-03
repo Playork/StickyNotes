@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 
+<!-- Note Page-->
+<!-- Html -->
 <template>
   <div id="note" v-on:click="showhide">
     <titlebar v-bind:close="close" v-bind:note="note"/>
@@ -31,21 +33,29 @@ SOFTWARE.
   </div>
 </template>
 
+<!-- Javascript -->
 <script>
+// Import Required Packages
 import { remote, ipcRenderer } from "electron";
 import store from "store";
 import editor from "../components/note/editor.vue";
 import titlebar from "../components/note/titlebar.vue";
 import colors from "../components/note/colors.vue";
 import choosecolor from "../components/note/choosecolor.vue";
+
+// Vue Class
 export default {
+  // Components
   components: {
     titlebar,
     editor,
     colors,
     choosecolor
   },
+
+  // Do On Start
   mounted() {
+    // Close When Closing Home
     window.setInterval(() => {
       try {
         if (store.get("closed").closed == "yes") {
@@ -53,6 +63,8 @@ export default {
         }
       } catch {}
     }, 1);
+
+    // Restore Saved Note
     try {
       let text = store.get(store.get("id").ids);
       window.resizeTo(Number(text.wid), Number(text.hei));
@@ -70,10 +82,15 @@ export default {
       document.getElementById("window-title1").style.pointerEvents = "none";
     }
   },
+
+  // Functions
   methods: {
+    // Close Function
     close() {
       remote.getCurrentWindow().close();
     },
+
+    // Start New Note
     note() {
       let func = obj => {
         obj++;
@@ -88,6 +105,8 @@ export default {
       }
       ipcRenderer.send("create-new-instance");
     },
+
+    // Focus Blur Event Function
     showhide() {
       document.addEventListener(
         "focus",

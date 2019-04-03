@@ -20,20 +20,26 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
+// Vue Router Config
+// Import Required Packages
 import Vue from "vue";
 import Router from "vue-router";
 import home from "./views/home.vue";
 
+// Load Router
 Vue.use(Router);
 
+// Config Router
 export default new Router({
   base: process.env.BASE_URL,
   routes: [
+    // Home Page
     {
       path: "/",
       name: "home",
       component: home
     },
+    // Note Page
     {
       path: "/note",
       name: "note",

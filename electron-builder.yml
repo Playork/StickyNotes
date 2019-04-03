@@ -1,3 +1,4 @@
+# Building Config
 appId: "ml.playork.stickynotes"
 win:
   target: "NSIS"

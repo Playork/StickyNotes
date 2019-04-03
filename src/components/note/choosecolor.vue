@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 
+<!-- Custom Color Section Of Note Page-->
+<!-- Html -->
 <template>
   <section id="choosecolor">
     <h1>Titlebar</h1>Color:
@@ -34,14 +36,20 @@ SOFTWARE.
   </section>
 </template>
 
+<!-- Javascript -->
 <script>
+// Vue Class
 export default {
+  // Vars
   data() {
     return {
       select: ["one", "two", "three", "four", "five", "six", "seven"]
     };
   },
+
+  // Functions
   methods: {
+    // Add New Custom Color To Note
     newColor() {
       var titleColor = document.getElementById("color1").value;
       var backColor = document.getElementById("color2").value;
@@ -53,6 +61,8 @@ export default {
         document.getElementById(this.select[j]).classList.add("hide");
       }
     },
+
+    // Cancel Color Selection
     cancel() {
       document.querySelector("section").style.display = "none";
     }

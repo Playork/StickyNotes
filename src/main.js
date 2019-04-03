@@ -20,12 +20,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
+// Main Vue Config
+// Import Required Packages
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 
+// Config Vue
 Vue.config.productionTip = false;
-
 new Vue({
   router,
   render: h => h(App)

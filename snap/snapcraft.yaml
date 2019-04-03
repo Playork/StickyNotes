@@ -10,7 +10,7 @@ description: |
   Add Audio To Note From Local Drive
   Add Video To Note From Local Drive
   Lock The Note
-  Text Suggetions
+  Text Suggestions
 grade: stable
 confinement: strict
 parts:

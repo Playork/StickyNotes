@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 
+<!-- Title Bar Section Of Note Page-->
+<!-- Html -->
 <template>
   <div>
     <div id="titlebar" style="position:fixed;">
@@ -36,8 +38,8 @@ SOFTWARE.
           <div class="button" id="menus" title="Menu">
             <span id="menu" v-on:click="menu">&#xE712;</span>
             <div id="menu-content" class="dropdown-content">
-              <a v-on:click="importnote">Import</a>
-              <a v-on:click="exportnote">Export</a>
+              <a v-on:click="importnote" title="Import Note">Import</a>
+              <a v-on:click="exportnote" title="Export Note">Export</a>
             </div>
           </div>
           <div class="button" id="show" title="Edit Text" v-on:click="showedit">
@@ -52,32 +54,25 @@ SOFTWARE.
   </div>
 </template>
 
+<!-- Javascript -->
 <script>
+// Import Required Packages
 import { remote } from "electron";
 import { setInterval } from "timers";
 import fs from "fs";
 import swal from "sweetalert";
+
+// Vue Class
 export default {
+  // Props
   props: {
     close: Function,
     note: Function
   },
+
+  // Functions
   methods: {
-    /*speech() {
-      document.getElementById("speech").innerHTML = "&#xEC71;";
-      var recognition = new window.webkitSpeechRecognition();
-      recognition.lang = "en-US";
-      recognition.start();
-      recognition.onresult = function(event) {
-        var last = event.results.length - 1;
-        var text = event.results[last][0].transcript;
-        document.getElementById("editor").innerHTML = text;
-      };
-      recognition.onspeechend = () => {
-        document.getElementById("speech").innerHTML = "&#xE720;";
-        recognition.stop();
-      };
-    },*/
+    // Locking Note Function
     locks(obj) {
       let id = document.getElementById("lock");
       let select = document.getElementById("close-button");
@@ -135,6 +130,8 @@ export default {
         select5.style.pointerEvents = "auto";
       }
     },
+
+    // Edinting Option Show And Hide Function
     showedit() {
       let select = document.querySelector(".ql-snow.ql-toolbar");
       let select0 = document.getElementById("color");
@@ -150,9 +147,13 @@ export default {
         document.getElementById("lightYellow").style.paddingTop = "30px";
       }
     },
+
+    //Menu Show And Hide Function
     menu() {
       document.getElementById("menu-content").classList.toggle("show");
     },
+
+    // Import Note Function
     importnote() {
       remote.dialog.showOpenDialog(
         {
@@ -181,6 +182,8 @@ export default {
         }
       );
     },
+
+    // Exportb Note Function
     exportnote() {
       remote.dialog.showSaveDialog(
         {

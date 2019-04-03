@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 
+<!-- Body Of Home Page-->
+<!-- Html -->
 <template>
   <div>
     <div id="notes"></div>
@@ -47,12 +49,18 @@ SOFTWARE.
   </div>
 </template>
 
+<!-- Javascript -->
 <script>
+// Import Required Packages
 import store from "store";
 import swal from "sweetalert";
 import { setTimeout } from "timers";
+
+// Vue Class
 export default {
+  // Functions
   methods: {
+    // Delete All Note Function
     deleteall() {
       swal({
         title: "Are you sure?",
@@ -71,11 +79,15 @@ export default {
         }
       });
     },
+
+    // Show About Page Function
     aboutshow() {
       let id = document.getElementById("about");
       id.style.display = "block";
       document.getElementById("home").style.overflowY = "hidden";
     },
+
+    // Hide About Page Function
     hide() {
       let id = document.getElementById("about");
       id.style.display = "none";

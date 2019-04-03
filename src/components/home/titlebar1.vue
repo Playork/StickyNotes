@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 
+<!-- Title Bar Of Home Page-->
+<!-- Html -->
 <template>
   <div>
     <header id="titlebar1">
@@ -39,8 +41,11 @@ SOFTWARE.
   </div>
 </template>
 
+<!-- Javascript -->
 <script>
+// Vue Class
 export default {
+  // Props
   props: {
     close: Function,
     note: Function
