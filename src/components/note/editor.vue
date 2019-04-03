@@ -246,7 +246,7 @@ export default {
         },
         audios => {
           if (audios === undefined) return;
-          var audiofile = audios[0];
+          let audiofile = audios[0];
           document.querySelector(
             ".ql-snow .ql-editor"
           ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///${audiofile}' controls></audio>"></iframe>`;
@@ -274,7 +274,7 @@ export default {
         },
         videos => {
           if (videos === undefined) return;
-          var videofile = videos[0];
+          let videofile = videos[0];
           document.querySelector(
             ".ql-snow .ql-editor"
           ).innerHTML += `<iframe srcdoc="<video src='file:///${videofile}' height='150px' controls preload='none'></video>" id="video"></iframe>`;

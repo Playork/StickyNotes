@@ -36,8 +36,8 @@ SOFTWARE.
           <div class="button" id="menus" title="Menu">
             <span id="menu" v-on:click="menu">&#xE712;</span>
             <div id="menu-content" class="dropdown-content">
-              <a href="#import">Import</a>
-              <a href="#export">Export</a>
+              <a v-on:click="importnote">Import</a>
+              <a v-on:click="exportnote">Export</a>
             </div>
           </div>
           <div class="button" id="show" title="Edit Text" v-on:click="showedit">
@@ -55,6 +55,8 @@ SOFTWARE.
 <script>
 import { remote } from "electron";
 import { setInterval } from "timers";
+import fs from "fs";
+import swal from "sweetalert";
 export default {
   props: {
     close: Function,
@@ -150,6 +152,54 @@ export default {
     },
     menu() {
       document.getElementById("menu-content").classList.toggle("show");
+    },
+    importnote() {
+      remote.dialog.showOpenDialog(
+        {
+          filters: [
+            {
+              name: "Note(.spst)",
+              extensions: ["spst"]
+            }
+          ]
+        },
+        note => {
+          if (note === undefined) return;
+          let notefile = note[0];
+          fs.readFile(notefile, (e, d) => {
+            if (e) {
+              swal("Not Supported");
+            } else {
+              document.querySelector(".ql-snow .ql-editor").innerHTML = d;
+            }
+          });
+        }
+      );
+    },
+    exportnote() {
+      remote.dialog.showSaveDialog(
+        {
+          filters: [
+            {
+              name: "Note(.spst)",
+              extensions: ["spst"]
+            }
+          ],
+          defaultPath: "note.spst"
+        },
+        note => {
+          if (note === undefined) return;
+          fs.writeFile(
+            note,
+            document.querySelector(".ql-snow .ql-editor").innerHTML,
+            e => {
+              if (e) {
+                swal("Not Supported");
+              }
+            }
+          );
+        }
+      );
     }
   }
 };
