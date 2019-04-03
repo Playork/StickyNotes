@@ -43,6 +43,7 @@ let launchonstart = new AutoLaunch({
 });
 launchonstart.enable();
 
+app.on("window-all-closed", app.quit);
 const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
 protocol.registerStandardSchemes(["app"], { secure: true });
