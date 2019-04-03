@@ -71,10 +71,10 @@ export default {
     }
   },
   methods: {
-    close: function() {
+    close() {
       remote.getCurrentWindow().close();
     },
-    note: function() {
+    note() {
       let func = obj => {
         obj++;
         store.set("id", { ids: obj.toString() });
@@ -88,7 +88,7 @@ export default {
       }
       ipcRenderer.send("create-new-instance");
     },
-    showhide: function() {
+    showhide() {
       document.addEventListener(
         "focus",
         () => {
@@ -103,12 +103,13 @@ export default {
           document.getElementById("add").style.display = "flex";
           document.getElementById("more").style.display = "flex";
           document.getElementById("close").style.display = "flex";
+          document.getElementById("menu").style.display = "flex";
         },
         true
       );
       document.addEventListener(
         "click",
-        () => {
+        e => {
           document.getElementById("titlebar").style.height = "32px";
           if (
             document.querySelector(".ql-snow.ql-toolbar").style.display !=
@@ -120,6 +121,13 @@ export default {
           document.getElementById("add").style.display = "flex";
           document.getElementById("more").style.display = "flex";
           document.getElementById("close").style.display = "flex";
+          document.getElementById("menu").style.display = "flex";
+          if (!e.target.matches("#menus")) {
+            let dropdowns = document.getElementById("menu-content");
+            if (dropdowns.classList.contains("show")) {
+              dropdowns.classList.remove("show");
+            }
+          }
         },
         true
       );
@@ -132,6 +140,7 @@ export default {
           document.getElementById("add").style.display = "none";
           document.getElementById("more").style.display = "none";
           document.getElementById("close").style.display = "none";
+          document.getElementById("menu").style.display = "none";
         },
         true
       );

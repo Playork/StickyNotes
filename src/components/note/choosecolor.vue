@@ -42,7 +42,7 @@ export default {
     };
   },
   methods: {
-    newColor: function() {
+    newColor() {
       var titleColor = document.getElementById("color1").value;
       var backColor = document.getElementById("color2").value;
       document.getElementById("titlebar").style.background = titleColor;
@@ -53,7 +53,7 @@ export default {
         document.getElementById(this.select[j]).classList.add("hide");
       }
     },
-    cancel: function() {
+    cancel() {
       document.querySelector("section").style.display = "none";
     }
   }

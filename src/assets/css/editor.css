@@ -130,3 +130,59 @@ SOFTWARE. */
 .ql-font-comicsans {
   font-family: "ComicSans";
 }
+.dropdown-menu,
+.textcomplete-dropdown {
+  background: #202020;
+  border-radius: 10px;
+  text-align: center;
+  list-style: none;
+  padding: 10px;
+  font-family: "Arial";
+  border: #000 4px solid;
+  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
+}
+.textcomplete-item {
+  cursor: pointer;
+}
+.textcomplete-item a:hover {
+  color: #000 !important;
+}
+.ql-toolbar {
+  position: fixed !important;
+  top: 0 !important;
+  z-index: 6;
+  padding-top: 40px !important;
+}
+#songselect {
+  position: absolute;
+  color: #000;
+  top: 67px;
+  right: 28px;
+  z-index: 50;
+  font-family: "segoe";
+  font-size: 20px;
+}
+#videoselect {
+  position: absolute;
+  color: #000;
+  top: 67px;
+  z-index: 50;
+  font-family: "segoe";
+  font-size: 20px;
+  right: 55px;
+}
+#selectmedia {
+  display: none;
+}
+@media screen and (min-width: 660px) {
+  #songselect {
+    position: absolute;
+    top: 43px;
+    right: 35px;
+  }
+  #videoselect {
+    position: absolute;
+    top: 43px;
+    right: 60px;
+  }
+}

@@ -64,9 +64,6 @@ button {
   left: 15%;
   user-select: none;
 }
-#help {
-  display: none;
-}
 #options {
   float: left;
   position: absolute;
@@ -102,12 +99,6 @@ button {
   color: #fff;
   font-family: "segoe";
 }
-#helppage {
-  font-family: "Lobster";
-  padding-top: 20px;
-  text-align: center;
-  padding: 10px;
-}
 #notes {
   margin-top: 65px;
   height: 100%;
@@ -130,50 +121,6 @@ button {
   pointer-events: none;
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }
-.ql-toolbar {
-  position: fixed !important;
-  top: 0 !important;
-  z-index: 6;
-  padding-top: 40px !important;
-}
-#songselect {
-  position: absolute;
-  color: #000;
-  top: 67px;
-  right: 28px;
-  z-index: 50;
-  font-family: "segoe";
-  font-size: 20px;
-}
-#videoselect {
-  position: absolute;
-  color: #000;
-  top: 67px;
-  z-index: 50;
-  font-family: "segoe";
-  font-size: 20px;
-  right: 55px;
-}
-#selectmedia {
-  display: none;
-}
-@media screen and (min-width: 660px) {
-  #songselect {
-    position: absolute;
-    top: 43px;
-    right: 35px;
-  }
-  #videoselect {
-    position: absolute;
-    top: 43px;
-    right: 60px;
-  }
-  #emoji {
-    position: fixed !important;
-    top: 50px !important;
-    right: 10px !important;
-  }
-}
 #video {
   border: none;
   height: 200px;
@@ -185,21 +132,4 @@ button {
   width: 350px;
   height: 100px;
   overflow: hidden;
-}
-.dropdown-menu,
-.textcomplete-dropdown {
-  background: #202020;
-  border-radius: 10px;
-  text-align: center;
-  list-style: none;
-  padding: 10px;
-  font-family: "Arial";
-  border: #000 4px solid;
-  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
-}
-.textcomplete-item {
-  cursor: pointer;
-}
-.textcomplete-item a:hover {
-  color: #000 !important;
 }

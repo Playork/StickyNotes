@@ -33,6 +33,13 @@ SOFTWARE.
           <span id="lock">&#xE785;</span>
         </div>
         <div id="window-controls">
+          <div class="button" id="menus" title="Menu">
+            <span id="menu" v-on:click="menu">&#xE712;</span>
+            <div id="menu-content" class="dropdown-content">
+              <a href="#import">Import</a>
+              <a href="#export">Export</a>
+            </div>
+          </div>
           <div class="button" id="show" title="Edit Text" v-on:click="showedit">
             <span id="more" class="more">&#xE70F;</span>
           </div>
@@ -54,7 +61,7 @@ export default {
     note: Function
   },
   methods: {
-    /*speech: function() {
+    /*speech() {
       document.getElementById("speech").innerHTML = "&#xEC71;";
       var recognition = new window.webkitSpeechRecognition();
       recognition.lang = "en-US";
@@ -64,12 +71,12 @@ export default {
         var text = event.results[last][0].transcript;
         document.getElementById("editor").innerHTML = text;
       };
-      recognition.onspeechend = function() {
+      recognition.onspeechend = () => {
         document.getElementById("speech").innerHTML = "&#xE720;";
         recognition.stop();
       };
     },*/
-    locks: function(obj) {
+    locks(obj) {
       let id = document.getElementById("lock");
       let select = document.getElementById("close-button");
       let select0 = document.getElementById("show");
@@ -77,7 +84,7 @@ export default {
       let select2 = document.getElementById("editor");
       let select3 = document.querySelector(".ql-snow.ql-toolbar");
       let select4 = document.getElementById("window-title1");
-
+      let select5 = document.getElementById("menus");
       if (
         select.style.pointerEvents == "auto" ||
         select.style.pointerEvents == ""
@@ -89,6 +96,7 @@ export default {
         select2.style.pointerEvents = "none";
         select3.style.display = "none";
         select4.style.display = "none";
+        select5.style.pointerEvents = "none";
         let clearint = window.setInterval(() => {
           document.getElementById("color").style.height = "0";
           document.getElementById("locks").style.marginLeft = "-35px";
@@ -96,6 +104,12 @@ export default {
           document.getElementById("more").style.display = "none";
           document.getElementById("selectmedia").style.display = "none";
           document.getElementById("close").style.display = "none";
+          document.getElementById("menu").style.display = "none";
+          if (
+            document.getElementById("menu-content").classList.contains("show")
+          ) {
+            document.getElementById("menu-content").classList.remove("show");
+          }
           remote.getCurrentWindow().setMaximumSize(350, 375);
           if (select.style.pointerEvents == "auto") {
             document.getElementById("color").style.height = "40px";
@@ -103,6 +117,7 @@ export default {
             document.getElementById("add").style.display = "flex";
             document.getElementById("more").style.display = "flex";
             document.getElementById("close").style.display = "flex";
+            document.getElementById("menu").style.display = "flex";
             remote.getCurrentWindow().setMaximumSize(100000, 100000);
             clearInterval(clearint);
           }
@@ -115,9 +130,10 @@ export default {
         select1.style.pointerEvents = "auto";
         select2.style.pointerEvents = "auto";
         select4.style.display = "flex";
+        select5.style.pointerEvents = "auto";
       }
     },
-    showedit: function() {
+    showedit() {
       let select = document.querySelector(".ql-snow.ql-toolbar");
       let select0 = document.getElementById("color");
       if (select.style.display == "none" || select.style.display == "") {
@@ -131,6 +147,9 @@ export default {
         document.getElementById("selectmedia").style.display = "none";
         document.getElementById("lightYellow").style.paddingTop = "30px";
       }
+    },
+    menu() {
+      document.getElementById("menu-content").classList.toggle("show");
     }
   }
 };

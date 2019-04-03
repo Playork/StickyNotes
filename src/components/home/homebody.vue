@@ -53,7 +53,7 @@ import swal from "sweetalert";
 import { setTimeout } from "timers";
 export default {
   methods: {
-    deleteall: function() {
+    deleteall() {
       swal({
         title: "Are you sure?",
         text: "Want To Delete All Notes!",
@@ -71,12 +71,12 @@ export default {
         }
       });
     },
-    aboutshow: function() {
+    aboutshow() {
       let id = document.getElementById("about");
       id.style.display = "block";
       document.getElementById("home").style.overflowY = "hidden";
     },
-    hide: function() {
+    hide() {
       let id = document.getElementById("about");
       id.style.display = "none";
       document.getElementById("home").style.overflowY = "auto";

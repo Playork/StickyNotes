@@ -121,7 +121,7 @@ export default {
     // });
   },
   methods: {
-    close: function() {
+    close() {
       if (document.getElementById("deleteall").style.pointerEvents != "none") {
         store.each((value, key) => {
           if (key != "id" && key != "loglevel:webpack-dev-server") {
@@ -138,7 +138,7 @@ export default {
         swal("Can't Close Note Is Locked");
       }
     },
-    note: function() {
+    note() {
       let func = obj => {
         obj++;
         store.set("id", { ids: obj.toString() });

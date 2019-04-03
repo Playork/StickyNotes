@@ -148,3 +148,50 @@ SOFTWARE. */
 #lock {
   -webkit-app-region: no-drag;
 }
+#menus {
+  grid-row: 1 / span 1;
+  font-size: 25px;
+  font-family: "segoe";
+  width: 40px !important;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0 !important;
+  right: 80px !important;
+  height: 100%;
+  -webkit-app-region: no-drag;
+  color: #707070;
+}
+#menus:hover {
+  background: rgba(255, 255, 255, 0.4);
+  opacity: 1;
+  color: #fff;
+}
+#menus {
+  -webkit-app-region: no-drag;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 40px;
+  right: -60px;
+  background-color: #202020;
+  min-width: 100px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+.dropdown-content a {
+  color: white;
+  padding: 5px;
+  text-decoration: none;
+  display: block;
+  font-size: 18px;
+  font-family: "Lobster";
+}
+.dropdown-content a:hover {
+  background-color: #111;
+}
+.show {
+  display: block;
+}

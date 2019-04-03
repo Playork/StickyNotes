@@ -42,17 +42,31 @@ import store from "store";
 import swal from "sweetalert";
 import $ from "./../../assets/script/jquery.js";
 import wordsarray from "an-array-of-english-words";
+import { setTimeout } from "timers";
 export default {
   mounted() {
     let words = wordsarray.filter(word => word.match(/^/i));
-    var BackgroundClass = Quill.import("attributors/class/background");
-    var ColorClass = Quill.import("attributors/class/color");
-    var SizeStyle = Quill.import("attributors/style/size");
+    let cap = [];
+    let upp = [];
+    window.setTimeout(() => {
+      for (let i = 0; i < words.length; i++) {
+        cap[i] = words[i].charAt(0).toUpperCase() + words[i].substr(1);
+      }
+      for (let i = 0; i < words.length; i++) {
+        upp[i] = words[i].toUpperCase();
+      }
+    }, 100);
+    window.setTimeout(() => {
+      words = words.concat(cap, upp);
+    }, 200);
+    let BackgroundClass = Quill.import("attributors/class/background");
+    let ColorClass = Quill.import("attributors/class/color");
+    let SizeStyle = Quill.import("attributors/style/size");
     SizeStyle.whitelist = ["10px", "18px", "27px", "37px"];
     Quill.register(BackgroundClass, true);
     Quill.register(ColorClass, true);
     Quill.register(SizeStyle, true);
-    var Font = Quill.import("formats/font");
+    let Font = Quill.import("formats/font");
     Font.whitelist = ["lobster", "comicsans"];
     Quill.register(Font, true);
     let quill = new Quill("#editor", {
@@ -173,7 +187,7 @@ export default {
           } catch {}
         }
       };
-      quill.on("text-change", function() {
+      quill.on("text-change", () => {
         repeafunc();
       });
       document.getElementById("color").addEventListener("click", () => {
@@ -205,14 +219,14 @@ export default {
       $(".ql-snow .ql-editor").textcomplete([
         {
           match: /(^|\b)(\w{2,})$/,
-          search: function(term, callback) {
+          search: (term, callback) => {
             callback(
-              $.map(words, function(word) {
+              $.map(words, word => {
                 return word.indexOf(term) === 0 ? word : null;
               })
             );
           },
-          replace: function(word) {
+          replace: word => {
             return word + " ";
           }
         }
@@ -220,7 +234,7 @@ export default {
     }, 1000);
   },
   methods: {
-    clicksong: function() {
+    clicksong() {
       remote.dialog.showOpenDialog(
         {
           filters: [
@@ -239,7 +253,7 @@ export default {
         }
       );
     },
-    clickvideo: function() {
+    clickvideo() {
       remote.dialog.showOpenDialog(
         {
           filters: [

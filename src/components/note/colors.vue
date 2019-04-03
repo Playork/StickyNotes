@@ -80,7 +80,7 @@ export default {
     };
   },
   methods: {
-    colors: function() {
+    colors() {
       for (let i = 0; i < 7; i++) {
         document.getElementById(this.id[i]).onclick = () => {
           document.getElementById("titlebar").style.background = this.color1[i];
@@ -96,7 +96,7 @@ export default {
         };
       }
     },
-    showthis: function() {
+    showthis() {
       document.getElementById("colors").onclick = () => {
         document.getElementById("choosecolor").style.display = "block";
       };
