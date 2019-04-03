@@ -170,7 +170,12 @@ export default {
             if (e) {
               swal("Not Supported");
             } else {
-              document.querySelector(".ql-snow .ql-editor").innerHTML = d;
+              d = d.toString().split("\n");
+              document.querySelector(".ql-snow .ql-editor").innerHTML = d[0];
+              document.getElementById("lightYellow").style.backgroundColor =
+                d[1];
+              document.getElementById("titlebar").style.backgroundColor = d[2];
+              window.resizeTo(Number(d[3]), Number([4]));
             }
           });
         }
@@ -191,7 +196,19 @@ export default {
           if (note === undefined) return;
           fs.writeFile(
             note,
-            document.querySelector(".ql-snow .ql-editor").innerHTML,
+            document.querySelector(".ql-snow .ql-editor").innerHTML +
+              "\n" +
+              window
+                .getComputedStyle(document.getElementById("lightYellow"))
+                .getPropertyValue("background-color") +
+              "\n" +
+              window
+                .getComputedStyle(document.getElementById("titlebar"))
+                .getPropertyValue("background-color") +
+              "\n" +
+              window.innerWidth.toString() +
+              "\n" +
+              window.innerHeight.toString(),
             e => {
               if (e) {
                 swal("Not Supported");
