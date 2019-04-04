@@ -38,8 +38,8 @@ SOFTWARE.
           <div class="button" id="menus" title="Menu">
             <span id="menu" v-on:click="menu">&#xE712;</span>
             <div id="menu-content" class="dropdown-content">
-              <a title="Select Audio" v-on:click="clicksong">Add Video</a>
-              <a title="Select Video" v-on:click="clickvideo">Add Audio</a>
+              <a title="Select Audio" v-on:click="clicksong">Add Audio</a>
+              <a title="Select Video" v-on:click="clickvideo">Add Video</a>
               <a v-on:click="importnote" title="Import Note">Import</a>
               <a v-on:click="exportnote" title="Export Note">Export</a>
             </div>

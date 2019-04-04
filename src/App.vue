@@ -38,6 +38,8 @@ import "./assets/css/main.css";
 import "./assets/css/titlebar.css";
 import "./assets/css/editor.css";
 import "./assets/css/color.css";
+
+export default {};
 </script>
 
 <!-- Some Default Style -->
