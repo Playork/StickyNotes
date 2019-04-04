@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 
+<!-- Editor Section Of Note Page-->
+<!-- Html -->
 <template>
   <div>
     <div id="selectmedia">
@@ -35,7 +37,9 @@ SOFTWARE.
   </div>
 </template>
 
+<!-- Javascript -->
 <script>
+// Import Required Packages
 import { remote } from "electron";
 import Quill from "quill";
 import store from "store";
@@ -43,8 +47,12 @@ import swal from "sweetalert";
 import $ from "./../../assets/script/jquery.js";
 import wordsarray from "an-array-of-english-words";
 import { setTimeout } from "timers";
+
+// Vue Class
 export default {
+  // Do On Start
   mounted() {
+    // Create Text Suggestion Words Array
     let words = wordsarray.filter(word => word.match(/^/i));
     let cap = [];
     let upp = [];
@@ -59,6 +67,8 @@ export default {
     window.setTimeout(() => {
       words = words.concat(cap, upp);
     }, 200);
+
+    // Load Editor And Save Note On Several Events
     let BackgroundClass = Quill.import("attributors/class/background");
     let ColorClass = Quill.import("attributors/class/color");
     let SizeStyle = Quill.import("attributors/style/size");
@@ -233,7 +243,10 @@ export default {
       ]);
     }, 1000);
   },
+
+  // Functions
   methods: {
+    // Add Audio To Note
     clicksong() {
       remote.dialog.showOpenDialog(
         {
@@ -253,6 +266,8 @@ export default {
         }
       );
     },
+
+    // Add Video To Note
     clickvideo() {
       remote.dialog.showOpenDialog(
         {

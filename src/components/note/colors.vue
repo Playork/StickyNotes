@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 
+<!-- Colors Section Of Note Page-->
+<!-- Html -->
 <template>
   <div>
     <div id="color" v-on:click="colors">
@@ -53,8 +55,11 @@ SOFTWARE.
   </div>
 </template>
 
+<!-- Javascript -->
 <script>
+// Vue Class
 export default {
+  // Vars
   data() {
     return {
       id: ["yellow", "green", "blue", "pink", "violet", "gray", "dark"],
@@ -79,7 +84,10 @@ export default {
       ]
     };
   },
+
+  // Functions
   methods: {
+    // Changing Color Of Note Function
     colors() {
       for (let i = 0; i < 7; i++) {
         document.getElementById(this.id[i]).onclick = () => {
@@ -96,6 +104,8 @@ export default {
         };
       }
     },
+
+    // Custom Color Choser Show Hide Function
     showthis() {
       document.getElementById("colors").onclick = () => {
         document.getElementById("choosecolor").style.display = "block";
