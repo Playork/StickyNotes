@@ -43,7 +43,7 @@ let launchonstart = new AutoLaunch({
 });
 launchonstart.enable();
 
-app.on("window-all-closed", app.quit);
+app.on("window-all-closed", app.quit());
 const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
 protocol.registerStandardSchemes(["app"], { secure: true });
@@ -72,11 +72,17 @@ function createWindow() {
     win.show();
     win.focus();
   });
-  win.on("close", () => {
-    setTimeout(() => {
-      app.quit();
-    }, 400);
+  win.on("close", e => {
+    e.preventDefault();
+    win.webContents.send("closeall", "closeit");
+    ipcMain.on("stopclose", () => {});
+    ipcMain.on("closetime", () => {
+      setTimeout(() => {
+        app.quit();
+      }, 400);
+    });
   });
+  win.on("window-all-closed", app.quit);
 }
 
 app.commandLine.appendSwitch("disable-web-security");

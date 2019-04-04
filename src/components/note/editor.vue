@@ -125,10 +125,10 @@ export default {
             { align: "" },
             { align: "center" },
             { align: "right" },
-            "clean",
-            "image",
             "link",
-            "formula"
+            "formula",
+            "clean",
+            "image"
           ]
         ]
       },
