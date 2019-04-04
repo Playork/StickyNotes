@@ -26,12 +26,7 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div>
-    <div id="selectmedia">
-      <span id="songselect" title="Select Audio" v-on:click="clicksong">&#xEC4F;</span>
-      <span id="videoselect" title="Select Video" v-on:click="clickvideo">&#xE714;</span>
-    </div>
     <div id="lightYellow">
-      <!--<div id="editor" data-meteor-emoji="true"></div>-->
       <div id="editor"></div>
     </div>
   </div>
@@ -42,16 +37,26 @@ SOFTWARE.
 // Import Required Packages
 import { remote } from "electron";
 import Quill from "quill";
+import katex from "katex";
 import store from "store";
 import swal from "sweetalert";
 import $ from "./../../assets/script/jquery.js";
 import wordsarray from "an-array-of-english-words";
-import { setTimeout } from "timers";
+import { setTimeout, setInterval } from "timers";
 
 // Vue Class
 export default {
   // Do On Start
   mounted() {
+    // matching Toolbar Color To Note
+    window.setInterval(() => {
+      document.querySelector(
+        ".ql-toolbar"
+      ).style.backgroundColor = window
+        .getComputedStyle(document.getElementById("lightYellow"))
+        .getPropertyValue("background-color");
+    }, 1);
+
     // Create Text Suggestion Words Array
     let words = wordsarray.filter(word => word.match(/^/i));
     let cap = [];
@@ -89,6 +94,8 @@ export default {
             "italic",
             "underline",
             "strike",
+            { script: "super" },
+            { script: "sub" },
             {
               color: [
                 "black",
@@ -119,7 +126,9 @@ export default {
             { align: "center" },
             { align: "right" },
             "clean",
-            "image"
+            "image",
+            "link",
+            "formula"
           ]
         ]
       },
@@ -161,7 +170,6 @@ export default {
             closed: "no",
             locked: lock
           });
-          document.querySelector(".ql-toolbar").style.backgroundColor = color1;
           window.onbeforeunload = e => {
             e.returnValue = true;
             if (store.get(obj.toString()).deleted == "no") {
@@ -242,60 +250,6 @@ export default {
         }
       ]);
     }, 1000);
-  },
-
-  // Functions
-  methods: {
-    // Add Audio To Note
-    clicksong() {
-      remote.dialog.showOpenDialog(
-        {
-          filters: [
-            {
-              name: "Audo Files(mp3,wav,ogg)",
-              extensions: ["mp3", "MP3", "wav", "WAV", "ogg", "OGG"]
-            }
-          ]
-        },
-        audios => {
-          if (audios === undefined) return;
-          let audiofile = audios[0];
-          document.querySelector(
-            ".ql-snow .ql-editor"
-          ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///${audiofile}' controls></audio>"></iframe>`;
-        }
-      );
-    },
-
-    // Add Video To Note
-    clickvideo() {
-      remote.dialog.showOpenDialog(
-        {
-          filters: [
-            {
-              name: "Video Files(mp4,webm,ogg)",
-              extensions: [
-                "mp4",
-                "MP4",
-                "webm",
-                "WEBM",
-                "WebM",
-                "ogg",
-                "OGG",
-                "Ogg"
-              ]
-            }
-          ]
-        },
-        videos => {
-          if (videos === undefined) return;
-          let videofile = videos[0];
-          document.querySelector(
-            ".ql-snow .ql-editor"
-          ).innerHTML += `<iframe srcdoc="<video src='file:///${videofile}' height='150px' controls preload='none'></video>" id="video"></iframe>`;
-        }
-      );
-    }
   }
 };
 </script>

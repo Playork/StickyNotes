@@ -154,36 +154,3 @@ SOFTWARE. */
   z-index: 6;
   padding-top: 40px !important;
 }
-#songselect {
-  position: absolute;
-  color: #000;
-  top: 67px;
-  right: 28px;
-  z-index: 50;
-  font-family: "segoe";
-  font-size: 20px;
-}
-#videoselect {
-  position: absolute;
-  color: #000;
-  top: 67px;
-  z-index: 50;
-  font-family: "segoe";
-  font-size: 20px;
-  right: 55px;
-}
-#selectmedia {
-  display: none;
-}
-@media screen and (min-width: 660px) {
-  #songselect {
-    position: absolute;
-    top: 43px;
-    right: 35px;
-  }
-  #videoselect {
-    position: absolute;
-    top: 43px;
-    right: 60px;
-  }
-}

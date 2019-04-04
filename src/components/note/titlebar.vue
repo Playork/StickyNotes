@@ -38,6 +38,8 @@ SOFTWARE.
           <div class="button" id="menus" title="Menu">
             <span id="menu" v-on:click="menu">&#xE712;</span>
             <div id="menu-content" class="dropdown-content">
+              <a title="Select Audio" v-on:click="clicksong">Add Video</a>
+              <a title="Select Video" v-on:click="clickvideo">Add Audio</a>
               <a v-on:click="importnote" title="Import Note">Import</a>
               <a v-on:click="exportnote" title="Export Note">Export</a>
             </div>
@@ -138,12 +140,10 @@ export default {
       if (select.style.display == "none" || select.style.display == "") {
         select.style.display = "block";
         select0.style.height = "0";
-        document.getElementById("selectmedia").style.display = "flex";
         document.getElementById("lightYellow").style.paddingTop = "90px";
       } else {
         select.style.display = "none";
         select0.style.height = "40px";
-        document.getElementById("selectmedia").style.display = "none";
         document.getElementById("lightYellow").style.paddingTop = "30px";
       }
     },
@@ -218,6 +218,57 @@ export default {
               }
             }
           );
+        }
+      );
+    },
+
+    // Add Audio To Note
+    clicksong() {
+      remote.dialog.showOpenDialog(
+        {
+          filters: [
+            {
+              name: "Audo Files(mp3,wav,ogg)",
+              extensions: ["mp3", "MP3", "wav", "WAV", "ogg", "OGG"]
+            }
+          ]
+        },
+        audios => {
+          if (audios === undefined) return;
+          let audiofile = audios[0];
+          document.querySelector(
+            ".ql-snow .ql-editor"
+          ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///${audiofile}' controls></audio>"></iframe>`;
+        }
+      );
+    },
+
+    // Add Video To Note
+    clickvideo() {
+      remote.dialog.showOpenDialog(
+        {
+          filters: [
+            {
+              name: "Video Files(mp4,webm,ogg)",
+              extensions: [
+                "mp4",
+                "MP4",
+                "webm",
+                "WEBM",
+                "WebM",
+                "ogg",
+                "OGG",
+                "Ogg"
+              ]
+            }
+          ]
+        },
+        videos => {
+          if (videos === undefined) return;
+          let videofile = videos[0];
+          document.querySelector(
+            ".ql-snow .ql-editor"
+          ).innerHTML += `<iframe srcdoc="<video src='file:///${videofile}' height='150px' controls preload='none'></video>" id="video"></iframe>`;
         }
       );
     }

@@ -14,6 +14,7 @@
     "auto-launch": "latest",
     "electron-context-menu": "latest",
     "electron-updater": "^4.0.0",
+    "katex": "^0.10.1",
     "quill": "latest",
     "store": "latest",
     "sweetalert": "latest"
