@@ -38,6 +38,11 @@ SOFTWARE.
           <div class="button" id="menus" title="Menu">
             <span id="menu" v-on:click="menu">&#xE712;</span>
             <div id="menu-content" class="dropdown-content">
+              <a
+                id="mouch"
+                title="Change Between Canvas Mode And Typing Mode"
+                v-on:click="mouch"
+              >Canvas Mode</a>
               <a title="Select Audio" v-on:click="clicksong">Add Audio</a>
               <a title="Select Video" v-on:click="clickvideo">Add Video</a>
               <a v-on:click="printnote" title="Print Note">Print</a>
@@ -75,8 +80,21 @@ export default {
 
   // Functions
   methods: {
+    // Canvace Mode
+    mouch() {
+      if (document.getElementById("mouch").innerHTML == "Canvas Mode") {
+        document.getElementById("mouch").innerHTML = "Typing Mode";
+        document.getElementById("lightYellow").style.display = "none";
+        document.getElementById("draw").style.display = "block";
+      } else {
+        document.getElementById("mouch").innerHTML = "Canvas Mode";
+        document.getElementById("lightYellow").style.display = "block";
+        document.getElementById("draw").style.display = "none";
+      }
+    },
+
     // Locking Note Function
-    locks(obj) {
+    locks() {
       let id = document.getElementById("lock");
       let select = document.getElementById("close-button");
       let select0 = document.getElementById("show");

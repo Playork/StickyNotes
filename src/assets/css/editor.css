@@ -154,3 +154,7 @@ SOFTWARE. */
   z-index: 6;
   padding-top: 40px !important;
 }
+#draw {
+  display: none;
+  cursor: pointer;
+}
