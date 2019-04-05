@@ -170,8 +170,7 @@ export default {
             closed: "no",
             locked: lock
           });
-          window.onbeforeunload = e => {
-            e.returnValue = true;
+          function closefunc() {
             if (store.get(obj.toString()).deleted == "no") {
               store.set(obj.toString(), {
                 first: text,
@@ -192,6 +191,10 @@ export default {
                 remote.getCurrentWindow().destroy();
               }
             }, 300);
+          }
+          window.onbeforeunload = e => {
+            e.returnValue = true;
+            closefunc();
           };
           try {
             window.setInterval(() => {
@@ -225,6 +228,16 @@ export default {
       ) {
         repeafunc();
       }
+      ipcRenderer.on("closenote", () => {
+        if (
+          document.getElementById("close-button").style.pointerEvents != "none"
+        ) {
+          let close = repeafunc();
+          close.closefunc();
+        } else {
+          swal("Can't Close Note Is Locked");
+        }
+      });
     };
     try {
       let id = Number(store.get("id").ids);

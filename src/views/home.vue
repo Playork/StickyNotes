@@ -55,7 +55,6 @@ export default {
     // close on app.quit()
     ipcRenderer.on("closeall", () => {
       if (document.getElementById("deleteall").style.pointerEvents != "none") {
-        ipcRenderer.send("closetime");
         store.each((value, key) => {
           if (key != "id" && key != "loglevel:webpack-dev-server") {
             if (value.first == "<p><br></p>") {
@@ -65,8 +64,9 @@ export default {
         });
         store.set("closed", { closed: "yes" });
         window.setTimeout(() => {
-          remote.getCurrentWindow().close();
+          remote.getCurrentWindow().destroy();
         }, 350);
+        ipcRenderer.send("closetime");
       } else {
         swal("Can't Close Note Is Locked");
         ipcRenderer.send("stopclose");
