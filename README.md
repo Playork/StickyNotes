@@ -1,4 +1,4 @@
-## Description
+# Description
 
 ![Logo](src/assets/logo.png)
 ![ScreenShot](screen.png)
@@ -71,7 +71,7 @@ build for production by this command
 npm run build
 ```
 
-## Licence
+# Licence
 
 MIT License (MIT)
 
