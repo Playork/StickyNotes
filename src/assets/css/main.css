@@ -122,15 +122,3 @@ button {
   pointer-events: none;
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }
-#video {
-  border: none;
-  height: 200px;
-  width: 350px;
-}
-#audio {
-  border: none;
-  border-radius: 30px;
-  width: 350px;
-  height: 100px;
-  overflow: hidden;
-}

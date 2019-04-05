@@ -64,7 +64,6 @@ import { remote } from "electron";
 import { setInterval } from "timers";
 import fs from "fs";
 import swal from "sweetalert";
-import $ from "./../../assets/script/jquery.js";
 
 // Vue Class
 export default {
@@ -160,9 +159,7 @@ export default {
         var ifr = document.createElement("iframe");
         ifr.style = "height: 0px; width: 0px; position: absolute";
         document.body.appendChild(ifr);
-        $(e)
-          .clone()
-          .appendTo(ifr.contentDocument.body);
+        ifr.contentDocument.body.innerHTML = e.innerHTML;
         ifr.contentWindow.print();
         ifr.parentElement.removeChild(ifr);
       }

@@ -395,6 +395,18 @@
   content: "";
   display: table;
 }
+#video {
+  border: none;
+  height: 200px;
+  width: 350px;
+}
+#audio {
+  border: none;
+  border-radius: 30px;
+  width: 350px;
+  height: 100px;
+  overflow: hidden;
+}
 .ql-snow.ql-toolbar button,
 .ql-snow .ql-toolbar button {
   background: none;
