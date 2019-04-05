@@ -11,6 +11,8 @@ description: |
   Add Video To Note From Local Drive
   Lock The Note
   Text Suggestions
+  Import Note From A File
+  Export Note To A Fil
 grade: stable
 confinement: strict
 parts:

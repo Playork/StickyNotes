@@ -29,6 +29,7 @@ import {
 } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import AutoLaunch from "auto-launch";
+import { setTimeout } from "timers";
 autoUpdater.checkForUpdatesAndNotify();
 require("electron-context-menu")({
   prepend: () => [
@@ -43,7 +44,6 @@ let launchonstart = new AutoLaunch({
 });
 launchonstart.enable();
 
-app.on("window-all-closed", app.quit());
 const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
 protocol.registerStandardSchemes(["app"], { secure: true });
@@ -82,7 +82,11 @@ function createWindow() {
       }, 400);
     });
   });
-  win.on("window-all-closed", app.quit);
+  setTimeout(() => {
+    win.on("window-all-closed", () => {
+      app.quit();
+    });
+  }, 10000);
 }
 
 app.commandLine.appendSwitch("disable-web-security");
@@ -112,6 +116,10 @@ function createNote() {
     winnote.focus();
   });
   winnote.setMinimumSize(350, 375);
+  winnote.on("close", e => {
+    e.preventDefault();
+    win.webContents.send("closenote", "closeit");
+  });
 }
 
 ipcMain.on("create-new-instance", () => {

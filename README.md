@@ -21,6 +21,10 @@
 
 ### Text Suggetions
 
+### Import Note From A File
+
+### Export Note To A File
+
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/stickynotes)
 
 ### If you like my App please consider buying me a coffee at [HERE!](http://buymeacoff.ee/playork)

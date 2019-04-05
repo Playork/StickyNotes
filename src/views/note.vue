@@ -38,6 +38,7 @@ SOFTWARE.
 // Import Required Packages
 import { remote, ipcRenderer } from "electron";
 import store from "store";
+import swal from "sweetalert";
 import editor from "../components/note/editor.vue";
 import titlebar from "../components/note/titlebar.vue";
 import colors from "../components/note/colors.vue";
@@ -55,6 +56,17 @@ export default {
 
   // Do On Start
   mounted() {
+    // Close For Main Process Close
+    ipcRenderer.on("closenote", () => {
+      if (
+        document.getElementById("close-button").style.pointerEvents != "none"
+      ) {
+        remote.getCurrentWindow().close();
+      } else {
+        swal("Can't Close Note Is Locked");
+      }
+    });
+
     // Close When Closing Home
     window.setInterval(() => {
       try {

@@ -101,7 +101,6 @@ export default {
           document.getElementById("locks").style.marginLeft = "-35px";
           document.getElementById("add").style.display = "none";
           document.getElementById("more").style.display = "none";
-          document.getElementById("selectmedia").style.display = "none";
           document.getElementById("close").style.display = "none";
           document.getElementById("menu").style.display = "none";
           if (
@@ -155,6 +154,7 @@ export default {
 
     // Import Note Function
     importnote() {
+      document.getElementById("note").style.pointerEvents = "none";
       remote.dialog.showOpenDialog(
         {
           filters: [
@@ -165,6 +165,7 @@ export default {
           ]
         },
         note => {
+          document.getElementById("note").style.pointerEvents = "auto";
           if (note === undefined) return;
           let notefile = note[0];
           fs.readFile(notefile, (e, d) => {
@@ -185,6 +186,7 @@ export default {
 
     // Exportb Note Function
     exportnote() {
+      document.getElementById("note").style.pointerEvents = "none";
       remote.dialog.showSaveDialog(
         {
           filters: [
@@ -196,6 +198,7 @@ export default {
           defaultPath: "note.spst"
         },
         note => {
+          document.getElementById("note").style.pointerEvents = "auto";
           if (note === undefined) return;
           fs.writeFile(
             note,
@@ -224,6 +227,7 @@ export default {
 
     // Add Audio To Note
     clicksong() {
+      document.getElementById("note").style.pointerEvents = "none";
       remote.dialog.showOpenDialog(
         {
           filters: [
@@ -234,17 +238,23 @@ export default {
           ]
         },
         audios => {
+          document.getElementById("note").style.pointerEvents = "auto";
           if (audios === undefined) return;
           let audiofile = audios[0];
-          document.querySelector(
-            ".ql-snow .ql-editor"
-          ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///${audiofile}' controls></audio>"></iframe>`;
+          try {
+            document.querySelector(
+              ".ql-snow .ql-editor"
+            ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///${audiofile}' controls></audio>"></iframe>`;
+          } catch {
+            swal("Not Supported");
+          }
         }
       );
     },
 
     // Add Video To Note
     clickvideo() {
+      document.getElementById("note").style.pointerEvents = "none";
       remote.dialog.showOpenDialog(
         {
           filters: [
@@ -264,11 +274,16 @@ export default {
           ]
         },
         videos => {
+          document.getElementById("note").style.pointerEvents = "auto";
           if (videos === undefined) return;
           let videofile = videos[0];
-          document.querySelector(
-            ".ql-snow .ql-editor"
-          ).innerHTML += `<iframe srcdoc="<video src='file:///${videofile}' height='150px' controls preload='none'></video>" id="video"></iframe>`;
+          try {
+            document.querySelector(
+              ".ql-snow .ql-editor"
+            ).innerHTML += `<iframe srcdoc="<video src='file:///${videofile}' height='150px' controls preload='none'></video>" id="video"></iframe>`;
+          } catch {
+            swal("Not Supported");
+          }
         }
       );
     }
