@@ -72,10 +72,8 @@ function createWindow() {
     win.show();
     win.focus();
   });
-  win.on("close", e => {
-    e.preventDefault();
+  win.on("close", () => {
     win.webContents.send("closeall", "closeit");
-    ipcMain.on("stopclose", () => {});
     ipcMain.on("closetime", () => {
       setTimeout(() => {
         app.quit();
@@ -116,8 +114,7 @@ function createNote() {
     winnote.focus();
   });
   winnote.setMinimumSize(350, 375);
-  winnote.on("close", e => {
-    e.preventDefault();
+  winnote.on("close", () => {
     win.webContents.send("closenote", "closeit");
   });
 }

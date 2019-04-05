@@ -56,6 +56,11 @@ export default {
 
   // Do On Start
   mounted() {
+    // Close For Main Process Close
+    ipcRenderer.on("closenote", () => {
+      remote.getCurrentWindow().close();
+    });
+
     // Close When Closing Home
     window.setInterval(() => {
       try {
