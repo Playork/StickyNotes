@@ -54,18 +54,7 @@ export default {
   mounted() {
     // close on app.quit()
     ipcRenderer.on("closeall", () => {
-      store.each((value, key) => {
-        if (key != "id" && key != "loglevel:webpack-dev-server") {
-          if (value.first == "<p><br></p>") {
-            store.remove(key);
-          }
-        }
-      });
       store.set("closed", { closed: "yes" });
-      window.setTimeout(() => {
-        remote.getCurrentWindow.close();
-      }, 350);
-      ipcRenderer.send("closetime");
     });
 
     // Remove Closed

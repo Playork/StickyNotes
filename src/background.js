@@ -72,13 +72,12 @@ function createWindow() {
     win.show();
     win.focus();
   });
-  win.on("close", () => {
+  win.on("close", e => {
+    e.preventDefault();
     win.webContents.send("closeall", "closeit");
-    ipcMain.on("closetime", () => {
-      setTimeout(() => {
-        app.quit();
-      }, 400);
-    });
+    setTimeout(() => {
+      app.quit();
+    }, 400);
   });
   setTimeout(() => {
     win.on("window-all-closed", () => {
