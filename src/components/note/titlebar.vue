@@ -40,6 +40,7 @@ SOFTWARE.
             <div id="menu-content" class="dropdown-content">
               <a title="Select Audio" v-on:click="clicksong">Add Audio</a>
               <a title="Select Video" v-on:click="clickvideo">Add Video</a>
+              <a v-on:click="printnote" title="Print Note">Print</a>
               <a v-on:click="importnote" title="Import Note">Import</a>
               <a v-on:click="exportnote" title="Export Note">Export</a>
             </div>
@@ -63,6 +64,7 @@ import { remote } from "electron";
 import { setInterval } from "timers";
 import fs from "fs";
 import swal from "sweetalert";
+import $ from "./../../assets/script/jquery.js";
 
 // Vue Class
 export default {
@@ -150,6 +152,21 @@ export default {
     //Menu Show And Hide Function
     menu() {
       document.getElementById("menu-content").classList.toggle("show");
+    },
+
+    // Print Note Function
+    printnote() {
+      function printElement(e) {
+        var ifr = document.createElement("iframe");
+        ifr.style = "height: 0px; width: 0px; position: absolute";
+        document.body.appendChild(ifr);
+        $(e)
+          .clone()
+          .appendTo(ifr.contentDocument.body);
+        ifr.contentWindow.print();
+        ifr.parentElement.removeChild(ifr);
+      }
+      printElement(document.querySelector(".ql-snow .ql-editor"));
     },
 
     // Import Note Function
