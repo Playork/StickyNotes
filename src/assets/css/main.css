@@ -57,11 +57,8 @@ button {
   cursor: pointer;
 }
 .start div {
-  font-family: "Lobster";
-  color: rgba(255, 255, 255, 0.05);
-  font-size: 50px;
   position: absolute;
-  top: 40%;
+  top: 20%;
   left: 15%;
   user-select: none;
 }
@@ -101,9 +98,14 @@ button {
   font-family: "segoe";
 }
 #notes {
-  margin-top: 65px;
-  height: 100%;
+  height: calc(100% - 65px);
   z-index: 20;
+  position: absolute;
+  top: 65px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
 }
 #notes span {
   font-family: "segoe";

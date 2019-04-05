@@ -26,6 +26,11 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div>
+    <div class="start">
+      <div>
+        <img src="../../assets/sticky.svg" width="300px">
+      </div>
+    </div>
     <div id="notes"></div>
     <div>
       <div id="options">
@@ -42,9 +47,6 @@ SOFTWARE.
           <div id="view" style="font-size:20px;">©2019</div>
         </div>
       </div>
-    </div>
-    <div class="start">
-      <div>Sticky Notes</div>
     </div>
   </div>
 </template>

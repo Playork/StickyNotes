@@ -55,6 +55,7 @@ export default {
     // close on app.quit()
     ipcRenderer.on("closeall", () => {
       store.set("closed", { closed: "yes" });
+      remote.getCurrentWindow().destroy()
     });
 
     // Remove Closed
