@@ -163,6 +163,7 @@ SOFTWARE. */
   right: 0;
   top: 0;
   bottom: 0;
+  z-index: 5;
 }
 #save {
   display: none;
@@ -173,5 +174,38 @@ SOFTWARE. */
   top: 40px;
   left: 0;
   right: 0;
-  height: 50px;
+  height: 40px;
+  z-index: 6;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0);
+}
+#black {
+  background: black;
+}
+#red {
+  background: red;
+}
+#white {
+  background: white;
+  color: black;
+}
+#clear {
+  width: 40px;
+  color: #fff;
+  border-radius: 50%;
+  font-family: "segoe";
+  font-size: 20px;
+  background: #202020;
+  border: none;
+  height: 40px;
+}
+select {
+  color: #fff;
+  background: #202020;
+  border: none;
+  border-radius: 5px;
+  width: 100px;
+  height: 30px;
+  margin: 5px;
+  outline: none;
 }

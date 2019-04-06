@@ -29,7 +29,24 @@ SOFTWARE.
     <div id="lightYellow">
       <div id="editor"></div>
     </div>
-    <div id="candit"></div>
+    <div id="candit">
+      <select>
+        <option id="black">Black</option>
+        <option id="red">Red</option>
+        <option id="green">Green</option>
+        <option id="blue">Blue</option>
+        <option id="white">White</option>
+      </select>
+      <select>
+        <option id="s1">Very Small</option>
+        <option id="s3">Small</option>
+        <option id="s5">Normal</option>
+        <option id="s10">Big</option>
+        <option id="s20">Very Big</option>
+        <option id="s40">extremely big</option>
+      </select>
+      <button id="clear" v-on:click="clearCanvas">&#xE74D;</button>
+    </div>
     <canvas id="draw"></canvas>
   </div>
 </template>
@@ -69,8 +86,28 @@ export default {
         .getComputedStyle(document.getElementById("lightYellow"))
         .getPropertyValue("background-color");
       canvas.style.backgroundColor = color1;
-      document.getElementById("candit").style.backgroundColor = color1;
     }, 1);
+    document.getElementById("s1").addEventListener("click", changeWidth(1));
+    document.getElementById("s3").addEventListener("click", changeWidth(3));
+    document.getElementById("s5").addEventListener("click", changeWidth(5));
+    document.getElementById("s10").addEventListener("click", changeWidth(10));
+    document.getElementById("s20").addEventListener("click", changeWidth(20));
+    document.getElementById("s40").addEventListener("click", changeWidth(40));
+    document
+      .getElementById("red")
+      .addEventListener("click", changeColor("red"));
+    document
+      .getElementById("black")
+      .addEventListener("click", changeColor("black"));
+    document
+      .getElementById("white")
+      .addEventListener("click", changeColor("white"));
+    document
+      .getElementById("blue")
+      .addEventListener("click", changeColor("blue"));
+    document
+      .getElementById("green")
+      .addEventListener("click", changeColor("green"));
     canvas.addEventListener("mousemove", handleMove);
     canvas.addEventListener("mousedown", handleDown);
     canvas.addEventListener("mouseup", handleUp);
@@ -80,14 +117,6 @@ export default {
     canvas.addEventListener("touchleave", handleEnd, false);
     canvas.addEventListener("touchmove", handleTouchMove, false);
     canvas.addEventListener("painterWidth", changeWidth, false);
-    function changeSize(sizeDirection) {
-      if (sizeDirection === "-") {
-        if (width >= 2) width = width - 1;
-      } else if (sizeDirection === "+") {
-        if (width <= 100) width = width + 1;
-      }
-      window.onload();
-    }
     function handleMove(e) {
       let xPos = e.clientX - canvas.offsetLeft;
       let yPos = e.clientY - canvas.offsetTop;
@@ -98,7 +127,7 @@ export default {
         ctx.stroke();
       }
     }
-    function handleDown() {
+    function handleDown(e) {
       let xPos = e.clientX - canvas.offsetLeft;
       let yPos = e.clientY - canvas.offsetTop;
       down = true;
@@ -108,11 +137,11 @@ export default {
     function handleUp() {
       down = false;
     }
-    function handleStart(evt) {
-      let touches = evt.changedTouches;
+    function handleStart(e) {
+      let touches = e.changedTouches;
       for (let i = 0; i < touches.length; i++) {
         if (isValidTouch(touches[i])) {
-          evt.preventDefault();
+          e.preventDefault();
           arr_touches.push(copyTouch(touches[i]));
           ctx.beginPath();
           ctx.fillStyle = color;
@@ -120,12 +149,12 @@ export default {
         }
       }
     }
-    function handleTouchMove(evt) {
-      let touches = evt.changedTouches;
+    function handleTouchMove(e) {
+      let touches = e.changedTouches;
       let offset = findPos(canvas);
       for (let i = 0; i < touches.length; i++) {
         if (isValidTouch(touches[i])) {
-          evt.preventDefault();
+          e.preventDefault();
           let idx = ongoingTouchIndexById(touches[i].identifier);
           if (idx >= 0) {
             ctx.beginPath();
@@ -146,12 +175,12 @@ export default {
         }
       }
     }
-    function handleEnd(evt) {
-      let touches = evt.changedTouches;
+    function handleEnd(e) {
+      let touches = e.changedTouches;
       let offset = findPos(canvas);
       for (let i = 0; i < touches.length; i++) {
         if (isValidTouch(touches[i])) {
-          evt.preventDefault();
+          e.preventDefault();
           let idx = ongoingTouchIndexById(touches[i].identifier);
           if (idx >= 0) {
             ctx.lineWidth = 4;
@@ -170,35 +199,32 @@ export default {
         }
       }
     }
-    function handleCancel(evt) {
-      evt.preventDefault();
-      let touches = evt.changedTouches;
+    function handleCancel(e) {
+      e.preventDefault();
+      let touches = e.changedTouches;
 
       for (let i = 0; i < touches.length; i++) {
         arr_touches.splice(i, 1);
       }
     }
-    function copyTouch(touch) {
+    function copyTouch(e) {
       return {
-        identifier: touch.identifier,
-        clientX: touch.clientX,
-        clientY: touch.clientY
+        identifier: e.identifier,
+        clientX: e.clientX,
+        clientY: e.clientY
       };
     }
-    function ongoingTouchIndexById(idToFind) {
+    function ongoingTouchIndexById(e) {
       for (let i = 0; i < arr_touches.length; i++) {
         let id = arr_touches[i].identifier;
-        if (id == idToFind) {
+        if (id == e) {
           return i;
         }
       }
       return -1;
     }
-    function changeColor(new_color) {
-      color = new_color;
-    }
-    function changeWidth(painterWidth) {
-      width = painterWidth;
+    function changeWidth(e) {
+      width = e;
     }
     function clearCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -229,14 +255,14 @@ export default {
         return false;
       }
     }
-    function findPos(obj) {
+    function findPos(e) {
       let curleft = 0,
         curtop = 0;
-      if (obj.offsetParent) {
+      if (e.offsetParent) {
         do {
-          curleft += obj.offsetLeft;
-          curtop += obj.offsetTop;
-        } while (obj == obj.offsetParent);
+          curleft += e.offsetLeft;
+          curtop += e.offsetTop;
+        } while (e == e.offsetParent);
 
         return {
           x: curleft - document.body.scrollLeft,
@@ -244,25 +270,15 @@ export default {
         };
       }
     }
-    function newColor() {
-      elColor = document.getElementById("color");
-      cv = document.getElementById("colorValue");
-      cv.innerHTML = "color: " + elColor.value;
-      color = elColor.value;
+    function changeColor(e) {
+      width = e;
     }
-    function c(val) {
-      document.getElementById("d").value = val;
-    }
-    function v(val) {
-      document.getElementById("d").value += val;
-    }
-    function e() {
-      try {
-        c(eval(document.getElementById("d").value));
-      } catch (e) {
-        c("Error");
-      }
-    }
+    // function newColor() {
+    //   elColor = document.getElementById("color");
+    //   cv = document.getElementById("colorValue");
+    //   cv.innerHTML = "color: " + elColor.value;
+    //   color = elColor.value;
+    // }
 
     // matching Toolbar Color To Note
     window.setInterval(() => {
@@ -466,6 +482,14 @@ export default {
         }
       ]);
     }, 1000);
+  },
+  methods: {
+    clearCanvas() {
+      document
+        .getElementById("draw")
+        .getContext("2d")
+        .clearRect(0, 0, window.innerWidth, window.innerHeight);
+    }
   }
 };
 </script>

@@ -177,7 +177,7 @@ export default {
       let select = document.querySelector(".ql-snow.ql-toolbar");
       let select0 = document.getElementById("color");
       let select1 = document.getElementById("candit");
-      if (document.getElementById("mouch").innerHTML == "Canvas Mode") {
+      if (document.getElementById("draw").style.display != "block") {
         if (select.style.display == "none" || select.style.display == "") {
           select.style.display = "block";
           select0.style.height = "0";
