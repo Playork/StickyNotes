@@ -112,7 +112,6 @@ export default {
         ctx.lineWidth = width;
         ctx.stroke();
       }
-      drawPoints(ctx, arr_touches);
     }
     function handleDown(e) {
       let xPos = e.clientX - canvas.offsetLeft;
@@ -135,7 +134,6 @@ export default {
           ctx.fill();
         }
       }
-      drawPoints(ctx, arr_touches);
     }
     function handleTouchMove(e) {
       let touches = e.changedTouches;
@@ -257,29 +255,6 @@ export default {
           y: curtop - document.body.scrollTop
         };
       }
-    }
-    function drawPoints(ctx, arr_touches) {
-      if (points.length < 6) {
-        var b = points[0];
-        ctx.beginPath(),
-          ctx.arc(b.x, b.y, ctx.lineWidth / 2, 0, Math.PI * 2, !0),
-          ctx.closePath(),
-          ctx.fill();
-        return;
-      }
-      ctx.beginPath(), ctx.moveTo(points[0].x, points[0].y);
-      for (i = 1; i < points.length - 2; i++) {
-        var c = (points[i].x + points[i + 1].x) / 2,
-          d = (points[i].y + points[i + 1].y) / 2;
-        ctx.quadraticCurveTo(points[i].x, points[i].y, c, d);
-      }
-      ctx.quadraticCurveTo(
-        points[i].x,
-        points[i].y,
-        points[i + 1].x,
-        points[i + 1].y
-      ),
-        ctx.stroke();
     }
     // function newColor() {
     //   elColor = document.getElementById("color");
