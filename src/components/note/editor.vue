@@ -29,21 +29,22 @@ SOFTWARE.
     <div id="lightYellow">
       <div id="editor"></div>
     </div>
+    <div id="backc"></div>
     <div id="candit">
-      <select>
-        <option id="black">Black</option>
-        <option id="red">Red</option>
-        <option id="green">Green</option>
-        <option id="blue">Blue</option>
-        <option id="white">White</option>
+      <select id="brushcolor">
+        <option id="black" value="black">Black</option>
+        <option id="red" value="red">Red</option>
+        <option id="green1" value="green">Green</option>
+        <option id="blue1" value="blue">Blue</option>
+        <option id="white" value="white">White</option>
       </select>
-      <select>
-        <option id="s1">Very Small</option>
-        <option id="s3">Small</option>
-        <option id="s5">Normal</option>
-        <option id="s10">Big</option>
-        <option id="s20">Very Big</option>
-        <option id="s40">extremely big</option>
+      <select id="brushwidth">
+        <option value="1">Very Small</option>
+        <option value="3">Small</option>
+        <option value="5" selected="selected">Normal</option>
+        <option value="10">Big</option>
+        <option value="20">Very Big</option>
+        <option value="40">extremely big</option>
       </select>
       <button id="clear" v-on:click="clearCanvas">&#xE74D;</button>
     </div>
@@ -85,29 +86,14 @@ export default {
       let color1 = window
         .getComputedStyle(document.getElementById("lightYellow"))
         .getPropertyValue("background-color");
-      canvas.style.backgroundColor = color1;
+      document.getElementById("backc").style.backgroundColor = color1;
     }, 1);
-    document.getElementById("s1").addEventListener("click", changeWidth(1));
-    document.getElementById("s3").addEventListener("click", changeWidth(3));
-    document.getElementById("s5").addEventListener("click", changeWidth(5));
-    document.getElementById("s10").addEventListener("click", changeWidth(10));
-    document.getElementById("s20").addEventListener("click", changeWidth(20));
-    document.getElementById("s40").addEventListener("click", changeWidth(40));
-    document
-      .getElementById("red")
-      .addEventListener("click", changeColor("red"));
-    document
-      .getElementById("black")
-      .addEventListener("click", changeColor("black"));
-    document
-      .getElementById("white")
-      .addEventListener("click", changeColor("white"));
-    document
-      .getElementById("blue")
-      .addEventListener("click", changeColor("blue"));
-    document
-      .getElementById("green")
-      .addEventListener("click", changeColor("green"));
+    document.getElementById("brushcolor").addEventListener("change", () => {
+      color = document.getElementById("brushcolor").value;
+    });
+    document.getElementById("brushwidth").addEventListener("change", () => {
+      changeWidth(Number(document.getElementById("brushwidth").value));
+    });
     canvas.addEventListener("mousemove", handleMove);
     canvas.addEventListener("mousedown", handleDown);
     canvas.addEventListener("mouseup", handleUp);
@@ -126,6 +112,7 @@ export default {
         ctx.lineWidth = width;
         ctx.stroke();
       }
+      drawPoints(ctx, arr_touches);
     }
     function handleDown(e) {
       let xPos = e.clientX - canvas.offsetLeft;
@@ -148,6 +135,7 @@ export default {
           ctx.fill();
         }
       }
+      drawPoints(ctx, arr_touches);
     }
     function handleTouchMove(e) {
       let touches = e.changedTouches;
@@ -270,8 +258,28 @@ export default {
         };
       }
     }
-    function changeColor(e) {
-      width = e;
+    function drawPoints(ctx, arr_touches) {
+      if (points.length < 6) {
+        var b = points[0];
+        ctx.beginPath(),
+          ctx.arc(b.x, b.y, ctx.lineWidth / 2, 0, Math.PI * 2, !0),
+          ctx.closePath(),
+          ctx.fill();
+        return;
+      }
+      ctx.beginPath(), ctx.moveTo(points[0].x, points[0].y);
+      for (i = 1; i < points.length - 2; i++) {
+        var c = (points[i].x + points[i + 1].x) / 2,
+          d = (points[i].y + points[i + 1].y) / 2;
+        ctx.quadraticCurveTo(points[i].x, points[i].y, c, d);
+      }
+      ctx.quadraticCurveTo(
+        points[i].x,
+        points[i].y,
+        points[i + 1].x,
+        points[i + 1].y
+      ),
+        ctx.stroke();
     }
     // function newColor() {
     //   elColor = document.getElementById("color");

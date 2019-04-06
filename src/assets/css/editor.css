@@ -161,8 +161,8 @@ SOFTWARE. */
   position: absolute;
   left: 0;
   right: 0;
-  top: 0;
-  bottom: 0;
+  top: 40px;
+  bottom: 40px;
   z-index: 5;
 }
 #save {
@@ -189,6 +189,12 @@ SOFTWARE. */
   background: white;
   color: black;
 }
+#green1 {
+  background: green;
+}
+#blue1 {
+  background: blue;
+}
 #clear {
   width: 40px;
   color: #fff;
@@ -203,9 +209,29 @@ select {
   color: #fff;
   background: #202020;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   width: 100px;
   height: 30px;
   margin: 5px;
   outline: none;
+}
+option {
+  border: none;
+  border-radius: 10px;
+}
+#backc {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 4;
+}
+.ql-snow .ql-editor {
+  position: absolute;
+  top: 0;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  z-index: 5;
 }

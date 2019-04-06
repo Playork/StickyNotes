@@ -44,6 +44,7 @@ SOFTWARE.
                 v-on:click="mouch"
               >Canvas Mode</a>
               <a title="Save Note" id="save" v-on:click="savenote">Save</a>
+              <a title="Restore Note" id="restore" v-on:click="restorenote">Restore</a>
               <a title="Select Audio" id="video1" v-on:click="clicksong">Add Audio</a>
               <a title="Select Video" id="audio1" v-on:click="clickvideo">Add Video</a>
               <a v-on:click="printnote" id="print" title="Print Note">Print</a>
@@ -94,7 +95,6 @@ export default {
         document.getElementById("print").style.display = "none";
         document.getElementById("import").style.display = "none";
         document.getElementById("export").style.display = "none";
-        document.getElementById("candit").style.display = "block";
       } else {
         document.getElementById("mouch").innerHTML = "Canvas Mode";
         document.getElementById("lightYellow").style.display = "block";
@@ -352,6 +352,7 @@ export default {
 
     //Save Note
     savenote() {
+      document.getElementById("note").style.pointerEvents = "none";
       html2canvas(document.getElementById("draw"), {
         onrendered: function(canvas) {
           var tempcanvas = document.createElement("canvas");
@@ -375,6 +376,42 @@ export default {
           link.click();
         }
       });
+      document.getElementById("note").style.pointerEvents = "auto";
+    },
+
+    // Restorenote
+    restorenote() {
+      document.getElementById("note").style.pointerEvents = "none";
+      remote.dialog.showOpenDialog(
+        {
+          filters: [
+            {
+              name: "Restore(png)",
+              extensions: ["png"]
+            }
+          ]
+        },
+        notes => {
+          document.getElementById("note").style.pointerEvents = "auto";
+          if (notes === undefined) return;
+          let note = notes[0];
+          try {
+            let canvas = document.getElementById("draw");
+            let ctx = canvas.getContext("2d");
+
+            let img = new Image();
+            img.src = `file:///${note}`;
+            img.onload = function() {
+              window.resizeTo(img.naturalWidth, img.naturalHeight);
+              window.setTimeout(() => {
+                ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
+              }, 50);
+            };
+          } catch {
+            swal("Not Supported");
+          }
+        }
+      );
     }
   }
 };
