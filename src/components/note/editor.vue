@@ -29,7 +29,8 @@ SOFTWARE.
     <div id="lightYellow">
       <div id="editor"></div>
     </div>
-    <canvas id="draw" style="position:absolute;left:0;right:0;top:40px;bottom:60px;z-index:100;"></canvas>
+    <div id="candit"></div>
+    <canvas id="draw"></canvas>
   </div>
 </template>
 
@@ -50,23 +51,26 @@ export default {
   // Do On Start
   mounted() {
     // Cavas
-    let htmlCanvas = document.getElementById("draw");
+    let canvas = document.getElementById("draw");
     window.addEventListener("resize", resizeCanvas, false);
     resizeCanvas();
     function resizeCanvas() {
-      htmlCanvas.width = window.innerWidth;
-      htmlCanvas.height = window.innerHeight - 100;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     }
-    var arr_touches = [];
-    var arr_touches = [];
-    var canvas;
-    var ctx;
-    var down = false;
-    var color = "black";
-    var width = 5;
-    canvas = document.getElementById("draw");
-    ctx = canvas.getContext("2d");
+    let arr_touches = [];
+    let down = false;
+    let color = "black";
+    let width = 5;
+    let ctx = canvas.getContext("2d");
     ctx.lineWidth = width;
+    window.setInterval(() => {
+      let color1 = window
+        .getComputedStyle(document.getElementById("lightYellow"))
+        .getPropertyValue("background-color");
+      canvas.style.backgroundColor = color1;
+      document.getElementById("candit").style.backgroundColor = color1;
+    }, 1);
     canvas.addEventListener("mousemove", handleMove);
     canvas.addEventListener("mousedown", handleDown);
     canvas.addEventListener("mouseup", handleUp);
@@ -95,6 +99,8 @@ export default {
       }
     }
     function handleDown() {
+      let xPos = e.clientX - canvas.offsetLeft;
+      let yPos = e.clientY - canvas.offsetTop;
       down = true;
       ctx.beginPath();
       ctx.moveTo(xPos, yPos);
@@ -103,8 +109,8 @@ export default {
       down = false;
     }
     function handleStart(evt) {
-      var touches = evt.changedTouches;
-      for (var i = 0; i < touches.length; i++) {
+      let touches = evt.changedTouches;
+      for (let i = 0; i < touches.length; i++) {
         if (isValidTouch(touches[i])) {
           evt.preventDefault();
           arr_touches.push(copyTouch(touches[i]));
@@ -115,12 +121,12 @@ export default {
       }
     }
     function handleTouchMove(evt) {
-      var touches = evt.changedTouches;
-      var offset = findPos(canvas);
-      for (var i = 0; i < touches.length; i++) {
+      let touches = evt.changedTouches;
+      let offset = findPos(canvas);
+      for (let i = 0; i < touches.length; i++) {
         if (isValidTouch(touches[i])) {
           evt.preventDefault();
-          var idx = ongoingTouchIndexById(touches[i].identifier);
+          let idx = ongoingTouchIndexById(touches[i].identifier);
           if (idx >= 0) {
             ctx.beginPath();
             ctx.moveTo(
@@ -141,12 +147,12 @@ export default {
       }
     }
     function handleEnd(evt) {
-      var touches = evt.changedTouches;
-      var offset = findPos(canvas);
-      for (var i = 0; i < touches.length; i++) {
+      let touches = evt.changedTouches;
+      let offset = findPos(canvas);
+      for (let i = 0; i < touches.length; i++) {
         if (isValidTouch(touches[i])) {
           evt.preventDefault();
-          var idx = ongoingTouchIndexById(touches[i].identifier);
+          let idx = ongoingTouchIndexById(touches[i].identifier);
           if (idx >= 0) {
             ctx.lineWidth = 4;
             ctx.fillStyle = color;
@@ -166,9 +172,9 @@ export default {
     }
     function handleCancel(evt) {
       evt.preventDefault();
-      var touches = evt.changedTouches;
+      let touches = evt.changedTouches;
 
-      for (var i = 0; i < touches.length; i++) {
+      for (let i = 0; i < touches.length; i++) {
         arr_touches.splice(i, 1);
       }
     }
@@ -180,8 +186,8 @@ export default {
       };
     }
     function ongoingTouchIndexById(idToFind) {
-      for (var i = 0; i < arr_touches.length; i++) {
-        var id = arr_touches[i].identifier;
+      for (let i = 0; i < arr_touches.length; i++) {
+        let id = arr_touches[i].identifier;
         if (id == idToFind) {
           return i;
         }
@@ -198,9 +204,9 @@ export default {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     function isValidTouch(touch) {
-      var curleft = 0,
+      let curleft = 0,
         curtop = 0;
-      var offset = 0;
+      let offset = 0;
       if (canvas.offsetParent) {
         do {
           curleft += canvas.offsetLeft;
@@ -224,7 +230,7 @@ export default {
       }
     }
     function findPos(obj) {
-      var curleft = 0,
+      let curleft = 0,
         curtop = 0;
       if (obj.offsetParent) {
         do {

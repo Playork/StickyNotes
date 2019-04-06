@@ -43,11 +43,12 @@ SOFTWARE.
                 title="Change Between Canvas Mode And Typing Mode"
                 v-on:click="mouch"
               >Canvas Mode</a>
-              <a title="Select Audio" v-on:click="clicksong">Add Audio</a>
-              <a title="Select Video" v-on:click="clickvideo">Add Video</a>
-              <a v-on:click="printnote" title="Print Note">Print</a>
-              <a v-on:click="importnote" title="Import Note">Import</a>
-              <a v-on:click="exportnote" title="Export Note">Export</a>
+              <a title="Save Note" id="save" v-on:click="savenote">Save</a>
+              <a title="Select Audio" id="video1" v-on:click="clicksong">Add Audio</a>
+              <a title="Select Video" id="audio1" v-on:click="clickvideo">Add Video</a>
+              <a v-on:click="printnote" id="print" title="Print Note">Print</a>
+              <a v-on:click="importnote" id="import" title="Import Note">Import</a>
+              <a v-on:click="exportnote" id="export" title="Export Note">Export</a>
             </div>
           </div>
           <div class="button" id="show" title="Edit Text" v-on:click="showedit">
@@ -69,6 +70,7 @@ import { remote } from "electron";
 import { setInterval } from "timers";
 import fs from "fs";
 import swal from "sweetalert";
+import "./../../assets/script/html2canvas.min.js";
 
 // Vue Class
 export default {
@@ -86,10 +88,24 @@ export default {
         document.getElementById("mouch").innerHTML = "Typing Mode";
         document.getElementById("lightYellow").style.display = "none";
         document.getElementById("draw").style.display = "block";
+        document.getElementById("save").style.display = "block";
+        document.getElementById("video1").style.display = "none";
+        document.getElementById("audio1").style.display = "none";
+        document.getElementById("print").style.display = "none";
+        document.getElementById("import").style.display = "none";
+        document.getElementById("export").style.display = "none";
+        document.getElementById("candit").style.display = "block";
       } else {
         document.getElementById("mouch").innerHTML = "Canvas Mode";
         document.getElementById("lightYellow").style.display = "block";
         document.getElementById("draw").style.display = "none";
+        document.getElementById("save").style.display = "none";
+        document.getElementById("video1").style.display = "block";
+        document.getElementById("audio1").style.display = "block";
+        document.getElementById("print").style.display = "block";
+        document.getElementById("import").style.display = "block";
+        document.getElementById("export").style.display = "block";
+        document.getElementById("candit").style.display = "none";
       }
     },
 
@@ -103,6 +119,8 @@ export default {
       let select3 = document.querySelector(".ql-snow.ql-toolbar");
       let select4 = document.getElementById("window-title1");
       let select5 = document.getElementById("menus");
+      let select6 = document.getElementById("draw");
+      let select7 = document.getElementById("candit");
       if (
         select.style.pointerEvents == "auto" ||
         select.style.pointerEvents == ""
@@ -115,6 +133,8 @@ export default {
         select3.style.display = "none";
         select4.style.display = "none";
         select5.style.pointerEvents = "none";
+        select6.style.pointerEvents = "none";
+        select7.style.display = "none";
         let clearint = window.setInterval(() => {
           document.getElementById("color").style.height = "0";
           document.getElementById("locks").style.marginLeft = "-35px";
@@ -148,6 +168,7 @@ export default {
         select2.style.pointerEvents = "auto";
         select4.style.display = "flex";
         select5.style.pointerEvents = "auto";
+        select6.style.pointerEvents = "auto";
       }
     },
 
@@ -155,14 +176,23 @@ export default {
     showedit() {
       let select = document.querySelector(".ql-snow.ql-toolbar");
       let select0 = document.getElementById("color");
-      if (select.style.display == "none" || select.style.display == "") {
-        select.style.display = "block";
-        select0.style.height = "0";
-        document.getElementById("lightYellow").style.paddingTop = "90px";
+      let select1 = document.getElementById("candit");
+      if (document.getElementById("mouch").innerHTML == "Canvas Mode") {
+        if (select.style.display == "none" || select.style.display == "") {
+          select.style.display = "block";
+          select0.style.height = "0";
+          document.getElementById("lightYellow").style.paddingTop = "90px";
+        } else {
+          select.style.display = "none";
+          select0.style.height = "40px";
+          document.getElementById("lightYellow").style.paddingTop = "30px";
+        }
       } else {
-        select.style.display = "none";
-        select0.style.height = "40px";
-        document.getElementById("lightYellow").style.paddingTop = "30px";
+        if (select1.style.display == "none" || select1.style.display == "") {
+          select1.style.display = "block";
+        } else {
+          select1.style.display = "none";
+        }
       }
     },
 
@@ -318,6 +348,33 @@ export default {
           }
         }
       );
+    },
+
+    //Save Note
+    savenote() {
+      html2canvas(document.getElementById("draw"), {
+        onrendered: function(canvas) {
+          var tempcanvas = document.createElement("canvas");
+          tempcanvas.width = window.innerWidth;
+          tempcanvas.height = window.innerHeight;
+          var context = tempcanvas.getContext("2d");
+          context.drawImage(
+            canvas,
+            0,
+            0,
+            window.innerWidth,
+            window.innerHeight,
+            0,
+            0,
+            window.innerWidth,
+            window.innerHeight
+          );
+          var link = document.createElement("a");
+          link.href = tempcanvas.toDataURL("image/png");
+          link.download = "note.png";
+          link.click();
+        }
+      });
     }
   }
 };
