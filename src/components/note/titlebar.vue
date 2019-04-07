@@ -90,6 +90,7 @@ export default {
         document.getElementById("lightYellow").style.display = "none";
         document.getElementById("draw").style.display = "block";
         document.getElementById("save").style.display = "block";
+        document.getElementById("restore").style.display = "block";
         document.getElementById("video1").style.display = "none";
         document.getElementById("audio1").style.display = "none";
         document.getElementById("print").style.display = "none";
@@ -100,6 +101,7 @@ export default {
         document.getElementById("lightYellow").style.display = "block";
         document.getElementById("draw").style.display = "none";
         document.getElementById("save").style.display = "none";
+        document.getElementById("restore").style.display = "none";
         document.getElementById("video1").style.display = "block";
         document.getElementById("audio1").style.display = "block";
         document.getElementById("print").style.display = "block";

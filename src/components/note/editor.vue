@@ -30,22 +30,35 @@ SOFTWARE.
       <div id="editor"></div>
     </div>
     <div id="backc"></div>
+    <section id="choosepaint">
+      Color:
+      <input type="color" value="#000000" id="color3">
+      <br>
+      <button class="button1" v-on:click="cancel">Cancel</button>
+      <button id="cc" class="button1">done</button>
+    </section>
     <div id="candit">
-      <select id="brushcolor">
-        <option id="black" value="black">Black</option>
-        <option id="red" value="red">Red</option>
-        <option id="green1" value="green">Green</option>
-        <option id="blue1" value="blue">Blue</option>
-        <option id="white" value="white">White</option>
-      </select>
-      <select id="brushwidth">
-        <option value="1">Very Small</option>
-        <option value="3">Small</option>
-        <option value="5" selected="selected">Normal</option>
-        <option value="10">Big</option>
-        <option value="20">Very Big</option>
-        <option value="40">extremely big</option>
-      </select>
+      <div id="brushcolor" v-on:click="changeColor">
+        <button id="black" class="buttons">
+          <span id="one" class="selected select">&#xE73E;</span>
+        </button>
+        <button id="red" class="buttons">
+          <span id="two" class="selected hide">&#xE73E;</span>
+        </button>
+        <button id="green1" class="buttons">
+          <span id="three" class="selected hide">&#xE73E;</span>
+        </button>
+        <button id="blue1" class="buttons">
+          <span id="four" class="selected hide">&#xE73E;</span>
+        </button>
+        <button id="white" class="buttons">
+          <span id="five" class="selected hide">&#xE73E;</span>
+        </button>
+        <button id="paintcolor" class="buttons" v-on:click="showthis" title="Choose Color">
+          <span>&#xE710;</span>
+        </button>
+      </div>
+      <input type="range" min="1" max="50" value="5" id="brushwidth">
       <button id="clear" v-on:click="clearCanvas">&#xE74D;</button>
     </div>
     <canvas id="draw"></canvas>
@@ -66,6 +79,15 @@ import { setTimeout, setInterval } from "timers";
 
 // Vue Class
 export default {
+  // Vars
+  data() {
+    return {
+      id: ["black", "red", "green1", "blue1", "white"],
+      select: ["one", "two", "three", "four", "five"],
+      color3: ["black", "red", "green", "blue", "white"]
+    };
+  },
+
   // Do On Start
   mounted() {
     // Cavas
@@ -88,11 +110,30 @@ export default {
         .getPropertyValue("background-color");
       document.getElementById("backc").style.backgroundColor = color1;
     }, 1);
-    document.getElementById("brushcolor").addEventListener("change", () => {
-      color = document.getElementById("brushcolor").value;
+    document.getElementById("brushcolor").addEventListener("click", () => {
+      for (let i = 0; i < 5; i++) {
+        document.getElementById(this.id[i]).onclick = () => {
+          color = this.color3[i];
+          for (let j = 0; j < 5; j++) {
+            document.getElementById(this.select[j]).classList.remove("select");
+            document.getElementById(this.select[j]).classList.add("hide");
+          }
+          document.getElementById(this.select[i]).classList.add("select");
+          document.getElementById(this.select[i]).classList.remove("hide");
+        };
+      }
+    });
+    document.getElementById("cc").addEventListener("click", () => {
+      let Color = document.getElementById("color3").value;
+      color = Color;
+      document.querySelector("section").style.display = "none";
+      for (let j = 0; j < 7; j++) {
+        document.getElementById(this.select[j]).classList.remove("select");
+        document.getElementById(this.select[j]).classList.add("hide");
+      }
     });
     document.getElementById("brushwidth").addEventListener("change", () => {
-      changeWidth(Number(document.getElementById("brushwidth").value));
+      width = document.getElementById("brushwidth").value;
     });
     canvas.addEventListener("mousemove", handleMove);
     canvas.addEventListener("mousedown", handleDown);
@@ -467,11 +508,24 @@ export default {
     }, 1000);
   },
   methods: {
+    // Clear Canvas
     clearCanvas() {
       document
         .getElementById("draw")
         .getContext("2d")
         .clearRect(0, 0, window.innerWidth, window.innerHeight);
+    },
+
+    // Custom Color Choser Show Hide Function
+    showthis() {
+      document.getElementById("paintcolor").onclick = () => {
+        document.getElementById("choosepaint").style.display = "block";
+      };
+    },
+
+    // Cancel Color Selection
+    cancel() {
+      document.querySelector("section").style.display = "none";
     }
   }
 };

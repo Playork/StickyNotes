@@ -51,8 +51,8 @@ export default {
   methods: {
     // Add New Custom Color To Note
     newColor() {
-      var titleColor = document.getElementById("color1").value;
-      var backColor = document.getElementById("color2").value;
+      let titleColor = document.getElementById("color1").value;
+      let backColor = document.getElementById("color2").value;
       document.getElementById("titlebar").style.background = titleColor;
       document.getElementById("lightYellow").style.background = backColor;
       document.querySelector("section").style.display = "none";

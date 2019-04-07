@@ -176,9 +176,9 @@ SOFTWARE. */
   display: none;
   position: absolute;
   top: 40px;
-  right: -60px;
+  right: -80px;
   background-color: #202020;
-  min-width: 100px;
+  min-width: 120px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
