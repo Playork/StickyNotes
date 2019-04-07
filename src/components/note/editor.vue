@@ -38,7 +38,7 @@ SOFTWARE.
       <button id="cc" class="button1">done</button>
     </section>
     <div id="candit">
-      <div id="brushcolor" v-on:click="changeColor">
+      <div id="brushcolor">
         <button id="black" class="buttons">
           <span id="one" class="selected select">&#xE73E;</span>
         </button>
@@ -59,6 +59,7 @@ SOFTWARE.
         </button>
       </div>
       <input type="range" min="1" max="50" value="5" id="brushwidth">
+      <p id="widthvalue">5</p>
       <button id="clear" v-on:click="clearCanvas">&#xE74D;</button>
     </div>
     <canvas id="draw"></canvas>
@@ -134,6 +135,9 @@ export default {
     });
     document.getElementById("brushwidth").addEventListener("change", () => {
       width = document.getElementById("brushwidth").value;
+      document.getElementById("widthvalue").innerHTML = document.getElementById(
+        "brushwidth"
+      ).value;
     });
     canvas.addEventListener("mousemove", handleMove);
     canvas.addEventListener("mousedown", handleDown);

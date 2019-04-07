@@ -265,7 +265,7 @@ SOFTWARE. */
 #brushwidth {
   -webkit-appearance: none;
   height: 5px;
-  width: 97%;
+  width: 93%;
   border-radius: 5px;
   background: #000;
   outline: none;
@@ -274,7 +274,6 @@ SOFTWARE. */
   margin: 0;
   padding: 0;
 }
-
 #brushwidth::-webkit-slider-thumb {
   appearance: none;
   width: 20px;
@@ -282,4 +281,9 @@ SOFTWARE. */
   border-radius: 50%;
   background: #fff;
   cursor: pointer;
+}
+#widthvalue {
+  position: absolute;
+  top: 30px;
+  right: 0;
 }
