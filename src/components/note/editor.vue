@@ -391,8 +391,12 @@ export default {
     });
 
     let func = obj => {
-      let canvasfunc = () => {
-        let url = document.getElementById("draw").toDataURL();
+      let repeafunc = () => {
+        let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
+        let url;
+        window.setInterval(() => {
+          url = document.getElementById("draw").toDataURL();
+        }, 1);
         let color1 = window
           .getComputedStyle(document.getElementById("lightYellow"))
           .getPropertyValue("background-color");
@@ -409,35 +413,73 @@ export default {
         } else {
           lock = "no";
         }
-        store.set(obj.toString(), {
-          image: url,
-          back: color1,
-          title: color2,
-          wid: winwidth,
-          hei: winheight,
-          deleted: "no",
-          closed: "no",
-          locked: lock
-        });
-        window.onbeforeunload = e => {
-          e.returnValue = true;
-          let del;
-          if (store.get(obj.toString()).deleted == undefined) {
-            del = "no";
-          } else {
-            del = store.get(obj.toString()).deleted;
-          }
-          if (del == "no") {
+        if (document.getElementById("lightYellow").style.display != "none") {
+          if (
+            document.querySelector(".ql-snow .ql-editor").innerHTML !=
+            "<p><br></p>"
+          ) {
             store.set(obj.toString(), {
-              image: url,
+              first: text,
               back: color1,
               title: color2,
               wid: winwidth,
               hei: winheight,
               deleted: "no",
-              closed: "yes",
+              closed: "no",
               locked: lock
             });
+          }
+        } else {
+          store.set(obj.toString(), {
+            image: url,
+            back: color1,
+            title: color2,
+            wid: winwidth,
+            hei: winheight,
+            deleted: "no",
+            closed: "no",
+            locked: lock
+          });
+        }
+        window.onbeforeunload = e => {
+          e.returnValue = true;
+          let del;
+          try {
+            del = store.get(obj.toString()).deleted;
+          } catch {
+            del = "no";
+          }
+          if (del == "no") {
+            if (
+              document.getElementById("lightYellow").style.display != "none"
+            ) {
+              if (
+                document.querySelector(".ql-snow .ql-editor").innerHTML !=
+                "<p><br></p>"
+              ) {
+                store.set(obj.toString(), {
+                  first: text,
+                  back: color1,
+                  title: color2,
+                  wid: winwidth,
+                  hei: winheight,
+                  deleted: "no",
+                  closed: "yes",
+                  locked: lock
+                });
+              }
+            } else {
+              store.set(obj.toString(), {
+                image: url,
+                back: color1,
+                title: color2,
+                wid: winwidth,
+                hei: winheight,
+                deleted: "no",
+                closed: "yes",
+                locked: lock
+              });
+            }
           }
           window.setTimeout(() => {
             if (
@@ -460,107 +502,20 @@ export default {
           } catch {}
         }, 1);
       };
-      let repeafunc = () => {
-        if (
-          document.querySelector(".ql-snow .ql-editor").innerHTML !=
-          "<p><br></p>"
-        ) {
-          let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
-          let color1 = window
-            .getComputedStyle(document.getElementById("lightYellow"))
-            .getPropertyValue("background-color");
-          let color2 = window
-            .getComputedStyle(document.getElementById("titlebar"))
-            .getPropertyValue("background-color");
-          let winwidth = window.innerWidth.toString();
-          let winheight = window.innerHeight.toString();
-          let lock;
-          if (
-            document.getElementById("close-button").style.pointerEvents ==
-            "none"
-          ) {
-            lock = "yes";
-          } else {
-            lock = "no";
-          }
-          store.set(obj.toString(), {
-            first: text,
-            back: color1,
-            title: color2,
-            wid: winwidth,
-            hei: winheight,
-            deleted: "no",
-            closed: "no",
-            locked: lock
-          });
-          window.onbeforeunload = e => {
-            e.returnValue = true;
-            let del;
-            if (store.get(obj.toString()).deleted == undefined) {
-              del = "no";
-            } else {
-              del = store.get(obj.toString()).deleted;
-            }
-            if (del == "no") {
-              store.set(obj.toString(), {
-                first: text,
-                back: color1,
-                title: color2,
-                wid: winwidth,
-                hei: winheight,
-                deleted: "no",
-                closed: "yes",
-                locked: lock
-              });
-            }
-            window.setTimeout(() => {
-              if (
-                store.get(obj.toString()).closed == "yes" ||
-                store.get(obj.toString()).deleted == "yes"
-              ) {
-                remote.getCurrentWindow().destroy();
-              }
-            }, 300);
-          };
-
-          window.setInterval(() => {
-            try {
-              if (store.get(obj.toString()).deleted == "yes") {
-                store.remove(obj.toString());
-                if (store.get(obj.toString()) == undefined) {
-                  remote.getCurrentWindow().close();
-                }
-              }
-            } catch {}
-          }, 1);
-        }
-      };
-      let funci = () => {
-        if (document.getElementById("draw").style.display != "block") {
-          repeafunc();
-        } else {
-          canvasfunc();
-        }
-      };
       quill.on("text-change", repeafunc());
       canvas = document.getElementById("draw");
-      canvas.addEventListener("mousemove", canvasfunc());
-      canvas.addEventListener("mousedown", canvasfunc());
-      canvas.addEventListener("mouseup", canvasfunc());
-      canvas.addEventListener("touchstart", canvasfunc());
-      canvas.addEventListener("touchend", canvasfunc());
-      canvas.addEventListener("touchcancel", canvasfunc());
-      canvas.addEventListener("touchleave", canvasfunc());
-      canvas.addEventListener("touchmove", canvasfunc());
-      document.getElementById("color").addEventListener("click", funci());
-      document.getElementById("cc").addEventListener("click", funci());
-      document.getElementById("locks").addEventListener("click", funci());
-      window.addEventListener("resize", funci());
-      if (
-        document.querySelector(".ql-snow .ql-editor").innerHTML != "<p><br></p>"
-      ) {
-        repeafunc();
-      }
+      canvas.addEventListener("mousemove", repeafunc());
+      canvas.addEventListener("mousedown", repeafunc());
+      canvas.addEventListener("mouseup", repeafunc());
+      canvas.addEventListener("touchstart", repeafunc());
+      canvas.addEventListener("touchend", repeafunc());
+      canvas.addEventListener("touchcancel", repeafunc());
+      canvas.addEventListener("touchleave", repeafunc());
+      canvas.addEventListener("touchmove", repeafunc());
+      document.getElementById("color").addEventListener("click", repeafunc());
+      document.getElementById("cc").addEventListener("click", repeafunc());
+      document.getElementById("locks").addEventListener("click", repeafunc());
+      window.addEventListener("resize", repeafunc());
     };
     try {
       let id = Number(store.get("id").ids);

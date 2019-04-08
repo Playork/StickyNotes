@@ -73,25 +73,25 @@ export default {
     // Restore Saved Note
     try {
       let text = store.get(store.get("id").ids);
-      window.resizeTo(Number(text.wid), Number(text.hei));
       if (text.first == undefined) {
         document.getElementById("mouch").click();
         let canvas = document.getElementById("draw");
         let ctx = canvas.getContext("2d");
-
         let img = new Image();
         img.src = text.image;
+        window.resizeTo(img.naturalWidth, img.naturalHeight);
         img.onload = function() {
           window.setTimeout(() => {
             ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
           }, 50);
         };
       } else {
+        window.resizeTo(Number(text.wid), Number(text.hei));
         document.querySelector(".ql-snow .ql-editor").innerHTML = text.first;
+        document.querySelector(".ql-toolbar").style.backgroundColor = text.back;
       }
       document.getElementById("lightYellow").style.backgroundColor = text.back;
       document.getElementById("titlebar").style.backgroundColor = text.title;
-      document.querySelector(".ql-toolbar").style.backgroundColor = text.back;
     } catch {
       window.resizeTo(350, 375);
       document.querySelector(".ql-toolbar").style.backgroundColor = "#FFF2AB";
