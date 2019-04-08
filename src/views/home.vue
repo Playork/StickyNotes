@@ -72,9 +72,9 @@ export default {
         ) {
           let content;
           if (value.first == undefined) {
-            content = value.first;
-          } else {
             content = "it's a canvas note can't show preview";
+          } else {
+            content = value.first;
           }
           document
             .getElementById("notes")
