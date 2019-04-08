@@ -393,10 +393,7 @@ export default {
     let func = obj => {
       let repeafunc = () => {
         let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
-        let url;
-        window.setInterval(() => {
-          url = document.getElementById("draw").toDataURL();
-        }, 1);
+        let url = document.getElementById("draw").toDataURL();
         let color1 = window
           .getComputedStyle(document.getElementById("lightYellow"))
           .getPropertyValue("background-color");
@@ -413,26 +410,13 @@ export default {
         } else {
           lock = "no";
         }
-        window.setTimeout(() => {
-          if (document.getElementById("lightYellow").style.display != "none") {
-            if (
-              document.querySelector(".ql-snow .ql-editor").innerHTML !=
-              "<p><br></p>"
-            ) {
-              store.set(obj.toString(), {
-                first: text,
-                back: color1,
-                title: color2,
-                wid: winwidth,
-                hei: winheight,
-                deleted: "no",
-                closed: "yes",
-                locked: lock
-              });
-            }
-          } else {
+        if (document.getElementById("lightYellow").style.display != "none") {
+          if (
+            document.querySelector(".ql-snow .ql-editor").innerHTML !=
+            "<p><br></p>"
+          ) {
             store.set(obj.toString(), {
-              image: url,
+              first: text,
               back: color1,
               title: color2,
               wid: winwidth,
@@ -442,7 +426,18 @@ export default {
               locked: lock
             });
           }
-        }, 100);
+        } else {
+          store.set(obj.toString(), {
+            image: url,
+            back: color1,
+            title: color2,
+            wid: winwidth,
+            hei: winheight,
+            deleted: "no",
+            closed: "yes",
+            locked: lock
+          });
+        }
         window.onbeforeunload = e => {
           e.returnValue = true;
           let del;
@@ -451,29 +446,16 @@ export default {
           } catch {
             del = "no";
           }
-          window.setTimeout(() => {
-            if (del == "no") {
+          if (del == "no") {
+            if (
+              document.getElementById("lightYellow").style.display != "none"
+            ) {
               if (
-                document.getElementById("lightYellow").style.display != "none"
+                document.querySelector(".ql-snow .ql-editor").innerHTML !=
+                "<p><br></p>"
               ) {
-                if (
-                  document.querySelector(".ql-snow .ql-editor").innerHTML !=
-                  "<p><br></p>"
-                ) {
-                  store.set(obj.toString(), {
-                    first: text,
-                    back: color1,
-                    title: color2,
-                    wid: winwidth,
-                    hei: winheight,
-                    deleted: "no",
-                    closed: "yes",
-                    locked: lock
-                  });
-                }
-              } else {
                 store.set(obj.toString(), {
-                  image: url,
+                  first: text,
                   back: color1,
                   title: color2,
                   wid: winwidth,
@@ -483,8 +465,19 @@ export default {
                   locked: lock
                 });
               }
+            } else {
+              store.set(obj.toString(), {
+                image: url,
+                back: color1,
+                title: color2,
+                wid: winwidth,
+                hei: winheight,
+                deleted: "no",
+                closed: "yes",
+                locked: lock
+              });
             }
-          }, 100);
+          }
           window.setTimeout(() => {
             if (
               store.get(obj.toString()).closed == "yes" ||
