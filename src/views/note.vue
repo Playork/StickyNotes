@@ -75,8 +75,6 @@ export default {
       let text = store.get(store.get("id").ids);
       window.resizeTo(Number(text.wid), Number(text.hei));
       if (text.first == undefined) {
-        document.querySelector(".ql-snow .ql-editor").innerHTML = text.first;
-      } else {
         document.getElementById("mouch").click();
         let canvas = document.getElementById("draw");
         let ctx = canvas.getContext("2d");
@@ -88,6 +86,8 @@ export default {
             ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
           }, 50);
         };
+      } else {
+        document.querySelector(".ql-snow .ql-editor").innerHTML = text.first;
       }
       document.getElementById("lightYellow").style.backgroundColor = text.back;
       document.getElementById("titlebar").style.backgroundColor = text.title;
