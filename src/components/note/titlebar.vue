@@ -40,9 +40,9 @@ SOFTWARE.
             <div id="menu-content" class="dropdown-content">
               <a
                 id="mouch"
-                title="Change Between Canvas Mode And Typing Mode"
+                title="Change Between Touch Mode And Typing Mode"
                 v-on:click="mouch"
-              >Canvas Mode</a>
+              >Touch Mode</a>
               <a title="Print Note" id="save" v-on:click="savenote">Save</a>
               <a title="Import Note" id="restore" v-on:click="restorenote">Import</a>
               <a title="Export Note" id="backup" v-on:click="backupnote">Export</a>
@@ -85,7 +85,7 @@ export default {
   methods: {
     // Canvace Mode
     mouch() {
-      if (document.getElementById("mouch").innerHTML == "Canvas Mode") {
+      if (document.getElementById("mouch").innerHTML == "Touch Mode") {
         document.getElementById("mouch").innerHTML = "Typing Mode";
         document.getElementById("lightYellow").style.display = "none";
         document.getElementById("draw").style.display = "block";
@@ -98,7 +98,7 @@ export default {
         document.getElementById("import").style.display = "none";
         document.getElementById("export").style.display = "none";
       } else {
-        document.getElementById("mouch").innerHTML = "Canvas Mode";
+        document.getElementById("mouch").innerHTML = "Touch Mode";
         document.getElementById("lightYellow").style.display = "block";
         document.getElementById("draw").style.display = "none";
         document.getElementById("save").style.display = "none";

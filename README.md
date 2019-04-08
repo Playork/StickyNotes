@@ -25,6 +25,10 @@
 
 ### Export Note To A File
 
+### Print Note
+
+### Canvas Mode For Touch Or Pen Devices(Support Many Eding And Import,Export And Save Options)
+
 ### If you like my App please consider buying me a coffee at [HERE!](http://buymeacoff.ee/playork)
 
 # Stable Release
