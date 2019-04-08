@@ -413,64 +413,14 @@ export default {
         } else {
           lock = "no";
         }
-        if (document.getElementById("lightYellow").style.display != "none") {
-          if (
-            document.querySelector(".ql-snow .ql-editor").innerHTML !=
-            "<p><br></p>"
-          ) {
-            store.set(obj.toString(), {
-              first: text,
-              back: color1,
-              title: color2,
-              wid: winwidth,
-              hei: winheight,
-              deleted: "no",
-              closed: "no",
-              locked: lock
-            });
-          }
-        } else {
-          store.set(obj.toString(), {
-            image: url,
-            back: color1,
-            title: color2,
-            wid: winwidth,
-            hei: winheight,
-            deleted: "no",
-            closed: "no",
-            locked: lock
-          });
-        }
-        window.onbeforeunload = e => {
-          e.returnValue = true;
-          let del;
-          try {
-            del = store.get(obj.toString()).deleted;
-          } catch {
-            del = "no";
-          }
-          if (del == "no") {
+        window.setTimeout(() => {
+          if (document.getElementById("lightYellow").style.display != "none") {
             if (
-              document.getElementById("lightYellow").style.display != "none"
+              document.querySelector(".ql-snow .ql-editor").innerHTML !=
+              "<p><br></p>"
             ) {
-              if (
-                document.querySelector(".ql-snow .ql-editor").innerHTML !=
-                "<p><br></p>"
-              ) {
-                store.set(obj.toString(), {
-                  first: text,
-                  back: color1,
-                  title: color2,
-                  wid: winwidth,
-                  hei: winheight,
-                  deleted: "no",
-                  closed: "yes",
-                  locked: lock
-                });
-              }
-            } else {
               store.set(obj.toString(), {
-                image: url,
+                first: text,
                 back: color1,
                 title: color2,
                 wid: winwidth,
@@ -480,7 +430,61 @@ export default {
                 locked: lock
               });
             }
+          } else {
+            store.set(obj.toString(), {
+              image: url,
+              back: color1,
+              title: color2,
+              wid: winwidth,
+              hei: winheight,
+              deleted: "no",
+              closed: "yes",
+              locked: lock
+            });
           }
+        }, 100);
+        window.onbeforeunload = e => {
+          e.returnValue = true;
+          let del;
+          try {
+            del = store.get(obj.toString()).deleted;
+          } catch {
+            del = "no";
+          }
+          window.setTimeout(() => {
+            if (del == "no") {
+              if (
+                document.getElementById("lightYellow").style.display != "none"
+              ) {
+                if (
+                  document.querySelector(".ql-snow .ql-editor").innerHTML !=
+                  "<p><br></p>"
+                ) {
+                  store.set(obj.toString(), {
+                    first: text,
+                    back: color1,
+                    title: color2,
+                    wid: winwidth,
+                    hei: winheight,
+                    deleted: "no",
+                    closed: "yes",
+                    locked: lock
+                  });
+                }
+              } else {
+                store.set(obj.toString(), {
+                  image: url,
+                  back: color1,
+                  title: color2,
+                  wid: winwidth,
+                  hei: winheight,
+                  deleted: "no",
+                  closed: "yes",
+                  locked: lock
+                });
+              }
+            }
+          }, 100);
           window.setTimeout(() => {
             if (
               store.get(obj.toString()).closed == "yes" ||
@@ -502,20 +506,26 @@ export default {
           } catch {}
         }, 1);
       };
-      quill.on("text-change", repeafunc());
+      quill.on("text-change", () => repeafunc());
       canvas = document.getElementById("draw");
-      canvas.addEventListener("mousemove", repeafunc());
-      canvas.addEventListener("mousedown", repeafunc());
-      canvas.addEventListener("mouseup", repeafunc());
-      canvas.addEventListener("touchstart", repeafunc());
-      canvas.addEventListener("touchend", repeafunc());
-      canvas.addEventListener("touchcancel", repeafunc());
-      canvas.addEventListener("touchleave", repeafunc());
-      canvas.addEventListener("touchmove", repeafunc());
-      document.getElementById("color").addEventListener("click", repeafunc());
-      document.getElementById("cc").addEventListener("click", repeafunc());
-      document.getElementById("locks").addEventListener("click", repeafunc());
-      window.addEventListener("resize", repeafunc());
+      canvas.addEventListener("mousemove", () => repeafunc());
+      canvas.addEventListener("mousedown", () => repeafunc());
+      canvas.addEventListener("mouseup", () => repeafunc());
+      canvas.addEventListener("touchstart", () => repeafunc(), false);
+      canvas.addEventListener("touchend", () => repeafunc(), false);
+      canvas.addEventListener("touchcancel", () => repeafunc(), false);
+      canvas.addEventListener("touchleave", () => repeafunc(), false);
+      canvas.addEventListener("touchmove", () => repeafunc(), false);
+      document
+        .getElementById("color")
+        .addEventListener("click", () => repeafunc());
+      document
+        .getElementById("cc")
+        .addEventListener("click", () => repeafunc());
+      document
+        .getElementById("locks")
+        .addEventListener("click", () => repeafunc());
+      window.addEventListener("resize", () => repeafunc());
     };
     try {
       let id = Number(store.get("id").ids);

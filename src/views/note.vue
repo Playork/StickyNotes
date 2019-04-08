@@ -79,17 +79,16 @@ export default {
         let ctx = canvas.getContext("2d");
         let img = new Image();
         img.src = text.image;
-        window.resizeTo(img.naturalWidth, img.naturalHeight);
         img.onload = function() {
           window.setTimeout(() => {
             ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
           }, 50);
         };
       } else {
-        window.resizeTo(Number(text.wid), Number(text.hei));
         document.querySelector(".ql-snow .ql-editor").innerHTML = text.first;
-        document.querySelector(".ql-toolbar").style.backgroundColor = text.back;
       }
+      document.querySelector(".ql-toolbar").style.backgroundColor = text.back;
+      window.resizeTo(Number(text.wid), Number(text.hei));
       document.getElementById("lightYellow").style.backgroundColor = text.back;
       document.getElementById("titlebar").style.backgroundColor = text.title;
     } catch {
