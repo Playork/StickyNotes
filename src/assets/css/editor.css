@@ -165,9 +165,6 @@ SOFTWARE. */
   bottom: 40px;
   z-index: 5;
 }
-#save {
-  display: none;
-}
 #candit {
   display: none;
   position: absolute;
@@ -286,4 +283,9 @@ SOFTWARE. */
   position: absolute;
   top: 30px;
   right: 0;
+}
+#restore,
+#backup,
+#save {
+  display: none;
 }

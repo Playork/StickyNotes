@@ -257,9 +257,6 @@ export default {
     function changeWidth(e) {
       width = e;
     }
-    function clearCanvas() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
     function isValidTouch(touch) {
       let curleft = 0,
         curtop = 0;

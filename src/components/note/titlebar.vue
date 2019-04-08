@@ -46,7 +46,8 @@ SOFTWARE.
               <a title="Print Note" id="save" v-on:click="savenote">Print</a>
               <a title="Import Note" id="restore" v-on:click="restorenote">Import</a>
               <a title="Export Note" id="backup" v-on:click="backupnote">Export</a>
-              <a title="Select Video" id="audio1" v-on:click="clickvideo">Add Video</a>
+              <a title="Select Audio" id="video1" v-on:click="clickvideo">Add Video</a>
+              <a title="Select Video" id="audio1" v-on:click="clicksong">Add Audio</a>
               <a v-on:click="printnote" id="print" title="Print Note">Print</a>
               <a v-on:click="importnote" id="import" title="Import Note">Import</a>
               <a v-on:click="exportnote" id="export" title="Export Note">Export</a>
@@ -71,7 +72,6 @@ import { remote } from "electron";
 import { setInterval } from "timers";
 import fs from "fs";
 import swal from "sweetalert";
-import "./../../assets/script/html2canvas.min.js";
 
 // Vue Class
 export default {
@@ -358,8 +358,7 @@ export default {
       var ifr = document.createElement("iframe");
       ifr.style = "height: 0px; width: 0px; position: absolute";
       document.body.appendChild(ifr);
-      let url = document.getElementById("draw").toDataURL();
-      ifr.setAttribute("src", url);
+      ifr.setAttribute("src", document.getElementById("draw").toDataURL());
       ifr.contentWindow.print();
       ifr.parentElement.removeChild(ifr);
     },
