@@ -43,7 +43,7 @@ SOFTWARE.
                 title="Change Between Canvas Mode And Typing Mode"
                 v-on:click="mouch"
               >Canvas Mode</a>
-              <a title="Print Note" id="save" v-on:click="savenote">Print</a>
+              <a title="Print Note" id="save" v-on:click="savenote">Save</a>
               <a title="Import Note" id="restore" v-on:click="restorenote">Import</a>
               <a title="Export Note" id="backup" v-on:click="backupnote">Export</a>
               <a title="Select Audio" id="video1" v-on:click="clickvideo">Add Video</a>
@@ -355,12 +355,18 @@ export default {
 
     //Save Note
     savenote() {
-      var ifr = document.createElement("iframe");
-      ifr.style = "height: 0px; width: 0px; position: absolute";
-      document.body.appendChild(ifr);
-      ifr.setAttribute("src", document.getElementById("draw").toDataURL());
-      ifr.contentWindow.print();
-      ifr.parentElement.removeChild(ifr);
+      var link = document.createElement("a");
+      document.body.appendChild(link);
+      link.addEventListener(
+        "click",
+        function(ev) {
+          link.href = document.getElementById("draw").toDataURL();
+          link.download = "note.png";
+        },
+        false
+      );
+      link.click();
+      link.parentElement.removeChild(link);
     },
 
     // Backup Note
