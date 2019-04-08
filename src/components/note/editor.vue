@@ -524,7 +524,7 @@ export default {
         }
       };
       let funci = () => {
-        if (document.getElementById("draw") != "block") {
+        if (document.getElementById("draw").style.display != "block") {
           repeafunc();
         } else {
           canvasfunc();
