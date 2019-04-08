@@ -421,7 +421,13 @@ export default {
         });
         window.onbeforeunload = e => {
           e.returnValue = true;
-          if (store.get(obj.toString()).deleted == "no") {
+          let del;
+          if (store.get(obj.toString()).deleted == undefined) {
+            del = "no";
+          } else {
+            del = store.get(obj.toString()).deleted;
+          }
+          if (del == "no") {
             store.set(obj.toString(), {
               image: url,
               back: color1,
@@ -489,7 +495,13 @@ export default {
           });
           window.onbeforeunload = e => {
             e.returnValue = true;
-            if (store.get(obj.toString()).deleted == "no") {
+            let del;
+            if (store.get(obj.toString()).deleted == undefined) {
+              del = "no";
+            } else {
+              del = store.get(obj.toString()).deleted;
+            }
+            if (del == "no") {
               store.set(obj.toString(), {
                 first: text,
                 back: color1,
