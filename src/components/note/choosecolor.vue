@@ -55,7 +55,7 @@ export default {
       let backColor = document.getElementById("color2").value;
       document.getElementById("titlebar").style.background = titleColor;
       document.getElementById("lightYellow").style.background = backColor;
-      document.querySelector("section").style.display = "none";
+      document.getElementById("choosecolor").style.display = "none";
       for (let j = 0; j < 7; j++) {
         document.getElementById(this.select[j]).classList.remove("select");
         document.getElementById(this.select[j]).classList.add("hide");
@@ -64,7 +64,7 @@ export default {
 
     // Cancel Color Selection
     cancel() {
-      document.querySelector("section").style.display = "none";
+      document.getElementById("choosecolor").style.display = "none";
     }
   }
 };

@@ -146,6 +146,7 @@ export default {
           document.getElementById("more").style.display = "none";
           document.getElementById("close").style.display = "none";
           document.getElementById("menu").style.display = "none";
+          document.getElementById("lightYellow").style.paddingTop = "30px";
           if (
             document.getElementById("menu-content").classList.contains("show")
           ) {
