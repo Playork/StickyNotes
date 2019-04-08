@@ -74,7 +74,21 @@ export default {
     try {
       let text = store.get(store.get("id").ids);
       window.resizeTo(Number(text.wid), Number(text.hei));
-      document.querySelector(".ql-snow .ql-editor").innerHTML = text.first;
+      if (text.first == undefined) {
+        document.querySelector(".ql-snow .ql-editor").innerHTML = text.first;
+      } else {
+        document.getElementById("mouch").click();
+        let canvas = document.getElementById("draw");
+        let ctx = canvas.getContext("2d");
+
+        let img = new Image();
+        img.src = text.image;
+        img.onload = function() {
+          window.setTimeout(() => {
+            ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
+          }, 50);
+        };
+      }
       document.getElementById("lightYellow").style.backgroundColor = text.back;
       document.getElementById("titlebar").style.backgroundColor = text.title;
       document.querySelector(".ql-toolbar").style.backgroundColor = text.back;

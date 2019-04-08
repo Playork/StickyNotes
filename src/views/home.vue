@@ -55,7 +55,7 @@ export default {
     // close on app.quit()
     ipcRenderer.on("closeall", () => {
       store.set("closed", { closed: "yes" });
-      remote.getCurrentWindow().destroy()
+      remote.getCurrentWindow().destroy();
     });
 
     // Remove Closed
@@ -70,13 +70,17 @@ export default {
           key != "loglevel:webpack-dev-server" &&
           key != "closed"
         ) {
+          let content;
+          if (value.first == undefined) {
+            content = value.first;
+          } else {
+            content = "it's a canvas note can't show preview";
+          }
           document
             .getElementById("notes")
             .insertAdjacentHTML(
               "afterbegin",
-              `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span>${
-                value.first
-              }</div>`
+              `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span>${content}</div>`
             );
 
           if (value.closed == "yes") {
