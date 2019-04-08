@@ -40,19 +40,19 @@ SOFTWARE.
     <div id="candit">
       <div id="brushcolor">
         <button id="black" class="buttons">
-          <span id="one" class="selected select">&#xE73E;</span>
+          <span id="c1" class="selected select">&#xE73E;</span>
         </button>
         <button id="red" class="buttons">
-          <span id="two" class="selected hide">&#xE73E;</span>
+          <span id="c2" class="selected hide">&#xE73E;</span>
         </button>
         <button id="green1" class="buttons">
-          <span id="three" class="selected hide">&#xE73E;</span>
+          <span id="c3" class="selected hide">&#xE73E;</span>
         </button>
         <button id="blue1" class="buttons">
-          <span id="four" class="selected hide">&#xE73E;</span>
+          <span id="c4" class="selected hide">&#xE73E;</span>
         </button>
         <button id="white" class="buttons">
-          <span id="five" class="selected hide">&#xE73E;</span>
+          <span id="c5" class="selected hide">&#xE73E;</span>
         </button>
         <button id="paintcolor" class="buttons" v-on:click="showthis" title="Choose Color">
           <span>&#xE710;</span>
@@ -84,7 +84,7 @@ export default {
   data() {
     return {
       id: ["black", "red", "green1", "blue1", "white"],
-      select: ["one", "two", "three", "four", "five"],
+      select: ["c1", "c2", "c3", "c4", "c5"],
       color3: ["black", "red", "green", "blue", "white"]
     };
   },
