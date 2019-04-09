@@ -72,7 +72,7 @@ export default {
         ) {
           let content;
           if (value.first == undefined) {
-            content = "it's a canvas note can't show preview";
+            content = `<img src="${value.image}" style="max-width:90%;"`;
           } else {
             content = value.first;
           }
