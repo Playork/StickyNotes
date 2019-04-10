@@ -46,6 +46,7 @@ SOFTWARE.
               <a title="Print Note" id="save" v-on:click="savenote">Save</a>
               <a title="Import Note" id="restore" v-on:click="restorenote">Import</a>
               <a title="Export Note" id="backup" v-on:click="backupnote">Export</a>
+              <a title="Add Emoji" id="emoji" v-on:click="emoji">Add Emoji</a>
               <a title="Select Audio" id="video1" v-on:click="clickvideo">Add Video</a>
               <a title="Select Video" id="audio1" v-on:click="clicksong">Add Audio</a>
               <a v-on:click="printnote" id="print" title="Print Note">Print</a>
@@ -94,6 +95,7 @@ export default {
         document.getElementById("backup").style.display = "block";
         document.getElementById("video1").style.display = "none";
         document.getElementById("audio1").style.display = "none";
+        document.getElementById("emoji").style.display = "none";
         document.getElementById("print").style.display = "none";
         document.getElementById("import").style.display = "none";
         document.getElementById("export").style.display = "none";
@@ -106,10 +108,25 @@ export default {
         document.getElementById("backup").style.display = "none";
         document.getElementById("video1").style.display = "block";
         document.getElementById("audio1").style.display = "block";
+        document.getElementById("emoji").style.display = "block";
         document.getElementById("print").style.display = "block";
         document.getElementById("import").style.display = "block";
         document.getElementById("export").style.display = "block";
         document.getElementById("candit").style.display = "none";
+      }
+    },
+
+    // Add Emoji
+    emoji() {
+      if (
+        document.getElementsByClassName("emoji-mart")[0].style.display ==
+          "none" ||
+        document.getElementsByClassName("emoji-mart")[0].style.display == ""
+      ) {
+        document.getElementsByClassName("emoji-mart")[0].style.display =
+          "inline-block";
+      } else {
+        document.getElementsByClassName("emoji-mart")[0].style.display = "none";
       }
     },
 
@@ -146,6 +163,8 @@ export default {
           document.getElementById("more").style.display = "none";
           document.getElementById("close").style.display = "none";
           document.getElementById("menu").style.display = "none";
+          document.getElementsByClassName("emoji-mart")[0].style.display =
+            "none";
           document.getElementById("lightYellow").style.paddingTop = "30px";
           if (
             document.getElementById("menu-content").classList.contains("show")

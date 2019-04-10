@@ -238,7 +238,7 @@ SOFTWARE. */
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }
 #choosepaint {
-  background: #202020;
+  background: #202020ee;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -288,4 +288,20 @@ SOFTWARE. */
 #backup,
 #save {
   display: none;
+}
+.emoji-mart {
+  font-family: "Lobster" !important;
+  background: #202020ee !important;
+  display: none;
+}
+.emoji-mart-category-label span {
+  background: #202020 !important;
+}
+.emoji-mart * {
+  border: none !important;
+  color: #fff !important;
+  border-radius: 20px !important;
+}
+.emoji-mart-search input {
+  color: #000 !important;
 }

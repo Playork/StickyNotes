@@ -26,6 +26,16 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div>
+    <div id="emojip">
+      <picker
+        set="google"
+        @select="addEmoji"
+        title="Pick your emoji…"
+        emoji="point_up"
+        :style="{ position: 'absolute', top: '40px',right: '0', zIndex: '7', width: '300px', height:'335px'}"
+        :i18n="{ search: 'Search', categories: { search: 'Results Of Your Search', recent: 'Recent' } }"
+      />
+    </div>
     <div id="lightYellow">
       <div id="editor"></div>
     </div>
@@ -77,9 +87,15 @@ import swal from "sweetalert";
 import $ from "./../../assets/script/jquery.js";
 import wordsarray from "an-array-of-english-words";
 import { setTimeout, setInterval } from "timers";
+import { Picker } from "emoji-mart-vue";
 
 // Vue Class
 export default {
+  // Components
+  components: {
+    Picker
+  },
+
   // Vars
   data() {
     return {
@@ -437,13 +453,7 @@ export default {
         }
         window.onbeforeunload = e => {
           e.returnValue = true;
-          let del;
-          try {
-            del = store.get(obj.toString()).deleted;
-          } catch {
-            del = "no";
-          }
-          if (del == "no") {
+          if (store.get(obj.toString()).deleted == "no" || store.get(obj.toString()).deleted == undefined) {
             if (
               document.getElementById("lightYellow").style.display != "none"
             ) {
@@ -543,6 +553,14 @@ export default {
     }, 1000);
   },
   methods: {
+    // Add emoji
+    addEmoji(e) {
+      document.querySelector(
+        ".ql-snow .ql-editor"
+      ).lastElementChild.innerHTML += e.native;
+      console.log(e);
+    },
+
     // Clear Canvas
     clearCanvas() {
       document
