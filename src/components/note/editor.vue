@@ -120,6 +120,8 @@ export default {
     let color = "black";
     let width = 5;
     let ctx = canvas.getContext("2d");
+    let cPushArray = new Array();
+    let cStep = -1;
     ctx.lineWidth = width;
     window.setInterval(() => {
       let color1 = window
@@ -164,6 +166,13 @@ export default {
     canvas.addEventListener("touchleave", handleEnd, false);
     canvas.addEventListener("touchmove", handleTouchMove, false);
     canvas.addEventListener("painterWidth", changeWidth, false);
+    function cPush() {
+      cStep++;
+      if (cStep < cPushArray.length) {
+        cPushArray.length = cStep;
+      }
+      cPushArray.push(document.getElementById("draw").toDataURL());
+    }
     function handleMove(e) {
       let xPos = e.clientX - canvas.offsetLeft;
       let yPos = e.clientY - canvas.offsetTop;
@@ -183,6 +192,7 @@ export default {
     }
     function handleUp() {
       down = false;
+      cPush();
     }
     function handleStart(e) {
       let touches = e.changedTouches;
@@ -245,6 +255,7 @@ export default {
           }
         }
       }
+      cPush();
     }
     function handleCancel(e) {
       e.preventDefault();
@@ -397,12 +408,44 @@ export default {
             "clean",
             "image"
           ]
-        ]
+        ],
+        history: {
+          delay: 1000,
+          maxStack: 500,
+          userOnly: true
+        }
       },
       placeholder: "Add Your Note",
       theme: "snow"
     });
-
+    document.getElementById("undo").addEventListener("click", () => {
+      if (document.getElementById("draw").style.display != "block") {
+        quill.history.undo();
+      } else {
+        if (cStep > 0) {
+          cStep--;
+          var canvasPic = new Image();
+          canvasPic.src = cPushArray[cStep];
+          canvasPic.onload = function() {
+            ctx.drawImage(canvasPic, 0, 0);
+          };
+        }
+      }
+    });
+    document.getElementById("redo").addEventListener("click", () => {
+      if (document.getElementById("draw").style.display != "block") {
+        quill.history.redo();
+      } else {
+        if (cStep < cPushArray.length - 1) {
+          cStep++;
+          var canvasPic = new Image();
+          canvasPic.src = cPushArray[cStep];
+          canvasPic.onload = function() {
+            ctx.drawImage(canvasPic, 0, 0);
+          };
+        }
+      }
+    });
     let func = obj => {
       let repeafunc = () => {
         let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
@@ -435,7 +478,7 @@ export default {
               wid: winwidth,
               hei: winheight,
               deleted: "no",
-              closed: "yes",
+              closed: "no",
               locked: lock
             });
           }
@@ -447,13 +490,16 @@ export default {
             wid: winwidth,
             hei: winheight,
             deleted: "no",
-            closed: "yes",
+            closed: "no",
             locked: lock
           });
         }
         window.onbeforeunload = e => {
           e.returnValue = true;
-          if (store.get(obj.toString()).deleted == "no" || store.get(obj.toString()).deleted == undefined) {
+          if (
+            store.get(obj.toString()) == undefined ||
+            store.get(obj.toString()).deleted == "no"
+          ) {
             if (
               document.getElementById("lightYellow").style.display != "none"
             ) {
@@ -500,7 +546,7 @@ export default {
             if (store.get(obj.toString()).deleted == "yes") {
               store.remove(obj.toString());
               if (store.get(obj.toString()) == undefined) {
-                remote.getCurrentWindow().close();
+                remote.getCurrentWindow().destroy();
               }
             }
           } catch {}
@@ -558,7 +604,6 @@ export default {
       document.querySelector(
         ".ql-snow .ql-editor"
       ).lastElementChild.innerHTML += e.native;
-      console.log(e);
     },
 
     // Clear Canvas

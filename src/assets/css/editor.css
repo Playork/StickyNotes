@@ -292,7 +292,7 @@ SOFTWARE. */
 .emoji-mart {
   font-family: "Lobster" !important;
   background: #202020ee !important;
-  display: none;
+  visibility: hidden;
 }
 .emoji-mart-category-label span {
   background: #202020 !important;

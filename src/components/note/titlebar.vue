@@ -43,13 +43,12 @@ SOFTWARE.
                 title="Change Between Touch Mode And Typing Mode"
                 v-on:click="mouch"
               >Touch Mode</a>
-              <a title="Print Note" id="save" v-on:click="savenote">Save</a>
-              <a title="Import Note" id="restore" v-on:click="restorenote">Import</a>
-              <a title="Export Note" id="backup" v-on:click="backupnote">Export</a>
+              <a title="Undo" id="undo">Undo</a>
+              <a title="Redo" id="redo">Redo</a>
               <a title="Add Emoji" id="emoji" v-on:click="emoji">Add Emoji</a>
               <a title="Select Audio" id="video1" v-on:click="clickvideo">Add Video</a>
               <a title="Select Video" id="audio1" v-on:click="clicksong">Add Audio</a>
-              <a v-on:click="printnote" id="print" title="Print Note">Print</a>
+              <a v-on:click="savenote" title="Save Note">Save</a>
               <a v-on:click="importnote" id="import" title="Import Note">Import</a>
               <a v-on:click="exportnote" id="export" title="Export Note">Export</a>
             </div>
@@ -90,28 +89,16 @@ export default {
         document.getElementById("mouch").innerHTML = "Typing Mode";
         document.getElementById("lightYellow").style.display = "none";
         document.getElementById("draw").style.display = "block";
-        document.getElementById("save").style.display = "block";
-        document.getElementById("restore").style.display = "block";
-        document.getElementById("backup").style.display = "block";
         document.getElementById("video1").style.display = "none";
         document.getElementById("audio1").style.display = "none";
         document.getElementById("emoji").style.display = "none";
-        document.getElementById("print").style.display = "none";
-        document.getElementById("import").style.display = "none";
-        document.getElementById("export").style.display = "none";
       } else {
         document.getElementById("mouch").innerHTML = "Touch Mode";
         document.getElementById("lightYellow").style.display = "block";
         document.getElementById("draw").style.display = "none";
-        document.getElementById("save").style.display = "none";
-        document.getElementById("restore").style.display = "none";
-        document.getElementById("backup").style.display = "none";
         document.getElementById("video1").style.display = "block";
         document.getElementById("audio1").style.display = "block";
         document.getElementById("emoji").style.display = "block";
-        document.getElementById("print").style.display = "block";
-        document.getElementById("import").style.display = "block";
-        document.getElementById("export").style.display = "block";
         document.getElementById("candit").style.display = "none";
       }
     },
@@ -119,14 +106,15 @@ export default {
     // Add Emoji
     emoji() {
       if (
-        document.getElementsByClassName("emoji-mart")[0].style.display ==
-          "none" ||
-        document.getElementsByClassName("emoji-mart")[0].style.display == ""
+        document.getElementsByClassName("emoji-mart")[0].style.visibility ==
+          "hidden" ||
+        document.getElementsByClassName("emoji-mart")[0].style.visibility == ""
       ) {
-        document.getElementsByClassName("emoji-mart")[0].style.display =
-          "inline-block";
+        document.getElementsByClassName("emoji-mart")[0].style.visibility =
+          "visible";
       } else {
-        document.getElementsByClassName("emoji-mart")[0].style.display = "none";
+        document.getElementsByClassName("emoji-mart")[0].style.visibility =
+          "hidden";
       }
     },
 
@@ -225,16 +213,31 @@ export default {
       document.getElementById("menu-content").classList.toggle("show");
     },
 
-    // Print Note Function
-    printnote() {
-      var ifr = document.createElement("iframe");
-      ifr.style = "height: 0px; width: 0px; position: absolute";
-      document.body.appendChild(ifr);
-      ifr.contentDocument.body.innerHTML = document.querySelector(
-        ".ql-snow .ql-editor"
-      ).innerHTML;
-      ifr.contentWindow.print();
-      ifr.parentElement.removeChild(ifr);
+    // Save Note Function
+    savenote() {
+      if (document.getElementById("draw").style.display != "block") {
+        var ifr = document.createElement("iframe");
+        ifr.style = "height: 0px; width: 0px; position: absolute";
+        document.body.appendChild(ifr);
+        ifr.contentDocument.body.innerHTML = document.querySelector(
+          ".ql-snow .ql-editor"
+        ).innerHTML;
+        ifr.contentWindow.print();
+        ifr.parentElement.removeChild(ifr);
+      } else {
+        var link = document.createElement("a");
+        document.body.appendChild(link);
+        link.addEventListener(
+          "click",
+          function(ev) {
+            link.href = document.getElementById("draw").toDataURL();
+            link.download = "note.png";
+          },
+          false
+        );
+        link.click();
+        link.parentElement.removeChild(link);
+      }
     },
 
     // Import Note Function
@@ -258,7 +261,25 @@ export default {
               swal("Not Supported");
             } else {
               d = d.toString().split("\n");
-              document.querySelector(".ql-snow .ql-editor").innerHTML = d[0];
+              if (document.getElementById("draw").style.display != "block") {
+                document.querySelector(".ql-snow .ql-editor").innerHTML = d[0];
+              } else {
+                let canvas = document.getElementById("draw");
+                let ctx = canvas.getContext("2d");
+                let img = new Image();
+                img.src = d[0];
+                img.onload = function() {
+                  window.setTimeout(() => {
+                    ctx.drawImage(
+                      img,
+                      0,
+                      0,
+                      img.naturalWidth,
+                      img.naturalHeight
+                    );
+                  }, 50);
+                };
+              }
               document.getElementById("lightYellow").style.backgroundColor =
                 d[1];
               document.getElementById("titlebar").style.backgroundColor = d[2];
@@ -285,9 +306,15 @@ export default {
         note => {
           document.getElementById("note").style.pointerEvents = "auto";
           if (note === undefined) return;
+          let data;
+          if (document.getElementById("draw").style.display != "block") {
+            data = document.querySelector(".ql-snow .ql-editor").innerHTML;
+          } else {
+            data = document.getElementById("draw").toDataURL();
+          }
           fs.writeFile(
             note,
-            document.querySelector(".ql-snow .ql-editor").innerHTML +
+            data +
               "\n" +
               window
                 .getComputedStyle(document.getElementById("lightYellow"))
@@ -369,103 +396,6 @@ export default {
           } catch {
             swal("Not Supported");
           }
-        }
-      );
-    },
-
-    //Save Note
-    savenote() {
-      var link = document.createElement("a");
-      document.body.appendChild(link);
-      link.addEventListener(
-        "click",
-        function(ev) {
-          link.href = document.getElementById("draw").toDataURL();
-          link.download = "note.png";
-        },
-        false
-      );
-      link.click();
-      link.parentElement.removeChild(link);
-    },
-
-    // Backup Note
-    backupnote() {
-      document.getElementById("note").style.pointerEvents = "none";
-      remote.dialog.showSaveDialog(
-        {
-          filters: [
-            {
-              name: "Note(.spst)",
-              extensions: ["spst"]
-            }
-          ],
-          defaultPath: "note.spst"
-        },
-        note => {
-          document.getElementById("note").style.pointerEvents = "auto";
-          if (note === undefined) return;
-          fs.writeFile(
-            note,
-            document.getElementById("draw").toDataURL() +
-              "\n" +
-              window
-                .getComputedStyle(document.getElementById("lightYellow"))
-                .getPropertyValue("background-color") +
-              "\n" +
-              window
-                .getComputedStyle(document.getElementById("titlebar"))
-                .getPropertyValue("background-color") +
-              "\n" +
-              window.innerWidth.toString() +
-              "\n" +
-              window.innerHeight.toString(),
-            e => {
-              if (e) {
-                swal("Not Supported");
-              }
-            }
-          );
-        }
-      );
-    },
-
-    // Restorenote
-    restorenote() {
-      document.getElementById("note").style.pointerEvents = "none";
-      remote.dialog.showOpenDialog(
-        {
-          filters: [
-            {
-              name: "Note(.spst)",
-              extensions: ["spst"]
-            }
-          ]
-        },
-        note => {
-          document.getElementById("note").style.pointerEvents = "auto";
-          if (note === undefined) return;
-          let notefile = note[0];
-          fs.readFile(notefile, (e, d) => {
-            if (e) {
-              swal("Not Supported");
-            } else {
-              d = d.toString().split("\n");
-              let canvas = document.getElementById("draw");
-              let ctx = canvas.getContext("2d");
-              let img = new Image();
-              img.src = d[0];
-              img.onload = function() {
-                window.setTimeout(() => {
-                  ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
-                }, 50);
-              };
-              document.getElementById("lightYellow").style.backgroundColor =
-                d[1];
-              document.getElementById("titlebar").style.backgroundColor = d[2];
-              window.resizeTo(Number(d[3]), Number([4]));
-            }
-          });
         }
       );
     }
