@@ -269,7 +269,6 @@ export default {
                 let img = new Image();
                 img.src = d[0];
                 img.onload = function() {
-                  window.setTimeout(() => {
                     ctx.drawImage(
                       img,
                       0,
@@ -277,7 +276,6 @@ export default {
                       img.naturalWidth,
                       img.naturalHeight
                     );
-                  }, 50);
                 };
               }
               document.getElementById("lightYellow").style.backgroundColor =

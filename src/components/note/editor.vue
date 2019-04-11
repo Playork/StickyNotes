@@ -346,10 +346,10 @@ export default {
       for (let i = 0; i < words.length; i++) {
         upp[i] = words[i].toUpperCase();
       }
-    }, 100);
+    }, 50);
     window.setTimeout(() => {
       words = words.concat(cap, upp);
-    }, 200);
+    }, 50);
 
     // Load Editor And Save Note On Several Events
     let BackgroundClass = Quill.import("attributors/class/background");
@@ -538,7 +538,7 @@ export default {
             ) {
               remote.getCurrentWindow().destroy();
             }
-          }, 300);
+          }, 50);
         };
 
         window.setInterval(() => {
@@ -596,7 +596,7 @@ export default {
           }
         }
       ]);
-    }, 1000);
+    }, 500);
   },
   methods: {
     // Add emoji

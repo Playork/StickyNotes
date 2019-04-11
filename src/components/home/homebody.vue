@@ -76,7 +76,7 @@ export default {
           if (store.get("closed").closed == "yes") {
             window.setTimeout(() => {
               store.clearAll();
-            }, 100);
+            }, 50);
           }
         }
       });

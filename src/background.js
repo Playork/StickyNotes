@@ -78,7 +78,7 @@ function createWindow() {
     setTimeout(() => {
       win.destroy();
       app.quit();
-    }, 400);
+    }, 150);
   });
   setTimeout(() => {
     win.on("window-all-closed", () => {

@@ -158,7 +158,7 @@ export default {
         store.set("closed", { closed: "yes" });
         window.setTimeout(() => {
           remote.getCurrentWindow().close();
-        }, 350);
+        }, 100);
       } else {
         swal("Can't Close Note Is Locked");
       }
