@@ -22,6 +22,7 @@
     "@vue/cli-service": "latest",
     "electron": "latest",
     "vue-cli-plugin-electron-builder": "latest",
+    "vue-router": "latest",
     "vue-template-compiler": "latest"
   },
   "postcss": {

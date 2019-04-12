@@ -26,6 +26,8 @@ SOFTWARE.
     <router-view/>
   </div>
 </template>
+
+<!-- Javascript -->
 <script>
 import "./assets/css/quill.min.css";
 import "./assets/css/main.css";

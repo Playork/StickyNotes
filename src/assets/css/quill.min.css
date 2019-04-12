@@ -433,7 +433,7 @@
   float: left;
   height: 24px;
   padding: 3px 5px;
-  width: 28px;
+  width: 23px;
 }
 .ql-snow.ql-toolbar button svg {
   float: left;
@@ -835,7 +835,6 @@
   text-decoration: underline;
 }
 .ql-snow .ql-editor blockquote {
-  border-left: 4px solid #ccc;
   margin-bottom: 5px;
   margin-top: 5px;
   padding-left: 16px;
@@ -935,7 +934,6 @@
   width: 152px;
 }
 .ql-snow .ql-color-picker .ql-picker-item {
-  border: 1px solid transparent;
   float: left;
   height: 16px;
   margin: 2px;
@@ -1126,7 +1124,6 @@
   color: #06c;
 }
 .ql-toolbar.ql-snow {
-  border: 1px solid #ccc;
   box-sizing: border-box;
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   padding: 8px;
