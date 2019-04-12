@@ -45,6 +45,9 @@ SOFTWARE.
           <div style="font-size:40px;">Sticky Notes</div>
           <div style="font-size:20px;">bekalshenoy@gmail.com</div>
           <div id="view" style="font-size:20px;">©2019</div>
+          <div style="font-size:10px;">
+            <a href="https://github.com/Playork/StickyNotes/issues/new" target="_blank">report bug</a>
+          </div>
         </div>
       </div>
     </div>

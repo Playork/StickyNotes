@@ -68,7 +68,9 @@ export default {
         if (
           key != "id" &&
           key != "loglevel:webpack-dev-server" &&
-          key != "closed"
+          key != "closed" &&
+          key != "emoji-mart.frequently" &&
+          key != "emoji-mart.last"
         ) {
           let content;
           if (value.first == undefined) {
