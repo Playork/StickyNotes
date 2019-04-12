@@ -21,9 +21,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-
-<!-- Main App Start Page -->
-<!-- Html -->
 <template>
   <div id="app">
     <router-view/>
@@ -32,17 +29,14 @@ SOFTWARE.
 
 <!-- Javascript -->
 <script>
-// Import Required Packages
 import "./assets/css/quill.min.css";
 import "./assets/css/main.css";
 import "./assets/css/titlebar.css";
 import "./assets/css/editor.css";
 import "./assets/css/color.css";
-
 export default {};
 </script>
 
-<!-- Some Default Style -->
 <style>
 @font-face {
   font-family: "Lobster";

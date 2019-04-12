@@ -1,51 +1,17 @@
-# Description
+## Description
 
 ![Logo](src/assets/logo.png)
 ![ScreenShot](screen.png)
 
-### A Open Source Sticky Note Application.
-
-### Automatically Save Notes
-
-### Choose Background And Title Bar Color You Like
-
-### Editing Options Like Font,Bold,Size,.etc
-
-### Add Images To Note From Local Drive
-
-### Add Audio To Note From Local Drive
-
-### Add Video To Note From Local Drive
-
-### Lock The Note
-
-### Text Suggetions
-
-### Import Note From A File
-
-### Export Note To A File
-
-### Print Note
-
-### Canvas Mode For Touch Or Pen Devices(Support Many Eding And Import,Export And Save Options)
+### A Sticky Note Application.
 
 ### If you like my App please consider buying me a coffee at [HERE!](http://buymeacoff.ee/playork)
 
-# Stable Release
-
-## For Linux
-
-[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/stickynotes)
-
-## For Windows
-
-[Get it from the Softpedia](https://www.softpedia.com/get/Office-tools/Diary-Organizers-Calendar/Playork-stickynotes.shtml)
-
-# Unstable Release
+## Install
 
 ### For Development Version Follow the instuctions below
 
-if you want to try it install [nodejs](https://nodejs.org), [git](https://git-scm.com/), [Vue CLI](https://cli.vuejs.org/) and clone this repository
+if you want to try it install [nodejs](https://nodejs.org), [git](https://git-scm.com/) and clone this repository
 
 ```bash
 git clone https://github.com/Playork/StickyNotes
@@ -54,7 +20,7 @@ git clone https://github.com/Playork/StickyNotes
 point to source directory
 
 ```bash
-cd /path/to/source/of/StickyNotes
+cd /path/to/source/of/Sticky-Note
 ```
 
 and install depencise by
@@ -75,7 +41,7 @@ build for production by this command
 npm run build
 ```
 
-# Licence
+## Licence
 
 MIT License (MIT)
 

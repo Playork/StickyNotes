@@ -3,11 +3,8 @@ win:
   target: "NSIS"
   icon: "public/favicon.ico"
 nsis:
-  perMachine: false
   createDesktopShortcut: true
   createStartMenuShortcut: true
-  deleteAppDataOnUninstall: true
-  shortcutName: "Sticky Notes"
 linux:
-  target: "snap"
+  target: "deb"
   icon: "src/assets/logo.png"

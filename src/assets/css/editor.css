@@ -1,29 +1,5 @@
-/* MIT License
-
-Copyright (c) 2019 Playork
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE. */
-
-/* Editor Css */
 #lightYellow {
-  padding-top: 30px;
-  padding-bottom: 60px;
+  padding-top: 35px;
   display: block;
   position: absolute;
   top: 0;
@@ -31,12 +7,6 @@ SOFTWARE. */
   right: 0;
   left: 0;
   background-color: #fff2ab;
-  height: calc(100% - 60px);
-  overflow: auto;
-  width: 100%;
-}
-#editor {
-  padding-top: 10px;
 }
 @media screen and (max-height: 374px) {
   #editor {
@@ -48,7 +18,7 @@ SOFTWARE. */
 }
 .ql-snow .ql-editor {
   width: 98%;
-  overflow-x: hidden;
+  height: calc(100% - 60px);
   margin-left: 2px;
   background-color: transparent;
   border: none;
@@ -57,19 +27,19 @@ SOFTWARE. */
   font-size: 18px;
   font-family: arial;
 }
-*::-webkit-scrollbar {
-  width: 6px;
+.ql-snow .ql-editor::-webkit-scrollbar {
+  width: 2px;
 }
-*::-webkit-scrollbar-track {
+.ql-snow .ql-editor::-webkit-scrollbar-track {
   box-shadow: none;
   border-radius: 10px;
   -webkit-border-radius: 10px;
   background: none;
 }
-*::-webkit-scrollbar-thumb {
+.ql-snow .ql-editor::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-border-radius: 10px;
-  background: #000;
+  background: #222;
   box-shadow: none;
 }
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value=""]::before {
@@ -130,200 +100,4 @@ SOFTWARE. */
 }
 .ql-font-comicsans {
   font-family: "ComicSans";
-}
-.dropdown-menu,
-.textcomplete-dropdown {
-  background: #202020;
-  border-radius: 10px;
-  text-align: center;
-  list-style: none;
-  padding: 10px;
-  font-family: "Arial";
-  border: #000 4px solid;
-  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
-}
-.textcomplete-item {
-  cursor: pointer;
-}
-.textcomplete-item a:hover {
-  color: #000 !important;
-}
-.ql-toolbar {
-  position: fixed !important;
-  top: 0 !important;
-  z-index: 6;
-  padding-top: 40px !important;
-}
-#draw {
-  display: none;
-  cursor: pointer;
-  touch-action: none;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 40px;
-  bottom: 40px;
-  z-index: 5;
-}
-#candit {
-  display: none;
-  position: absolute;
-  top: 40px;
-  left: 0;
-  right: 0;
-  height: 40px;
-  z-index: 6;
-  padding: 5px;
-  background: rgba(0, 0, 0, 0);
-}
-#black {
-  background: black;
-}
-#red {
-  background: red;
-}
-#white {
-  background: white;
-  color: black;
-}
-#green1 {
-  background: green;
-}
-#blue1 {
-  background: blue;
-}
-#clear {
-  width: 40px;
-  color: #fff;
-  border-radius: 50%;
-  font-family: "segoe";
-  font-size: 20px;
-  background: #202020;
-  border: none;
-  height: 40px;
-  position: absolute;
-  top: 70px;
-  right: 10px;
-}
-#backc {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  z-index: 4;
-}
-.ql-snow .ql-editor {
-  position: absolute;
-  top: 0;
-  bottom: 60px;
-  left: 0;
-  right: 0;
-  z-index: 5;
-}
-#brushcolor {
-  display: grid;
-  grid-template-columns: 17% 16% 17% 17% 16% 17%;
-  position: fixed;
-  top: 40px;
-  left: 0;
-  right: 0;
-  z-index: 6;
-  width: 100%;
-  height: 40px;
-  min-width: 300px;
-  padding: 0;
-  margin: 0;
-  transition: height 0.1s ease;
-  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
-}
-#choosepaint {
-  background: #202020ee;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  font-family: "Lobster";
-  z-index: 7;
-  padding-top: 45px;
-  text-align: center;
-  display: none;
-  color: white;
-}
-#paintcolor {
-  background: #000;
-}
-#paintcolor span {
-  font-size: 20px;
-  font-family: "segoe";
-  color: #fff;
-}
-#brushwidth {
-  -webkit-appearance: none;
-  height: 5px;
-  width: 93%;
-  border-radius: 5px;
-  background: #000;
-  outline: none;
-  position: absolute;
-  top: 55px;
-  margin: 0;
-  padding: 0;
-}
-#brushwidth::-webkit-slider-thumb {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #fff;
-  cursor: pointer;
-}
-#widthvalue {
-  position: absolute;
-  top: 30px;
-  right: 0;
-}
-#restore,
-#backup,
-#save {
-  display: none;
-}
-.emoji-mart {
-  font-family: "Lobster" !important;
-  background: #202020ee !important;
-  visibility: hidden;
-  border: none !important;
-  border-radius: 0 !important;
-}
-.emoji-mart-category-label span {
-  background: #202020 !important;
-}
-.emoji-mart * {
-  border: none !important;
-  color: #fff !important;
-  border-radius: 20px !important;
-}
-.emoji-mart-search input {
-  color: #000 !important;
-}
-#hideemoji {
-  font-family: "segoe";
-  font-size: 15px;
-  position: absolute;
-  top: 40px;
-  right: 275px;
-  z-index: 8;
-  color: #fff;
-  padding: 14px 0 14px 10px;
-  background: #202020ee;
-  display: none;
-}
-#emoji {
-  font-size: 30px;
-  position: absolute;
-  top: 40px;
-  right: 0;
-  z-index: 7;
-  color: #000;
 }

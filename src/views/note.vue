@@ -25,7 +25,7 @@ SOFTWARE.
 <!-- Note Page-->
 <!-- Html -->
 <template>
-  <div id="note" v-on:click="showhide">
+  <div class="note" v-on:click="showhide">
     <titlebar v-bind:close="close" v-bind:note="note"/>
     <editor/>
     <colors/>
@@ -33,18 +33,13 @@ SOFTWARE.
   </div>
 </template>
 
-<!-- Javascript -->
 <script>
-// Import Required Packages
 import { remote, ipcRenderer } from "electron";
-import store from "store";
-import swal from "sweetalert";
+import stores from "store";
 import editor from "../components/note/editor.vue";
 import titlebar from "../components/note/titlebar.vue";
 import colors from "../components/note/colors.vue";
 import choosecolor from "../components/note/choosecolor.vue";
-
-// Vue Class
 export default {
   // Components
   components: {
@@ -53,70 +48,46 @@ export default {
     colors,
     choosecolor
   },
-
-  // Do On Start
   mounted() {
-    // Close For Main Process Close
-    ipcRenderer.on("closenote", () => {
-      remote.getCurrentWindow().close();
-    });
-
-    // Close When Closing Home
-    window.setInterval(() => {
-      try {
-        if (store.get("closed").closed == "yes") {
-          remote.getCurrentWindow().close();
-        }
-      } catch {}
-    }, 1);
-
-    // Restore Saved Note
-    try {
-      let text = store.get(store.get("id").ids);
-      if (text.first == undefined) {
-        document.getElementById("mouch").click();
-        let canvas = document.getElementById("draw");
-        let ctx = canvas.getContext("2d");
-        let img = new Image();
-        img.src = text.image;
-        img.onload = function() {
-          window.setTimeout(() => {
-            ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
-          }, 50);
-        };
-      } else {
-        document.querySelector(".ql-snow .ql-editor").innerHTML = text.first;
-      }
-      document.querySelector(".ql-toolbar").style.backgroundColor = text.back;
-      window.resizeTo(Number(text.wid), Number(text.hei));
-      document.getElementById("lightYellow").style.backgroundColor = text.back;
-      document.getElementById("titlebar").style.backgroundColor = text.title;
-    } catch {
-      window.resizeTo(350, 375);
-      document.querySelector(".ql-toolbar").style.backgroundColor = "#FFF2AB";
-    }
-    if (
-      document.querySelector(".ql-snow .ql-editor").innerHTML != "<p><br></p>"
-    ) {
-      document.getElementById("window-title1").style.pointerEvents = "none";
+    try{
+    document.querySelector(".ql-snow .ql-editor").innerHTML = stores.get(stores.get("id").ids).first;
+    }catch{}
+    if(document.querySelector(".ql-snow .ql-editor").innerHTML != "<p><br></p>"){
+      let id = Number(stores.get("id").ids) + 10
+      stores.set("id",{ids : id.toString()})
     }
   },
-
-  // Functions
   methods: {
-    // Close Function
-    close() {
-      remote.getCurrentWindow().close();
+    close: function() {
+      const options = {
+        type: "warning",
+        title: "Delete?",
+        message: "Do You Want To Delete The Note?",
+        buttons: ["Yes", "No"]
+      };
+      remote.dialog.showMessageBox(options, index => {
+        if (index === 0) {
+          stores.each((value, key) => {
+            if (key != "id" && key != "loglevel:webpack-dev-server") {
+              if (
+                value.first ==
+                document.querySelector(".ql-snow .ql-editor").innerHTML
+              ) {
+                stores.remove(key);
+              }
+            }
+          });
+          remote.getCurrentWindow().close();
+        }
+      });
     },
-
-    // Start New Note
-    note() {
+    note: function() {
       let func = obj => {
         obj++;
-        store.set("id", { ids: obj.toString() });
+        stores.set("id", { ids: obj.toString() });
       };
       try {
-        let id = Number(store.get("id").ids);
+        let id = Number(stores.get("id").ids);
         func(id);
       } catch {
         let id = 1;
@@ -124,9 +95,7 @@ export default {
       }
       ipcRenderer.send("create-new-instance");
     },
-
-    // Focus Blur Event Function
-    showhide() {
+    showhide: function() {
       document.addEventListener(
         "focus",
         () => {
@@ -138,17 +107,16 @@ export default {
             document.getElementById("color").style.height = "40px";
           }
           document.getElementById("lock").style.display = "flex";
+          document.getElementById("lock").style.display = "flex";
           document.getElementById("add").style.display = "flex";
           document.getElementById("more").style.display = "flex";
           document.getElementById("close").style.display = "flex";
-          document.getElementById("menu").style.display = "flex";
-          document.getElementById("emoji").style.display = "block";
         },
         true
       );
       document.addEventListener(
         "click",
-        e => {
+        () => {
           document.getElementById("titlebar").style.height = "32px";
           if (
             document.querySelector(".ql-snow.ql-toolbar").style.display !=
@@ -157,17 +125,10 @@ export default {
             document.getElementById("color").style.height = "40px";
           }
           document.getElementById("lock").style.display = "flex";
+          document.getElementById("lock").style.display = "flex";
           document.getElementById("add").style.display = "flex";
           document.getElementById("more").style.display = "flex";
           document.getElementById("close").style.display = "flex";
-          document.getElementById("menu").style.display = "flex";
-          document.getElementById("emoji").style.display = "block";
-          if (!e.target.matches("#menus")) {
-            let dropdowns = document.getElementById("menu-content");
-            if (dropdowns.classList.contains("show")) {
-              dropdowns.classList.remove("show");
-            }
-          }
         },
         true
       );
@@ -180,8 +141,6 @@ export default {
           document.getElementById("add").style.display = "none";
           document.getElementById("more").style.display = "none";
           document.getElementById("close").style.display = "none";
-          document.getElementById("menu").style.display = "none";
-          document.getElementById("emoji").style.display = "none";
         },
         true
       );
