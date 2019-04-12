@@ -45,7 +45,6 @@ SOFTWARE.
               >Touch Mode</a>
               <a title="Undo" id="undo">Undo</a>
               <a title="Redo" id="redo">Redo</a>
-              <a title="Add Emoji" id="emoji" v-on:click="emoji">Add Emoji</a>
               <a title="Select Audio" id="video1" v-on:click="clickvideo">Add Video</a>
               <a title="Select Video" id="audio1" v-on:click="clicksong">Add Audio</a>
               <a v-on:click="savenote" title="Save Note">Save</a>
@@ -92,29 +91,17 @@ export default {
         document.getElementById("video1").style.display = "none";
         document.getElementById("audio1").style.display = "none";
         document.getElementById("emoji").style.display = "none";
+        document.getElementsByClassName("emoji-mart")[0].style.visibility =
+          "hidden";
+        document.getElementById("hideemoji").style.display = "none";
       } else {
         document.getElementById("mouch").innerHTML = "Touch Mode";
         document.getElementById("lightYellow").style.display = "block";
         document.getElementById("draw").style.display = "none";
         document.getElementById("video1").style.display = "block";
         document.getElementById("audio1").style.display = "block";
-        document.getElementById("emoji").style.display = "block";
         document.getElementById("candit").style.display = "none";
-      }
-    },
-
-    // Add Emoji
-    emoji() {
-      if (
-        document.getElementsByClassName("emoji-mart")[0].style.visibility ==
-          "hidden" ||
-        document.getElementsByClassName("emoji-mart")[0].style.visibility == ""
-      ) {
-        document.getElementsByClassName("emoji-mart")[0].style.visibility =
-          "visible";
-      } else {
-        document.getElementsByClassName("emoji-mart")[0].style.visibility =
-          "hidden";
+        document.getElementById("emoji").style.display = "block";
       }
     },
 
@@ -151,8 +138,10 @@ export default {
           document.getElementById("more").style.display = "none";
           document.getElementById("close").style.display = "none";
           document.getElementById("menu").style.display = "none";
-          document.getElementsByClassName("emoji-mart")[0].style.display =
-            "none";
+          document.getElementsByClassName("emoji-mart")[0].style.visibility =
+            "hidden";
+          document.getElementById("emoji").style.display = "none";
+          document.getElementById("hideemoji").style.display = "none";
           document.getElementById("lightYellow").style.paddingTop = "30px";
           if (
             document.getElementById("menu-content").classList.contains("show")
@@ -269,13 +258,7 @@ export default {
                 let img = new Image();
                 img.src = d[0];
                 img.onload = function() {
-                    ctx.drawImage(
-                      img,
-                      0,
-                      0,
-                      img.naturalWidth,
-                      img.naturalHeight
-                    );
+                  ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
                 };
               }
               document.getElementById("lightYellow").style.backgroundColor =

@@ -142,6 +142,7 @@ export default {
           document.getElementById("more").style.display = "flex";
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
+          document.getElementById("emoji").style.display = "block";
         },
         true
       );
@@ -160,6 +161,7 @@ export default {
           document.getElementById("more").style.display = "flex";
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
+          document.getElementById("emoji").style.display = "block";
           if (!e.target.matches("#menus")) {
             let dropdowns = document.getElementById("menu-content");
             if (dropdowns.classList.contains("show")) {
@@ -179,6 +181,7 @@ export default {
           document.getElementById("more").style.display = "none";
           document.getElementById("close").style.display = "none";
           document.getElementById("menu").style.display = "none";
+          document.getElementById("emoji").style.display = "none";
         },
         true
       );

@@ -26,13 +26,15 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div>
+    <span title="Add Emoji" id="emoji" v-on:click="emoji">☺</span>
+    <span title="close" id="hideemoji" v-on:click="hideemoji">&#xE8BB;</span>
     <div id="emojip">
       <picker
         set="google"
         @select="addEmoji"
         title="Pick your emoji…"
         emoji="point_up"
-        :style="{ position: 'absolute', top: '40px',right: '0', zIndex: '7', width: '300px', height:'335px'}"
+        :style="{ position: 'absolute', top: '40px',right: '0', zIndex: '7', width: '275px', height:'335px'}"
         :i18n="{ search: 'Search', categories: { search: 'Results Of Your Search', recent: 'Recent' } }"
       />
     </div>
@@ -427,7 +429,15 @@ export default {
           var canvasPic = new Image();
           canvasPic.src = cPushArray[cStep];
           canvasPic.onload = function() {
-            ctx.drawImage(canvasPic, 0, 0);
+            window.setTimeout(() => {
+              ctx.drawImage(
+                canvasPic,
+                0,
+                0,
+                canvasPic.naturalWidth,
+                canvasPic.naturalHeight
+              );
+            }, 50);
           };
         }
       }
@@ -441,7 +451,15 @@ export default {
           var canvasPic = new Image();
           canvasPic.src = cPushArray[cStep];
           canvasPic.onload = function() {
-            ctx.drawImage(canvasPic, 0, 0);
+            window.setTimeout(() => {
+              ctx.drawImage(
+                canvasPic,
+                0,
+                0,
+                canvasPic.naturalWidth,
+                canvasPic.naturalHeight
+              );
+            }, 50);
           };
         }
       }
@@ -517,6 +535,9 @@ export default {
                   closed: "yes",
                   locked: lock
                 });
+              } else {
+                store.remove(obj.toString());
+                remote.getCurrentWindow().destroy();
               }
             } else {
               store.set(obj.toString(), {
@@ -604,6 +625,20 @@ export default {
       document.querySelector(
         ".ql-snow .ql-editor"
       ).lastElementChild.innerHTML += e.native;
+    },
+
+    // Add Emoji
+    emoji() {
+      document.getElementsByClassName("emoji-mart")[0].style.visibility =
+        "visible";
+      document.getElementById("hideemoji").style.display = "block";
+    },
+
+    // Hide Emoji
+    hideemoji() {
+      document.getElementsByClassName("emoji-mart")[0].style.visibility =
+        "hidden";
+      document.getElementById("hideemoji").style.display = "none";
     },
 
     // Clear Canvas
