@@ -421,48 +421,10 @@ export default {
       theme: "snow"
     });
     document.getElementById("undo").addEventListener("click", () => {
-      if (document.getElementById("draw").style.display != "block") {
-        quill.history.undo();
-      } else {
-        if (cStep > 0) {
-          cStep--;
-          var canvasPic = new Image();
-          canvasPic.src = cPushArray[cStep];
-          canvasPic.onload = function() {
-            window.setTimeout(() => {
-              ctx.drawImage(
-                canvasPic,
-                0,
-                0,
-                canvasPic.naturalWidth,
-                canvasPic.naturalHeight
-              );
-            }, 50);
-          };
-        }
-      }
+      quill.history.undo();
     });
     document.getElementById("redo").addEventListener("click", () => {
-      if (document.getElementById("draw").style.display != "block") {
-        quill.history.redo();
-      } else {
-        if (cStep < cPushArray.length - 1) {
-          cStep++;
-          var canvasPic = new Image();
-          canvasPic.src = cPushArray[cStep];
-          canvasPic.onload = function() {
-            window.setTimeout(() => {
-              ctx.drawImage(
-                canvasPic,
-                0,
-                0,
-                canvasPic.naturalWidth,
-                canvasPic.naturalHeight
-              );
-            }, 50);
-          };
-        }
-      }
+      quill.history.redo();
     });
     let func = obj => {
       let repeafunc = () => {

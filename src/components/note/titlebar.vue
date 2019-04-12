@@ -94,6 +94,8 @@ export default {
         document.getElementsByClassName("emoji-mart")[0].style.visibility =
           "hidden";
         document.getElementById("hideemoji").style.display = "none";
+        document.getElementById("redo").style.display = "none";
+        document.getElementById("undo").style.display = "none";
       } else {
         document.getElementById("mouch").innerHTML = "Touch Mode";
         document.getElementById("lightYellow").style.display = "block";
@@ -102,6 +104,8 @@ export default {
         document.getElementById("audio1").style.display = "block";
         document.getElementById("candit").style.display = "none";
         document.getElementById("emoji").style.display = "block";
+        document.getElementById("redo").style.display = "block";
+        document.getElementById("undo").style.display = "block";
       }
     },
 
