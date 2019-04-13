@@ -21,19 +21,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 "use strict";
-import { app, protocol, BrowserWindow, ipcMain } from "electron";
+
+import { app, protocol, BrowserWindow, ipcMain, dialog } from "electron";
 import {
   createProtocol,
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
+import { autoUpdater } from "electron-updater";
+import AutoLaunch from "auto-launch";
+import { setTimeout } from "timers";
+autoUpdater.checkForUpdatesAndNotify();
 require("electron-context-menu")({
   prepend: () => [
     {
-      label: "v0.1.0"
+      label: "v0.3.0"
     }
   ],
   showInspectElement: false
 });
+let launchonstart = new AutoLaunch({
+  name: "StickyNotes"
+});
+launchonstart.enable();
+
 const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
 protocol.registerStandardSchemes(["app"], { secure: true });
@@ -45,7 +55,11 @@ function createWindow() {
     backgroundColor: "#202020",
     title: "Playork Sticky Notes",
     frame: false,
-    resizable: false
+    resizable: false,
+    show: false,
+    webPreferences: {
+      webSecurity: false
+    }
   });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
@@ -54,10 +68,9 @@ function createWindow() {
     createProtocol("app");
     win.loadURL("app://./index.html");
   }
-  win.on("close", e => {
-    e.preventDefault();
-    app.quit();
-    win.destroy();
+  win.on("ready-to-show", () => {
+    win.show();
+    win.focus();
   });
   win.on("close", e => {
     e.preventDefault();
@@ -83,35 +96,46 @@ function createNote() {
     icon: "public/favicon.ico",
     backgroundColor: "#202020",
     title: "Playork Sticky Notes",
-    frame: false
+    frame: false,
+    show: false,
+    webPreferences: {
+      webSecurity: false
+    }
   });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    win.loadURL("http://localhost:8080/#/note");
-    if (!process.env.IS_TEST) win.webContents.openDevTools();
+    winnote.loadURL("http://localhost:8080/#/note");
+    if (!process.env.IS_TEST) winnote.webContents.openDevTools();
   } else {
     createProtocol("app");
-    win.loadURL("app://./index.html#note");
+    winnote.loadURL("app://./index.html#note");
   }
-  win.on("ready-to-show", () => {
-    win.show();
-    win.focus();
+  winnote.on("ready-to-show", () => {
+    winnote.show();
+    winnote.focus();
+  });
+  winnote.setMinimumSize(350, 375);
+  winnote.on("close", () => {
+    win.webContents.send("closenote", "closeit");
   });
 }
 
 ipcMain.on("create-new-instance", () => {
   createNote();
 });
+
 app.on("activate", () => {
   if (win === null) {
     createWindow();
   }
 });
+
 app.on("ready", async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     await installVueDevtools();
   }
   createWindow();
 });
+
 if (isDevelopment) {
   if (process.platform === "win32") {
     process.on("message", data => {
