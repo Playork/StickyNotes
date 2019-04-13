@@ -40,6 +40,9 @@ SOFTWARE.
       </div>
       <div id="sync">
         <span v-on:click="hide">&#xE8BB;</span>
+        <div>
+          <button>Dropbox Sync</button>
+        </div>
       </div>
       <div id="about">
         <span v-on:click="hide">&#xE8BB;</span>
