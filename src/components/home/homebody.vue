@@ -41,7 +41,8 @@ SOFTWARE.
       <div id="sync">
         <span v-on:click="hide">&#xE8BB;</span>
         <div>
-          <button>Dropbox Sync</button>
+          <h1>Sync</h1>
+          <button id="drb">Dropbox Sync</button>
         </div>
       </div>
       <div id="about">
@@ -67,9 +68,28 @@ SOFTWARE.
 import store from "store";
 import swal from "sweetalert";
 import { setTimeout } from "timers";
+import Dropsync from "dropbox";
+import { remote } from "electron";
 
 // Vue Class
 export default {
+  // Do On Start
+  mounted() {
+    let dbx = new Dropsync.Dropbox({ clientId: "5wj57sidlrskuzl" });
+    let authUrl = dbx.getAuthenticationUrl("http://localhost:8080");
+    document.getElementById("drb").addEventListener("click", () => {
+      const win = new remote.electron.BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+          nodeIntegration: false
+        }
+      });
+
+      win.loadURL(authUrl);
+    });
+  },
+
   // Functions
   methods: {
     // Delete All Note Function
