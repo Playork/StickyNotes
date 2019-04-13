@@ -65,11 +65,11 @@ export default {
     // Load Saved Notes
     window.setInterval(() => {
       let accesst;
-      if(store.get("access") = undefined){
+      if (store.get("access") == undefined) {
+        document.getElementById("sign").innerHTML = "";
+      } else {
         accesst = store.get("access").access;
-        document.getElementById("sign").innerHTML = "Signed In"
-      }else{
-        document.getElementById("sign").innerHTML = ""
+        document.getElementById("sign").innerHTML = "Signed In";
       }
       document.getElementById("notes").innerHTML = "";
       store.each((value, key) => {
