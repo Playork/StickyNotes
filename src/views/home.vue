@@ -25,7 +25,7 @@ SOFTWARE.
 <!-- Home Page -->
 <!-- Html -->
 <template>
-  <div id="home" v-on:click="savenote">
+  <div id="home">
     <titlebar1 v-bind:close="close" v-bind:note="note"/>
     <homebody/>
   </div>
@@ -35,66 +35,145 @@ SOFTWARE.
 <script>
 // Import Required Packages
 import { remote, ipcRenderer } from "electron";
+import swal from "sweetalert";
 import homebody from "../components/home/homebody.vue";
 import titlebar1 from "../components/home/titlebar1.vue";
-import stores from "store";
+import store from "store";
+import { setTimeout } from "timers";
+import os from "os";
+
+// Vue Class
 export default {
   // Components
   components: {
     titlebar1,
     homebody
   },
-  mounted() {},
-  methods: {
-    savenote: function() {
+
+  // Do On Start
+  mounted() {
+    // close on app.quit()
+    ipcRenderer.on("closeall", () => {
+      store.set("closed", { closed: "yes" });
+      remote.getCurrentWindow().destroy();
+    });
+
+    // Remove Closed
+    store.remove("closed");
+
+    // Load Saved Notes
+    window.setInterval(() => {
       document.getElementById("notes").innerHTML = "";
-      stores.each((value, key) => {
-        if (key != "id" && key != "loglevel:webpack-dev-server") {
+      store.each((value, key) => {
+        if (
+          key != "id" &&
+          key != "loglevel:webpack-dev-server" &&
+          key != "closed" &&
+          key != "emoji-mart.frequently" &&
+          key != "emoji-mart.last"
+        ) {
+          let content;
+          if (value.first == undefined) {
+            content = `<img src="${value.image}" style="max-width:90%;"`;
+          } else {
+            content = value.first;
+          }
           document
             .getElementById("notes")
             .insertAdjacentHTML(
               "afterbegin",
-              `<div id="notetext"><span id="startnote">&#xE710;</span><span id="deletenote">&#xE74D;</span>${
-                value.first
-              }</div>`
+              `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span>${content}</div>`
             );
+
+          if (value.closed == "yes") {
+            document.getElementById("startnote").style.display = "inline";
+          }
+          if (value.closed == "no") {
+            document.getElementById("startnote").style.display = "none";
+          }
+          if (value.locked == "yes") {
+            document.getElementById("deletenote").style.pointerEvents = "none";
+            document.getElementById("deleteall").style.pointerEvents = "none";
+          }
+          if (value.locked == "no") {
+            document.getElementById("deletenote").style.pointerEvents = "auto";
+            document.getElementById("deleteall").style.pointerEvents = "auto";
+          }
           document.getElementById("startnote").onclick = () => {
-            stores.set("id", { ids: key });
+            let id = store.get("id").ids;
+            store.set("id", { ids: key });
             ipcRenderer.send("create-new-instance");
+            window.setTimeout(() => {
+              if (value.closed == "no") {
+                store.set("id", { ids: id });
+              }
+            }, 500);
           };
           document.getElementById("deletenote").onclick = () => {
-            const options = {
-              type: "warning",
-              title: "Delete?",
-              message: "Do You Want To Delete The Note?",
-              buttons: ["Yes", "No"]
-            };
-            remote.dialog.showMessageBox(options, index => {
-              if (index === 0) {
-                stores.remove(key);
+            swal({
+              title: "Are you sure?",
+              text: "Want To Delete Your Note!",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true
+            }).then(willDelete => {
+              if (willDelete) {
+                if (value.closed == "no") {
+                  store.set(key, { deleted: "yes" });
+                }
+                if (value.closed == "yes") {
+                  store.remove(key);
+                }
               }
             });
           };
+          document.getElementById("notetext").style.backgroundColor =
+            value.back;
+          document.getElementById("notetext").style.border =
+            "5px solid " + value.title;
         }
       });
-    },
-    close: function() {
-      stores.each((value, key) => {
-        if (key != "id" && key != "loglevel:webpack-dev-server") {
-          if (value.first == "<p><br></p>") {
-            stores.remove(key);
+    }, 2500);
+    // let start = store.get("id").ids;
+    // store.each((value, key) => {
+    //   if (key != "id" && key != "loglevel:webpack-dev-server") {
+    //     if (store.get("id").ids == start) {
+    //       store.set("id", { ids: key });
+    //       ipcRenderer.send("create-new-instance");
+    //     }
+    //   }
+    // });
+  },
+
+  // Functions
+  methods: {
+    // Close Function
+    close() {
+      if (document.getElementById("deleteall").style.pointerEvents != "none") {
+        store.each((value, key) => {
+          if (key != "id" && key != "loglevel:webpack-dev-server") {
+            if (value.first == "<p><br></p>") {
+              store.remove(key);
+            }
           }
-        }
-      });
-      remote.getCurrentWindow().close();
+        });
+        store.set("closed", { closed: "yes" });
+        window.setTimeout(() => {
+          remote.getCurrentWindow().close();
+        }, 100);
+      } else {
+        swal("Can't Close Note Is Locked");
+      }
     },
-    note: function() {
+
+    // Start New Note
+    note() {
       let func = obj => {
         obj++;
-        stores.set("id", { ids: obj.toString() });
+        store.set("id", { ids: obj.toString() });
       };
       try {
-        let id = Number(stores.get("id").ids);
+        let id = Number(store.get("id").ids);
         func(id);
       } catch {
         let id = 0;
