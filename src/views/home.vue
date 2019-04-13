@@ -41,6 +41,7 @@ import titlebar1 from "../components/home/titlebar1.vue";
 import store from "store";
 import { setTimeout } from "timers";
 import os from "os";
+import { Dropbox } from "dropbox";
 
 // Vue Class
 export default {
@@ -63,6 +64,13 @@ export default {
 
     // Load Saved Notes
     window.setInterval(() => {
+      let accesst;
+      if(store.get("access") = undefined){
+        accesst = store.get("access").access;
+        document.getElementById("sign").innerHTML = "Signed In"
+      }else{
+        document.getElementById("sign").innerHTML = ""
+      }
       document.getElementById("notes").innerHTML = "";
       store.each((value, key) => {
         if (

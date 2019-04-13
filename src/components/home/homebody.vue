@@ -43,6 +43,7 @@ SOFTWARE.
         <div>
           <h1>Sync</h1>
           <button id="drb">Dropbox Sync</button>
+          <p id="sign"></p>
         </div>
       </div>
       <div id="about">
@@ -68,25 +69,42 @@ SOFTWARE.
 import store from "store";
 import swal from "sweetalert";
 import { setTimeout } from "timers";
-import Dropsync from "dropbox";
+import { Dropbox } from "dropbox";
 import { remote } from "electron";
+import fs from "fs";
 
 // Vue Class
 export default {
   // Do On Start
   mounted() {
-    let dbx = new Dropsync.Dropbox({ clientId: "5wj57sidlrskuzl" });
-    let authUrl = dbx.getAuthenticationUrl("http://localhost:8080");
+    let client_id;
+    fs.readFile("client_id", (e, d) => {
+      if (e) {
+        alert("Client Id Is Not Defined");
+      } else {
+        client_id = d;
+      }
+    });
+    let dbx = new Dropbox({ clientId: client_id });
+    let authUrl = dbx.getAuthenticationUrl("http://localhost:8080/auth");
     document.getElementById("drb").addEventListener("click", () => {
-      const win = new remote.electron.BrowserWindow({
+      const win = new remote.BrowserWindow({
         width: 800,
         height: 600,
+        icon: "public/favicon.ico",
+        backgroundColor: "#202020",
+        title: "Playork Sticky Notes",
+        resizable: false,
+        show: false,
         webPreferences: {
           nodeIntegration: false
         }
       });
-
       win.loadURL(authUrl);
+      win.on("ready-to-show", () => {
+        win.show();
+        win.focus();
+      });
     });
   },
 
