@@ -1,26 +1,32 @@
-.note,
+/* MIT License
+
+Copyright (c) 2019 Playork
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. */
+
+/* Random Css Of Note Page And Css Of Home Page*/
+#note,
 #home {
+  user-select: none;
   margin: 0;
   padding: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  font-family: "Arial";
-  user-select: none;
-}
-#home{
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-.note{
   overflow: hidden;
-}
-.help {
-  user-select: none;
-  margin: 0;
-  padding: 0;
   height: 100%;
   width: 100%;
   position: absolute;
@@ -28,7 +34,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  font-family: "Lobster";
+  font-family: "Arial";
+}
+#home {
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 button {
   outline: none;
@@ -40,27 +50,24 @@ a {
 .start {
   z-index: 10;
 }
-span .button .buttons button {
+span,
+.button,
+.buttons,
+button {
   cursor: pointer;
 }
 .start div {
-  font-family: "Lobster";
-  color: rgba(255, 255, 255, 0.05);
-  font-size: 50px;
   position: absolute;
-  top: 40%;
+  top: 20%;
   left: 15%;
   user-select: none;
-}
-#help {
-  display: none;
 }
 #options {
   float: left;
   position: absolute;
   top: 45px;
   bottom: 100%;
-  left: 82%;
+  left: 90%;
   font-family: "segoe";
   color: #fff;
   user-select: none;
@@ -90,45 +97,30 @@ span .button .buttons button {
   color: #fff;
   font-family: "segoe";
 }
-
-#helppage {
-  font-family: "Lobster";
-  padding-top: 20px;
-  text-align: center;
-  padding: 10px;
-}
-
-.help span {
-  position: absolute;
-  top: 5px;
-  bottom: 100%;
-  right: 5px;
-  color: #fff;
-  font-family: "segoe";
-}
-
-#content {
-  display: grid;
-  grid-template-columns: 50% 50%;
-  row-gap: 20px;
-  color: #fff;
-}
 #notes {
-  margin-top: 60px;
-  height: 100%;
+  height: calc(100% - 65px);
   z-index: 20;
+  position: absolute;
+  top: 65px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
 }
 #notes span {
   font-family: "segoe";
   padding: 5px;
 }
+#startnote {
+  pointer-events: all;
+}
 #notes #notetext {
   padding: 5px;
   margin: 5px;
   border-radius: 20px;
-  width: 80%;
+  width: 91%;
   word-wrap: break-word;
-  background: #ffeb81;
   min-height: 80px;
-  user-select: text;
+  pointer-events: none;
+  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }
