@@ -320,10 +320,12 @@ SOFTWARE. */
   display: none;
 }
 #emoji {
-  font-size: 30px;
+  font-family: "segoe";
+  font-size: 15px;
   position: absolute;
   top: 40px;
   right: 0;
   z-index: 7;
   color: #000;
+  padding: 5px;
 }

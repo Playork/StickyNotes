@@ -67,13 +67,13 @@ button {
   position: absolute;
   top: 45px;
   bottom: 100%;
-  left: 90%;
+  left: 80%;
   font-family: "segoe";
   color: #fff;
   user-select: none;
 }
 #options span {
-  padding-right: 5px;
+  padding-right: 10px;
 }
 #about {
   display: none;
@@ -90,6 +90,28 @@ button {
   color: #fff;
 }
 #about span {
+  position: absolute;
+  top: 45px;
+  bottom: 100%;
+  left: 5px;
+  color: #fff;
+  font-family: "segoe";
+}
+#sync {
+  display: none;
+  background: #202020;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-family: "Lobster";
+  z-index: 7;
+  padding-top: 35px;
+  text-align: center;
+  color: #fff;
+}
+#sync span {
   position: absolute;
   top: 45px;
   bottom: 100%;

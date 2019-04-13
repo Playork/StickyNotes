@@ -26,7 +26,7 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div>
-    <span title="Add Emoji" id="emoji" v-on:click="emoji">☺</span>
+    <span title="Add Emoji" id="emoji" v-on:click="emoji">&#xE76E;</span>
     <span title="close" id="hideemoji" v-on:click="hideemoji">&#xE8BB;</span>
     <div id="emojip">
       <picker
