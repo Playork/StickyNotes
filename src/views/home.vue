@@ -54,6 +54,14 @@ export default {
 
   // Do On Start
   mounted() {
+    // Before Close
+    window.onbeforeunload = () => {
+      dbx.filesUpload({
+        path: "/Playork Sticky Notes/notes.spst",
+        contents: notes
+      });
+    };
+
     // Sync Restore
     let accesst;
     if (store.get("access") == undefined) {
@@ -64,38 +72,40 @@ export default {
       document.getElementById("sign").innerHTML = "Signed In(Syncing)";
       document.getElementById("out").innerHTML = "Sign Out";
     }
-    var dbx = new Dropbox({ accessToken: accesst });
+    let dbx = new Dropbox({ accessToken: accesst });
     dbx
       .filesDownload({ path: "/Playork Sticky Notes/notes.spst" })
       .then(function(data) {
-        fs.writeFile(data.name, data.fileBinary, "binary", err => {
-          if (err) {
-            throw err;
-          }
-        });
+        fs.writeFile("./notes.spst", data.fileBinary, "binary", () => {});
       });
     window.setTimeout(() => {
-      fs.readFile("notes", (e, d) => {
+      fs.readFile("notes.spst", (e, d) => {
         if (e) {
-          throw e;
+          console.log(e);
         }
         if (d != "") {
           d = d.toString().split("\n");
-          l = d.length - 1;
+          let l = d.length - 1;
           for (let i = 0; i < l; i++) {
             if (i % 2 == 0) {
               if (store.get(d[i]) == undefined) {
                 store.set(d[i], JSON.parse(d[i + 1]));
               } else {
-                let d = new Date().getTime();
-                let id = Number(d[i]) * d;
-                store.set(id.toString(), JSON.parse(d[i + 1]));
+                let js = JSON.parse(d[i + 1]);
+                if (
+                  js.first != store.get(d[i]).first ||
+                  js.image != store.get(d[i]).image
+                ) {
+                  let g = new Date().getTime();
+                  let id = Number(d[i]) * g;
+                  store.set(id.toString(), JSON.parse(d[i + 1]));
+                }
               }
             }
           }
         }
       });
-    }, 100);
+    }, 500);
 
     // close on app.quit()
     ipcRenderer.on("closeall", () => {
@@ -109,9 +119,11 @@ export default {
     // Sync
     window.setInterval(() => {
       if (store.get("sync") == undefined || store.get("sync").sync == "no") {
-        if (store.get("sync").sync == "no") {
-          store.remove("sync");
-        }
+        try {
+          if (store.get("sync").sync == "no") {
+            store.remove("sync");
+          }
+        } catch {}
         let notes = "";
         store.each((value, key) => {
           if (
@@ -126,45 +138,57 @@ export default {
           }
         });
         if (store.get("access") != undefined) {
-          var dbx = new Dropbox({ accessToken: accesst });
+          let dbx = new Dropbox({ accessToken: accesst });
           dbx
-            .filesDelete({ path: "/Playork Sticky Notes/notes.spst" })
-            .catch(function(e) {});
+            .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
+            .catch(() => {});
           window.setTimeout(() => {
             dbx.filesUpload({
               path: "/Playork Sticky Notes/notes.spst",
               contents: notes
             });
-          }, 50);
+          }, 1000);
         }
       }
-    }, 100);
+    }, 2000);
 
     // Load Saved Notes
     window.setInterval(() => {
       if (store.get("sync") != undefined) {
         store.set("sync", { sync: "no" });
-        var dbx = new Dropbox({ accessToken: accesst });
+        let dbx = new Dropbox({ accessToken: accesst });
         dbx
           .filesDownload({ path: "/Playork Sticky Notes/notes.spst" })
           .then(function(data) {
             fs.writeFile(data.name, data.fileBinary, "binary", err => {
               if (err) {
-                throw err;
+                console.log(err);
               }
             });
           });
         window.setTimeout(() => {
-          fs.readFile("notes", (e, d) => {
+          fs.readFile("notes.spst", (e, d) => {
             if (e) {
               throw e;
             }
             if (d != "") {
               d = d.toString().split("\n");
-              l = d.length - 1;
+              let l = d.length - 1;
               for (let i = 0; i < l; i++) {
                 if (i % 2 == 0) {
-                  store.set(d[i], JSON.parse(d[i + 1]));
+                  if (store.get(d[i]) == undefined) {
+                    store.set(d[i], JSON.parse(d[i + 1]));
+                  } else {
+                    let js = JSON.parse(d[i + 1]);
+                    if (
+                      js.first != store.get(d[i]).first ||
+                      js.image != store.get(d[i]).image
+                    ) {
+                      let g = new Date().getTime();
+                      let id = Number(d[i]) * g;
+                      store.set(id.toString(), JSON.parse(d[i + 1]));
+                    }
+                  }
                 }
               }
             }
