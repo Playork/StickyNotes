@@ -42,6 +42,7 @@ import store from "store";
 import { setTimeout, setInterval } from "timers";
 import os from "os";
 import { Dropbox } from "dropbox";
+import fs from "fs";
 
 // Vue Class
 export default {
@@ -83,7 +84,7 @@ export default {
               console.log(response);
             })
             .catch(function(err) {
-              console.log(err);
+              alert(err);
             });
         }
       }, 500);
@@ -91,6 +92,35 @@ export default {
 
     // Load Saved Notes
     window.setInterval(() => {
+      if (store.get("sync") != undefined) {
+        var dbx = new Dropbox({ accessToken: accesst });
+        dbx
+          .filesDownload({ path: "/notes" })
+          .then(function(data) {
+            fs.writeFile(data.name, data.fileBinary, "binary", err => {
+              if (err) {
+                throw err;
+              }
+            });
+          })
+          .catch(function(error) {
+            alert(err);
+          });
+        window.setTimeout(() => {
+          fs.readFile("notes", (e, d) => {
+            if (e) {
+              throw e;
+            }
+            d = d.toString().split("\n");
+            l = d.length - 1;
+            for (let i = 0; i <= l; i++) {
+              if (i % 2 == 0) {
+                store.set(d[i], d[i + 1]);
+              }
+            }
+          });
+        }, 500);
+      }
       if (store.get("access") == undefined) {
         document.getElementById("sign").innerHTML =
           "Not Signed In(Not Syncing)";
