@@ -98,10 +98,6 @@ export default {
         win.focus();
       });
     });
-    ipcRenderer.on("accesstoken", (e, a) => {
-      store.set("access", { access: a.access_token });
-      win.close();
-    });
   },
 
   // Functions

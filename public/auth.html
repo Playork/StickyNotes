@@ -8,7 +8,6 @@
   </head>
   <body>
     <script>
-      const ipc = window.ipc;
       const hash = window.location.hash;
       const params = {};
 
@@ -20,7 +19,8 @@
           params[val[0]] = val[1];
         });
 
-      ipc.send("token", params);
+      localStorage.setItem("access", { access: params.access_token });
+      window.close();
     </script>
   </body>
 </html>

@@ -117,10 +117,6 @@ function createNote() {
   });
 }
 
-ipcMain.on("token", (e, params) => {
-  win.webContents.send("accesstoken", params);
-});
-
 ipcMain.on("create-new-instance", () => {
   createNote();
 });
@@ -151,5 +147,3 @@ if (isDevelopment) {
     });
   }
 }
-import { ipcRenderer as ipc } from "electron";
-global.ipc = ipc;
