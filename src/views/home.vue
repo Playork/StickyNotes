@@ -90,11 +90,11 @@ export default {
       if (store.get("access") != undefined) {
         var dbx = new Dropbox({ accessToken: accesst });
         dbx
-          .filesDelete({ path: "/Playork Sticky Notes/notes.txt" })
+          .filesDelete({ path: "/Playork Sticky Notes/notes.spst" })
           .catch(function(e) {});
         window.setTimeout(() => {
           dbx.filesUpload({
-            path: "/Playork Sticky Notes/notes.txt",
+            path: "/Playork Sticky Notes/notes.spst",
             contents: notes
           });
         }, 1000);
@@ -107,7 +107,7 @@ export default {
         store.remove("sync");
         var dbx = new Dropbox({ accessToken: accesst });
         dbx
-          .filesDownload({ path: "/Playork Sticky Notes/notes.txt" })
+          .filesDownload({ path: "/Playork Sticky Notes/notes.spst" })
           .then(function(data) {
             fs.writeFile(data.name, data.fileBinary, "binary", err => {
               if (err) {
