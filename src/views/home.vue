@@ -93,29 +93,27 @@ export default {
     // Load Saved Notes
     window.setInterval(() => {
       if (store.get("sync") != undefined) {
+        store.remove("sync");
         var dbx = new Dropbox({ accessToken: accesst });
-        dbx
-          .filesDownload({ path: "/notes" })
-          .then(function(data) {
-            fs.writeFile(data.name, data.fileBinary, "binary", err => {
-              if (err) {
-                throw err;
-              }
-            });
-          })
-          .catch(function(error) {
-            alert(err);
+        dbx.filesDownload({ path: "/notes" }).then(function(data) {
+          fs.writeFile(data.name, data.fileBinary, "binary", err => {
+            if (err) {
+              throw err;
+            }
           });
+        });
         window.setTimeout(() => {
           fs.readFile("notes", (e, d) => {
             if (e) {
               throw e;
             }
-            d = d.toString().split("\n");
-            l = d.length - 1;
-            for (let i = 0; i <= l; i++) {
-              if (i % 2 == 0) {
-                store.set(d[i], d[i + 1]);
+            if (d != "") {
+              d = d.toString().split("\n");
+              l = d.length - 1;
+              for (let i = 0; i < l; i++) {
+                if (i % 2 == 0) {
+                  store.set(d[i], JSON.parse(d[i + 1]));
+                }
               }
             }
           });
@@ -140,7 +138,7 @@ export default {
           key != "emoji-mart.last" &&
           key != "access"
         ) {
-          notes = `${notes}${key}\n${value}\n`;
+          notes = `${notes}${key}\n${JSON.stringify(value)}\n`;
           let content;
           if (value.first == undefined) {
             content = `<img src="${value.image}" style="max-width:90%;"`;
