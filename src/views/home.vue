@@ -39,7 +39,7 @@ import swal from "sweetalert";
 import homebody from "../components/home/homebody.vue";
 import titlebar1 from "../components/home/titlebar1.vue";
 import store from "store";
-import { setTimeout } from "timers";
+import { setTimeout, setInterval } from "timers";
 import os from "os";
 import { Dropbox } from "dropbox";
 
@@ -62,17 +62,43 @@ export default {
     // Remove Closed
     store.remove("closed");
 
+    // Sync
+    let accesst;
+    let notes = "";
+    if (store.get("access") == undefined) {
+      document.getElementById("sign").innerHTML = "Not Signed In(Not Syncing)";
+      document.getElementById("out").innerHTML = "";
+    } else {
+      accesst = store.get("access").access;
+      document.getElementById("sign").innerHTML = "Signed In(Syncing)";
+      document.getElementById("out").innerHTML = "Sign Out";
+    }
+    window.setInterval(() => {
+      window.setTimeout(() => {
+        if (store.get("access") != undefined) {
+          var dbx = new Dropbox({ accessToken: accesst });
+          dbx
+            .filesUpload({ path: "/notes", contents: notes })
+            .then(function(response) {
+              console.log(response);
+            })
+            .catch(function(err) {
+              console.log(err);
+            });
+        }
+      }, 500);
+    }, 1);
+
     // Load Saved Notes
     window.setInterval(() => {
-      let accesst;
       if (store.get("access") == undefined) {
         document.getElementById("sign").innerHTML =
           "Not Signed In(Not Syncing)";
         document.getElementById("out").innerHTML = "";
       } else {
-        accesst = store.get("access").access;
-        document.getElementById("sign").innerHTML = "Signed In(Syncing)";
-        document.getElementById("out").innerHTML = "Sign Out";
+        if (store.get("access").access != accesst) {
+          accesst = store.get("access").access;
+        }
       }
       document.getElementById("notes").innerHTML = "";
       store.each((value, key) => {
@@ -84,6 +110,7 @@ export default {
           key != "emoji-mart.last" &&
           key != "access"
         ) {
+          notes = `${notes}${key}\n${value}\n`;
           let content;
           if (value.first == undefined) {
             content = `<img src="${value.image}" style="max-width:90%;"`;
@@ -145,7 +172,7 @@ export default {
             "5px solid " + value.title;
         }
       });
-    }, 2500);
+    }, 2000);
     // let start = store.get("id").ids;
     // store.each((value, key) => {
     //   if (key != "id" && key != "loglevel:webpack-dev-server") {
