@@ -66,10 +66,13 @@ export default {
     window.setInterval(() => {
       let accesst;
       if (store.get("access") == undefined) {
-        document.getElementById("sign").innerHTML = "";
+        document.getElementById("sign").innerHTML =
+          "Not Signed In(Not Syncing)";
+        document.getElementById("out").innerHTML = "";
       } else {
         accesst = store.get("access").access;
-        document.getElementById("sign").innerHTML = "Signed In";
+        document.getElementById("sign").innerHTML = "Signed In(Syncing)";
+        document.getElementById("out").innerHTML = "Sign Out";
       }
       document.getElementById("notes").innerHTML = "";
       store.each((value, key) => {
@@ -78,7 +81,8 @@ export default {
           key != "loglevel:webpack-dev-server" &&
           key != "closed" &&
           key != "emoji-mart.frequently" &&
-          key != "emoji-mart.last"
+          key != "emoji-mart.last" &&
+          key != "access"
         ) {
           let content;
           if (value.first == undefined) {

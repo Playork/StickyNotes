@@ -44,6 +44,7 @@ SOFTWARE.
           <h1>Sync</h1>
           <button id="drb">Dropbox Sync</button>
           <p id="sign"></p>
+          <a id="out" v-on:click="out"></a>
         </div>
       </div>
       <div id="about">
@@ -70,23 +71,14 @@ import store from "store";
 import swal from "sweetalert";
 import { setTimeout } from "timers";
 import { Dropbox } from "dropbox";
-import { remote } from "electron";
-import fs from "fs";
+import { remote, ipcRenderer, inAppPurchase } from "electron";
 
 // Vue Class
 export default {
   // Do On Start
   mounted() {
-    let client_id;
-    fs.readFile("client_id", (e, d) => {
-      if (e) {
-        alert("Client Id Is Not Defined");
-      } else {
-        client_id = d;
-      }
-    });
-    let dbx = new Dropbox({ clientId: client_id });
-    let authUrl = dbx.getAuthenticationUrl("http://localhost:8080/auth");
+    let dbx = new Dropbox({ clientId: "5wj57sidlrskuzl" });
+    let authUrl = dbx.getAuthenticationUrl("app://./auth.html");
     document.getElementById("drb").addEventListener("click", () => {
       const win = new remote.BrowserWindow({
         width: 800,
@@ -105,6 +97,10 @@ export default {
         win.show();
         win.focus();
       });
+    });
+    ipcRenderer.on("accesstoken", (e, a) => {
+      store.set("access", { access: a.access_token });
+      win.close();
     });
   },
 
@@ -128,6 +124,11 @@ export default {
           }
         }
       });
+    },
+
+    // Sign Out
+    out() {
+      store.remove("access");
     },
 
     // Show About Page Function
