@@ -56,10 +56,17 @@ export default {
   mounted() {
     // Before Close
     window.onbeforeunload = () => {
-      dbx.filesUpload({
-        path: "/Playork Sticky Notes/notes.spst",
-        contents: notes
-      });
+      dbx
+        .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
+        .then(() => {
+          dbx
+            .filesUpload({
+              path: "/Playork Sticky Notes/notes.spst",
+              contents: notes
+            })
+            .catch(() => {});
+        })
+        .catch(() => {});
     };
 
     // Sync Restore
@@ -75,9 +82,10 @@ export default {
     let dbx = new Dropbox({ accessToken: accesst });
     dbx
       .filesDownload({ path: "/Playork Sticky Notes/notes.spst" })
-      .then(function(data) {
+      .then(data => {
         fs.writeFile("./notes.spst", data.fileBinary, "binary", () => {});
-      });
+      })
+      .catch(() => {});
     window.setTimeout(() => {
       fs.readFile("notes.spst", (e, d) => {
         if (e) {
@@ -117,40 +125,64 @@ export default {
     store.remove("closed");
 
     // Sync
-    window.setInterval(() => {
-      if (store.get("sync") == undefined || store.get("sync").sync == "no") {
-        try {
-          if (store.get("sync").sync == "no") {
-            store.remove("sync");
-          }
-        } catch {}
-        let notes = "";
-        store.each((value, key) => {
+    let syme = new Date().getTime();
+    window.addEventListener(
+      "storage",
+      () => {
+        let a = syme + 1000;
+        let t = new Date().getTime();
+        if (a < t) {
           if (
-            key != "id" &&
-            key != "loglevel:webpack-dev-server" &&
-            key != "closed" &&
-            key != "emoji-mart.frequently" &&
-            key != "emoji-mart.last" &&
-            key != "access"
+            store.get("sync") == undefined ||
+            store.get("sync").sync == "no"
           ) {
-            notes = notes + key + "\n" + JSON.stringify(value) + "\n";
-          }
-        });
-        if (store.get("access") != undefined) {
-          let dbx = new Dropbox({ accessToken: accesst });
-          dbx
-            .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
-            .catch(() => {});
-          window.setTimeout(() => {
-            dbx.filesUpload({
-              path: "/Playork Sticky Notes/notes.spst",
-              contents: notes
+            try {
+              if (store.get("sync").sync == "no") {
+                store.remove("sync");
+              }
+            } catch {}
+            let notes = "";
+            store.each((value, key) => {
+              if (
+                key != "id" &&
+                key != "loglevel:webpack-dev-server" &&
+                key != "closed" &&
+                key != "emoji-mart.frequently" &&
+                key != "emoji-mart.last" &&
+                key != "access"
+              ) {
+                notes = notes + key + "\n" + JSON.stringify(value) + "\n";
+              }
             });
-          }, 1000);
+            if (store.get("access") != undefined) {
+              let dbx = new Dropbox({ accessToken: accesst });
+              dbx
+                .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
+                .then(() => {
+                  dbx
+                    .filesUpload({
+                      path: "/Playork Sticky Notes/notes.spst",
+                      contents: notes
+                    })
+                    .catch(() => {});
+                })
+                .catch(e => {
+                  if (e) {
+                    dbx
+                      .filesUpload({
+                        path: "/Playork Sticky Notes/notes.spst",
+                        contents: notes
+                      })
+                      .catch(() => {});
+                  }
+                });
+            }
+          }
         }
-      }
-    }, 2000);
+        syme = new Date().getTime();
+      },
+      true
+    );
 
     // Load Saved Notes
     window.setInterval(() => {
@@ -159,12 +191,12 @@ export default {
         let dbx = new Dropbox({ accessToken: accesst });
         dbx
           .filesDownload({ path: "/Playork Sticky Notes/notes.spst" })
-          .then(function(data) {
+          .then(data => {
             fs.writeFile(data.name, data.fileBinary, "binary", err => {
               if (err) {
                 console.log(err);
               }
-            });
+            }).catch(() => {});
           });
         window.setTimeout(() => {
           fs.readFile("notes.spst", (e, d) => {
