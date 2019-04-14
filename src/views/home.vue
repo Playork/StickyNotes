@@ -54,6 +54,49 @@ export default {
 
   // Do On Start
   mounted() {
+    // Sync Restore
+    let accesst;
+    if (store.get("access") == undefined) {
+      document.getElementById("sign").innerHTML = "Not Signed In(Not Syncing)";
+      document.getElementById("out").innerHTML = "";
+    } else {
+      accesst = store.get("access").access;
+      document.getElementById("sign").innerHTML = "Signed In(Syncing)";
+      document.getElementById("out").innerHTML = "Sign Out";
+    }
+    var dbx = new Dropbox({ accessToken: accesst });
+    dbx
+      .filesDownload({ path: "/Playork Sticky Notes/notes.spst" })
+      .then(function(data) {
+        fs.writeFile(data.name, data.fileBinary, "binary", err => {
+          if (err) {
+            throw err;
+          }
+        });
+      });
+    window.setTimeout(() => {
+      fs.readFile("notes", (e, d) => {
+        if (e) {
+          throw e;
+        }
+        if (d != "") {
+          d = d.toString().split("\n");
+          l = d.length - 1;
+          for (let i = 0; i < l; i++) {
+            if (i % 2 == 0) {
+              if (store.get(d[i]) == undefined) {
+                store.set(d[i], JSON.parse(d[i + 1]));
+              } else {
+                let d = new Date().getTime();
+                let id = Number(d[i]) * d;
+                store.set(id.toString(), JSON.parse(d[i + 1]));
+              }
+            }
+          }
+        }
+      });
+    }, 100);
+
     // close on app.quit()
     ipcRenderer.on("closeall", () => {
       store.set("closed", { closed: "yes" });
@@ -64,15 +107,6 @@ export default {
     store.remove("closed");
 
     // Sync
-    let accesst;
-    if (store.get("access") == undefined) {
-      document.getElementById("sign").innerHTML = "Not Signed In(Not Syncing)";
-      document.getElementById("out").innerHTML = "";
-    } else {
-      accesst = store.get("access").access;
-      document.getElementById("sign").innerHTML = "Signed In(Syncing)";
-      document.getElementById("out").innerHTML = "Sign Out";
-    }
     window.setInterval(() => {
       if (store.get("sync") == undefined || store.get("sync").sync == "no") {
         if (store.get("sync").sync == "no") {
