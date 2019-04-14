@@ -74,37 +74,42 @@ export default {
       document.getElementById("out").innerHTML = "Sign Out";
     }
     window.setInterval(() => {
-      let notes = "";
-      store.each((value, key) => {
-        if (
-          key != "id" &&
-          key != "loglevel:webpack-dev-server" &&
-          key != "closed" &&
-          key != "emoji-mart.frequently" &&
-          key != "emoji-mart.last" &&
-          key != "access"
-        ) {
-          notes = notes + key + "\n" + JSON.stringify(value) + "\n";
+      if (store.get("sync") == undefined || store.get("sync").sync == "no") {
+        if (store.get("sync").sync == "no") {
+          store.remove("sync");
         }
-      });
-      if (store.get("access") != undefined) {
-        var dbx = new Dropbox({ accessToken: accesst });
-        dbx
-          .filesDelete({ path: "/Playork Sticky Notes/notes.spst" })
-          .catch(function(e) {});
-        window.setTimeout(() => {
-          dbx.filesUpload({
-            path: "/Playork Sticky Notes/notes.spst",
-            contents: notes
-          });
-        }, 1000);
+        let notes = "";
+        store.each((value, key) => {
+          if (
+            key != "id" &&
+            key != "loglevel:webpack-dev-server" &&
+            key != "closed" &&
+            key != "emoji-mart.frequently" &&
+            key != "emoji-mart.last" &&
+            key != "access"
+          ) {
+            notes = notes + key + "\n" + JSON.stringify(value) + "\n";
+          }
+        });
+        if (store.get("access") != undefined) {
+          var dbx = new Dropbox({ accessToken: accesst });
+          dbx
+            .filesDelete({ path: "/Playork Sticky Notes/notes.spst" })
+            .catch(function(e) {});
+          window.setTimeout(() => {
+            dbx.filesUpload({
+              path: "/Playork Sticky Notes/notes.spst",
+              contents: notes
+            });
+          }, 50);
+        }
       }
-    }, 5000);
+    }, 100);
 
     // Load Saved Notes
     window.setInterval(() => {
       if (store.get("sync") != undefined) {
-        store.remove("sync");
+        store.set("sync", { sync: "no" });
         var dbx = new Dropbox({ accessToken: accesst });
         dbx
           .filesDownload({ path: "/Playork Sticky Notes/notes.spst" })
@@ -130,7 +135,7 @@ export default {
               }
             }
           });
-        }, 2000);
+        }, 100);
       }
       if (store.get("access") == undefined) {
         document.getElementById("sign").innerHTML =
