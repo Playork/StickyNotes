@@ -115,7 +115,11 @@ export default {
           store.set("closed", { closed: "yes" });
           if (store.get("closed").closed == "yes") {
             window.setTimeout(() => {
-              store.clearAll();
+              store.each((value, key) => {
+                if (key != "access") {
+                  store.remove(key);
+                }
+              });
             }, 50);
           }
         }

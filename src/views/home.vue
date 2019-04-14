@@ -41,7 +41,7 @@ import titlebar1 from "../components/home/titlebar1.vue";
 import store from "store";
 import { setTimeout, setInterval } from "timers";
 import os from "os";
-import { Dropbox } from "dropbox";
+import { Dropbox } from "dropbox/lib/dropbox";
 import fs from "fs";
 
 // Vue Class
@@ -65,7 +65,6 @@ export default {
 
     // Sync
     let accesst;
-    let notes = "";
     if (store.get("access") == undefined) {
       document.getElementById("sign").innerHTML = "Not Signed In(Not Syncing)";
       document.getElementById("out").innerHTML = "";
@@ -75,33 +74,47 @@ export default {
       document.getElementById("out").innerHTML = "Sign Out";
     }
     window.setInterval(() => {
-      window.setTimeout(() => {
-        if (store.get("access") != undefined) {
-          var dbx = new Dropbox({ accessToken: accesst });
-          dbx
-            .filesUpload({ path: "/notes", contents: notes })
-            .then(function(response) {
-              console.log(response);
-            })
-            .catch(function(err) {
-              alert(err);
-            });
+      let notes = "";
+      store.each((value, key) => {
+        if (
+          key != "id" &&
+          key != "loglevel:webpack-dev-server" &&
+          key != "closed" &&
+          key != "emoji-mart.frequently" &&
+          key != "emoji-mart.last" &&
+          key != "access"
+        ) {
+          notes = notes + key + "\n" + JSON.stringify(value) + "\n";
         }
-      }, 500);
-    }, 1);
+      });
+      if (store.get("access") != undefined) {
+        var dbx = new Dropbox({ accessToken: accesst });
+        dbx
+          .filesDelete({ path: "/Playork Sticky Notes/notes.txt" })
+          .catch(function(e) {});
+        window.setTimeout(() => {
+          dbx.filesUpload({
+            path: "/Playork Sticky Notes/notes.txt",
+            contents: notes
+          });
+        }, 1000);
+      }
+    }, 5000);
 
     // Load Saved Notes
     window.setInterval(() => {
       if (store.get("sync") != undefined) {
         store.remove("sync");
         var dbx = new Dropbox({ accessToken: accesst });
-        dbx.filesDownload({ path: "/notes" }).then(function(data) {
-          fs.writeFile(data.name, data.fileBinary, "binary", err => {
-            if (err) {
-              throw err;
-            }
+        dbx
+          .filesDownload({ path: "/Playork Sticky Notes/notes.txt" })
+          .then(function(data) {
+            fs.writeFile(data.name, data.fileBinary, "binary", err => {
+              if (err) {
+                throw err;
+              }
+            });
           });
-        });
         window.setTimeout(() => {
           fs.readFile("notes", (e, d) => {
             if (e) {
@@ -117,7 +130,7 @@ export default {
               }
             }
           });
-        }, 500);
+        }, 2000);
       }
       if (store.get("access") == undefined) {
         document.getElementById("sign").innerHTML =
@@ -136,9 +149,9 @@ export default {
           key != "closed" &&
           key != "emoji-mart.frequently" &&
           key != "emoji-mart.last" &&
-          key != "access"
+          key != "access" &&
+          key != "sync"
         ) {
-          notes = `${notes}${key}\n${JSON.stringify(value)}\n`;
           let content;
           if (value.first == undefined) {
             content = `<img src="${value.image}" style="max-width:90%;"`;
