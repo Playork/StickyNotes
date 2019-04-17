@@ -22,7 +22,7 @@
     "sweetalert": "latest"
   },
   "devDependencies": {
-    "@vue/cli-service": "^3.5.3",
+    "@vue/cli-service": "^3.6.0",
     "electron": "latest",
     "vue": "latest",
     "vue-cli-plugin-electron-builder": "latest",

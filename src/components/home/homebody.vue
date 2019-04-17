@@ -42,7 +42,7 @@ SOFTWARE.
         <span v-on:click="hide">&#xE8BB;</span>
         <div>
           <h1>Sync</h1>
-          <button id="drb">Dropbox Sync</button>
+          <button id="drb">Sync With Dropbox</button>
           <p id="sign"></p>
           <a id="out" v-on:click="out"></a>
         </div>

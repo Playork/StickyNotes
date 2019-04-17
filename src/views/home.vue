@@ -43,6 +43,7 @@ import { setTimeout, setInterval } from "timers";
 import os from "os";
 import { Dropbox } from "dropbox/lib/dropbox";
 import fs from "fs";
+import http from "http";
 
 // Vue Class
 export default {
@@ -66,7 +67,16 @@ export default {
             })
             .catch(() => {});
         })
-        .catch(() => {});
+        .catch(e => {
+          if (e) {
+            dbx
+              .filesUpload({
+                path: "/Playork Sticky Notes/notes.spst",
+                contents: notes
+              })
+              .catch(() => {});
+          }
+        });
     };
 
     // Sync Restore
@@ -81,39 +91,40 @@ export default {
     }
     let dbx = new Dropbox({ accessToken: accesst });
     dbx
-      .filesDownload({ path: "/Playork Sticky Notes/notes.spst" })
+      .filesGetTemporaryLink({ path: "/Playork Sticky Notes/notes.spst" })
       .then(data => {
-        fs.writeFile("./notes.spst", data.fileBinary, "binary", () => {});
-      })
-      .catch(() => {});
-    window.setTimeout(() => {
-      fs.readFile("notes.spst", (e, d) => {
-        if (e) {
-          console.log(e);
-        }
-        if (d != "") {
-          d = d.toString().split("\n");
-          let l = d.length - 1;
-          for (let i = 0; i < l; i++) {
-            if (i % 2 == 0) {
-              if (store.get(d[i]) == undefined) {
-                store.set(d[i], JSON.parse(d[i + 1]));
-              } else {
-                let js = JSON.parse(d[i + 1]);
-                if (
-                  js.first != store.get(d[i]).first ||
-                  js.image != store.get(d[i]).image
-                ) {
-                  let g = new Date().getTime();
-                  let id = Number(d[i]) * g;
-                  store.set(id.toString(), JSON.parse(d[i + 1]));
+        let file = fs.createWriteStream("note.spst");
+        let request = http.get(data, function(response) {
+          response.pipe(file);
+        });
+        fs.readFile("notes.spst", (e, d) => {
+          if (e) {
+            throw e;
+          }
+          if (d != "") {
+            d = d.toString().split("\n");
+            let l = d.length - 1;
+            for (let i = 0; i < l; i++) {
+              if (i % 2 == 0) {
+                if (store.get(d[i]) == undefined) {
+                  store.set(d[i], JSON.parse(d[i + 1]));
+                } else {
+                  let js = JSON.parse(d[i + 1]);
+                  if (
+                    js.first != store.get(d[i]).first ||
+                    js.image != store.get(d[i]).image
+                  ) {
+                    let g = new Date().getTime();
+                    let id = Number(d[i]) * g;
+                    store.set(id.toString(), JSON.parse(d[i + 1]));
+                  }
                 }
               }
             }
           }
-        }
-      });
-    }, 500);
+        });
+      })
+      .catch(() => {});
 
     // close on app.quit()
     ipcRenderer.on("closeall", () => {
@@ -126,63 +137,56 @@ export default {
 
     // Sync
     let syme = new Date().getTime();
-    window.addEventListener(
-      "storage",
-      () => {
-        let a = syme + 1000;
-        let t = new Date().getTime();
-        if (a < t) {
-          if (
-            store.get("sync") == undefined ||
-            store.get("sync").sync == "no"
-          ) {
-            try {
-              if (store.get("sync").sync == "no") {
-                store.remove("sync");
-              }
-            } catch {}
-            let notes = "";
-            store.each((value, key) => {
-              if (
-                key != "id" &&
-                key != "loglevel:webpack-dev-server" &&
-                key != "closed" &&
-                key != "emoji-mart.frequently" &&
-                key != "emoji-mart.last" &&
-                key != "access"
-              ) {
-                notes = notes + key + "\n" + JSON.stringify(value) + "\n";
-              }
-            });
-            if (store.get("access") != undefined) {
-              let dbx = new Dropbox({ accessToken: accesst });
-              dbx
-                .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
-                .then(() => {
+    window.addEventListener("storage", () => {
+      let a = syme + 1000;
+      let t = new Date().getTime();
+      if (a < t) {
+        if (store.get("sync") == undefined || store.get("sync").sync == "no") {
+          try {
+            if (store.get("sync").sync == "no") {
+              store.remove("sync");
+            }
+          } catch {}
+          let notes = "";
+          store.each((value, key) => {
+            if (
+              key != "id" &&
+              key != "loglevel:webpack-dev-server" &&
+              key != "closed" &&
+              key != "emoji-mart.frequently" &&
+              key != "emoji-mart.last" &&
+              key != "access"
+            ) {
+              notes = notes + key + "\n" + JSON.stringify(value) + "\n";
+            }
+          });
+          if (store.get("access") != undefined) {
+            let dbx = new Dropbox({ accessToken: accesst });
+            dbx
+              .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
+              .then(() => {
+                dbx
+                  .filesUpload({
+                    path: "/Playork Sticky Notes/notes.spst",
+                    contents: notes
+                  })
+                  .catch(() => {});
+              })
+              .catch(e => {
+                if (e) {
                   dbx
                     .filesUpload({
                       path: "/Playork Sticky Notes/notes.spst",
                       contents: notes
                     })
                     .catch(() => {});
-                })
-                .catch(e => {
-                  if (e) {
-                    dbx
-                      .filesUpload({
-                        path: "/Playork Sticky Notes/notes.spst",
-                        contents: notes
-                      })
-                      .catch(() => {});
-                  }
-                });
-            }
+                }
+              });
           }
         }
-        syme = new Date().getTime();
-      },
-      true
-    );
+      }
+      syme = new Date().getTime();
+    });
 
     // Load Saved Notes
     window.setInterval(() => {
@@ -225,7 +229,7 @@ export default {
               }
             }
           });
-        }, 100);
+        }, 2000);
       }
       if (store.get("access") == undefined) {
         document.getElementById("sign").innerHTML =
@@ -234,6 +238,11 @@ export default {
       } else {
         if (store.get("access").access != accesst) {
           accesst = store.get("access").access;
+          document.getElementById("sign").innerHTML = "Signed In(Syncing)";
+          document.getElementById("out").innerHTML = "Sign Out";
+        } else {
+          document.getElementById("sign").innerHTML = "Signed In(Syncing)";
+          document.getElementById("out").innerHTML = "Sign Out";
         }
       }
       document.getElementById("notes").innerHTML = "";
