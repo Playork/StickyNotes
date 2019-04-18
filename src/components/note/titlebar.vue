@@ -209,7 +209,7 @@ export default {
     // Save Note Function
     savenote() {
       if (document.getElementById("draw").style.display != "block") {
-        var ifr = document.createElement("iframe");
+        let ifr = document.createElement("iframe");
         ifr.style = "height: 0px; width: 0px; position: absolute";
         document.body.appendChild(ifr);
         ifr.contentDocument.body.innerHTML = document.querySelector(
@@ -218,7 +218,7 @@ export default {
         ifr.contentWindow.print();
         ifr.parentElement.removeChild(ifr);
       } else {
-        var link = document.createElement("a");
+        let link = document.createElement("a");
         document.body.appendChild(link);
         link.addEventListener(
           "click",

@@ -34,8 +34,18 @@ SOFTWARE.
     <div id="notes"></div>
     <div>
       <div id="options">
+        <span v-on:click="syncshow" title="Sync">&#xE895;</span>
         <span id="deleteall" v-on:click="deleteall" title="Delete All Notes">&#xE74D;</span>
         <span v-on:click="aboutshow" title="About">&#xE946;</span>
+      </div>
+      <div id="sync">
+        <span v-on:click="hide">&#xE8BB;</span>
+        <div>
+          <h1>Sync</h1>
+          <button id="drb">Sync With Dropbox</button>
+          <p id="sign"></p>
+          <a id="out" v-on:click="out"></a>
+        </div>
       </div>
       <div id="about">
         <span v-on:click="hide">&#xE8BB;</span>
@@ -60,9 +70,36 @@ SOFTWARE.
 import store from "store";
 import swal from "sweetalert";
 import { setTimeout } from "timers";
+import { Dropbox } from "dropbox";
+import { remote, ipcRenderer, inAppPurchase } from "electron";
 
 // Vue Class
 export default {
+  // Do On Start
+  mounted() {
+    let dbx = new Dropbox({ clientId: "5wj57sidlrskuzl" });
+    let authUrl = dbx.getAuthenticationUrl("app://./auth.html");
+    document.getElementById("drb").addEventListener("click", () => {
+      const win = new remote.BrowserWindow({
+        width: 800,
+        height: 600,
+        icon: "public/favicon.ico",
+        backgroundColor: "#202020",
+        title: "Playork Sticky Notes",
+        resizable: false,
+        show: false,
+        webPreferences: {
+          nodeIntegration: false
+        }
+      });
+      win.loadURL(authUrl);
+      win.on("ready-to-show", () => {
+        win.show();
+        win.focus();
+      });
+    });
+  },
+
   // Functions
   methods: {
     // Delete All Note Function
@@ -78,11 +115,20 @@ export default {
           store.set("closed", { closed: "yes" });
           if (store.get("closed").closed == "yes") {
             window.setTimeout(() => {
-              store.clearAll();
+              store.each((value, key) => {
+                if (key != "access") {
+                  store.remove(key);
+                }
+              });
             }, 50);
           }
         }
       });
+    },
+
+    // Sign Out
+    out() {
+      store.remove("access");
     },
 
     // Show About Page Function
@@ -92,10 +138,17 @@ export default {
       document.getElementById("home").style.overflowY = "hidden";
     },
 
+    // Show Sync Page Function
+    syncshow() {
+      let id = document.getElementById("sync");
+      id.style.display = "block";
+      document.getElementById("home").style.overflowY = "hidden";
+    },
+
     // Hide About Page Function
     hide() {
-      let id = document.getElementById("about");
-      id.style.display = "none";
+      document.getElementById("sync").style.display = "none";
+      document.getElementById("about").style.display = "none";
       document.getElementById("home").style.overflowY = "auto";
     }
   }

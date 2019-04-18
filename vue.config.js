@@ -6,6 +6,6 @@ module.exports = {
   },
   filenameHashing: false,
   devServer: {
-    proxy: 'http://localhost:8080'
+    proxy: "http://localhost:8080"
   }
-}
+};

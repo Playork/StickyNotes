@@ -39,8 +39,11 @@ import swal from "sweetalert";
 import homebody from "../components/home/homebody.vue";
 import titlebar1 from "../components/home/titlebar1.vue";
 import store from "store";
-import { setTimeout } from "timers";
+import { setTimeout, setInterval } from "timers";
 import os from "os";
+import { Dropbox } from "dropbox/lib/dropbox";
+import fs from "fs";
+import https from "https";
 
 // Vue Class
 export default {
@@ -52,6 +55,85 @@ export default {
 
   // Do On Start
   mounted() {
+    // Before Close
+    window.onbeforeunload = () => {
+      dbx
+        .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
+        .then(() => {
+          dbx
+            .filesUpload({
+              path: "/Playork Sticky Notes/notes.spst",
+              contents: notes
+            })
+            .catch(() => {});
+        })
+        .catch(e => {
+          if (e) {
+            dbx
+              .filesUpload({
+                path: "/Playork Sticky Notes/notes.spst",
+                contents: notes
+              })
+              .catch(() => {});
+          }
+        });
+    };
+
+    // Sync Restore
+    let accesst;
+    if (store.get("access") == undefined) {
+      document.getElementById("sign").innerHTML = "Not Signed In(Not Syncing)";
+      document.getElementById("out").innerHTML = "";
+    } else {
+      accesst = store.get("access").access;
+      document.getElementById("sign").innerHTML = "Signed In(Syncing)";
+      document.getElementById("out").innerHTML = "Sign Out";
+    }
+    let dbx = new Dropbox({ fetch, accessToken: accesst });
+    dbx
+      .filesGetTemporaryLink({ path: "/Playork Sticky Notes/notes.spst" })
+      .then(data => {
+        let file = fs.createWriteStream("notes.spst");
+        let request = https.get(data.link, function(response) {
+          response.pipe(file);
+          file.on("finish", function() {
+            file.close();
+          });
+        });
+        window.setTimeout(() => {
+          fs.readFile("./notes.spst", "binary", (e, d) => {
+            if (e) {
+              console.log(e);
+            } else {
+              if (d != "") {
+                d = d.toString().split("\n");
+                for (let i = 0; i < d.length; i++) {
+                  if (i % 2 == 0 && d[i] != "") {
+                    let js = JSON.parse(d[i + 1]);
+                    console.log(js);
+                    if (store.get(d[i]) == undefined) {
+                      store.set(d[i], js);
+                    } else {
+                      if (
+                        js.first != store.get(d[i]).first ||
+                        js.image != store.get(d[i]).image
+                      ) {
+                        let g = new Date().getTime();
+                        let id = Number(d[i]) * g;
+                        store.set(id.toString(), js);
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          });
+        }, 2000);
+      })
+      .catch(e => {
+        if (e) console.log(e);
+      });
+
     // close on app.quit()
     ipcRenderer.on("closeall", () => {
       store.set("closed", { closed: "yes" });
@@ -61,8 +143,122 @@ export default {
     // Remove Closed
     store.remove("closed");
 
+    // Sync
+    let syme = new Date().getTime();
+    window.addEventListener("storage", () => {
+      let a = syme + 1000;
+      let t = new Date().getTime();
+      if (a < t) {
+        if (store.get("sync") == undefined || store.get("sync").sync == "no") {
+          try {
+            if (store.get("sync").sync == "no") {
+              store.remove("sync");
+            }
+          } catch {}
+          let notes = "";
+          store.each((value, key) => {
+            if (
+              key != "id" &&
+              key != "loglevel:webpack-dev-server" &&
+              key != "closed" &&
+              key != "emoji-mart.frequently" &&
+              key != "emoji-mart.last" &&
+              key != "access"
+            ) {
+              notes = notes + key + "\n" + JSON.stringify(value) + "\n";
+            }
+          });
+          if (store.get("access") != undefined) {
+            let dbx = new Dropbox({ fetch, accessToken: accesst });
+            dbx
+              .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
+              .then(() => {
+                dbx
+                  .filesUpload({
+                    path: "/Playork Sticky Notes/notes.spst",
+                    contents: notes
+                  })
+                  .catch(() => {});
+              })
+              .catch(e => {
+                if (e) {
+                  dbx
+                    .filesUpload({
+                      path: "/Playork Sticky Notes/notes.spst",
+                      contents: notes
+                    })
+                    .catch(() => {});
+                }
+              });
+          }
+        }
+        syme = new Date().getTime();
+      }
+    });
+
     // Load Saved Notes
     window.setInterval(() => {
+      if (store.get("sync") != undefined) {
+        store.set("sync", { sync: "no" });
+        let dbx = new Dropbox({ fetch, accessToken: accesst });
+        dbx
+          .filesGetTemporaryLink({ path: "/Playork Sticky Notes/notes.spst" })
+          .then(data => {
+            let file = fs.createWriteStream("notes.spst");
+            let request = https.get(data.link, function(response) {
+              response.pipe(file);
+              file.on("finish", function() {
+                file.close();
+              });
+            });
+            window.setTimeout(() => {
+              fs.readFile("./notes.spst", "binary", (e, d) => {
+                if (e) {
+                  console.log(e);
+                } else {
+                  if (d != "") {
+                    d = d.toString().split("\n");
+                    for (let i = 0; i < d.length; i++) {
+                      if (i % 2 == 0 && d[i] != "") {
+                        let js = JSON.parse(d[i + 1]);
+                        console.log(js);
+                        if (store.get(d[i]) == undefined) {
+                          store.set(d[i], js);
+                        } else {
+                          if (
+                            js.first != store.get(d[i]).first ||
+                            js.image != store.get(d[i]).image
+                          ) {
+                            let g = new Date().getTime();
+                            let id = Number(d[i]) * g;
+                            store.set(id.toString(), js);
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              });
+            }, 2000);
+          })
+          .catch(e => {
+            if (e) console.log(e);
+          });
+      }
+      if (store.get("access") == undefined) {
+        document.getElementById("sign").innerHTML =
+          "Not Signed In(Not Syncing)";
+        document.getElementById("out").innerHTML = "";
+      } else {
+        if (store.get("access").access != accesst) {
+          accesst = store.get("access").access;
+          document.getElementById("sign").innerHTML = "Signed In(Syncing)";
+          document.getElementById("out").innerHTML = "Sign Out";
+        } else {
+          document.getElementById("sign").innerHTML = "Signed In(Syncing)";
+          document.getElementById("out").innerHTML = "Sign Out";
+        }
+      }
       document.getElementById("notes").innerHTML = "";
       store.each((value, key) => {
         if (
@@ -70,7 +266,9 @@ export default {
           key != "loglevel:webpack-dev-server" &&
           key != "closed" &&
           key != "emoji-mart.frequently" &&
-          key != "emoji-mart.last"
+          key != "emoji-mart.last" &&
+          key != "access" &&
+          key != "sync"
         ) {
           let content;
           if (value.first == undefined) {
@@ -133,7 +331,7 @@ export default {
             "5px solid " + value.title;
         }
       });
-    }, 2500);
+    }, 2000);
     // let start = store.get("id").ids;
     // store.each((value, key) => {
     //   if (key != "id" && key != "loglevel:webpack-dev-server") {

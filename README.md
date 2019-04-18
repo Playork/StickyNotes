@@ -7,9 +7,13 @@
 
 ### Automatically Save Notes
 
+### Sync Your Note With Dropbox Account(Use This Account To Start Your Sticky Notes Where You Left Off)
+
 ### Choose Background And Title Bar Color You Like
 
-### Editing Options Like Font,Bold,Size,.etc
+### Editing Options Like Font,Bold,Size,Math Formula,Link,Italic,List,Align.etc
+
+### Emoji Selector
 
 ### Add Images To Note From Local Drive
 
@@ -25,9 +29,11 @@
 
 ### Export Note To A File
 
-### Print Note
+### Save Note
 
-### Canvas Mode For Touch Or Pen Devices(Support Many Eding And Import,Export And Save Options)
+### Undo,Redo Options
+
+### Touch Mode For Touch Or Pen Devices(Support Many Eding And Import,Export And Save Options)
 
 ### If you like my App please consider buying me a coffee at [HERE!](http://buymeacoff.ee/playork)
 
