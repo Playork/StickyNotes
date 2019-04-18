@@ -43,7 +43,7 @@ import { setTimeout, setInterval } from "timers";
 import os from "os";
 import { Dropbox } from "dropbox/lib/dropbox";
 import fs from "fs";
-import http from "http";
+import https from "https";
 
 // Vue Class
 export default {
@@ -89,42 +89,51 @@ export default {
       document.getElementById("sign").innerHTML = "Signed In(Syncing)";
       document.getElementById("out").innerHTML = "Sign Out";
     }
-    let dbx = new Dropbox({ accessToken: accesst });
+    let dbx = new Dropbox({ fetch, accessToken: accesst });
     dbx
       .filesGetTemporaryLink({ path: "/Playork Sticky Notes/notes.spst" })
       .then(data => {
-        let file = fs.createWriteStream("note.spst");
-        let request = http.get(data, function(response) {
+        let file = fs.createWriteStream("notes.spst");
+        let request = https.get(data.link, function(response) {
           response.pipe(file);
+          file.on("finish", function() {
+            file.close();
+          });
         });
-        fs.readFile("notes.spst", (e, d) => {
-          if (e) {
-            throw e;
-          }
-          if (d != "") {
-            d = d.toString().split("\n");
-            let l = d.length - 1;
-            for (let i = 0; i < l; i++) {
-              if (i % 2 == 0) {
-                if (store.get(d[i]) == undefined) {
-                  store.set(d[i], JSON.parse(d[i + 1]));
-                } else {
-                  let js = JSON.parse(d[i + 1]);
-                  if (
-                    js.first != store.get(d[i]).first ||
-                    js.image != store.get(d[i]).image
-                  ) {
-                    let g = new Date().getTime();
-                    let id = Number(d[i]) * g;
-                    store.set(id.toString(), JSON.parse(d[i + 1]));
+        window.setTimeout(() => {
+          fs.readFile("./notes.spst", "binary", (e, d) => {
+            if (e) {
+              console.log(e);
+            } else {
+              console.log(d.toString());
+              if (d != "") {
+                d = d.toString().split("\n");
+                for (let i = 0; i < d.length; i++) {
+                  if (i % 2 == 0 && d[i] != "") {
+                    let js = JSON.parse(d[i + 1]);
+                    console.log(js);
+                    if (store.get(d[i]) == undefined) {
+                      store.set(d[i], js);
+                    } else {
+                      if (
+                        js.first != store.get(d[i]).first ||
+                        js.image != store.get(d[i]).image
+                      ) {
+                        let g = new Date().getTime();
+                        let id = Number(d[i]) * g;
+                        store.set(id.toString(), js);
+                      }
+                    }
                   }
                 }
               }
             }
-          }
-        });
+          });
+        }, 2000);
       })
-      .catch(() => {});
+      .catch(e => {
+        if (e) console.log(e);
+      });
 
     // close on app.quit()
     ipcRenderer.on("closeall", () => {
@@ -161,7 +170,7 @@ export default {
             }
           });
           if (store.get("access") != undefined) {
-            let dbx = new Dropbox({ accessToken: accesst });
+            let dbx = new Dropbox({ fetch, accessToken: accesst });
             dbx
               .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
               .then(() => {
@@ -184,52 +193,59 @@ export default {
               });
           }
         }
+        syme = new Date().getTime();
       }
-      syme = new Date().getTime();
     });
 
     // Load Saved Notes
     window.setInterval(() => {
       if (store.get("sync") != undefined) {
         store.set("sync", { sync: "no" });
-        let dbx = new Dropbox({ accessToken: accesst });
+        let dbx = new Dropbox({ fetch, accessToken: accesst });
         dbx
-          .filesDownload({ path: "/Playork Sticky Notes/notes.spst" })
+          .filesGetTemporaryLink({ path: "/Playork Sticky Notes/notes.spst" })
           .then(data => {
-            fs.writeFile(data.name, data.fileBinary, "binary", err => {
-              if (err) {
-                console.log(err);
-              }
-            }).catch(() => {});
-          });
-        window.setTimeout(() => {
-          fs.readFile("notes.spst", (e, d) => {
-            if (e) {
-              throw e;
-            }
-            if (d != "") {
-              d = d.toString().split("\n");
-              let l = d.length - 1;
-              for (let i = 0; i < l; i++) {
-                if (i % 2 == 0) {
-                  if (store.get(d[i]) == undefined) {
-                    store.set(d[i], JSON.parse(d[i + 1]));
-                  } else {
-                    let js = JSON.parse(d[i + 1]);
-                    if (
-                      js.first != store.get(d[i]).first ||
-                      js.image != store.get(d[i]).image
-                    ) {
-                      let g = new Date().getTime();
-                      let id = Number(d[i]) * g;
-                      store.set(id.toString(), JSON.parse(d[i + 1]));
+            let file = fs.createWriteStream("notes.spst");
+            let request = https.get(data.link, function(response) {
+              response.pipe(file);
+              file.on("finish", function() {
+                file.close();
+              });
+            });
+            window.setTimeout(() => {
+              fs.readFile("./notes.spst", "binary", (e, d) => {
+                if (e) {
+                  console.log(e);
+                } else {
+                  console.log(d.toString());
+                  if (d != "") {
+                    d = d.toString().split("\n");
+                    for (let i = 0; i < d.length; i++) {
+                      if (i % 2 == 0 && d[i] != "") {
+                        let js = JSON.parse(d[i + 1]);
+                        console.log(js);
+                        if (store.get(d[i]) == undefined) {
+                          store.set(d[i], js);
+                        } else {
+                          if (
+                            js.first != store.get(d[i]).first ||
+                            js.image != store.get(d[i]).image
+                          ) {
+                            let g = new Date().getTime();
+                            let id = Number(d[i]) * g;
+                            store.set(id.toString(), js);
+                          }
+                        }
+                      }
                     }
                   }
                 }
-              }
-            }
+              });
+            }, 2000);
+          })
+          .catch(e => {
+            if (e) console.log(e);
           });
-        }, 2000);
       }
       if (store.get("access") == undefined) {
         document.getElementById("sign").innerHTML =
