@@ -95,11 +95,6 @@ export default {
       window.resizeTo(350, 375);
       document.querySelector(".ql-toolbar").style.backgroundColor = "#FFF2AB";
     }
-    if (
-      document.querySelector(".ql-snow .ql-editor").innerHTML != "<p><br></p>"
-    ) {
-      document.getElementById("window-title1").style.pointerEvents = "none";
-    }
   },
 
   // Functions

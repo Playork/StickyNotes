@@ -298,7 +298,7 @@ export default {
             document.getElementById("deleteall").style.pointerEvents = "auto";
           }
           document.getElementById("startnote").onclick = () => {
-            let id = store.get("id").ids;
+            let id = new Date().getTime();
             store.set("id", { ids: key });
             ipcRenderer.send("create-new-instance");
             window.setTimeout(() => {
