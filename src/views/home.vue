@@ -105,7 +105,6 @@ export default {
             if (e) {
               console.log(e);
             } else {
-              console.log(d.toString());
               if (d != "") {
                 d = d.toString().split("\n");
                 for (let i = 0; i < d.length; i++) {
@@ -217,7 +216,6 @@ export default {
                 if (e) {
                   console.log(e);
                 } else {
-                  console.log(d.toString());
                   if (d != "") {
                     d = d.toString().split("\n");
                     for (let i = 0; i < d.length; i++) {
