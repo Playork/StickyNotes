@@ -256,7 +256,9 @@ export default {
               d = d.toString().split("\n");
               if (document.getElementById("draw").style.display != "block") {
                 document.querySelector(".ql-snow .ql-editor").innerHTML = d[0];
+                window.resizeTo(Number(d[3]), Number([4]));
               } else {
+                window.resizeTo(Number(d[3]), Number([4]));
                 let canvas = document.getElementById("draw");
                 let ctx = canvas.getContext("2d");
                 let img = new Image();
@@ -268,7 +270,6 @@ export default {
               document.getElementById("lightYellow").style.backgroundColor =
                 d[1];
               document.getElementById("titlebar").style.backgroundColor = d[2];
-              window.resizeTo(Number(d[3]), Number([4]));
             }
           });
         }

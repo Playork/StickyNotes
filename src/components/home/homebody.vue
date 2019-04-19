@@ -55,8 +55,8 @@ SOFTWARE.
           <div style="font-size:40px;">Sticky Notes</div>
           <div style="font-size:20px;">bekalshenoy@gmail.com</div>
           <div id="view" style="font-size:20px;">©2019</div>
-          <div style="font-size:10px;">
-            <a href="https://github.com/Playork/StickyNotes/issues/new" target="_blank">report bug</a>
+          <div>
+            <p id="report" v-on:click="report" style="font-size:18px;cursor: pointer;">report bug</p>
           </div>
         </div>
       </div>
@@ -71,7 +71,7 @@ import store from "store";
 import swal from "sweetalert";
 import { setTimeout } from "timers";
 import { Dropbox } from "dropbox";
-import { remote, ipcRenderer, inAppPurchase } from "electron";
+import { remote, ipcRenderer, inAppPurchase, shell } from "electron";
 
 // Vue Class
 export default {
@@ -102,6 +102,13 @@ export default {
 
   // Functions
   methods: {
+    // Report Bug
+    report() {
+      shell.openExternal(
+        "mailto:playork@outlook.com?subject=Sticky%20Notes%20Bug"
+      );
+    },
+
     // Delete All Note Function
     deleteall() {
       swal({
