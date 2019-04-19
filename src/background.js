@@ -92,7 +92,7 @@ function createNote() {
     width: 350,
     height: 375,
     icon: "public/favicon.ico",
-    backgroundColor: "#202020",
+    transparent: true,
     title: "Playork Sticky Notes",
     frame: false,
     show: false,

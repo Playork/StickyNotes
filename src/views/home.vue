@@ -167,11 +167,8 @@ export default {
     store.remove("closed");
 
     // Sync
-    let syme = new Date().getTime();
-    window.addEventListener("storage", () => {
-      let a = syme + 1000;
-      let t = new Date().getTime();
-      if (a < t) {
+    window.setTimeout(() => {
+      window.setInterval(() => {
         if (store.get("sync") == undefined || store.get("sync").sync == "no") {
           try {
             if (store.get("sync").sync == "no") {
@@ -215,9 +212,8 @@ export default {
               });
           }
         }
-        syme = new Date().getTime();
-      }
-    });
+      }, 2500);
+    }, 2500);
 
     // Load Saved Notes
     window.setInterval(() => {
