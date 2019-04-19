@@ -52,7 +52,7 @@ function createWindow() {
     width: 400,
     height: 600,
     icon: "public/favicon.ico",
-    backgroundColor: "#202020",
+    transparent: true,
     title: "Playork Sticky Notes",
     frame: false,
     resizable: false,
@@ -123,7 +123,9 @@ ipcMain.on("create-new-instance", () => {
 
 app.on("activate", () => {
   if (win === null) {
-    createWindow();
+    setTimeout(() => {
+      createWindow();
+    }, 500);
   }
 });
 
@@ -131,7 +133,9 @@ app.on("ready", async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     await installVueDevtools();
   }
-  createWindow();
+  setTimeout(() => {
+    createWindow();
+  }, 500);
 });
 
 if (isDevelopment) {

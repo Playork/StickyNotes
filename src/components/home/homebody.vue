@@ -77,7 +77,7 @@ import { remote, ipcRenderer, inAppPurchase } from "electron";
 export default {
   // Do On Start
   mounted() {
-    let dbx = new Dropbox({ clientId: "5wj57sidlrskuzl" });
+    let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
     let authUrl = dbx.getAuthenticationUrl("app://./auth.html");
     document.getElementById("drb").addEventListener("click", () => {
       const win = new remote.BrowserWindow({

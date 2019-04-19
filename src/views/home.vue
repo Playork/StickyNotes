@@ -110,7 +110,6 @@ export default {
                 for (let i = 0; i < d.length; i++) {
                   if (i % 2 == 0 && d[i] != "") {
                     let js = JSON.parse(d[i + 1]);
-                    console.log(js);
                     if (store.get(d[i]) == undefined) {
                       store.set(d[i], js);
                     } else {
@@ -221,7 +220,6 @@ export default {
                     for (let i = 0; i < d.length; i++) {
                       if (i % 2 == 0 && d[i] != "") {
                         let js = JSON.parse(d[i + 1]);
-                        console.log(js);
                         if (store.get(d[i]) == undefined) {
                           store.set(d[i], js);
                         } else {
