@@ -17,7 +17,7 @@
           const val = pair.split("=");
           params[val[0]] = val[1];
         });
-      localStorage.setItem("access", { access: params.access_token });
+      localStorage.setItem("access", params.access_token);
       localStorage.setItem("sync", { sync: "yes" });
       window.setTimeout(() => {
         window.close();

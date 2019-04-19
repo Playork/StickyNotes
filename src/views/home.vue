@@ -78,16 +78,40 @@ export default {
           }
         });
     };
+    window.setTimeout(() => {
+      dbx
+        .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
+        .then(() => {
+          dbx
+            .filesUpload({
+              path: "/Playork Sticky Notes/notes.spst",
+              contents: notes
+            })
+            .catch(() => {});
+        })
+        .catch(e => {
+          if (e) {
+            dbx
+              .filesUpload({
+                path: "/Playork Sticky Notes/notes.spst",
+                contents: notes
+              })
+              .catch(() => {});
+          }
+        });
+    }, 4000);
 
     // Sync Restore
     let accesst;
-    if (store.get("access") == undefined) {
+    if (localStorage.getItem("access") == undefined) {
       document.getElementById("sign").innerHTML = "Not Signed In(Not Syncing)";
       document.getElementById("out").innerHTML = "";
+      document.getElementById("drb").innerHTML = "Sync With Dropbox";
     } else {
-      accesst = store.get("access").access;
+      accesst = localStorage.getItem("access");
       document.getElementById("sign").innerHTML = "Signed In(Syncing)";
       document.getElementById("out").innerHTML = "Sign Out";
+      document.getElementById("drb").innerHTML = "Change Sync Dropbox Account";
     }
     let dbx = new Dropbox({ fetch, accessToken: accesst });
     dbx
@@ -243,18 +267,23 @@ export default {
             if (e) console.log(e);
           });
       }
-      if (store.get("access") == undefined) {
+      if (localStorage.getItem("access") == undefined) {
         document.getElementById("sign").innerHTML =
           "Not Signed In(Not Syncing)";
         document.getElementById("out").innerHTML = "";
+        document.getElementById("drb").innerHTML = "Sync With Dropbox";
       } else {
-        if (store.get("access").access != accesst) {
-          accesst = store.get("access").access;
+        if (localStorage.getItem("access") != accesst) {
+          accesst = localStorage.getItem("access");
           document.getElementById("sign").innerHTML = "Signed In(Syncing)";
           document.getElementById("out").innerHTML = "Sign Out";
+          document.getElementById("drb").innerHTML =
+            "Change Sync Dropbox Account";
         } else {
           document.getElementById("sign").innerHTML = "Signed In(Syncing)";
           document.getElementById("out").innerHTML = "Sign Out";
+          document.getElementById("drb").innerHTML =
+            "Change Sync Dropbox Account";
         }
       }
       document.getElementById("notes").innerHTML = "";
