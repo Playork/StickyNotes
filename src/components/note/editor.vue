@@ -549,8 +549,8 @@ export default {
         .getElementById("color")
         .addEventListener("click", () => repeafunc());
       document
-        .getElementById("cc")
-        .addEventListener("click", () => repeafunc());
+        .getElementById("changec")
+        .addEventListener("click", () => window.setTimeout(()=>repeafunc(),100));
       document
         .getElementById("locks")
         .addEventListener("click", () => repeafunc());

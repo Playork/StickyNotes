@@ -32,7 +32,7 @@ SOFTWARE.
     <input type="color" value="#fff2ab" id="color2">
     <br>
     <button class="button1" v-on:click="cancel">Cancel</button>
-    <button id="cc" class="button1" v-on:click="newColor">done</button>
+    <button id="changec" class="button1" v-on:click="newColor">done</button>
   </section>
 </template>
 
