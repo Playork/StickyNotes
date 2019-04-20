@@ -168,7 +168,7 @@ export default {
 
     // Sync
     let notes = "";
-    window.setInterval(() => {
+    window.addEventListener("storage",() => {
       if (store.get("sync") == undefined || store.get("sync").sync == "no") {
         try {
           if (store.get("sync").sync == "no") {
@@ -211,7 +211,7 @@ export default {
             });
         }
       }
-    }, 1000);
+    });
 
     // Load Saved Notes
     window.setInterval(() => {
