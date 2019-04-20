@@ -170,7 +170,7 @@ export default {
     let notes = "";
     let syme = new Date().getTime();
     window.setTimeout(() => {
-      window.addEventListener("storage", () => {
+      window.setInterval(() => {
         let a = syme + 1000;
         let t = new Date().getTime();
         if (a > t) {
@@ -221,8 +221,8 @@ export default {
           }
           syme = new Date().getTime();
         }
-      });
-    }, 2500);
+      },1000);
+    }, 1000);
 
     // Load Saved Notes
     window.setInterval(() => {
