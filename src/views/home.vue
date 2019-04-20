@@ -169,55 +169,60 @@ export default {
     // Sync
     let notes = "";
     let syme = new Date().getTime();
-    window.addEventListener("storage", () => {
-      let a = syme + 1000;
-      let t = new Date().getTime();
-      if (a > t) {
-        if (store.get("sync") == undefined || store.get("sync").sync == "no") {
-          try {
-            if (store.get("sync").sync == "no") {
-              store.remove("sync");
-            }
-          } catch {}
-          store.each((value, key) => {
-            if (
-              key != "id" &&
-              key != "loglevel:webpack-dev-server" &&
-              key != "closed" &&
-              key != "emoji-mart.frequently" &&
-              key != "emoji-mart.last" &&
-              key != "access"
-            ) {
-              notes = notes + key + "\n" + JSON.stringify(value) + "\n";
-            }
-          });
-          if (store.get("access") != undefined) {
-            let dbx = new Dropbox({ fetch, accessToken: accesst });
-            dbx
-              .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
-              .then(() => {
-                dbx
-                  .filesUpload({
-                    path: "/Playork Sticky Notes/notes.spst",
-                    contents: notes
-                  })
-                  .catch(() => {});
-              })
-              .catch(e => {
-                if (e) {
+    window.setTimeout(() => {
+      window.addEventListener("storage", () => {
+        let a = syme + 1000;
+        let t = new Date().getTime();
+        if (a > t) {
+          if (
+            store.get("sync") == undefined ||
+            store.get("sync").sync == "no"
+          ) {
+            try {
+              if (store.get("sync").sync == "no") {
+                store.remove("sync");
+              }
+            } catch {}
+            store.each((value, key) => {
+              if (
+                key != "id" &&
+                key != "loglevel:webpack-dev-server" &&
+                key != "closed" &&
+                key != "emoji-mart.frequently" &&
+                key != "emoji-mart.last" &&
+                key != "access"
+              ) {
+                notes = notes + key + "\n" + JSON.stringify(value) + "\n";
+              }
+            });
+            if (store.get("access") != undefined) {
+              let dbx = new Dropbox({ fetch, accessToken: accesst });
+              dbx
+                .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
+                .then(() => {
                   dbx
                     .filesUpload({
                       path: "/Playork Sticky Notes/notes.spst",
                       contents: notes
                     })
                     .catch(() => {});
-                }
-              });
+                })
+                .catch(e => {
+                  if (e) {
+                    dbx
+                      .filesUpload({
+                        path: "/Playork Sticky Notes/notes.spst",
+                        contents: notes
+                      })
+                      .catch(() => {});
+                  }
+                });
+            }
           }
+          syme = new Date().getTime();
         }
-        syme = new Date().getTime();
-      }
-    });
+      });
+    }, 2500);
 
     // Load Saved Notes
     window.setInterval(() => {
