@@ -167,7 +167,6 @@ export default {
     store.remove("closed");
 
     // Sync
-    window.setTimeout(() => {
       window.setInterval(() => {
         if (store.get("sync") == undefined || store.get("sync").sync == "no") {
           try {
@@ -212,8 +211,7 @@ export default {
               });
           }
         }
-      }, 2500);
-    }, 2500);
+      }, 1000);
 
     // Load Saved Notes
     window.setInterval(() => {
