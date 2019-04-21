@@ -55,42 +55,29 @@ export default {
 
   // Do On Start
   mounted() {
-    // Before Close
-    window.onbeforeunload = () => {
-      let notes = "";
-      store.each((value, key) => {
-        if (
-          key != "id" &&
-          key != "loglevel:webpack-dev-server" &&
-          key != "closed" &&
-          key != "emoji-mart.frequently" &&
-          key != "emoji-mart.last" &&
-          key != "access"
-        ) {
-          notes = notes + key + "\n" + JSON.stringify(value) + "\n";
+    // Linux Restore
+    if (process.platform == "linux") {
+      fs.readFile("./restore.spst", "binary", (e, d) => {
+        if (e) {
+          console.log(e);
+        } else {
+          if (d != "") {
+            d = d.toString().split("\n");
+            for (let i = 0; i < d.length; i++) {
+              if (i % 2 == 0 && d[i] != "") {
+                if (d[i] == "access") {
+                  localStorage.setItem(d[i], d[i + 1]);
+                } else {
+                  store.set(d[i], JSON.parse(d[i + 1]));
+                }
+              }
+            }
+          }
         }
       });
-      dbx
-        .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
-        .then(() => {
-          dbx
-            .filesUpload({
-              path: "/Playork Sticky Notes/notes.spst",
-              contents: notes
-            })
-            .catch(() => {});
-        })
-        .catch(e => {
-          if (e) {
-            dbx
-              .filesUpload({
-                path: "/Playork Sticky Notes/notes.spst",
-                contents: notes
-              })
-              .catch(() => {});
-          }
-        });
-    };
+    }
+
+    // Upload
     window.setTimeout(() => {
       dbx
         .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
@@ -225,8 +212,8 @@ export default {
               });
           }
         }
-      }, 3000);
-    }, 3000);
+      }, 2500);
+    }, 2500);
 
     // Load Saved Notes
     window.setInterval(() => {
@@ -384,6 +371,50 @@ export default {
     // Close Function
     close() {
       if (document.getElementById("deleteall").style.pointerEvents != "none") {
+        let accesst = localStorage.getItem("access");
+        let dbx = new Dropbox({ fetch, accessToken: accesst });
+        let notes = "";
+        store.each((value, key) => {
+          if (
+            key != "id" &&
+            key != "loglevel:webpack-dev-server" &&
+            key != "closed" &&
+            key != "emoji-mart.frequently" &&
+            key != "emoji-mart.last" &&
+            key != "access"
+          ) {
+            notes = notes + key + "\n" + JSON.stringify(value) + "\n";
+          }
+        });
+        if (process.platform == "linux") {
+          if (localStorage.getItem("access") != undefined) {
+            let restore =
+              notes + "access" + "\n" + localStorage.getItem("access") + "\n";
+          }
+          fs.writeFile("restore.spst", restore, e => {
+            if (e) console.log(e);
+          });
+        }
+        dbx
+          .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
+          .then(() => {
+            dbx
+              .filesUpload({
+                path: "/Playork Sticky Notes/notes.spst",
+                contents: notes
+              })
+              .catch(() => {});
+          })
+          .catch(e => {
+            if (e) {
+              dbx
+                .filesUpload({
+                  path: "/Playork Sticky Notes/notes.spst",
+                  contents: notes
+                })
+                .catch(() => {});
+            }
+          });
         store.each((value, key) => {
           if (key != "id" && key != "loglevel:webpack-dev-server") {
             if (value.first == "<p><br></p>") {
