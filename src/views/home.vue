@@ -356,51 +356,23 @@ export default {
     // Close Function
     close() {
       if (document.getElementById("deleteall").style.pointerEvents != "none") {
-        let accesst = localStorage.getItem("access");
-        let dbx = new Dropbox({ fetch, accessToken: accesst });
-        let notes = "";
-        store.each((value, key) => {
-          if (
-            key != "id" &&
-            key != "loglevel:webpack-dev-server" &&
-            key != "closed" &&
-            key != "emoji-mart.frequently" &&
-            key != "emoji-mart.last" &&
-            key != "access"
-          ) {
-            notes = notes + key + "\n" + JSON.stringify(value) + "\n";
-          }
-        });
         if (process.platform == "linux") {
-          let restore = notes;
-          if (localStorage.getItem("access") != undefined) {
-            restore =
-              restore + "access" + "\n" + localStorage.getItem("access") + "\n";
-          }
-          fs.writeFile("restore.spst", restore, e => {
+          let notes = "";
+          store.each((value, key) => {
+            if (
+              key != "id" &&
+              key != "loglevel:webpack-dev-server" &&
+              key != "closed" &&
+              key != "emoji-mart.frequently" &&
+              key != "emoji-mart.last"
+            ) {
+              notes = notes + key + "\n" + JSON.stringify(value) + "\n";
+            }
+          });
+          fs.writeFile("restore.spst", notes, e => {
             if (e) console.log(e);
           });
         }
-        dbx
-          .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
-          .then(() => {
-            dbx
-              .filesUpload({
-                path: "/Playork Sticky Notes/notes.spst",
-                contents: notes
-              })
-              .catch(() => {});
-          })
-          .catch(e => {
-            if (e) {
-              dbx
-                .filesUpload({
-                  path: "/Playork Sticky Notes/notes.spst",
-                  contents: notes
-                })
-                .catch(() => {});
-            }
-          });
         store.each((value, key) => {
           if (key != "id" && key != "loglevel:webpack-dev-server") {
             if (value.first == "<p><br></p>") {
