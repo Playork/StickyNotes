@@ -387,9 +387,10 @@ export default {
           }
         });
         if (process.platform == "linux") {
+          let restore = notes;
           if (localStorage.getItem("access") != undefined) {
-            let restore =
-              notes + "access" + "\n" + localStorage.getItem("access") + "\n";
+            restore =
+              restore + "access" + "\n" + localStorage.getItem("access") + "\n";
           }
           fs.writeFile("restore.spst", restore, e => {
             if (e) console.log(e);
