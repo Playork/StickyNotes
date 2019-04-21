@@ -364,12 +364,18 @@ export default {
               key != "loglevel:webpack-dev-server" &&
               key != "closed" &&
               key != "emoji-mart.frequently" &&
-              key != "emoji-mart.last"
+              key != "emoji-mart.last" &&
+              key != "access"
             ) {
               notes = notes + key + "\n" + JSON.stringify(value) + "\n";
             }
           });
-          fs.writeFile("restore.spst", notes, e => {
+          let restore = notes;
+          if (localStorage.getItem("access") != undefined) {
+            restore =
+              restore + "access" + "\n" + localStorage.getItem("access") + "\n";
+          }
+          fs.writeFile("restore.spst", restore, e => {
             if (e) console.log(e);
           });
         }
