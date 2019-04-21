@@ -212,8 +212,8 @@ export default {
               });
           }
         }
-      }, 2500);
-    }, 2500);
+      }, 3000);
+    }, 3000);
 
     // Load Saved Notes
     window.setInterval(() => {
