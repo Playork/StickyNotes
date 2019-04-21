@@ -160,7 +160,34 @@ export default {
     // close on app.quit()
     ipcRenderer.on("closeall", () => {
       store.set("closed", { closed: "yes" });
-      remote.getCurrentWindow().destroy();
+      window.setTimeout(() => {
+        if (process.platform == "linux") {
+          let notes = "";
+          store.each((value, key) => {
+            if (
+              key != "id" &&
+              key != "loglevel:webpack-dev-server" &&
+              key != "closed" &&
+              key != "emoji-mart.frequently" &&
+              key != "emoji-mart.last" &&
+              key != "access"
+            ) {
+              notes = notes + key + "\n" + JSON.stringify(value) + "\n";
+            }
+          });
+          let restore = notes;
+          if (localStorage.getItem("access") != undefined) {
+            restore =
+              restore + "access" + "\n" + localStorage.getItem("access") + "\n";
+          }
+          fs.writeFile("restore.spst", restore, e => {
+            if (e) console.log(e);
+          });
+        }
+        window.setTimeout(() => {
+          remote.getCurrentWindow().destroy();
+        }, 100);
+      }, 100);
     });
 
     // Remove Closed
@@ -356,29 +383,6 @@ export default {
     // Close Function
     close() {
       if (document.getElementById("deleteall").style.pointerEvents != "none") {
-        if (process.platform == "linux") {
-          let notes = "";
-          store.each((value, key) => {
-            if (
-              key != "id" &&
-              key != "loglevel:webpack-dev-server" &&
-              key != "closed" &&
-              key != "emoji-mart.frequently" &&
-              key != "emoji-mart.last" &&
-              key != "access"
-            ) {
-              notes = notes + key + "\n" + JSON.stringify(value) + "\n";
-            }
-          });
-          let restore = notes;
-          if (localStorage.getItem("access") != undefined) {
-            restore =
-              restore + "access" + "\n" + localStorage.getItem("access") + "\n";
-          }
-          fs.writeFile("restore.spst", restore, e => {
-            if (e) console.log(e);
-          });
-        }
         store.each((value, key) => {
           if (key != "id" && key != "loglevel:webpack-dev-server") {
             if (value.first == "<p><br></p>") {
