@@ -31,6 +31,8 @@ SOFTWARE.
         <img src="../../assets/sticky.svg" width="300px">
       </div>
     </div>
+    <input type="text" id="search" value placeholder="Search">
+    <span id="searchico">&#xE721;</span>
     <div id="notes"></div>
     <div>
       <div id="options">

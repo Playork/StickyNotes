@@ -228,7 +228,7 @@ export default {
     });
 
     // Load Saved Notes
-    window.setInterval(() => {
+    window.setTimeout(() => {
       if (store.get("sync") != undefined) {
         store.set("sync", { sync: "no" });
         let dbx = new Dropbox({ fetch, accessToken: accesst });
@@ -315,8 +315,28 @@ export default {
             .getElementById("notes")
             .insertAdjacentHTML(
               "afterbegin",
-              `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span>${content}</div>`
+              `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span><div id="cont">${content}</div></div>`
             );
+          if (document.getElementById("search").value != "") {
+            let cont = document.getElementById("cont").innerHTML;
+            let index = cont.indexOf(document.getElementById("search").value);
+            if (index >= 0) {
+              let highcontent =
+                cont.substring(0, index) +
+                "<span style='background-color: yellow;border-radius:10px;'>" +
+                cont.substring(
+                  index,
+                  index + document.getElementById("search").value.length
+                ) +
+                "</span>" +
+                cont.substring(
+                  index + document.getElementById("search").value.length
+                );
+              document.getElementById("cont").innerHTML = highcontent;
+            } else {
+              document.getElementById("notetext").style.display = "none";
+            }
+          }
 
           if (value.closed == "yes") {
             document.getElementById("startnote").style.display = "inline";
@@ -366,16 +386,7 @@ export default {
             "5px solid " + value.title;
         }
       });
-    }, 2000);
-    // let start = store.get("id").ids;
-    // store.each((value, key) => {
-    //   if (key != "id" && key != "loglevel:webpack-dev-server") {
-    //     if (store.get("id").ids == start) {
-    //       store.set("id", { ids: key });
-    //       ipcRenderer.send("create-new-instance");
-    //     }
-    //   }
-    // });
+    }, 2500);
   },
 
   // Functions

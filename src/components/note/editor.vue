@@ -523,7 +523,6 @@ export default {
             }
           }, 50);
         };
-
         window.setInterval(() => {
           try {
             if (store.get(obj.toString()).deleted == "yes") {
@@ -550,7 +549,9 @@ export default {
         .addEventListener("click", () => repeafunc());
       document
         .getElementById("changec")
-        .addEventListener("click", () => window.setTimeout(()=>repeafunc(),100));
+        .addEventListener("click", () =>
+          window.setTimeout(() => repeafunc(), 100)
+        );
       document
         .getElementById("locks")
         .addEventListener("click", () => repeafunc());

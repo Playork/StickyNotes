@@ -689,12 +689,13 @@
   line-height: 22px;
 }
 .ql-snow .ql-picker-options {
-  background-color: #707070;
+  background-color: #202020ee;
   display: none;
   min-width: 100%;
   padding: 4px 8px;
   position: absolute;
   white-space: nowrap;
+  color: #fff;
 }
 .ql-snow .ql-picker-options .ql-picker-item {
   cursor: pointer;
@@ -889,10 +890,11 @@
   margin-right: 15px;
 }
 .ql-snow .ql-tooltip {
-  background-color: #707070;
+  background-color: #202020ee;
   color: #000;
   padding: 5px 12px;
   white-space: nowrap;
+  color: #fff;
 }
 .ql-snow .ql-tooltip::before {
   content: "Visit URL:";
@@ -906,6 +908,10 @@
   margin: 0;
   padding: 3px 5px;
   width: 170px;
+  background: #222;
+  color: #fff;
+  outline: none;
+  border: none;
 }
 .ql-snow .ql-tooltip a.ql-preview {
   display: inline-block;
@@ -925,6 +931,8 @@
 }
 .ql-snow .ql-tooltip a {
   line-height: 26px;
+  cursor: pointer;
+  color: #fff;
 }
 .ql-snow .ql-tooltip.ql-editing a.ql-preview,
 .ql-snow .ql-tooltip.ql-editing a.ql-remove {

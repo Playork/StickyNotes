@@ -57,7 +57,7 @@ SOFTWARE. */
   margin: 5px !important;
   height: 32px !important;
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px !important;
-  border-radius: 0 !important;
+  border-radius: 10px !important;
 }
 .swal-button--cancel:hover,
 .swal-button--danger:hover,
@@ -73,7 +73,7 @@ SOFTWARE. */
   color: white !important;
   background: #0078d7 !important;
   border: 2px solid rgba(0, 0, 0, 0.4) !important;
-  border-radius: 0 !important;
+  border-radius: 10px !important;
 }
 .swal-button--cancel:focus,
 .swal-button--danger:focus,
@@ -89,7 +89,7 @@ SOFTWARE. */
   margin: 5px !important;
   height: 32px !important;
   color: white !important;
-  border-radius: 0 !important;
+  border-radius: 10px !important;
 }
 .swal-button--cancel:active,
 .swal-button--danger:active,
@@ -105,7 +105,7 @@ SOFTWARE. */
   padding-right: 10px !important;
   margin: 5px !important;
   height: 32px !important;
-  border-radius: 0 !important;
+  border-radius: 10px !important;
 }
 .swal-modal {
   background: #202020ee !important;
