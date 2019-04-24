@@ -429,6 +429,17 @@ export default {
     let func = obj => {
       let repeafunc = () => {
         let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
+        document.querySelector(".ql-snow .ql-editor").innerHTML = text.replace(
+          /((1[0-2]|0?[1-9])(:|\.)([0-5][0-9]) ?([AaPp][Mm]))/g,
+          x => {
+            return (
+              "<span id='alarm' style='color:blue;text-decoration: underline;'>" +
+              x +
+              "</span>"
+            );
+          }
+        );
+        text = document.querySelector(".ql-snow .ql-editor").innerHTML;
         let url = document.getElementById("draw").toDataURL();
         let color1 = window
           .getComputedStyle(document.getElementById("lightYellow"))

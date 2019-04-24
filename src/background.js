@@ -22,7 +22,7 @@ SOFTWARE. */
 
 "use strict";
 
-import { app, protocol, BrowserWindow, ipcMain, dialog } from "electron";
+import { app, protocol, BrowserWindow, ipcMain } from "electron";
 import {
   createProtocol,
   installVueDevtools
@@ -58,7 +58,8 @@ function createWindow() {
     resizable: false,
     show: false,
     webPreferences: {
-      webSecurity: false
+      webSecurity: false,
+      nodeIntegration: true
     }
   });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -97,7 +98,8 @@ function createNote() {
     frame: false,
     show: false,
     webPreferences: {
-      webSecurity: false
+      webSecurity: false,
+      nodeIntegration: true
     }
   });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
