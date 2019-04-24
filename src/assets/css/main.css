@@ -121,10 +121,10 @@ button {
   font-family: "segoe";
 }
 #notes {
-  height: calc(100% - 65px);
+  height: calc(100% - 85px);
   z-index: 20;
   position: absolute;
-  top: 65px;
+  top: 85px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -146,4 +146,28 @@ button {
   min-height: 80px;
   pointer-events: none;
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
+}
+#search {
+  width: 270px;
+  position: absolute;
+  top: 45px;
+  left: 5px;
+  height: 35px;
+  font-family: Arial;
+  border: none;
+  background: #111;
+  border-radius: 10px;
+  padding-left: 30px;
+  padding-right: 5px;
+  outline: none;
+  color: #fff;
+  font-size: 15px;
+}
+#searchico {
+  color: #777;
+  position: absolute;
+  top: 55px;
+  left: 10px;
+  font-size: 17.5px;
+  font-family: "segoe";
 }
