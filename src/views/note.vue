@@ -138,7 +138,7 @@ export default {
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
           if (document.getElementById("mouch").innerHTML == "Touch Mode") {
-          document.getElementById("emoji").style.display = "block";
+            document.getElementById("emoji").style.display = "block";
           }
         },
         true
@@ -159,7 +159,7 @@ export default {
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
           if (document.getElementById("mouch").innerHTML == "Touch Mode") {
-          document.getElementById("emoji").style.display = "block";
+            document.getElementById("emoji").style.display = "block";
           }
           if (!e.target.matches("#menus")) {
             let dropdowns = document.getElementById("menu-content");
