@@ -26,7 +26,7 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div id="home">
-    <titlebar1 v-bind:close="close" v-bind:note="note"/>
+    <titlebar1 v-bind:close="close" v-bind:selectuser="selectuser" v-bind:note="note"/>
     <homebody/>
   </div>
 </template>
@@ -391,6 +391,13 @@ export default {
 
   // Functions
   methods: {
+    // Select User
+    selectuser() {
+      let id = document.getElementById("user");
+      id.style.display = "block";
+      document.getElementById("home").style.overflowY = "hidden";
+    },
+
     // Close Function
     close() {
       if (document.getElementById("deleteall").style.pointerEvents != "none") {

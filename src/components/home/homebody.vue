@@ -26,6 +26,10 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div>
+    <div id="user">
+      <span v-on:click="hide">&#xE8BB;</span>
+      <div></div>
+    </div>
     <div class="start">
       <div>
         <img src="../../assets/sticky.svg" width="300px">
@@ -158,6 +162,7 @@ export default {
     hide() {
       document.getElementById("sync").style.display = "none";
       document.getElementById("about").style.display = "none";
+      document.getElementById("user").style.display = "none";
       document.getElementById("home").style.overflowY = "auto";
     }
   }

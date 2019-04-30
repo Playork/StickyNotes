@@ -32,6 +32,9 @@ SOFTWARE.
           <span id="add">&#xE710;</span>
         </div>
         <div id="window-controls">
+          <div title="Switch User" class="button" v-on:click="selectuser" id="switchuser">
+            <span>&#xE748;</span>
+          </div>
           <div title="Close All Notes" class="button" v-on:click="close" id="close-button">
             <span>&#xE8BB;</span>
           </div>
@@ -48,7 +51,8 @@ export default {
   // Props
   props: {
     close: Function,
-    note: Function
+    note: Function,
+    selectuser: Function
   }
 };
 </script>
