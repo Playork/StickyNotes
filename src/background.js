@@ -81,9 +81,6 @@ function createWindow() {
       app.quit();
     }, 150);
   });
-  win.on("window-all-closed", () => {
-    app.quit();
-  });
 }
 
 app.commandLine.appendSwitch("disable-web-security");

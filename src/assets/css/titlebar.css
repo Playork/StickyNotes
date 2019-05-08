@@ -35,7 +35,7 @@ SOFTWARE. */
   left: 0;
   right: 0;
   bottom: 100%;
-  z-index: 8;
+  z-index: 9;
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }
 #close-button {
