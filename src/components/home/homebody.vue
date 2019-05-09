@@ -26,6 +26,11 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div>
+    <div id="user">
+      <span v-on:click="hide" id="closeuser">&#xE8BB;</span>
+      <span v-on:click="adduser" id="adduser">&#xE710;</span>
+      <div id="users"></div>
+    </div>
     <div class="start">
       <div>
         <img src="../../assets/sticky.svg" width="300px">
@@ -104,6 +109,45 @@ export default {
 
   // Functions
   methods: {
+    // Add User
+    adduser() {
+      swal({
+        text: "Add New User",
+        content: "input",
+        button: {
+          text: "Add"
+        }
+      }).then(user => {
+        document.getElementById(
+          "users"
+        ).innerHTML += `<p id="${user}"><span class="s${user}" id="username">${user}</span> <span class="${user} default" id="deleteuser">&#xE8BB;</span></p>`;
+        document.getElementsByClassName(user)[0].onclick = () => {
+          swal({
+            title: "Are you sure?",
+            text: "Want To Delete The User!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+          }).then(willDelete => {
+            if (willDelete) {
+              document.getElementById(user).remove();
+            }
+          });
+        };
+        document.getElementsByClassName(`s${user}`)[0].onclick = () => {
+          store.set("user", { default: user });
+          document.getElementsByClassName("default")[0].innerHTML = "&#xE8BB;";
+          document
+            .getElementsByClassName("default")[0]
+            .classList.remove("default");
+          document
+            .querySelector(`#${user} #deleteuser`)
+            .classList.add("default");
+          document.getElementsByClassName("default")[0].innerHTML = "&#xE73E;";
+        };
+      });
+    },
+
     // Report Bug
     report() {
       shell.openExternal(
@@ -125,8 +169,10 @@ export default {
           if (store.get("closed").closed == "yes") {
             window.setTimeout(() => {
               store.each((value, key) => {
-                if (key != "access") {
-                  store.remove(key);
+                if (key != "access" && key != "user") {
+                  if (value.user == store.get("user").default) {
+                    store.remove(key);
+                  }
                 }
               });
             }, 50);
@@ -158,6 +204,7 @@ export default {
     hide() {
       document.getElementById("sync").style.display = "none";
       document.getElementById("about").style.display = "none";
+      document.getElementById("user").style.display = "none";
       document.getElementById("home").style.overflowY = "auto";
     }
   }
