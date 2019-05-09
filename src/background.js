@@ -22,7 +22,7 @@ SOFTWARE. */
 
 "use strict";
 
-import { app, protocol, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import {
   createProtocol,
   installVueDevtools
@@ -30,6 +30,7 @@ import {
 import { autoUpdater } from "electron-updater";
 import AutoLaunch from "auto-launch";
 import { setTimeout } from "timers";
+
 autoUpdater.checkForUpdatesAndNotify();
 require("electron-context-menu")({
   prepend: () => [
@@ -46,7 +47,6 @@ launchonstart.enable();
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
-protocol.registerStandardSchemes(["app"], { secure: true });
 function createWindow() {
   win = new BrowserWindow({
     width: 400,
@@ -80,9 +80,6 @@ function createWindow() {
       win.destroy();
       app.quit();
     }, 150);
-  });
-  win.on("window-all-closed", () => {
-    app.quit();
   });
 }
 

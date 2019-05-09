@@ -109,7 +109,7 @@ export default {
 
   // Do On Start
   mounted() {
-    // Cavas
+    // Canvas
     let canvas = document.getElementById("draw");
     window.addEventListener("resize", resizeCanvas, false);
     resizeCanvas();
@@ -429,17 +429,6 @@ export default {
     let func = obj => {
       let repeafunc = () => {
         let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
-        document.querySelector(".ql-snow .ql-editor").innerHTML = text.replace(
-          /((1[0-2]|0?[1-9])(:|\.)([0-5][0-9]) ?([AaPp][Mm]))/g,
-          x => {
-            return (
-              "<span id='alarm' style='color:blue;text-decoration: underline;'>" +
-              x +
-              "</span>"
-            );
-          }
-        );
-        text = document.querySelector(".ql-snow .ql-editor").innerHTML;
         let url = document.getElementById("draw").toDataURL();
         let color1 = window
           .getComputedStyle(document.getElementById("lightYellow"))
@@ -623,7 +612,7 @@ export default {
         .clearRect(0, 0, window.innerWidth, window.innerHeight);
     },
 
-    // Custom Color Choser Show Hide Function
+    // Custom Color Chooser Show Hide Function
     showthis() {
       document.getElementById("paintcolor").onclick = () => {
         document.getElementById("choosepaint").style.display = "block";

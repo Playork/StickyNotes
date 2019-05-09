@@ -95,6 +95,19 @@ export default {
       window.resizeTo(350, 375);
       document.querySelector(".ql-toolbar").style.backgroundColor = "#FFF2AB";
     }
+    // document
+    //   .querySelector(".ql-snow .ql-editor")
+    //   .addEventListener("input", () => {
+    //     let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
+    //     let regexnow = /((1[0-2]|0?[1-9])(:|\.)([0-5][0-9]) ?([AaPp][Mm]))/;
+    //     if (regexnow.test(text)) {
+    //       document.querySelector(
+    //         ".ql-snow .ql-editor"
+    //       ).innerHTML = text.replace(regexnow, x => {
+    //         return "<span id='alarm' style='color:blue;'>" + x + "</span>";
+    //       });
+    //     }
+    //   });
   },
 
   // Functions
@@ -138,7 +151,7 @@ export default {
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
           if (document.getElementById("mouch").innerHTML == "Touch Mode") {
-          document.getElementById("emoji").style.display = "block";
+            document.getElementById("emoji").style.display = "block";
           }
         },
         true
@@ -159,7 +172,7 @@ export default {
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
           if (document.getElementById("mouch").innerHTML == "Touch Mode") {
-          document.getElementById("emoji").style.display = "block";
+            document.getElementById("emoji").style.display = "block";
           }
           if (!e.target.matches("#menus")) {
             let dropdowns = document.getElementById("menu-content");
