@@ -156,9 +156,10 @@ button {
   font-family: "segoe";
   font-size: 15px;
   padding-left: 5px;
+  cursor: pointer;
 }
 #users #deleteuser:hover {
-  color: red;
+  color: #ff0000 !important;
 }
 #users {
   position: absolute;
@@ -167,10 +168,10 @@ button {
   right: 0;
   font-size: 25px;
 }
-#users .username {
+#users #username {
   cursor: pointer;
 }
-#users .username:hover {
+#users #username:hover {
   color: #aaa;
 }
 #notes {

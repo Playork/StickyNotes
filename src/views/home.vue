@@ -90,15 +90,8 @@ export default {
           let user = "Default";
           document.getElementById(
             "users"
-<<<<<<< HEAD
-          ).innerHTML += `<p id="${user}"><span class="username">${user}</span> <span class="${user} default" id="deleteuser">&#xE73E;</span></p>`;
+          ).innerHTML += `<p id="${user}"><span class="s${user} id="username">${user}</span> <span class="${user} default" id="deleteuser">&#xE73E;</span></p>`;
           document.getElementsByClassName(user)[0].onclick = () => {
-=======
-          ).innerHTML += `<p class="username" id="${user}">${user} <span class="${user}" id="deleteuser">&#xE8BB;</span></p>`;
-          document.getElementsByClassName(
-            `#username .${user}`
-          ).onclick = () => {
->>>>>>> 2c339ec0f052107337d812d2c553001fb5b0323e
             swal({
               title: "Are you sure?",
               text: "Want To Delete The User!",
@@ -107,25 +100,22 @@ export default {
               dangerMode: true
             }).then(willDelete => {
               if (willDelete) {
-                document.getElementById(`${user}`).remove();
+                document.getElementById(user).remove();
               }
             });
           };
-<<<<<<< HEAD
-          document.querySelector(`#${user} .username`)[0].onclick = () => {
+          document.getElementsByClassName(`s${user}`)[0].onclick = () => {
             store.set("user", { default: user });
-            document.querySelector("#users .default").innerHTML = "&#xE8BB;";
+            document.getElementsByClassName("default")[0].innerHTML =
+              "&#xE8BB;";
             document
-              .querySelector("#users .default")
+              .getElementsByClassName("default")[0]
               .classList.remove("default");
             document
               .querySelector(`#${user} #deleteuser`)
               .classList.add("default");
-            document.querySelector("#users .default").innerHTML = "&#xE73E;";
-=======
-          document.getElementById(`${user}`).onclick = () => {
-            store.set("user", { default: user });
->>>>>>> 2c339ec0f052107337d812d2c553001fb5b0323e
+            document.getElementsByClassName("default")[0].innerHTML =
+              "&#xE73E;";
           };
         }
       }
