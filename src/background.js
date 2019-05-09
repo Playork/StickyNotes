@@ -22,7 +22,7 @@ SOFTWARE. */
 
 "use strict";
 
-import { app, protocol, BrowserWindow, ipcMain, dialog } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import {
   createProtocol,
   installVueDevtools
@@ -30,6 +30,7 @@ import {
 import { autoUpdater } from "electron-updater";
 import AutoLaunch from "auto-launch";
 import { setTimeout } from "timers";
+
 autoUpdater.checkForUpdatesAndNotify();
 require("electron-context-menu")({
   prepend: () => [
@@ -46,7 +47,6 @@ launchonstart.enable();
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
-protocol.registerStandardSchemes(["app"], { secure: true });
 function createWindow() {
   win = new BrowserWindow({
     width: 400,
@@ -58,7 +58,8 @@ function createWindow() {
     resizable: false,
     show: false,
     webPreferences: {
-      webSecurity: false
+      webSecurity: false,
+      nodeIntegration: true
     }
   });
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -80,9 +81,6 @@ function createWindow() {
       app.quit();
     }, 150);
   });
-  win.on("window-all-closed", () => {
-    app.quit();
-  });
 }
 
 app.commandLine.appendSwitch("disable-web-security");
@@ -97,7 +95,8 @@ function createNote() {
     frame: false,
     show: false,
     webPreferences: {
-      webSecurity: false
+      webSecurity: false,
+      nodeIntegration: true
     }
   });
   if (process.env.WEBPACK_DEV_SERVER_URL) {

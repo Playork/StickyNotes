@@ -10,29 +10,25 @@
     "start": "vue-cli-service electron:serve"
   },
   "dependencies": {
-    "an-array-of-english-words": "^1.3.1",
+    "an-array-of-english-words": "latest",
     "auto-launch": "latest",
     "dropbox": "^4.0.17",
     "electron-context-menu": "latest",
-    "electron-updater": "^4.0.0",
-    "emoji-mart-vue": "^2.6.6",
-    "katex": "^0.10.1",
+    "electron-updater": "latest",
+    "emoji-mart-vue": "latest",
+    "katex": "latest",
     "quill": "latest",
     "store": "latest",
     "sweetalert": "latest"
   },
   "devDependencies": {
-    "@vue/cli-service": "^3.6.0",
+    "@vue/cli-service": "latest",
     "electron": "latest",
+    "electron-builder": "latest",
     "vue": "latest",
     "vue-cli-plugin-electron-builder": "latest",
     "vue-router": "latest",
     "vue-template-compiler": "latest"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
   },
   "homepage": "https://github.com/Playork/StickyNotes",
   "license": "MIT",

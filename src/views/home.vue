@@ -395,7 +395,15 @@ export default {
     close() {
       if (document.getElementById("deleteall").style.pointerEvents != "none") {
         store.each((value, key) => {
-          if (key != "id" && key != "loglevel:webpack-dev-server") {
+          if (
+            key != "id" &&
+            key != "loglevel:webpack-dev-server" &&
+            key != "closed" &&
+            key != "emoji-mart.frequently" &&
+            key != "emoji-mart.last" &&
+            key != "access" &&
+            key != "sync"
+          ) {
             if (value.first == "<p><br></p>") {
               store.remove(key);
             }

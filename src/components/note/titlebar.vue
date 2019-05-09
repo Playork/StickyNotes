@@ -71,6 +71,7 @@ import { remote } from "electron";
 import { setInterval } from "timers";
 import fs from "fs";
 import swal from "sweetalert";
+import os from "os";
 
 // Vue Class
 export default {
@@ -243,7 +244,8 @@ export default {
               name: "Note(.spst)",
               extensions: ["spst"]
             }
-          ]
+          ],
+          defaultPath: os.homedir() + "/note.spst"
         },
         note => {
           document.getElementById("note").style.pointerEvents = "auto";
@@ -287,7 +289,7 @@ export default {
               extensions: ["spst"]
             }
           ],
-          defaultPath: "note.spst"
+          defaultPath: os.homedir() + "/note.spst"
         },
         note => {
           document.getElementById("note").style.pointerEvents = "auto";
@@ -333,7 +335,8 @@ export default {
               name: "Audo Files(mp3,wav,ogg)",
               extensions: ["mp3", "MP3", "wav", "WAV", "ogg", "OGG"]
             }
-          ]
+          ],
+          defaultPath: os.homedir()
         },
         audios => {
           document.getElementById("note").style.pointerEvents = "auto";
@@ -369,7 +372,8 @@ export default {
                 "Ogg"
               ]
             }
-          ]
+          ],
+          defaultPath: os.homedir()
         },
         videos => {
           document.getElementById("note").style.pointerEvents = "auto";

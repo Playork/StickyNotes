@@ -23,7 +23,7 @@
 
 ### Lock The Note
 
-### Text Suggetions
+### Text Suggestions
 
 ### Import Note From A File
 
@@ -33,7 +33,7 @@
 
 ### Undo,Redo Options
 
-### Touch Mode For Touch Or Pen Devices(Support Many Eding And Import,Export And Save Options)
+### Touch Mode For Touch Or Pen Devices(Support Many Editing And Import,Export And Save Options)
 
 ### If you like my App please consider buying me a coffee at [HERE!](http://buymeacoff.ee/playork)
 
@@ -49,9 +49,9 @@
 
 # Unstable Release
 
-### For Development Version Follow the instuctions below
+### For Development Version Follow the instructions below
 
-if you want to try it install [nodejs](https://nodejs.org), [git](https://git-scm.com/), [Vue CLI](https://cli.vuejs.org/) and clone this repository
+if you want to try it install [nodejs](https://nodejs.org), [git](https://git-scm.com/), [Vue CLI](https://cli.vuejs.org/), [pnpm](https://pnpm.js.org/) and clone this repository
 
 ```bash
 git clone https://github.com/Playork/StickyNotes
@@ -63,22 +63,22 @@ point to source directory
 cd /path/to/source/of/StickyNotes
 ```
 
-and install depencise by
+and install dependence by
 
 ```bash
-npm install
+pnpm install
 ```
 
 after this start this application by this command
 
 ```bash
-npm start
+pnpm start
 ```
 
 build for production by this command
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 # Licence

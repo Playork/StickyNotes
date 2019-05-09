@@ -109,7 +109,7 @@ export default {
 
   // Do On Start
   mounted() {
-    // Cavas
+    // Canvas
     let canvas = document.getElementById("draw");
     window.addEventListener("resize", resizeCanvas, false);
     resizeCanvas();
@@ -612,7 +612,7 @@ export default {
         .clearRect(0, 0, window.innerWidth, window.innerHeight);
     },
 
-    // Custom Color Choser Show Hide Function
+    // Custom Color Chooser Show Hide Function
     showthis() {
       document.getElementById("paintcolor").onclick = () => {
         document.getElementById("choosepaint").style.display = "block";
