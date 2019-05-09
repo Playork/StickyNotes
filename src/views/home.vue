@@ -26,7 +26,7 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div id="home">
-    <titlebar1 v-bind:close="close" v-bind:selectuser="selectuser" v-bind:note="note"/>
+    <titlebar1 v-bind:close="close" v-bind:note="note"/>
     <homebody/>
   </div>
 </template>
@@ -68,11 +68,7 @@ export default {
                 if (d[i] == "access") {
                   localStorage.setItem(d[i], d[i + 1]);
                 } else {
-                  if (d[i] == "user") {
-                    store.set(d[i], d[i + 1]);
-                  } else {
-                    store.set(d[i], JSON.parse(d[i + 1]));
-                  }
+                  store.set(d[i], JSON.parse(d[i + 1]));
                 }
               }
             }
@@ -80,46 +76,7 @@ export default {
         }
       });
     }
-    fs.readFile("./users.spst", "binary", (e, d) => {
-      if (e) {
-        console.log(e);
-      } else {
-        if (d != "") {
-          document.getElementById("users").innerHTML = d;
-        } else {
-          let user = "Default";
-          document.getElementById(
-            "users"
-          ).innerHTML += `<p id="${user}"><span class="s${user} id="username">${user}</span> <span class="${user} default" id="deleteuser">&#xE73E;</span></p>`;
-          document.getElementsByClassName(user)[0].onclick = () => {
-            swal({
-              title: "Are you sure?",
-              text: "Want To Delete The User!",
-              icon: "warning",
-              buttons: true,
-              dangerMode: true
-            }).then(willDelete => {
-              if (willDelete) {
-                document.getElementById(user).remove();
-              }
-            });
-          };
-          document.getElementsByClassName(`s${user}`)[0].onclick = () => {
-            store.set("user", { default: user });
-            document.getElementsByClassName("default")[0].innerHTML =
-              "&#xE8BB;";
-            document
-              .getElementsByClassName("default")[0]
-              .classList.remove("default");
-            document
-              .querySelector(`#${user} #deleteuser`)
-              .classList.add("default");
-            document.getElementsByClassName("default")[0].innerHTML =
-              "&#xE73E;";
-          };
-        }
-      }
-    });
+
     // Upload
     window.setTimeout(() => {
       dbx
@@ -227,10 +184,6 @@ export default {
             if (e) console.log(e);
           });
         }
-        let users = document.getElementById("users").innerHTML;
-        fs.writeFile("users.spst", users, e => {
-          if (e) console.log(e);
-        });
         window.setTimeout(() => {
           remote.getCurrentWindow().destroy();
         }, 100);
@@ -350,92 +303,87 @@ export default {
           key != "emoji-mart.frequently" &&
           key != "emoji-mart.last" &&
           key != "access" &&
-          key != "sync" &&
-          key != "user"
+          key != "sync"
         ) {
-          if (value.user == store.get("user").default) {
-            let content;
-            if (value.first == undefined) {
-              content = `<img src="${value.image}" style="max-width:90%;"`;
-            } else {
-              content = value.first;
-            }
-            document
-              .getElementById("notes")
-              .insertAdjacentHTML(
-                "afterbegin",
-                `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span><div id="cont">${content}</div></div>`
-              );
-            if (document.getElementById("search").value != "") {
-              let cont = document.getElementById("cont").innerHTML;
-              let index = cont.indexOf(document.getElementById("search").value);
-              if (index >= 0) {
-                let highcontent =
-                  cont.substring(0, index) +
-                  "<span style='background-color: yellow;border-radius:10px;'>" +
-                  cont.substring(
-                    index,
-                    index + document.getElementById("search").value.length
-                  ) +
-                  "</span>" +
-                  cont.substring(
-                    index + document.getElementById("search").value.length
-                  );
-                document.getElementById("cont").innerHTML = highcontent;
-              } else {
-                document.getElementById("notetext").style.display = "none";
-              }
-            }
-
-            if (value.closed == "yes") {
-              document.getElementById("startnote").style.display = "inline";
-            }
-            if (value.closed == "no") {
-              document.getElementById("startnote").style.display = "none";
-            }
-            if (value.locked == "yes") {
-              document.getElementById("deletenote").style.pointerEvents =
-                "none";
-              document.getElementById("deleteall").style.pointerEvents = "none";
-            }
-            if (value.locked == "no") {
-              document.getElementById("deletenote").style.pointerEvents =
-                "auto";
-              document.getElementById("deleteall").style.pointerEvents = "auto";
-            }
-            document.getElementById("startnote").onclick = () => {
-              let id = new Date().getTime();
-              store.set("id", { ids: key });
-              ipcRenderer.send("create-new-instance");
-              window.setTimeout(() => {
-                if (value.closed == "no") {
-                  store.set("id", { ids: id });
-                }
-              }, 500);
-            };
-            document.getElementById("deletenote").onclick = () => {
-              swal({
-                title: "Are you sure?",
-                text: "Want To Delete Your Note!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true
-              }).then(willDelete => {
-                if (willDelete) {
-                  if (value.closed == "no") {
-                    store.set(key, { deleted: "yes" });
-                  }
-                  if (value.closed == "yes") {
-                    store.remove(key);
-                  }
-                }
-              });
-            };
-            document.getElementById("notetext").style.backgroundColor =
-              value.back;
-            document.getElementById("notetext").style.border =
-              "5px solid " + value.title;
+          let content;
+          if (value.first == undefined) {
+            content = `<img src="${value.image}" style="max-width:90%;"`;
+          } else {
+            content = value.first;
           }
+          document
+            .getElementById("notes")
+            .insertAdjacentHTML(
+              "afterbegin",
+              `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span><div id="cont">${content}</div></div>`
+            );
+          if (document.getElementById("search").value != "") {
+            let cont = document.getElementById("cont").innerHTML;
+            let index = cont.indexOf(document.getElementById("search").value);
+            if (index >= 0) {
+              let highcontent =
+                cont.substring(0, index) +
+                "<span style='background-color: yellow;border-radius:10px;'>" +
+                cont.substring(
+                  index,
+                  index + document.getElementById("search").value.length
+                ) +
+                "</span>" +
+                cont.substring(
+                  index + document.getElementById("search").value.length
+                );
+              document.getElementById("cont").innerHTML = highcontent;
+            } else {
+              document.getElementById("notetext").style.display = "none";
+            }
+          }
+
+          if (value.closed == "yes") {
+            document.getElementById("startnote").style.display = "inline";
+          }
+          if (value.closed == "no") {
+            document.getElementById("startnote").style.display = "none";
+          }
+          if (value.locked == "yes") {
+            document.getElementById("deletenote").style.pointerEvents = "none";
+            document.getElementById("deleteall").style.pointerEvents = "none";
+          }
+          if (value.locked == "no") {
+            document.getElementById("deletenote").style.pointerEvents = "auto";
+            document.getElementById("deleteall").style.pointerEvents = "auto";
+          }
+          document.getElementById("startnote").onclick = () => {
+            let id = new Date().getTime();
+            store.set("id", { ids: key });
+            ipcRenderer.send("create-new-instance");
+            window.setTimeout(() => {
+              if (value.closed == "no") {
+                store.set("id", { ids: id });
+              }
+            }, 500);
+          };
+          document.getElementById("deletenote").onclick = () => {
+            swal({
+              title: "Are you sure?",
+              text: "Want To Delete Your Note!",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true
+            }).then(willDelete => {
+              if (willDelete) {
+                if (value.closed == "no") {
+                  store.set(key, { deleted: "yes" });
+                }
+                if (value.closed == "yes") {
+                  store.remove(key);
+                }
+              }
+            });
+          };
+          document.getElementById("notetext").style.backgroundColor =
+            value.back;
+          document.getElementById("notetext").style.border =
+            "5px solid " + value.title;
         }
       });
     }, 2000);
@@ -443,13 +391,6 @@ export default {
 
   // Functions
   methods: {
-    // Select User
-    selectuser() {
-      let id = document.getElementById("user");
-      id.style.display = "block";
-      document.getElementById("home").style.overflowY = "hidden";
-    },
-
     // Close Function
     close() {
       if (document.getElementById("deleteall").style.pointerEvents != "none") {
