@@ -461,12 +461,7 @@ export default {
             key != "emoji-mart.frequently" &&
             key != "emoji-mart.last" &&
             key != "access" &&
-<<<<<<< HEAD
             key != "sync"
-=======
-            key != "sync" &&
-            key != "user"
->>>>>>> b4d941d85e65b58bbf9d4d180dcdb1434a8d0d16
           ) {
             if (value.first == "<p><br></p>") {
               store.remove(key);
