@@ -120,8 +120,13 @@ export default {
       }).then(user => {
         document.getElementById(
           "users"
+<<<<<<< HEAD
         ).innerHTML += `<p id="${user}"><span class="username">${user}</span> <span class="${user} default" id="deleteuser">&#xE73E;</span></p>`;
         document.getElementsByClassName(user)[0].onclick = () => {
+=======
+        ).innerHTML += `<p class="username" id="${user}">${user} <span class="${user}" id="deleteuser">&#xE8BB;</span></p>`;
+        document.getElementsByClassName(`#username .${user}`).onclick = () => {
+>>>>>>> 2c339ec0f052107337d812d2c553001fb5b0323e
           swal({
             title: "Are you sure?",
             text: "Want To Delete The User!",
@@ -134,7 +139,11 @@ export default {
             }
           });
         };
+<<<<<<< HEAD
         document.querySelector(`#${user} .username`)[0].onclick = () => {
+=======
+        document.getElementById(`${user}`).onclick = () => {
+>>>>>>> 2c339ec0f052107337d812d2c553001fb5b0323e
           store.set("user", { default: user });
           document.querySelector("#users .default").innerHTML = "&#xE8BB;";
           document.querySelector("#users .default").classList.remove("default");
