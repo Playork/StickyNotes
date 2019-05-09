@@ -27,8 +27,9 @@ SOFTWARE.
 <template>
   <div>
     <div id="user">
-      <span v-on:click="hide">&#xE8BB;</span>
-      <div></div>
+      <span v-on:click="hide" id="closeuser">&#xE8BB;</span>
+      <span v-on:click="adduser" id="adduser">&#xE710;</span>
+      <div id="users"></div>
     </div>
     <div class="start">
       <div>
@@ -108,6 +109,43 @@ export default {
 
   // Functions
   methods: {
+    // Add User
+    adduser() {
+      swal({
+        text: "Add New User",
+        content: "input",
+        button: {
+          text: "Add"
+        }
+      }).then(user => {
+        document.getElementById(
+          "users"
+        ).innerHTML += `<p class="username" id="${user}">${user} <span class="${user}" id="deleteuser">&#xE8BB;</span></p>`;
+        document.getElementsByClassName(`#username .${user}`).onclick = () => {
+          swal({
+            title: "Are you sure?",
+            text: "Want To Delete The User!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+          }).then(willDelete => {
+            if (willDelete) {
+              document.getElementById(`${user}`).remove();
+            }
+          });
+        };
+        document.getElementById(`${user}`).onclick = () => {
+          store.set("user", { default: user });
+          document.querySelector("#users .default").innerHTML = "&#xE8BB;";
+          document.querySelector("#users .default").classList.remove("default");
+          document
+            .querySelector(`#${user} #deleteuser`)
+            .classList.add("default");
+          document.querySelector("#users .default").innerHTML = "&#xE73E;";
+        };
+      });
+    },
+
     // Report Bug
     report() {
       shell.openExternal(
@@ -129,8 +167,10 @@ export default {
           if (store.get("closed").closed == "yes") {
             window.setTimeout(() => {
               store.each((value, key) => {
-                if (key != "access") {
-                  store.remove(key);
+                if (key != "access" && key != "user") {
+                  if (value.user == store.get("user").default) {
+                    store.remove(key);
+                  }
                 }
               });
             }, 50);

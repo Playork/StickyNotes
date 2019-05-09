@@ -133,14 +133,45 @@ button {
   padding-top: 35px;
   text-align: center;
   color: #fff;
+  overflow: auto;
 }
-#user span {
+#user #closeuser {
   position: absolute;
   top: 45px;
   bottom: 100%;
   left: 5px;
   color: #fff;
   font-family: "segoe";
+}
+#user #adduser {
+  position: absolute;
+  top: 45px;
+  bottom: 100%;
+  right: 5px;
+  color: #fff;
+  font-family: "segoe";
+}
+#users #deleteuser {
+  color: #fff;
+  font-family: "segoe";
+  font-size: 15px;
+  padding-left: 5px;
+}
+#users #deleteuser:hover {
+  color: red;
+}
+#users {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  font-size: 25px;
+}
+#users .username {
+  cursor: pointer;
+}
+#users .username:hover {
+  color: #aaa;
 }
 #notes {
   height: calc(100% - 85px);
@@ -192,4 +223,7 @@ button {
   left: 10px;
   font-size: 17.5px;
   font-family: "segoe";
+}
+.default {
+  pointer-events: none;
 }

@@ -109,7 +109,7 @@ export default {
 
   // Do On Start
   mounted() {
-    // Cavas
+    // Canvas
     let canvas = document.getElementById("draw");
     window.addEventListener("resize", resizeCanvas, false);
     resizeCanvas();
@@ -428,6 +428,34 @@ export default {
     });
     let func = obj => {
       let repeafunc = () => {
+        let defaultuser;
+        if (document.getElementById("users").innerHTML == "") {
+          let user = "Default";
+          document.getElementById(
+            "users"
+          ).innerHTML += `<p class="username" id="${user}">${user} <span class="${user}" id="deleteuser">&#xE8BB;</span></p>`;
+          document.getElementsByClassName(
+            `#username .${user}`
+          ).onclick = () => {
+            swal({
+              title: "Are you sure?",
+              text: "Want To Delete The User!",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true
+            }).then(willDelete => {
+              if (willDelete) {
+                document.getElementById(`${user}`).remove();
+              }
+            });
+          };
+          document.getElementById(`${user}`).onclick = () => {
+            store.set("user", { default: user });
+          };
+          defaultuser = user;
+        } else {
+          defaultuser = store.get("user").default;
+        }
         let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
         let url = document.getElementById("draw").toDataURL();
         let color1 = window
@@ -452,6 +480,7 @@ export default {
             "<p><br></p>"
           ) {
             store.set(obj.toString(), {
+              user: defaultuser,
               first: text,
               back: color1,
               title: color2,
@@ -612,7 +641,7 @@ export default {
         .clearRect(0, 0, window.innerWidth, window.innerHeight);
     },
 
-    // Custom Color Choser Show Hide Function
+    // Custom Color Chooser Show Hide Function
     showthis() {
       document.getElementById("paintcolor").onclick = () => {
         document.getElementById("choosepaint").style.display = "block";
