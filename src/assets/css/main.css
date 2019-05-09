@@ -120,6 +120,60 @@ button {
   color: #fff;
   font-family: "segoe";
 }
+#user {
+  display: none;
+  background: #202020ee;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-family: "Lobster";
+  z-index: 8;
+  padding-top: 35px;
+  text-align: center;
+  color: #fff;
+  overflow: auto;
+}
+#user #closeuser {
+  position: absolute;
+  top: 45px;
+  bottom: 100%;
+  left: 5px;
+  color: #fff;
+  font-family: "segoe";
+}
+#user #adduser {
+  position: absolute;
+  top: 45px;
+  bottom: 100%;
+  right: 5px;
+  color: #fff;
+  font-family: "segoe";
+}
+#users #deleteuser {
+  color: #fff;
+  font-family: "segoe";
+  font-size: 15px;
+  padding-left: 5px;
+  cursor: pointer;
+}
+#users #deleteuser:hover {
+  color: #ff0000 !important;
+}
+#users {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  font-size: 25px;
+}
+#users #username {
+  cursor: pointer;
+}
+#users #username:hover {
+  color: #aaa;
+}
 #notes {
   height: calc(100% - 85px);
   z-index: 20;
@@ -170,4 +224,7 @@ button {
   left: 10px;
   font-size: 17.5px;
   font-family: "segoe";
+}
+.default {
+  pointer-events: none;
 }
