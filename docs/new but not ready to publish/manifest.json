@@ -1,0 +1,15 @@
+{
+  "name": "Playork Sticky Notes",
+  "short_name": "Sticky Notes",
+  "icons": [
+    {
+      "src": "./img/logo.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#202020",
+  "theme_color": "#ffff00"
+}
