@@ -38,7 +38,6 @@ SOFTWARE.
 // Import Required Packages
 import { remote, ipcRenderer } from "electron";
 import store from "store";
-import swal from "sweetalert";
 import editor from "../components/note/editor.vue";
 import titlebar from "../components/note/titlebar.vue";
 import colors from "../components/note/colors.vue";
@@ -94,6 +93,11 @@ export default {
     } catch {
       window.resizeTo(350, 375);
       document.querySelector(".ql-toolbar").style.backgroundColor = "#FFF2AB";
+    }
+    if (store.get("color").on == "no") {
+      document.getElementById("color").style.visibility = "hidden";
+    } else {
+      document.getElementById("color").style.visibility = "visible";
     }
     // document
     //   .querySelector(".ql-snow .ql-editor")

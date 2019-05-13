@@ -85,7 +85,6 @@ import { remote } from "electron";
 import Quill from "quill";
 import katex from "katex";
 import store from "store";
-import swal from "sweetalert";
 import $ from "./../../assets/script/jquery.js";
 import wordsarray from "an-array-of-english-words";
 import { setTimeout, setInterval } from "timers";
@@ -564,23 +563,25 @@ export default {
       let id = 1;
       func(id);
     }
-    window.setTimeout(() => {
-      $(".ql-snow .ql-editor").textcomplete([
-        {
-          match: /(^|\b)(\w{2,})$/,
-          search: (term, callback) => {
-            callback(
-              $.map(words, word => {
-                return word.indexOf(term) === 0 ? word : null;
-              })
-            );
-          },
-          replace: word => {
-            return word + " ";
+    if (store.get("text").on == "yes") {
+      window.setTimeout(() => {
+        $(".ql-snow .ql-editor").textcomplete([
+          {
+            match: /(^|\b)(\w{2,})$/,
+            search: (term, callback) => {
+              callback(
+                $.map(words, word => {
+                  return word.indexOf(term) === 0 ? word : null;
+                })
+              );
+            },
+            replace: word => {
+              return word + " ";
+            }
           }
-        }
-      ]);
-    }, 500);
+        ]);
+      }, 500);
+    }
   },
   methods: {
     // Add emoji

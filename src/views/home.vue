@@ -68,7 +68,19 @@ export default {
                 if (d[i] == "access") {
                   localStorage.setItem(d[i], d[i + 1]);
                 } else {
-                  store.set(d[i], JSON.parse(d[i + 1]));
+                  if (d[i] == "color") {
+                    localStorage.setItem(d[i], d[i + 1]);
+                  } else {
+                    if (d[i] == "text") {
+                      localStorage.setItem(d[i], d[i + 1]);
+                    } else {
+                      if (d[i] == "warn") {
+                        localStorage.setItem(d[i], d[i + 1]);
+                      } else {
+                        store.set(d[i], JSON.parse(d[i + 1]));
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -209,7 +221,10 @@ export default {
             key != "closed" &&
             key != "emoji-mart.frequently" &&
             key != "emoji-mart.last" &&
-            key != "access"
+            key != "access" &&
+            key != "text" &&
+            key != "warn" &&
+            key != "color"
           ) {
             notes = notes + key + "\n" + JSON.stringify(value) + "\n";
           }
@@ -303,7 +318,10 @@ export default {
           key != "emoji-mart.frequently" &&
           key != "emoji-mart.last" &&
           key != "access" &&
-          key != "sync"
+          key != "sync" &&
+          key != "text" &&
+          key != "warn" &&
+          key != "color"
         ) {
           let content;
           if (value.first == undefined) {
@@ -363,22 +381,31 @@ export default {
             }, 500);
           };
           document.getElementById("deletenote").onclick = () => {
-            swal({
-              title: "Are you sure?",
-              text: "Want To Delete Your Note!",
-              icon: "warning",
-              buttons: true,
-              dangerMode: true
-            }).then(willDelete => {
-              if (willDelete) {
-                if (value.closed == "no") {
-                  store.set(key, { deleted: "yes" });
+            if (store.get("warn").on == "yes") {
+              swal({
+                title: "Are you sure?",
+                text: "Want To Delete Your Note!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+              }).then(willDelete => {
+                if (willDelete) {
+                  if (value.closed == "no") {
+                    store.set(key, { deleted: "yes" });
+                  }
+                  if (value.closed == "yes") {
+                    store.remove(key);
+                  }
                 }
-                if (value.closed == "yes") {
-                  store.remove(key);
-                }
+              });
+            } else {
+              if (value.closed == "no") {
+                store.set(key, { deleted: "yes" });
               }
-            });
+              if (value.closed == "yes") {
+                store.remove(key);
+              }
+            }
           };
           document.getElementById("notetext").style.backgroundColor =
             value.back;
@@ -402,7 +429,10 @@ export default {
             key != "emoji-mart.frequently" &&
             key != "emoji-mart.last" &&
             key != "access" &&
-            key != "sync"
+            key != "sync" &&
+            key != "text" &&
+            key != "warn" &&
+            key != "color"
           ) {
             if (value.first == "<p><br></p>") {
               store.remove(key);

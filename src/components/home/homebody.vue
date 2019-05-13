@@ -38,6 +38,7 @@ SOFTWARE.
       <div id="options">
         <span v-on:click="syncshow" title="Sync">&#xE895;</span>
         <span id="deleteall" v-on:click="deleteall" title="Delete All Notes">&#xE74D;</span>
+        <span v-on:click="settingsshow" title="Settings">&#xE713;</span>
         <span v-on:click="aboutshow" title="About">&#xE946;</span>
       </div>
       <div id="sync">
@@ -47,6 +48,29 @@ SOFTWARE.
           <button id="drb">Sync With Dropbox</button>
           <p id="sign"></p>
           <a id="out" v-on:click="out"></a>
+        </div>
+      </div>
+      <div id="settings">
+        <span v-on:click="hide">&#xE8BB;</span>
+        <div>
+          <h1>Settings</h1>
+          <div id="setting">
+            <p>Background Colors</p>
+            <label class="container">
+              <input type="checkbox" id="colorswitch" checked="checked">
+              <span class="checkmark"></span>
+            </label>
+            <p>Text Suggestions</p>
+            <label class="container">
+              <input type="checkbox" id="textswitch" checked="checked">
+              <span class="checkmark"></span>
+            </label>
+            <p>Warn Before Delete</p>
+            <label class="container">
+              <input type="checkbox" id="warnswitch" checked="checked">
+              <span class="checkmark"></span>
+            </label>
+          </div>
         </div>
       </div>
       <div id="about">
@@ -100,6 +124,57 @@ export default {
         win.focus();
       });
     });
+    if (store.get("color") == undefined) {
+      document.getElementById("colorswitch").checked = true;
+      store.set("color", { on: "yes" });
+    } else {
+      if (store.get("color").on == "yes") {
+        document.getElementById("colorswitch").checked = true;
+      } else {
+        document.getElementById("colorswitch").checked = false;
+      }
+    }
+    if (store.get("text") == undefined) {
+      document.getElementById("textswitch").checked = true;
+      store.set("text", { on: "yes" });
+    } else {
+      if (store.get("text").on == "yes") {
+        document.getElementById("textswitch").checked = true;
+      } else {
+        document.getElementById("textswitch").checked = false;
+      }
+    }
+    if (store.get("warn") == undefined) {
+      document.getElementById("warnswitch").checked = true;
+      store.set("warn", { on: "yes" });
+    } else {
+      if (store.get("warn").on == "yes") {
+        document.getElementById("warnswitch").checked = true;
+      } else {
+        document.getElementById("warnswitch").checked = false;
+      }
+    }
+    document.getElementById("colorswitch").onclick = () => {
+      if (document.getElementById("colorswitch").checked == true) {
+        store.set("color", { on: "yes" });
+      } else {
+        store.set("color", { on: "no" });
+      }
+    };
+    document.getElementById("textswitch").onclick = () => {
+      if (document.getElementById("textswitch").checked == true) {
+        store.set("text", { on: "yes" });
+      } else {
+        store.set("text", { on: "no" });
+      }
+    };
+    document.getElementById("warnswitch").onclick = () => {
+      if (document.getElementById("warnswitch").checked == true) {
+        store.set("warn", { on: "yes" });
+      } else {
+        store.set("warn", { on: "no" });
+      }
+    };
   },
 
   // Functions
@@ -113,26 +188,50 @@ export default {
 
     // Delete All Note Function
     deleteall() {
-      swal({
-        title: "Are you sure?",
-        text: "Want To Delete All Notes!",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true
-      }).then(willDelete => {
-        if (willDelete) {
-          store.set("closed", { closed: "yes" });
-          if (store.get("closed").closed == "yes") {
-            window.setTimeout(() => {
-              store.each((value, key) => {
-                if (key != "access") {
-                  store.remove(key);
-                }
-              });
-            }, 50);
+      if (store.get("warn").on == "yes") {
+        swal({
+          title: "Are you sure?",
+          text: "Want To Delete All Notes!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true
+        }).then(willDelete => {
+          if (willDelete) {
+            store.set("closed", { closed: "yes" });
+            if (store.get("closed").closed == "yes") {
+              window.setTimeout(() => {
+                store.each((value, key) => {
+                  if (
+                    key != "access" &&
+                    key != "text" &&
+                    key != "warn" &&
+                    key != "color"
+                  ) {
+                    store.remove(key);
+                  }
+                });
+              }, 50);
+            }
           }
+        });
+      } else {
+        store.set("closed", { closed: "yes" });
+        if (store.get("closed").closed == "yes") {
+          store.set("closed", { closed: "yes" });
+          window.setTimeout(() => {
+            store.each((value, key) => {
+              if (
+                key != "access" &&
+                key != "text" &&
+                key != "warn" &&
+                key != "color"
+              ) {
+                store.remove(key);
+              }
+            });
+          }, 50);
         }
-      });
+      }
     },
 
     // Sign Out
@@ -154,10 +253,18 @@ export default {
       document.getElementById("home").style.overflowY = "hidden";
     },
 
+    // Show Sync Page Function
+    settingsshow() {
+      let id = document.getElementById("settings");
+      id.style.display = "block";
+      document.getElementById("home").style.overflowY = "hidden";
+    },
+
     // Hide About Page Function
     hide() {
       document.getElementById("sync").style.display = "none";
       document.getElementById("about").style.display = "none";
+      document.getElementById("settings").style.display = "none";
       document.getElementById("home").style.overflowY = "auto";
     }
   }
