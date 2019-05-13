@@ -65,6 +65,11 @@ SOFTWARE.
               <input type="checkbox" id="textswitch" checked="checked">
               <span class="checkmark"></span>
             </label>
+            <p>Emoji Selector</p>
+            <label class="container">
+              <input type="checkbox" id="emojiswitch" checked="checked">
+              <span class="checkmark"></span>
+            </label>
             <p>Warn Before Delete</p>
             <label class="container">
               <input type="checkbox" id="warnswitch" checked="checked">
@@ -144,6 +149,16 @@ export default {
         document.getElementById("textswitch").checked = false;
       }
     }
+    if (store.get("emoji") == undefined) {
+      document.getElementById("emojiswitch").checked = true;
+      store.set("emoji", { on: "yes" });
+    } else {
+      if (store.get("emoji").on == "yes") {
+        document.getElementById("emojiswitch").checked = true;
+      } else {
+        document.getElementById("emojiswitch").checked = false;
+      }
+    }
     if (store.get("warn") == undefined) {
       document.getElementById("warnswitch").checked = true;
       store.set("warn", { on: "yes" });
@@ -166,6 +181,13 @@ export default {
         store.set("text", { on: "yes" });
       } else {
         store.set("text", { on: "no" });
+      }
+    };
+    document.getElementById("emojiswitch").onclick = () => {
+      if (document.getElementById("emojiswitch").checked == true) {
+        store.set("emoji", { on: "yes" });
+      } else {
+        store.set("emoji", { on: "no" });
       }
     };
     document.getElementById("warnswitch").onclick = () => {
@@ -205,7 +227,8 @@ export default {
                     key != "access" &&
                     key != "text" &&
                     key != "warn" &&
-                    key != "color"
+                    key != "color" &&
+                    key != "emoji"
                   ) {
                     store.remove(key);
                   }
@@ -224,7 +247,8 @@ export default {
                 key != "access" &&
                 key != "text" &&
                 key != "warn" &&
-                key != "color"
+                key != "color" &&
+                key != "emoji"
               ) {
                 store.remove(key);
               }

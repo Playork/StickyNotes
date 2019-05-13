@@ -99,6 +99,11 @@ export default {
     } else {
       document.getElementById("color").style.visibility = "visible";
     }
+    if (store.get("emoji").on == "no") {
+      document.getElementById("emoji").style.visibility = "hidden";
+    } else {
+      document.getElementById("emoji").style.visibility = "visible";
+    }
     // document
     //   .querySelector(".ql-snow .ql-editor")
     //   .addEventListener("input", () => {
