@@ -38,6 +38,7 @@ SOFTWARE.
       <div id="options">
         <span v-on:click="syncshow" title="Sync">&#xE895;</span>
         <span id="deleteall" v-on:click="deleteall" title="Delete All Notes">&#xE74D;</span>
+        <span v-on:click="usershow" title="Users">&#xE77B;</span>
         <span v-on:click="settingsshow" title="Settings">&#xE713;</span>
         <span v-on:click="aboutshow" title="About">&#xE946;</span>
       </div>
@@ -49,6 +50,11 @@ SOFTWARE.
           <p id="sign"></p>
           <a id="out" v-on:click="out"></a>
         </div>
+      </div>
+      <div id="users">
+        <span v-on:click="hide" id="closeusers">&#xE8BB;</span>
+        <span v-on:click="adduser" id="adduser">&#xE710;</span>
+        <div></div>
       </div>
       <div id="settings">
         <span v-on:click="hide">&#xE8BB;</span>
@@ -284,11 +290,19 @@ export default {
       document.getElementById("home").style.overflowY = "hidden";
     },
 
+    // Show Sync Page Function
+    usershow() {
+      let id = document.getElementById("users");
+      id.style.display = "block";
+      document.getElementById("home").style.overflowY = "hidden";
+    },
+
     // Hide About Page Function
     hide() {
       document.getElementById("sync").style.display = "none";
       document.getElementById("about").style.display = "none";
       document.getElementById("settings").style.display = "none";
+      document.getElementById("users").style.display = "none";
       document.getElementById("home").style.overflowY = "auto";
     }
   }

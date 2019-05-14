@@ -64,17 +64,21 @@ button {
   user-select: none;
 }
 #options {
-  float: left;
-  position: absolute;
-  top: 45px;
-  bottom: 100%;
-  left: 75%;
+  display: grid;
+  position: fixed;
+  grid-template-columns: 1fr;
+  top: 40px;
+  left: 92%;
   font-family: "segoe";
   color: #fff;
   user-select: none;
+  background: #111;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
+  z-index: 7;
 }
 #options span {
-  padding-right: 10px;
+  padding: 10px;
 }
 #about {
   display: none;
@@ -95,6 +99,36 @@ button {
   top: 45px;
   bottom: 100%;
   left: 5px;
+  color: #fff;
+  font-family: "segoe";
+}
+#users {
+  display: none;
+  background: #202020ee;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-family: "Lobster";
+  z-index: 7;
+  padding-top: 35px;
+  text-align: center;
+  color: #fff;
+}
+#users #closeusers {
+  position: absolute;
+  top: 45px;
+  bottom: 100%;
+  left: 5px;
+  color: #fff;
+  font-family: "segoe";
+}
+#users #adduser {
+  position: absolute;
+  top: 45px;
+  bottom: 100%;
+  right: 5px;
   color: #fff;
   font-family: "segoe";
 }
@@ -163,15 +197,15 @@ button {
   padding: 5px;
   margin: 5px;
   border-radius: 20px;
-  width: 91%;
+  width: 85%;
   word-wrap: break-word;
   min-height: 80px;
   pointer-events: none;
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }
 #search {
-  width: 255px;
-  position: absolute;
+  width: 81%;
+  position: fixed;
   top: 45px;
   left: 5px;
   height: 35px;
@@ -184,14 +218,17 @@ button {
   outline: none;
   color: #fff;
   font-size: 15px;
+  z-index: 7;
+  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }
 #searchico {
   color: #777;
-  position: absolute;
+  position: fixed;
   top: 55px;
   left: 10px;
   font-size: 17.5px;
   font-family: "segoe";
+  z-index: 7;
 }
 .container {
   position: relative;
