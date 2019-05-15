@@ -205,21 +205,36 @@ export default {
       }
     };
     if (document.getElementById("userlist").innerHTML == "") {
-      sessionStorage.setItem("default", "{}");
-      document.getElementsByClassName("deletedefault")[0].style.visibility =
-        "hidden";
+      sessionStorage.setItem(
+        "default",
+        'warn----{"on":"yes"}----text----{"on":"yes"}----emoji----{"on":"no"}----color----{"on":"no"}----'
+      );
+      window.setTimeout(() => {
+        document.getElementsByClassName("deletedefault")[0].style.visibility =
+          "hidden";
+        document
+          .getElementsByClassName("default")[0]
+          .classList.add("userselected");
+      }, 2500);
       store.set("default", { user: "default" });
-      document
-        .getElementsByClassName("default")[0]
-        .classList.add("userselected");
     }
     window.setInterval(() => {
+      document.getElementById("userlist").innerHTML = "";
       for (var i = 0; i < sessionStorage.length; i++) {
         let user = sessionStorage.key(i);
         document.getElementById(
           "userlist"
         ).innerHTML += `<div id="userbox" class="${user}"><p>${user}</p><span id="deleteuser" class="delete${user}" title="Delete User">&#xE74D;</span></div>`;
         document.getElementsByClassName(user)[0].onclick = () => {
+          store.clearAll();
+          let d = sessionStorage.getItem(user);
+          d = d.toString().split("----");
+          for (let i = 0; i < d.length; i++) {
+            if (i % 2 == 0 && d[i] != "") {
+              let js = JSON.parse(d[i + 1]);
+              store.set(d[i], js);
+            }
+          }
           try {
             document.querySelector(".userselected span").style.display = "flex";
           } catch {}
@@ -256,7 +271,10 @@ export default {
           sessionStorage.getItem(user) == undefined &&
           user != null
         ) {
-          sessionStorage.setItem(user, "{}");
+          sessionStorage.setItem(
+            user,
+            'warn----{"on":"yes"}----text----{"on":"yes"}----emoji----{"on":"no"}----color----{"on":"no"}----'
+          );
         } else {
           if (sessionStorage.getItem(user) != undefined) {
             swal("User Is Already Created");

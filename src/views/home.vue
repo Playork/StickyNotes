@@ -55,7 +55,7 @@ export default {
 
   // Do On Start
   mounted() {
-    // Linux Restore
+    // Restore
     if (process.platform == "linux") {
       fs.readFile("./restore.spst", "binary", (e, d) => {
         if (e) {
@@ -96,6 +96,20 @@ export default {
         }
       });
     }
+    fs.readFile("./users.spst", "binary", (e, d) => {
+      if (e) {
+        console.log(e);
+      } else {
+        if (d != "") {
+          d = d.toString().split("\n");
+          for (let i = 0; i < d.length; i++) {
+            if (i % 2 == 0 && d[i] != "") {
+              sessionStorage.setItem(d[i], d[i + 1]);
+            }
+          }
+        }
+      }
+    });
 
     // Upload
     window.setTimeout(() => {
@@ -204,6 +218,15 @@ export default {
             if (e) console.log(e);
           });
         }
+        let storeuser = "";
+        for (var i = 0; i < sessionStorage.length; i++) {
+          let user = sessionStorage.key(i);
+          storeuser =
+            storeuser + user + "\n" + sessionStorage.getItem(user) + "\n";
+        }
+        fs.writeFile("users.spst", storeuser, e => {
+          if (e) console.log(e);
+        });
         window.setTimeout(() => {
           remote.getCurrentWindow().destroy();
         }, 100);
@@ -215,6 +238,20 @@ export default {
 
     // Sync
     window.addEventListener("storage", () => {
+      let storage = "";
+      store.each((value, key) => {
+        if (
+          key != "id" &&
+          key != "loglevel:webpack-dev-server" &&
+          key != "closed" &&
+          key != "emoji-mart.frequently" &&
+          key != "emoji-mart.last" &&
+          key != "default"
+        ) {
+          storage = storage + key + "----" + JSON.stringify(value) + "----";
+        }
+      });
+      sessionStorage.setItem(store.getItem("default").user, storage);
       if (store.get("sync") == undefined || store.get("sync").sync == "no") {
         try {
           if (store.get("sync").sync == "no") {
