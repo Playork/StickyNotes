@@ -222,7 +222,7 @@ export default {
           document.getElementsByClassName("deletedefault")[0].style.visibility =
             "hidden";
         }
-        if (store.getItem("default").user == user) {
+        if (store.get("default").user == user) {
           document.getElementsByClassName(user)[0].style.border =
             "5px solid #aaa";
           document

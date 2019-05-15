@@ -251,7 +251,7 @@ export default {
           storage = storage + key + "----" + JSON.stringify(value) + "----";
         }
       });
-      sessionStorage.setItem(store.getItem("default").user, storage);
+      sessionStorage.setItem(store.get("default").user, storage);
       if (store.get("sync") == undefined || store.get("sync").sync == "no") {
         try {
           if (store.get("sync").sync == "no") {
