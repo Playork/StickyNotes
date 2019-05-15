@@ -209,13 +209,6 @@ export default {
         "default",
         'warn----{"on":"yes"}----text----{"on":"yes"}----emoji----{"on":"no"}----color----{"on":"no"}----'
       );
-      window.setTimeout(() => {
-        document.getElementsByClassName("deletedefault")[0].style.visibility =
-          "hidden";
-        document
-          .getElementsByClassName("default")[0]
-          .classList.add("userselected");
-      }, 2500);
       store.set("default", { user: "default" });
     }
     window.setInterval(() => {
@@ -225,6 +218,19 @@ export default {
         document.getElementById(
           "userlist"
         ).innerHTML += `<div id="userbox" class="${user}"><p>${user}</p><span id="deleteuser" class="delete${user}" title="Delete User">&#xE74D;</span></div>`;
+        if (user == "default") {
+          document.getElementsByClassName("deletedefault")[0].style.visibility =
+            "hidden";
+        }
+        if (store.getItem("default").user == user) {
+          document.getElementsByClassName(user)[0].style.border =
+            "5px solid #aaa";
+          document
+            .getElementsByClassName(user)[0]
+            .classList.add("userselected");
+          document.getElementsByClassName(`delete${user}`)[0].style.display =
+            "none";
+        }
         document.getElementsByClassName(user)[0].onclick = () => {
           store.clearAll();
           let d = sessionStorage.getItem(user);
@@ -235,6 +241,7 @@ export default {
               store.set(d[i], js);
             }
           }
+
           try {
             document.querySelector(".userselected span").style.display = "flex";
           } catch {}
@@ -257,7 +264,7 @@ export default {
           document.getElementsByClassName(user)[0].remove();
         };
       }
-    }, 1);
+    }, 2500);
     document.getElementById("adduser").onclick = () => {
       swal({
         title: "Add A New User",
