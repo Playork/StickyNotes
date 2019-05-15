@@ -80,7 +80,11 @@ export default {
                         if (d[i] == "warn") {
                           localStorage.setItem(d[i], d[i + 1]);
                         } else {
-                          store.set(d[i], JSON.parse(d[i + 1]));
+                          if (d[i] == "default") {
+                            localStorage.setItem(d[i], d[i + 1]);
+                          } else {
+                            store.set(d[i], JSON.parse(d[i + 1]));
+                          }
                         }
                       }
                     }
@@ -229,7 +233,8 @@ export default {
             key != "text" &&
             key != "warn" &&
             key != "color" &&
-            key != "emoji"
+            key != "emoji" &&
+            key != "default"
           ) {
             notes = notes + key + "\n" + JSON.stringify(value) + "\n";
           }
@@ -327,7 +332,8 @@ export default {
           key != "text" &&
           key != "warn" &&
           key != "color" &&
-          key != "emoji"
+          key != "emoji" &&
+          key != "default"
         ) {
           let content;
           if (value.first == undefined) {
@@ -439,7 +445,8 @@ export default {
             key != "text" &&
             key != "warn" &&
             key != "color" &&
-            key != "emoji"
+            key != "emoji" &&
+            key != "default"
           ) {
             if (value.first == "<p><br></p>") {
               store.remove(key);

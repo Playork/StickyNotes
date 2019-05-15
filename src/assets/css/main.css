@@ -282,3 +282,30 @@ button {
   text-align: left;
   padding: 0 70px;
 }
+#userlist {
+  margin-top: 80px;
+  width: calc(100% - 60px);
+  margin: 0 30px;
+}
+#userbox {
+  background: #111;
+  width: calc(100% - 10px);
+  height: 30px;
+  margin: 10px 0;
+  display: flex;
+  border-radius: 5px;
+  font-size: 20px;
+  text-align: left;
+  padding: 5px;
+  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
+}
+#userbox p {
+  margin-top: 0;
+}
+#deleteuser {
+  font-family: "segoe";
+  font-size: 18px;
+  position: absolute;
+  right: 35px;
+  margin-top: 5px;
+}

@@ -53,8 +53,9 @@ SOFTWARE.
       </div>
       <div id="users">
         <span v-on:click="hide" id="closeusers">&#xE8BB;</span>
-        <span v-on:click="adduser" id="adduser">&#xE710;</span>
-        <div></div>
+        <span id="adduser">&#xE710;</span>
+        <h1>Users</h1>
+        <div id="userlist"></div>
       </div>
       <div id="settings">
         <span v-on:click="hide">&#xE8BB;</span>
@@ -106,9 +107,9 @@ SOFTWARE.
 // Import Required Packages
 import store from "store";
 import swal from "sweetalert";
-import { setTimeout } from "timers";
+import { setTimeout, setInterval } from "timers";
 import { Dropbox } from "dropbox";
-import { remote, ipcRenderer, inAppPurchase, shell } from "electron";
+import { remote, ipcRenderer, shell } from "electron";
 
 // Vue Class
 export default {
@@ -203,6 +204,66 @@ export default {
         store.set("warn", { on: "no" });
       }
     };
+    if (document.getElementById("userlist").innerHTML == "") {
+      sessionStorage.setItem("default", "{}");
+      document.getElementsByClassName("deletedefault")[0].style.visibility =
+        "hidden";
+      store.set("default", { user: "default" });
+      document
+        .getElementsByClassName("default")[0]
+        .classList.add("userselected");
+    }
+    window.setInterval(() => {
+      for (var i = 0; i < sessionStorage.length; i++) {
+        let user = sessionStorage.key(i);
+        document.getElementById(
+          "userlist"
+        ).innerHTML += `<div id="userbox" class="${user}"><p>${user}</p><span id="deleteuser" class="delete${user}" title="Delete User">&#xE74D;</span></div>`;
+        document.getElementsByClassName(user)[0].onclick = () => {
+          try {
+            document.querySelector(".userselected span").style.display = "flex";
+          } catch {}
+          document.getElementsByClassName("userselected")[0].style.border =
+            "none";
+          document
+            .getElementsByClassName("userselected")[0]
+            .classList.remove("userselected");
+          document.getElementsByClassName(user)[0].style.border =
+            "5px solid #aaa";
+          document
+            .getElementsByClassName(user)[0]
+            .classList.add("userselected");
+          document.getElementsByClassName(`delete${user}`)[0].style.display =
+            "none";
+          store.set("default", { user: user });
+        };
+        document.getElementsByClassName(`delete${user}`)[0].onclick = () => {
+          sessionStorage.removeItem(user);
+          document.getElementsByClassName(user)[0].remove();
+        };
+      }
+    }, 1);
+    document.getElementById("adduser").onclick = () => {
+      swal({
+        title: "Add A New User",
+        content: "input",
+        button: {
+          text: "Add"
+        }
+      }).then(user => {
+        if (
+          user != "" &&
+          sessionStorage.getItem(user) == undefined &&
+          user != null
+        ) {
+          sessionStorage.setItem(user, "{}");
+        } else {
+          if (sessionStorage.getItem(user) != undefined) {
+            swal("User Is Already Created");
+          }
+        }
+      });
+    };
   },
 
   // Functions
@@ -234,7 +295,8 @@ export default {
                     key != "text" &&
                     key != "warn" &&
                     key != "color" &&
-                    key != "emoji"
+                    key != "emoji" &&
+                    key != "default"
                   ) {
                     store.remove(key);
                   }
@@ -254,7 +316,8 @@ export default {
                 key != "text" &&
                 key != "warn" &&
                 key != "color" &&
-                key != "emoji"
+                key != "emoji" &&
+                key != "default"
               ) {
                 store.remove(key);
               }
