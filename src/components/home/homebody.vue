@@ -207,7 +207,7 @@ export default {
     if (document.getElementById("userlist").innerHTML == "") {
       sessionStorage.setItem(
         "default",
-        'warn----{"on":"yes"}----text----{"on":"yes"}----emoji----{"on":"no"}----color----{"on":"no"}----'
+        'warn----{"on":"yes"}----text----{"on":"yes"}----emoji----{"on":"yes"}----color----{"on":"yes"}----'
       );
       store.set("default", { user: "default" });
     }
@@ -283,7 +283,7 @@ export default {
         ) {
           sessionStorage.setItem(
             user,
-            'warn----{"on":"yes"}----text----{"on":"yes"}----emoji----{"on":"no"}----color----{"on":"no"}----'
+            'warn----{"on":"yes"}----text----{"on":"yes"}----emoji----{"on":"yes"}----color----{"on":"yes"}----'
           );
         } else {
           if (sessionStorage.getItem(user) != undefined) {
