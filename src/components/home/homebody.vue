@@ -232,7 +232,11 @@ export default {
             "none";
         }
         document.getElementsByClassName(user)[0].onclick = () => {
-          store.clearAll();
+          store.each((value, key) => {
+            if (key != "default") {
+              store.remove(key);
+            }
+          });
           let d = sessionStorage.getItem(user);
           d = d.toString().split("----");
           for (let i = 0; i < d.length; i++) {
@@ -241,7 +245,6 @@ export default {
               store.set(d[i], js);
             }
           }
-
           try {
             document.querySelector(".userselected span").style.display = "flex";
           } catch {}
