@@ -212,8 +212,21 @@ export default {
       store.set("default", { user: "default" });
     }
     window.setInterval(() => {
+      let storage = "";
+      store.each((value, key) => {
+        if (
+          key != "id" &&
+          key != "loglevel:webpack-dev-server" &&
+          key != "closed" &&
+          key != "emoji-mart.frequently" &&
+          key != "emoji-mart.last" &&
+          key != "default"
+        ) {
+          storage = storage + key + "----" + JSON.stringify(value) + "----";
+        }
+      });
       document.getElementById("userlist").innerHTML = "";
-      for (var i = 0; i < sessionStorage.length; i++) {
+      for (let i = 0; i < sessionStorage.length; i++) {
         let user = sessionStorage.key(i);
         document.getElementById(
           "userlist"
@@ -232,6 +245,7 @@ export default {
             "none";
         }
         document.getElementsByClassName(user)[0].onclick = () => {
+          store.set("default", { user: user });
           store.each((value, key) => {
             if (key != "default") {
               store.remove(key);
@@ -239,10 +253,10 @@ export default {
           });
           let d = sessionStorage.getItem(user);
           d = d.toString().split("----");
-          for (let i = 0; i < d.length; i++) {
-            if (i % 2 == 0 && d[i] != "") {
-              let js = JSON.parse(d[i + 1]);
-              store.set(d[i], js);
+          for (let j = 0; j < d.length; j++) {
+            if (j % 2 == 0 && d[j] != "") {
+              let js = JSON.parse(d[j + 1]);
+              store.set(d[j], js);
             }
           }
           try {
@@ -260,7 +274,6 @@ export default {
             .classList.add("userselected");
           document.getElementsByClassName(`delete${user}`)[0].style.display =
             "none";
-          store.set("default", { user: user });
         };
         document.getElementsByClassName(`delete${user}`)[0].onclick = () => {
           sessionStorage.removeItem(user);

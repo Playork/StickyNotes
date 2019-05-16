@@ -238,19 +238,6 @@ export default {
 
     // Sync
     window.addEventListener("storage", () => {
-      let storage = "";
-      store.each((value, key) => {
-        if (
-          key != "id" &&
-          key != "loglevel:webpack-dev-server" &&
-          key != "closed" &&
-          key != "emoji-mart.frequently" &&
-          key != "emoji-mart.last" &&
-          key != "default"
-        ) {
-          storage = storage + key + "----" + JSON.stringify(value) + "----";
-        }
-      });
       sessionStorage.setItem(store.get("default").user, storage);
       if (store.get("sync") == undefined || store.get("sync").sync == "no") {
         try {
