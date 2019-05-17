@@ -42,6 +42,7 @@ import editor from "../components/note/editor.vue";
 import titlebar from "../components/note/titlebar.vue";
 import colors from "../components/note/colors.vue";
 import choosecolor from "../components/note/choosecolor.vue";
+import swal from "sweetalert";
 
 // Vue Class
 export default {
@@ -55,6 +56,26 @@ export default {
 
   // Do On Start
   mounted() {
+    // Delete Note
+    let noteid = store.get("id").ids;
+    document.getElementById("deletenote").addEventListener("click", () => {
+      if (store.get("warn").on == "yes") {
+        swal({
+          title: "Are you sure?",
+          text: "Want To Delete Your Note!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true
+        }).then(willDelete => {
+          if (willDelete) {
+            store.remove(noteid);
+          }
+        });
+      } else {
+        store.remove(noteid);
+      }
+    });
+
     // Close For Main Process Close
     ipcRenderer.on("closenote", () => {
       remote.getCurrentWindow().close();

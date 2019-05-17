@@ -62,6 +62,9 @@ SOFTWARE.
               <a v-on:click="exportnote" id="export" title="Export Note">
                 <span>&#xEDE1;</span>Export
               </a>
+              <a id="deletenote" title="Delete Note">
+                <span>&#xE74D;</span>Delete
+              </a>
             </div>
           </div>
           <div class="button" id="show" title="Edit Text" v-on:click="showedit">
