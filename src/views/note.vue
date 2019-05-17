@@ -69,10 +69,12 @@ export default {
         }).then(willDelete => {
           if (willDelete) {
             store.remove(noteid);
+            remote.getCurrentWindow().destroy()
           }
         });
       } else {
         store.remove(noteid);
+        remote.getCurrentWindow().destroy()
       }
     });
 

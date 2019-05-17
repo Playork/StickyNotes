@@ -112,6 +112,7 @@ import swal from "sweetalert";
 import { setTimeout, setInterval } from "timers";
 import { Dropbox } from "dropbox";
 import { remote, ipcRenderer, shell } from "electron";
+import os from "os";
 
 // Vue Class
 export default {
