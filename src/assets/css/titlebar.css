@@ -176,10 +176,9 @@ SOFTWARE. */
   display: none;
   position: absolute;
   top: 40px;
-  right: -90px;
   background-color: #202020ee;
-  min-width: 130px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  min-width: 175px;
+  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
   z-index: 1;
 }
 .dropdown-content a {
@@ -187,8 +186,12 @@ SOFTWARE. */
   padding: 5px;
   text-decoration: none;
   display: block;
-  font-size: 22px;
+  font-size: 25px;
   font-family: "Lobster";
+}
+.dropdown-content a span {
+  font-family: "segoe";
+  padding: 5px;
 }
 .dropdown-content a:hover {
   background-color: #111;

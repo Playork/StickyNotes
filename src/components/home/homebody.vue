@@ -36,10 +36,12 @@ SOFTWARE.
     <div id="notes"></div>
     <div>
       <div id="options">
-        <span v-on:click="syncshow" title="Sync">&#xE895;</span>
         <span id="deleteall" v-on:click="deleteall" title="Delete All Notes">&#xE74D;</span>
+        <span v-on:click="syncshow" title="Sync">&#xE895;</span>
         <span v-on:click="usershow" title="Users">&#xE77B;</span>
         <span v-on:click="settingsshow" title="Settings">&#xE713;</span>
+        <span v-on:click="importnotes" title="Import Notes">&#xE8B5;</span>
+        <span v-on:click="exportnotes" title="Export Notes">&#xEDE1;</span>
         <span v-on:click="aboutshow" title="About">&#xE946;</span>
       </div>
       <div id="sync">
@@ -226,8 +228,7 @@ export default {
         }
       });
       document.getElementById("userlist").innerHTML = "";
-      for (let i = 0; i < sessionStorage.length; i++) {
-        let user = sessionStorage.key(i);
+      Object.keys(sessionStorage).forEach(function(user) {
         document.getElementById(
           "userlist"
         ).innerHTML += `<div id="userbox" class="${user}"><p>${user}</p><span id="deleteuser" class="delete${user}" title="Delete User">&#xE74D;</span></div>`;
@@ -235,53 +236,51 @@ export default {
           document.getElementsByClassName("deletedefault")[0].style.visibility =
             "hidden";
         }
+
+        document
+          .getElementsByClassName(user)[0]
+          .addEventListener("click", e => {
+            if (!e.target.matches(`.delete${user}`)) {
+              store.set("default", { user: user });
+              store.each((value, key) => {
+                if (key != "default") {
+                  store.remove(key);
+                }
+              });
+              let d = sessionStorage.getItem(user);
+              d = d.toString().split("----");
+              for (let j = 0; j < d.length; j++) {
+                if (j % 2 == 0 && d[j] != "") {
+                  let js = JSON.parse(d[j + 1]);
+                  store.set(d[j], js);
+                }
+              }
+            }
+          });
+        document
+          .getElementsByClassName(`delete${user}`)[0]
+          .addEventListener("click", () => {
+            swal({
+              title: "Are you sure?",
+              text: "Want To Delete The User!",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true
+            }).then(willDelete => {
+              if (willDelete) {
+                sessionStorage.removeItem(user);
+              }
+            });
+          });
         if (store.get("default").user == user) {
           document.getElementsByClassName(user)[0].style.border =
             "5px solid #aaa";
-          document
-            .getElementsByClassName(user)[0]
-            .classList.add("userselected");
           document.getElementsByClassName(`delete${user}`)[0].style.display =
             "none";
         }
-        document.getElementsByClassName(user)[0].onclick = () => {
-          store.set("default", { user: user });
-          store.each((value, key) => {
-            if (key != "default") {
-              store.remove(key);
-            }
-          });
-          let d = sessionStorage.getItem(user);
-          d = d.toString().split("----");
-          for (let j = 0; j < d.length; j++) {
-            if (j % 2 == 0 && d[j] != "") {
-              let js = JSON.parse(d[j + 1]);
-              store.set(d[j], js);
-            }
-          }
-          try {
-            document.querySelector(".userselected span").style.display = "flex";
-          } catch {}
-          document.getElementsByClassName("userselected")[0].style.border =
-            "none";
-          document
-            .getElementsByClassName("userselected")[0]
-            .classList.remove("userselected");
-          document.getElementsByClassName(user)[0].style.border =
-            "5px solid #aaa";
-          document
-            .getElementsByClassName(user)[0]
-            .classList.add("userselected");
-          document.getElementsByClassName(`delete${user}`)[0].style.display =
-            "none";
-        };
-        document.getElementsByClassName(`delete${user}`)[0].onclick = () => {
-          sessionStorage.removeItem(user);
-          document.getElementsByClassName(user)[0].remove();
-        };
-      }
-    }, 2500);
-    document.getElementById("adduser").onclick = () => {
+      });
+    }, 2000);
+    document.getElementById("adduser").addEventListener("click", () => {
       swal({
         title: "Add A New User",
         content: "input",
@@ -304,11 +303,101 @@ export default {
           }
         }
       });
-    };
+    });
   },
 
   // Functions
   methods: {
+    // Import Notes
+    importnotes() {
+      document.getElementById("home").style.pointerEvents = "none";
+      remote.dialog.showOpenDialog(
+        {
+          filters: [
+            {
+              name: "Notes(.spsd)",
+              extensions: ["spsd"]
+            }
+          ],
+          defaultPath: os.homedir() + "/note.spsd"
+        },
+        notes => {
+          document.getElementById("home").style.pointerEvents = "auto";
+          if (notes === undefined) return;
+          let notesfile = notes[0];
+          fs.readFile(notesfile, (e, d) => {
+            if (e) {
+              swal("Not Supported");
+            } else {
+              if (d != "") {
+                d = d.toString().split("\n");
+                for (let i = 0; i < d.length; i++) {
+                  if (i % 2 == 0 && d[i] != "") {
+                    let js = JSON.parse(d[i + 1]);
+                    if (store.get(d[i]) == undefined) {
+                      store.set(d[i], js);
+                    } else {
+                      if (
+                        js.first != store.get(d[i]).first ||
+                        js.image != store.get(d[i]).image
+                      ) {
+                        let g = new Date().getTime();
+                        let id = Number(d[i]) * g;
+                        store.set(id.toString(), js);
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          });
+        }
+      );
+    },
+
+    // Export Notes
+    exportnotes() {
+      document.getElementById("home").style.pointerEvents = "none";
+      remote.dialog.showSaveDialog(
+        {
+          filters: [
+            {
+              name: "Notes(.spsd)",
+              extensions: ["spsd"]
+            }
+          ],
+          defaultPath: os.homedir() + "/notes.spsd"
+        },
+        notes => {
+          document.getElementById("home").style.pointerEvents = "auto";
+          if (notes === undefined) return;
+          let data = "";
+          store.each((value, key) => {
+            if (
+              key != "id" &&
+              key != "loglevel:webpack-dev-server" &&
+              key != "closed" &&
+              key != "emoji-mart.frequently" &&
+              key != "emoji-mart.last" &&
+              key != "access" &&
+              key != "text" &&
+              key != "warn" &&
+              key != "color" &&
+              key != "emoji" &&
+              key != "default"
+            ) {
+              data = data + key + "\n" + JSON.stringify(value) + "\n";
+            }
+          });
+          fs.writeFile(notes, data, e => {
+            if (e) {
+              swal("Not Supported");
+            }
+          });
+        }
+      );
+    },
+
     // Report Bug
     report() {
       shell.openExternal(

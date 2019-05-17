@@ -159,7 +159,7 @@ export default {
           document.getElementById("more").style.display = "flex";
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
-          if (document.getElementById("mouch").innerHTML == "Touch Mode") {
+          if (/Touch Mode/.test(document.getElementById("mouch").innerHTML)) {
             document.getElementById("emoji").style.display = "block";
           }
         },
@@ -180,7 +180,7 @@ export default {
           document.getElementById("more").style.display = "flex";
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
-          if (document.getElementById("mouch").innerHTML == "Touch Mode") {
+          if (/Touch Mode/.test(document.getElementById("mouch").innerHTML)) {
             document.getElementById("emoji").style.display = "block";
           }
           if (!e.target.matches("#menus")) {

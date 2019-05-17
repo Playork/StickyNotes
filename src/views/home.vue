@@ -238,7 +238,6 @@ export default {
 
     // Sync
     window.addEventListener("storage", () => {
-      sessionStorage.setItem(store.get("default").user, storage);
       if (store.get("sync") == undefined || store.get("sync").sync == "no") {
         try {
           if (store.get("sync").sync == "no") {

@@ -38,18 +38,30 @@ SOFTWARE.
           <div class="button" id="menus" title="Menu">
             <span id="menu" v-on:click="menu">&#xE712;</span>
             <div id="menu-content" class="dropdown-content">
-              <a
-                id="mouch"
-                title="Change Between Touch Mode And Typing Mode"
-                v-on:click="mouch"
-              >Touch Mode</a>
-              <a title="Undo" id="undo">Undo</a>
-              <a title="Redo" id="redo">Redo</a>
-              <a title="Select Audio" id="video1" v-on:click="clickvideo">Add Video</a>
-              <a title="Select Video" id="audio1" v-on:click="clicksong">Add Audio</a>
-              <a v-on:click="savenote" title="Save Note">Save</a>
-              <a v-on:click="importnote" id="import" title="Import Note">Import</a>
-              <a v-on:click="exportnote" id="export" title="Export Note">Export</a>
+              <a id="mouch" title="Change Between Touch Mode And Typing Mode" v-on:click="mouch">
+                <span>&#xE815;</span>Touch Mode
+              </a>
+              <a title="Undo" id="undo">
+                <span>&#xE7A7;</span>Undo
+              </a>
+              <a title="Redo" id="redo">
+                <span>&#xE7A6;</span>Redo
+              </a>
+              <a title="Select Audio" id="video1" v-on:click="clickvideo">
+                <span>&#xE714;</span>Add Video
+              </a>
+              <a title="Select Video" id="audio1" v-on:click="clicksong">
+                <span>&#xE8D6;</span>Add Audio
+              </a>
+              <a v-on:click="savenote" title="Save Note">
+                <span>&#xE74E;</span>Save
+              </a>
+              <a v-on:click="importnote" id="import" title="Import Note">
+                <span>&#xE8B5;</span>Import
+              </a>
+              <a v-on:click="exportnote" id="export" title="Export Note">
+                <span>&#xEDE1;</span>Export
+              </a>
             </div>
           </div>
           <div class="button" id="show" title="Edit Text" v-on:click="showedit">
@@ -85,8 +97,9 @@ export default {
   methods: {
     // Canvace Mode
     mouch() {
-      if (document.getElementById("mouch").innerHTML == "Touch Mode") {
-        document.getElementById("mouch").innerHTML = "Typing Mode";
+      if (/Touch Mode/.test(document.getElementById("mouch").innerHTML)) {
+        document.getElementById("mouch").innerHTML =
+          "<span>&#xE765;</span>Typing Mode";
         document.getElementById("lightYellow").style.display = "none";
         document.getElementById("draw").style.display = "block";
         document.getElementById("video1").style.display = "none";
@@ -98,7 +111,8 @@ export default {
         document.getElementById("redo").style.display = "none";
         document.getElementById("undo").style.display = "none";
       } else {
-        document.getElementById("mouch").innerHTML = "Touch Mode";
+        document.getElementById("mouch").innerHTML =
+          "<span>&#xE815;</span>Touch Mode";
         document.getElementById("lightYellow").style.display = "block";
         document.getElementById("draw").style.display = "none";
         document.getElementById("video1").style.display = "block";
