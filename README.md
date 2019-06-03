@@ -35,7 +35,7 @@
 
 ### Touch Mode For Touch Or Pen Devices(Support Many Editing And Import,Export And Save Options)
 
-### If you like my App please consider buying me a coffee at [HERE!](http://buymeacoff.ee/playork)
+### If you like my App please consider buying me a coffee at [HERE!](https://www.buymeacoffee.com/playork)
 
 # Stable Release
 
