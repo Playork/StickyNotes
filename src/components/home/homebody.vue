@@ -28,15 +28,17 @@ SOFTWARE.
   <div>
     <div class="start">
       <div>
-        <img src="../../assets/sticky.svg" width="300px">
+        <img src="../../assets/sticky.svg" width="300px" />
       </div>
     </div>
-    <input type="text" id="search" value placeholder="Search">
+    <input type="text" id="search" value placeholder="Search" />
     <span id="searchico">&#xE721;</span>
     <div id="notes"></div>
     <div>
       <div id="options">
-        <span id="deleteall" v-on:click="deleteall" title="Delete All Notes">&#xE74D;</span>
+        <span id="deleteall" v-on:click="deleteall" title="Delete All Notes"
+          >&#xE74D;</span
+        >
         <span v-on:click="syncshow" title="Sync">&#xE895;</span>
         <span v-on:click="usershow" title="Users">&#xE77B;</span>
         <span v-on:click="settingsshow" title="Settings">&#xE713;</span>
@@ -64,24 +66,34 @@ SOFTWARE.
         <div>
           <h1>Settings</h1>
           <div id="setting">
+            <h2>Appearance</h2>
+            <br />
+            <p>Theme</p>
+            <select name="theme" id="theme">
+              <option value="System Default" selected>System Default</option>
+              <option value="Dark">Dark</option>
+              <option value="Light">Light</option>
+            </select>
+            <h2>Features</h2>
+            <br />
             <p>Background Colors</p>
             <label class="container">
-              <input type="checkbox" id="colorswitch" checked="checked">
+              <input type="checkbox" id="colorswitch" checked="checked" />
               <span class="checkmark"></span>
             </label>
             <p>Text Suggestions</p>
             <label class="container">
-              <input type="checkbox" id="textswitch" checked="checked">
+              <input type="checkbox" id="textswitch" checked="checked" />
               <span class="checkmark"></span>
             </label>
             <p>Emoji Selector</p>
             <label class="container">
-              <input type="checkbox" id="emojiswitch" checked="checked">
+              <input type="checkbox" id="emojiswitch" checked="checked" />
               <span class="checkmark"></span>
             </label>
             <p>Warn Before Delete</p>
             <label class="container">
-              <input type="checkbox" id="warnswitch" checked="checked">
+              <input type="checkbox" id="warnswitch" checked="checked" />
               <span class="checkmark"></span>
             </label>
           </div>
@@ -90,13 +102,23 @@ SOFTWARE.
       <div id="about">
         <span v-on:click="hide">&#xE8BB;</span>
         <div>
-          <img src="../../assets/logo.png" style="padding-top:20px;" width="150px">
+          <img
+            src="../../assets/logo.png"
+            style="padding-top:20px;"
+            width="150px"
+          />
           <div style="font-size:30px;">Playork</div>
           <div style="font-size:40px;">Sticky Notes</div>
           <div style="font-size:20px;">bekalshenoy@gmail.com</div>
           <div id="view" style="font-size:20px;">©2019</div>
           <div>
-            <p id="report" v-on:click="report" style="font-size:18px;cursor: pointer;">report bug</p>
+            <p
+              id="report"
+              v-on:click="report"
+              style="font-size:18px;cursor: pointer;"
+            >
+              report bug
+            </p>
           </div>
         </div>
       </div>
@@ -179,6 +201,12 @@ export default {
         document.getElementById("warnswitch").checked = false;
       }
     }
+    if (store.get("theme") == undefined) {
+      document.getElementById("theme").value = "System Default";
+      store.set("theme", { on: "System Default" });
+    } else {
+      document.getElementById("theme").value = store.get("theme");
+    }
     document.getElementById("colorswitch").onclick = () => {
       if (document.getElementById("colorswitch").checked == true) {
         store.set("color", { on: "yes" });
@@ -207,10 +235,13 @@ export default {
         store.set("warn", { on: "no" });
       }
     };
+    document.getElementById("theme").onchange = value => {
+      store.set("theme", { on: value });
+    };
     if (document.getElementById("userlist").innerHTML == "") {
       sessionStorage.setItem(
         "default",
-        'warn----{"on":"yes"}----text----{"on":"yes"}----emoji----{"on":"yes"}----color----{"on":"yes"}----'
+        'warn----{"on":"yes"}----text----{"on":"yes"}----emoji----{"on":"yes"}----color----{"on":"yes"}----theme----{"on":"System Default"}----'
       );
       store.set("default", { user: "default" });
     }
@@ -296,7 +327,7 @@ export default {
         ) {
           sessionStorage.setItem(
             user,
-            'warn----{"on":"yes"}----text----{"on":"yes"}----emoji----{"on":"yes"}----color----{"on":"yes"}----'
+            'warn----{"on":"yes"}----text----{"on":"yes"}----emoji----{"on":"yes"}----color----{"on":"yes"}----theme----{"on":"System Default"}----'
           );
         } else {
           if (sessionStorage.getItem(user) != undefined) {
@@ -311,7 +342,6 @@ export default {
   methods: {
     // Import Notes
     importnotes() {
-      document.getElementById("home").style.pointerEvents = "none";
       remote.dialog.showOpenDialog(
         {
           filters: [
@@ -323,7 +353,6 @@ export default {
           defaultPath: os.homedir() + "/note.spsd"
         },
         notes => {
-          document.getElementById("home").style.pointerEvents = "auto";
           if (notes === undefined) return;
           let notesfile = notes[0];
           fs.readFile(notesfile, (e, d) => {
@@ -358,7 +387,6 @@ export default {
 
     // Export Notes
     exportnotes() {
-      document.getElementById("home").style.pointerEvents = "none";
       remote.dialog.showSaveDialog(
         {
           filters: [
@@ -370,31 +398,31 @@ export default {
           defaultPath: os.homedir() + "/notes.spsd"
         },
         notes => {
-          document.getElementById("home").style.pointerEvents = "auto";
-          if (notes === undefined) return;
-          let data = "";
-          store.each((value, key) => {
-            if (
-              key != "id" &&
-              key != "loglevel:webpack-dev-server" &&
-              key != "closed" &&
-              key != "emoji-mart.frequently" &&
-              key != "emoji-mart.last" &&
-              key != "access" &&
-              key != "text" &&
-              key != "warn" &&
-              key != "color" &&
-              key != "emoji" &&
-              key != "default"
-            ) {
-              data = data + key + "\n" + JSON.stringify(value) + "\n";
-            }
-          });
-          fs.writeFile(notes, data, e => {
-            if (e) {
-              swal("Not Supported");
-            }
-          });
+          if (notes != undefined) {
+            let data = "";
+            store.each((value, key) => {
+              if (
+                key != "id" &&
+                key != "loglevel:webpack-dev-server" &&
+                key != "closed" &&
+                key != "emoji-mart.frequently" &&
+                key != "emoji-mart.last" &&
+                key != "access" &&
+                key != "text" &&
+                key != "warn" &&
+                key != "color" &&
+                key != "emoji" &&
+                key != "default"
+              ) {
+                data = data + key + "\n" + JSON.stringify(value) + "\n";
+              }
+            });
+            fs.writeFile(notes, data, e => {
+              if (e) {
+                swal("Not Supported");
+              }
+            });
+          }
         }
       );
     },
@@ -475,6 +503,7 @@ export default {
       let id = document.getElementById("sync");
       id.style.display = "block";
       document.getElementById("home").style.overflowY = "hidden";
+      if (!navigator.onLine) swal("Your Device Is Offline");
     },
 
     // Show Sync Page Function

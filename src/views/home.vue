@@ -26,8 +26,8 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div id="home">
-    <titlebar1 v-bind:close="close" v-bind:note="note"/>
-    <homebody/>
+    <titlebar1 v-bind:close="close" v-bind:note="note" />
+    <homebody />
   </div>
 </template>
 
@@ -80,10 +80,14 @@ export default {
                         if (d[i] == "warn") {
                           localStorage.setItem(d[i], d[i + 1]);
                         } else {
-                          if (d[i] == "default") {
+                          if (d[i] == "theme") {
                             localStorage.setItem(d[i], d[i + 1]);
                           } else {
-                            store.set(d[i], JSON.parse(d[i + 1]));
+                            if (d[i] == "default") {
+                              localStorage.setItem(d[i], d[i + 1]);
+                            } else {
+                              store.set(d[i], JSON.parse(d[i + 1]));
+                            }
                           }
                         }
                       }

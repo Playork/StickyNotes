@@ -34,7 +34,7 @@ SOFTWARE. */
   left: 0;
   right: 0;
   bottom: 0;
-  font-family: "Arial";
+  font-family: "Nunito";
   background: #202020ee;
 }
 #home {
@@ -155,6 +155,22 @@ button {
   color: #fff;
   font-family: "segoe";
 }
+#theme {
+  font-family: "Lobster";
+  font-size: 15px;
+  color: #fff;
+  width: 120px;
+  height: 40px;
+  background: #111;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: -40px;
+}
+#theme option {
+  margin: 10px;
+}
 #sync {
   display: none;
   background: #202020ee;
@@ -210,7 +226,7 @@ button {
   top: 45px;
   left: 5px;
   height: 35px;
-  font-family: Arial;
+  font-family: "Nunito";
   border: none;
   background: #111;
   border-radius: 10px;

@@ -26,13 +26,14 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <!-- Javascript -->
 <script>
 // Import Required Packages
+import "./assets/css/nunito.css";
 import "./assets/css/quill.min.css";
 import "./assets/css/main.css";
 import "./assets/css/titlebar.css";

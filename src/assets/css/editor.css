@@ -55,7 +55,7 @@ SOFTWARE. */
   outline: none;
   color: #000;
   font-size: 18px;
-  font-family: arial;
+  font-family: "Nunito";
 }
 *::-webkit-scrollbar {
   width: 6px;
@@ -116,8 +116,8 @@ SOFTWARE. */
 .ql-snow.ql-toolbar {
   display: none;
 }
-#toolbar-container .ql-font span[data-label="Arial"]::before {
-  font-family: "Arial";
+#toolbar-container .ql-font span[data-label="Nunito"]::before {
+  font-family: "Nunito";
 }
 #toolbar-container .ql-font span[data-label="Lobster"]::before {
   font-family: "Lobster";
@@ -138,7 +138,7 @@ SOFTWARE. */
   text-align: center;
   list-style: none;
   padding: 10px;
-  font-family: "Arial";
+  font-family: "Nunito";
   border: #000 4px solid;
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }
