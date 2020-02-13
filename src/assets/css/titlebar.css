@@ -101,7 +101,8 @@ SOFTWARE. */
 #min-button {
   grid-column: 1;
 }
-#window-title1 {
+#window-title1,
+#window-title2 {
   grid-row: 1 / span 1;
   font-size: 25px;
   font-family: "segoe";
@@ -120,6 +121,13 @@ SOFTWARE. */
   color: #707070;
 }
 #window-title1 span:hover {
+  color: #fff;
+}
+#window-title2 span {
+  -webkit-app-region: no-drag;
+  color: #707070;
+}
+#window-title2 span:hover {
   color: #fff;
 }
 #window-title1:hover {

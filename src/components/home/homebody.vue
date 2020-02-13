@@ -63,8 +63,7 @@ SOFTWARE.
             <br />
             <p>Theme</p>
             <select name="theme" id="theme">
-              <option value="System Default" selected>System Default</option>
-              <option value="Dark">Dark</option>
+              <option value="Dark" selected>Dark</option>
               <option value="Light">Light</option>
             </select>
             <h2>Features</h2>
@@ -103,7 +102,7 @@ SOFTWARE.
           <div style="font-size:30px;">Playork</div>
           <div style="font-size:40px;">Sticky Notes</div>
           <div style="font-size:20px;">bekalshenoy@gmail.com</div>
-          <div id="view" style="font-size:20px;">©2019</div>
+          <div id="view" style="font-size:20px;">©2020</div>
           <div>
             <p
               id="report"
@@ -198,7 +197,88 @@ export default {
       document.getElementById("theme").selectedIndex = 0;
       store.set("theme", { on: 0 });
     } else {
-      document.getElementById("theme").selectedIndex = store.get("theme").on;
+      let num = store.get("theme").on;
+      document.getElementById("theme").selectedIndex = num;
+      if (num == 1) {
+        let lith = document.createElement("style");
+        lith.type = "text/css";
+        lith.id = "lighttheme";
+        lith.innerText = `#note,
+  #home {
+    background: #ffffffee;
+  }
+  #titlebar1 {
+    background: #ffffffff !important;
+    color: #000 !important;
+  }
+  .button:hover {
+    color: #000 !important;
+  }
+  #search {
+    background: #fff;
+    color: #000;
+  }
+  #options {
+    color: #000;
+    background: #fff;
+  }
+  #sync,
+  #settings,
+  #about {
+    background: #ffffffee;
+    color: #000;
+  }
+  #sync span,
+  #settings span,
+  #about span {
+    color: #000;
+  }
+  #theme {
+    background: #fff;
+    color: #000;
+  }
+  .swal-modal {
+    background: #ffffffee !important;
+  }
+  .swal-title,
+  .swal-text {
+    color: #000 !important;
+  }
+  .dropdown-content {
+    background-color: #ffffffee !important;
+  }
+  .dropdown-content a {
+    color: #000 !important;
+  }
+  .dropdown-content a:hover {
+    background-color: #eee !important;
+  }
+  #choosecolor {
+    background: #ffffffee !important;
+    color: #000 !important;
+  }
+  .emoji-mart {
+    background: #ffffffee !important;
+  }
+  .emoji-mart-category-label span {
+    background: #fff !important;
+  }
+  .emoji-mart * {
+    color: #000 !important;
+  }
+  .emoji-mart-search input {
+    color: #fff !important;
+    background: #000;
+  }
+  #hideemoji {
+    color: #000 !important;
+    background: #ffffffee !important;
+  }
+  #window-title2 span:hover {
+    color: #000 !important;
+  }`;
+        document.head.appendChild(lith);
+      }
     }
     document.getElementById("colorswitch").onclick = () => {
       if (document.getElementById("colorswitch").checked == true) {
@@ -229,9 +309,90 @@ export default {
       }
     };
     document.getElementById("theme").onchange = () => {
-      store.set("theme", {
-        on: document.getElementById("theme").selectedIndex
-      });
+      let num = document.getElementById("theme").selectedIndex;
+      store.set("theme", { on: num });
+      if (num == 1) {
+        let lith = document.createElement("style");
+        lith.type = "text/css";
+        lith.id = "lighttheme";
+        lith.innerText = `#note,
+  #home {
+    background: #ffffffee;
+  }
+  #titlebar1 {
+    background: #ffffffff !important;
+    color: #000 !important;
+  }
+  .button:hover {
+    color: #000 !important;
+  }
+  #search {
+    background: #fff;
+    color: #000;
+  }
+  #options {
+    color: #000;
+    background: #fff;
+  }
+  #sync,
+  #settings,
+  #about {
+    background: #ffffffee;
+    color: #000;
+  }
+  #sync span,
+  #settings span,
+  #about span {
+    color: #000;
+  }
+  #theme {
+    background: #fff;
+    color: #000;
+  }
+  .swal-modal {
+    background: #ffffffee !important;
+  }
+  .swal-title,
+  .swal-text {
+    color: #000 !important;
+  }
+  .dropdown-content {
+    background-color: #ffffffee !important;
+  }
+  .dropdown-content a {
+    color: #000 !important;
+  }
+  .dropdown-content a:hover {
+    background-color: #eee !important;
+  }
+  #choosecolor {
+    background: #ffffffee !important;
+    color: #000 !important;
+  }
+  .emoji-mart {
+    background: #ffffffee !important;
+  }
+  .emoji-mart-category-label span {
+    background: #fff !important;
+  }
+  .emoji-mart * {
+    color: #000 !important;
+  }
+  .emoji-mart-search input {
+    color: #fff !important;
+    background: #000;
+  }
+  #hideemoji {
+    color: #000 !important;
+    background: #ffffffee !important;
+  }
+  #window-title2 span:hover {
+    color: #000 !important;
+  }`;
+        document.head.appendChild(lith);
+      } else {
+        document.head.removeChild(document.getElementById("lighttheme"));
+      }
     };
   },
 

@@ -28,11 +28,16 @@ SOFTWARE.
   <div>
     <header id="titlebar1">
       <div id="drag-region">
-        <div class="id" id="window-title1" title="Add Note" v-on:click="note">
+        <div class="id" id="window-title2" title="Add Note" v-on:click="note">
           <span id="add">&#xE710;</span>
         </div>
         <div id="window-controls">
-          <div title="Close All Notes" class="button" v-on:click="close" id="close-button">
+          <div
+            title="Close All Notes"
+            class="button"
+            v-on:click="close"
+            id="close-button"
+          >
             <span>&#xE8BB;</span>
           </div>
         </div>

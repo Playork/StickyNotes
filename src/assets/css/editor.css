@@ -59,24 +59,27 @@ SOFTWARE. */
 }
 *::-webkit-scrollbar {
   width: 6px;
+  cursor: pointer;
 }
 *::-webkit-scrollbar-track {
   box-shadow: none;
   border-radius: 10px;
   -webkit-border-radius: 10px;
   background: none;
+  cursor: pointer;
 }
 *::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-border-radius: 10px;
   background: #000;
   box-shadow: none;
+  cursor: pointer;
 }
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value=""]::before {
-  content: "Arial";
+  content: "Nunito";
 }
 .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=""]::before {
-  content: "Arial";
+  content: "Nunito";
 }
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="lobster"]::before {
   content: "Lobster";
@@ -291,21 +294,21 @@ SOFTWARE. */
 }
 .emoji-mart {
   font-family: "Lobster" !important;
-  background: #202020ee !important;
+  background: #202020ee;
   visibility: hidden;
   border: none !important;
   border-radius: 0 !important;
 }
 .emoji-mart-category-label span {
-  background: #202020 !important;
+  background: #202020;
 }
 .emoji-mart * {
   border: none !important;
-  color: #fff !important;
+  color: #fff;
   border-radius: 20px !important;
 }
 .emoji-mart-search input {
-  color: #000 !important;
+  color: #000;
 }
 #hideemoji {
   font-family: "segoe";

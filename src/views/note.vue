@@ -26,10 +26,10 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div id="note" v-on:click="showhide">
-    <titlebar v-bind:close="close" v-bind:note="note"/>
-    <editor/>
-    <colors/>
-    <choosecolor/>
+    <titlebar v-bind:close="close" v-bind:note="note" />
+    <editor />
+    <colors />
+    <choosecolor />
   </div>
 </template>
 
@@ -69,12 +69,12 @@ export default {
         }).then(willDelete => {
           if (willDelete) {
             store.remove(noteid);
-            remote.getCurrentWindow().destroy()
+            remote.getCurrentWindow().destroy();
           }
         });
       } else {
         store.remove(noteid);
-        remote.getCurrentWindow().destroy()
+        remote.getCurrentWindow().destroy();
       }
     });
 
@@ -170,6 +170,7 @@ export default {
       document.addEventListener(
         "focus",
         () => {
+          document.getElementById("lightYellow").style.paddingTop = "30px";
           document.getElementById("titlebar").style.height = "32px";
           if (
             document.querySelector(".ql-snow.ql-toolbar").style.display !=
@@ -191,6 +192,7 @@ export default {
       document.addEventListener(
         "click",
         e => {
+          document.getElementById("lightYellow").style.paddingTop = "30px";
           document.getElementById("titlebar").style.height = "32px";
           if (
             document.querySelector(".ql-snow.ql-toolbar").style.display !=
