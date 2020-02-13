@@ -202,10 +202,10 @@ export default {
       }
     }
     if (store.get("theme") == undefined) {
-      document.getElementById("theme").value = "System Default";
+      document.getElementById("theme").selected = "System Default";
       store.set("theme", { on: "System Default" });
     } else {
-      document.getElementById("theme").value = store.get("theme");
+      document.getElementById("theme").selected = store.get("theme");
     }
     document.getElementById("colorswitch").onclick = () => {
       if (document.getElementById("colorswitch").checked == true) {
@@ -235,8 +235,8 @@ export default {
         store.set("warn", { on: "no" });
       }
     };
-    document.getElementById("theme").onchange = value => {
-      store.set("theme", { on: value });
+    document.getElementById("theme").onchange = () => {
+      store.set("theme", { on: document.getElementById("theme").value });
     };
     if (document.getElementById("userlist").innerHTML == "") {
       sessionStorage.setItem(
@@ -412,6 +412,7 @@ export default {
                 key != "warn" &&
                 key != "color" &&
                 key != "emoji" &&
+                key != "theme" &&
                 key != "default"
               ) {
                 data = data + key + "\n" + JSON.stringify(value) + "\n";
@@ -455,6 +456,7 @@ export default {
                     key != "warn" &&
                     key != "color" &&
                     key != "emoji" &&
+                    key != "theme" &&
                     key != "default"
                   ) {
                     store.remove(key);
@@ -476,6 +478,7 @@ export default {
                 key != "warn" &&
                 key != "color" &&
                 key != "emoji" &&
+                key != "theme" &&
                 key != "default"
               ) {
                 store.remove(key);

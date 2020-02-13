@@ -261,6 +261,7 @@ export default {
             key != "warn" &&
             key != "color" &&
             key != "emoji" &&
+            key != "theme" &&
             key != "default"
           ) {
             notes = notes + key + "\n" + JSON.stringify(value) + "\n";
@@ -360,6 +361,7 @@ export default {
           key != "warn" &&
           key != "color" &&
           key != "emoji" &&
+          key != "theme" &&
           key != "default"
         ) {
           let content;
@@ -473,6 +475,7 @@ export default {
             key != "warn" &&
             key != "color" &&
             key != "emoji" &&
+            key != "theme" &&
             key != "default"
           ) {
             if (value.first == "<p><br></p>") {
