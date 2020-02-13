@@ -100,20 +100,6 @@ export default {
         }
       });
     }
-    fs.readFile("./users.spst", "binary", (e, d) => {
-      if (e) {
-        console.log(e);
-      } else {
-        if (d != "") {
-          d = d.toString().split("\n");
-          for (let i = 0; i < d.length; i++) {
-            if (i % 2 == 0 && d[i] != "") {
-              sessionStorage.setItem(d[i], d[i + 1]);
-            }
-          }
-        }
-      }
-    });
 
     // Upload
     window.setTimeout(() => {
@@ -222,15 +208,6 @@ export default {
             if (e) console.log(e);
           });
         }
-        let storeuser = "";
-        for (var i = 0; i < sessionStorage.length; i++) {
-          let user = sessionStorage.key(i);
-          storeuser =
-            storeuser + user + "\n" + sessionStorage.getItem(user) + "\n";
-        }
-        fs.writeFile("users.spst", storeuser, e => {
-          if (e) console.log(e);
-        });
         window.setTimeout(() => {
           remote.getCurrentWindow().destroy();
         }, 100);

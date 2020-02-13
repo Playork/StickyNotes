@@ -40,7 +40,6 @@ SOFTWARE.
           >&#xE74D;</span
         >
         <span v-on:click="syncshow" title="Sync">&#xE895;</span>
-        <span v-on:click="usershow" title="Users">&#xE77B;</span>
         <span v-on:click="settingsshow" title="Settings">&#xE713;</span>
         <span v-on:click="importnotes" title="Import Notes">&#xE8B5;</span>
         <span v-on:click="exportnotes" title="Export Notes">&#xEDE1;</span>
@@ -54,12 +53,6 @@ SOFTWARE.
           <p id="sign"></p>
           <a id="out" v-on:click="out"></a>
         </div>
-      </div>
-      <div id="users">
-        <span v-on:click="hide" id="closeusers">&#xE8BB;</span>
-        <span id="adduser">&#xE710;</span>
-        <h1>Users</h1>
-        <div id="userlist"></div>
       </div>
       <div id="settings">
         <span v-on:click="hide">&#xE8BB;</span>
@@ -202,10 +195,10 @@ export default {
       }
     }
     if (store.get("theme") == undefined) {
-      document.getElementById("theme").selected = "System Default";
-      store.set("theme", { on: "System Default" });
+      document.getElementById("theme").selectedIndex = 0;
+      store.set("theme", { on: 0 });
     } else {
-      document.getElementById("theme").selected = store.get("theme");
+      document.getElementById("theme").selectedIndex = store.get("theme").on;
     }
     document.getElementById("colorswitch").onclick = () => {
       if (document.getElementById("colorswitch").checked == true) {
@@ -236,106 +229,10 @@ export default {
       }
     };
     document.getElementById("theme").onchange = () => {
-      store.set("theme", { on: document.getElementById("theme").value });
+      store.set("theme", {
+        on: document.getElementById("theme").selectedIndex
+      });
     };
-    if (document.getElementById("userlist").innerHTML == "") {
-      sessionStorage.setItem(
-        "default",
-        'warn----{"on":"yes"}----text----{"on":"yes"}----emoji----{"on":"yes"}----color----{"on":"yes"}----theme----{"on":"System Default"}----'
-      );
-      store.set("default", { user: "default" });
-    }
-    window.setInterval(() => {
-      let storage = "";
-      store.each((value, key) => {
-        if (
-          key != "id" &&
-          key != "loglevel:webpack-dev-server" &&
-          key != "closed" &&
-          key != "emoji-mart.frequently" &&
-          key != "emoji-mart.last" &&
-          key != "default"
-        ) {
-          storage = storage + key + "----" + JSON.stringify(value) + "----";
-        }
-      });
-      document.getElementById("userlist").innerHTML = "";
-      Object.keys(sessionStorage).forEach(function(user) {
-        document.getElementById(
-          "userlist"
-        ).innerHTML += `<div id="userbox" class="${user}"><p>${user}</p><span id="deleteuser" class="delete${user}" title="Delete User">&#xE74D;</span></div>`;
-        if (user == "default") {
-          document.getElementsByClassName("deletedefault")[0].style.visibility =
-            "hidden";
-        }
-
-        document
-          .getElementsByClassName(user)[0]
-          .addEventListener("click", e => {
-            if (!e.target.matches(`.delete${user}`)) {
-              store.set("default", { user: user });
-              store.each((value, key) => {
-                if (key != "default") {
-                  store.remove(key);
-                }
-              });
-              let d = sessionStorage.getItem(user);
-              d = d.toString().split("----");
-              for (let j = 0; j < d.length; j++) {
-                if (j % 2 == 0 && d[j] != "") {
-                  let js = JSON.parse(d[j + 1]);
-                  store.set(d[j], js);
-                }
-              }
-            }
-          });
-        document
-          .getElementsByClassName(`delete${user}`)[0]
-          .addEventListener("click", () => {
-            swal({
-              title: "Are you sure?",
-              text: "Want To Delete The User!",
-              icon: "warning",
-              buttons: true,
-              dangerMode: true
-            }).then(willDelete => {
-              if (willDelete) {
-                sessionStorage.removeItem(user);
-              }
-            });
-          });
-        if (store.get("default").user == user) {
-          document.getElementsByClassName(user)[0].style.border =
-            "5px solid #aaa";
-          document.getElementsByClassName(`delete${user}`)[0].style.display =
-            "none";
-        }
-      });
-    }, 2000);
-    document.getElementById("adduser").addEventListener("click", () => {
-      swal({
-        title: "Add A New User",
-        content: "input",
-        button: {
-          text: "Add"
-        }
-      }).then(user => {
-        if (
-          user != "" &&
-          sessionStorage.getItem(user) == undefined &&
-          user != null
-        ) {
-          sessionStorage.setItem(
-            user,
-            'warn----{"on":"yes"}----text----{"on":"yes"}----emoji----{"on":"yes"}----color----{"on":"yes"}----theme----{"on":"System Default"}----'
-          );
-        } else {
-          if (sessionStorage.getItem(user) != undefined) {
-            swal("User Is Already Created");
-          }
-        }
-      });
-    });
   },
 
   // Functions
@@ -516,19 +413,11 @@ export default {
       document.getElementById("home").style.overflowY = "hidden";
     },
 
-    // Show Sync Page Function
-    usershow() {
-      let id = document.getElementById("users");
-      id.style.display = "block";
-      document.getElementById("home").style.overflowY = "hidden";
-    },
-
     // Hide About Page Function
     hide() {
       document.getElementById("sync").style.display = "none";
       document.getElementById("about").style.display = "none";
       document.getElementById("settings").style.display = "none";
-      document.getElementById("users").style.display = "none";
       document.getElementById("home").style.overflowY = "auto";
     }
   }

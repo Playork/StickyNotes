@@ -38,15 +38,15 @@ SOFTWARE.
           <div class="button" id="menus" title="Menu">
             <span id="menu" v-on:click="menu">&#xE712;</span>
             <div id="menu-content" class="dropdown-content">
-              <a id="mouch" title="Change Between Touch Mode And Typing Mode" v-on:click="mouch">
+              <a
+                id="mouch"
+                title="Change Between Touch Mode And Typing Mode"
+                v-on:click="mouch"
+              >
                 <span>&#xE815;</span>Touch Mode
               </a>
-              <a title="Undo" id="undo">
-                <span>&#xE7A7;</span>Undo
-              </a>
-              <a title="Redo" id="redo">
-                <span>&#xE7A6;</span>Redo
-              </a>
+              <a title="Undo" id="undo"> <span>&#xE7A7;</span>Undo </a>
+              <a title="Redo" id="redo"> <span>&#xE7A6;</span>Redo </a>
               <a title="Select Audio" id="video1" v-on:click="clickvideo">
                 <span>&#xE714;</span>Add Video
               </a>
@@ -253,7 +253,6 @@ export default {
 
     // Import Note Function
     importnote() {
-      document.getElementById("note").style.pointerEvents = "none";
       remote.dialog.showOpenDialog(
         {
           filters: [
@@ -265,7 +264,6 @@ export default {
           defaultPath: os.homedir() + "/note.spst"
         },
         note => {
-          document.getElementById("note").style.pointerEvents = "auto";
           if (note === undefined) return;
           let notefile = note[0];
           fs.readFile(notefile, (e, d) => {
@@ -297,7 +295,6 @@ export default {
 
     // Exportb Note Function
     exportnote() {
-      document.getElementById("note").style.pointerEvents = "none";
       remote.dialog.showSaveDialog(
         {
           filters: [
@@ -309,7 +306,6 @@ export default {
           defaultPath: os.homedir() + "/note.spst"
         },
         note => {
-          document.getElementById("note").style.pointerEvents = "auto";
           if (note === undefined) return;
           let data;
           if (document.getElementById("draw").style.display != "block") {
