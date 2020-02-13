@@ -14,7 +14,7 @@
     "auto-launch": "latest",
     "dropbox": "^4.0.17",
     "electron-context-menu": "latest",
-    "electron-updater": "latest",
+    "electron-updater": "^4.0.0",
     "emoji-mart-vue": "latest",
     "katex": "latest",
     "quill": "latest",

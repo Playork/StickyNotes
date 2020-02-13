@@ -9078,7 +9078,7 @@ specifiers:
   electron: latest
   electron-builder: latest
   electron-context-menu: latest
-  electron-updater: latest
+  electron-updater: ^4.0.0
   emoji-mart-vue: latest
   katex: latest
   quill: latest
