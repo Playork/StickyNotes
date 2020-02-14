@@ -294,21 +294,21 @@ SOFTWARE. */
 }
 .emoji-mart {
   font-family: "Lobster" !important;
-  background: #202020ee;
+  background: #202020ee !important;
   visibility: hidden;
   border: none !important;
   border-radius: 0 !important;
 }
 .emoji-mart-category-label span {
-  background: #202020;
+  background: #202020 !important;
 }
 .emoji-mart * {
   border: none !important;
-  color: #fff;
+  color: #fff !important;
   border-radius: 20px !important;
 }
 .emoji-mart-search input {
-  color: #000;
+  color: #000 !important;
 }
 #hideemoji {
   font-family: "segoe";
