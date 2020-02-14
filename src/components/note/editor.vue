@@ -34,8 +34,18 @@ SOFTWARE.
         @select="addEmoji"
         title="Pick your emoji…"
         emoji="point_up"
-        :style="{ position: 'absolute', top: '40px',right: '0', zIndex: '7', width: '275px', height:'335px'}"
-        :i18n="{ search: 'Search', categories: { search: 'Results Of Your Search', recent: 'Recent' } }"
+        :style="{
+          position: 'absolute',
+          top: '40px',
+          right: '0',
+          zIndex: '7',
+          width: '275px',
+          height: '335px'
+        }"
+        :i18n="{
+          search: 'Search',
+          categories: { search: 'Results Of Your Search', recent: 'Recent' }
+        }"
       />
     </div>
     <div id="lightYellow">
@@ -44,8 +54,8 @@ SOFTWARE.
     <div id="backc"></div>
     <section id="choosepaint">
       Color:
-      <input type="color" value="#000000" id="color3">
-      <br>
+      <input type="color" value="#000000" id="color3" />
+      <br />
       <button class="button1" v-on:click="cancel">Cancel</button>
       <button id="cc" class="button1">done</button>
     </section>
@@ -66,11 +76,16 @@ SOFTWARE.
         <button id="white" class="buttons">
           <span id="c5" class="selected hide">&#xE73E;</span>
         </button>
-        <button id="paintcolor" class="buttons" v-on:click="showthis" title="Choose Color">
+        <button
+          id="paintcolor"
+          class="buttons"
+          v-on:click="showthis"
+          title="Choose Color"
+        >
           <span>&#xE710;</span>
         </button>
       </div>
-      <input type="range" min="1" max="50" value="5" id="brushwidth">
+      <input type="range" min="1" max="50" value="5" id="brushwidth" />
       <p id="widthvalue">5</p>
       <button id="clear" v-on:click="clearCanvas">&#xE74D;</button>
     </div>
@@ -534,6 +549,21 @@ export default {
         }, 1);
       };
       quill.on("text-change", () => repeafunc());
+      // quill.on("text-change", () => {
+      //   let cont = document.querySelector(".ql-snow .ql-editor").innerHTML;
+      //   let index = cont.indexOf(
+      //     /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/
+      //   );
+      //   if (index >= 0) {
+      //     let highcontent =
+      //       cont.substring(0, index) +
+      //       "<a>" +
+      //       cont.substring(index, index + 8) +
+      //       "</a>" +
+      //       cont.substring(index + 8);
+      //     document.querySelector(".ql-snow .ql-editor").innerHTML = highcontent;
+      //   }
+      // });
       canvas = document.getElementById("draw");
       canvas.addEventListener("mousemove", () => repeafunc());
       canvas.addEventListener("mousedown", () => repeafunc());

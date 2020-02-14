@@ -190,7 +190,6 @@ button {
   min-height: 80px;
   pointer-events: none;
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
-  font-family: "nonito";
 }
 #search {
   width: 81%;
@@ -270,80 +269,4 @@ button {
   grid-template-columns: 90% 10%;
   text-align: left;
   padding: 0 70px;
-}
-@media screen and (prefers-color-scheme: light) {
-  #note,
-  #home {
-    background: #ffffffee;
-  }
-  #titlebar1 {
-    background: #ffffffff !important;
-    color: #000 !important;
-  }
-  .button:hover {
-    color: #000 !important;
-  }
-  #search {
-    background: #fff;
-    color: #000;
-  }
-  #options {
-    color: #000;
-    background: #fff;
-  }
-  #sync,
-  #settings,
-  #about {
-    background: #ffffffee;
-    color: #000;
-  }
-  #sync span,
-  #settings span,
-  #about span {
-    color: #000;
-  }
-  #theme {
-    background: #fff;
-    color: #000;
-  }
-  .swal-modal {
-    background: #ffffffee !important;
-  }
-  .swal-title,
-  .swal-text {
-    color: #000 !important;
-  }
-  .dropdown-content {
-    background-color: #ffffffee !important;
-  }
-  .dropdown-content a {
-    color: #000 !important;
-  }
-  .dropdown-content a:hover {
-    background-color: #eee !important;
-  }
-  #choosecolor {
-    background: #ffffffee !important;
-    color: #000 !important;
-  }
-  .emoji-mart {
-    background: #ffffffee !important;
-  }
-  .emoji-mart-category-label span {
-    background: #fff !important;
-  }
-  .emoji-mart * {
-    color: #000 !important;
-  }
-  .emoji-mart-search input {
-    color: #fff !important;
-    background: #000;
-  }
-  #hideemoji {
-    color: #000 !important;
-    background: #ffffffee !important;
-  }
-  #window-title2 span:hover {
-    color: #000 !important;
-  }
 }
