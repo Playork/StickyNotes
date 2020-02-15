@@ -30,6 +30,15 @@ import {
 import AutoLaunch from "auto-launch";
 import { setTimeout } from "timers";
 
+require("electron-context-menu")({
+  prepend: () => [
+    {
+      label: "v0.4.0"
+    }
+  ],
+  showInspectElement: false
+});
+
 let launchonstart = new AutoLaunch({
   name: "StickyNotes"
 });
