@@ -26,7 +26,11 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div id="note" v-on:click="showhide">
-    <titlebar v-bind:close="close" v-bind:note="note" />
+    <titlebar
+      v-bind:close="close"
+      v-bind:note="note"
+      v-bind:minimize="minimize"
+    />
     <editor />
     <colors />
     <choosecolor />
@@ -114,7 +118,7 @@ export default {
       document.getElementById("lightYellow").style.backgroundColor = text.back;
       document.getElementById("titlebar").style.backgroundColor = text.title;
     } catch {
-      window.resizeTo(350, 375);
+      window.resizeTo(300, 325);
       document.querySelector(".ql-toolbar").style.backgroundColor = "#FFF2AB";
     }
     if (store.get("color").on == "no") {
@@ -165,6 +169,11 @@ export default {
       ipcRenderer.send("create-new-instance");
     },
 
+    // Minimize Function
+    minimize() {
+      remote.getCurrentWindow().minimize();
+    },
+
     // Focus Blur Event Function
     showhide() {
       document.addEventListener(
@@ -181,6 +190,7 @@ export default {
           document.getElementById("lock").style.display = "flex";
           document.getElementById("add").style.display = "flex";
           document.getElementById("more").style.display = "flex";
+          document.getElementById("minimize").style.display = "flex";
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
           if (/Touch Mode/.test(document.getElementById("mouch").innerHTML)) {
@@ -203,6 +213,7 @@ export default {
           document.getElementById("lock").style.display = "flex";
           document.getElementById("add").style.display = "flex";
           document.getElementById("more").style.display = "flex";
+          document.getElementById("minimize").style.display = "flex";
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
           if (/Touch Mode/.test(document.getElementById("mouch").innerHTML)) {
@@ -225,6 +236,7 @@ export default {
           document.getElementById("lock").style.display = "none";
           document.getElementById("add").style.display = "none";
           document.getElementById("more").style.display = "none";
+          document.getElementById("minimize").style.display = "none";
           document.getElementById("close").style.display = "none";
           document.getElementById("menu").style.display = "none";
           document.getElementById("emoji").style.display = "none";

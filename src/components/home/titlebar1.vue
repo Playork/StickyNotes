@@ -33,6 +33,14 @@ SOFTWARE.
         </div>
         <div id="window-controls">
           <div
+            title="Minimize Window"
+            class="button"
+            v-on:click="minimize"
+            id="minimize-button"
+          >
+            <span>&#xE738;</span>
+          </div>
+          <div
             title="Close All Notes"
             class="button"
             v-on:click="close"
@@ -53,7 +61,8 @@ export default {
   // Props
   props: {
     close: Function,
-    note: Function
+    note: Function,
+    minimize: Function
   }
 };
 </script>

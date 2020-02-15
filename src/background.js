@@ -39,7 +39,7 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
 function createWindow() {
   win = new BrowserWindow({
-    width: 400,
+    width: 350,
     height: 600,
     icon: "public/favicon.ico",
     transparent: true,
@@ -77,8 +77,8 @@ app.commandLine.appendSwitch("disable-web-security");
 let winnote;
 function createNote() {
   winnote = new BrowserWindow({
-    width: 350,
-    height: 375,
+    width: 300,
+    height: 325,
     icon: "public/favicon.ico",
     transparent: true,
     title: "Playork Sticky Notes",
@@ -100,7 +100,7 @@ function createNote() {
     winnote.show();
     winnote.focus();
   });
-  winnote.setMinimumSize(350, 375);
+  winnote.setMinimumSize(300, 325);
   winnote.on("close", () => {
     win.webContents.send("closenote", "closeit");
   });

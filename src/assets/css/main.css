@@ -185,14 +185,14 @@ button {
   padding: 5px;
   margin: 5px;
   border-radius: 20px;
-  width: 85%;
+  width: 83%;
   word-wrap: break-word;
   min-height: 80px;
   pointer-events: none;
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }
 #search {
-  width: 81%;
+  width: 79%;
   position: fixed;
   top: 45px;
   left: 5px;

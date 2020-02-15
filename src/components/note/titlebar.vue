@@ -34,7 +34,7 @@ SOFTWARE.
         <div id="locks" title="Lock Note" v-on:click="locks">
           <span id="lock">&#xE785;</span>
         </div>
-        <div id="window-controls">
+        <div id="window-controls1">
           <div class="button" id="menus" title="Menu">
             <span id="menu" v-on:click="menu">&#xE712;</span>
             <div id="menu-content" class="dropdown-content">
@@ -70,6 +70,9 @@ SOFTWARE.
           <div class="button" id="show" title="Edit Text" v-on:click="showedit">
             <span id="more" class="more">&#xE70F;</span>
           </div>
+          <div class="button" id="minimize-button" v-on:click="minimize">
+            <span id="minimize">&#xE738;</span>
+          </div>
           <div class="button" id="close-button" v-on:click="close">
             <span id="close">&#xE8BB;</span>
           </div>
@@ -93,7 +96,8 @@ export default {
   // Props
   props: {
     close: Function,
-    note: Function
+    note: Function,
+    minimize: Function
   },
 
   // Functions
@@ -158,6 +162,7 @@ export default {
           document.getElementById("locks").style.marginLeft = "-35px";
           document.getElementById("add").style.display = "none";
           document.getElementById("more").style.display = "none";
+          document.getElementById("minimize").style.display = "none";
           document.getElementById("close").style.display = "none";
           document.getElementById("menu").style.display = "none";
           document.getElementsByClassName("emoji-mart")[0].style.visibility =
@@ -176,6 +181,7 @@ export default {
             document.getElementById("locks").style.marginLeft = "0";
             document.getElementById("add").style.display = "flex";
             document.getElementById("more").style.display = "flex";
+            document.getElementById("minimize").style.display = "flex";
             document.getElementById("close").style.display = "flex";
             document.getElementById("menu").style.display = "flex";
             remote.getCurrentWindow().setMaximumSize(100000, 100000);

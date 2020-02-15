@@ -39,11 +39,16 @@ SOFTWARE. */
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }
 #close-button {
-  grid-column: 2;
+  width: 40px !important;
 }
 #close-button:hover {
   box-shadow: none !important;
   background: #e81123;
+  color: #fff;
+}
+#minimize-button:hover {
+  box-shadow: none !important;
+  background: rgba(255, 255, 255, 0.4);
   color: #fff;
 }
 .button {
@@ -67,7 +72,7 @@ SOFTWARE. */
   display: block;
   height: 32px;
   width: 100%;
-  min-width: 350px;
+  min-width: 300px;
   background-color: #ffeb81;
   padding: 4px !important;
   color: #707070;
@@ -89,17 +94,25 @@ SOFTWARE. */
 }
 #window-controls {
   display: grid;
-  grid-template-columns: repeat(2, 40px) !important;
+  grid-template-columns: repeat(4, 40px) !important;
   position: absolute;
   top: 0 !important;
-  right: 15px !important;
+  left: calc(100% - 95px);
   height: 100%;
   font-size: 25px;
   -webkit-app-region: no-drag;
   align-items: center;
 }
-#min-button {
-  grid-column: 1;
+#window-controls1 {
+  display: grid;
+  grid-template-columns: repeat(2, 40px) !important;
+  position: absolute;
+  top: 0 !important;
+  left: calc(100% - 130px);
+  height: 100%;
+  font-size: 25px;
+  -webkit-app-region: no-drag;
+  align-items: center;
 }
 #window-title1,
 #window-title2 {
@@ -167,7 +180,7 @@ SOFTWARE. */
   align-items: center;
   position: absolute;
   top: 0 !important;
-  right: 80px !important;
+  right: 125px !important;
   height: 100%;
   -webkit-app-region: no-drag;
   color: #707070;
@@ -194,7 +207,7 @@ SOFTWARE. */
   padding: 5px;
   text-decoration: none;
   display: block;
-  font-size: 21px;
+  font-size: 17px;
   font-family: "Lobster";
 }
 .dropdown-content a span {

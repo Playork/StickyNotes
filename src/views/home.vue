@@ -26,7 +26,11 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div id="home">
-    <titlebar1 v-bind:close="close" v-bind:note="note" />
+    <titlebar1
+      v-bind:close="close"
+      v-bind:note="note"
+      v-bind:minimize="minimize"
+    />
     <homebody />
   </div>
 </template>
@@ -483,6 +487,11 @@ export default {
         func(id);
       }
       ipcRenderer.send("create-new-instance");
+    },
+
+    // Minimize Window
+    minimize() {
+      remote.getCurrentWindow().minimize();
     }
   }
 };
