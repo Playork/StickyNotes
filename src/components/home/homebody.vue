@@ -203,7 +203,7 @@ export default {
         let lith = document.createElement("style");
         lith.type = "text/css";
         lith.id = "lighttheme";
-        lith.innerText = `#note,
+        lith.innerText = `
   #home {
     background: #ffffffee;
   }

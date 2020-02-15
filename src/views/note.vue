@@ -89,6 +89,60 @@ export default {
 
     // Close When Closing Home
     window.setInterval(() => {
+      let num = store.get("theme").on;
+      if (num == 1) {
+        let lith = document.createElement("style");
+        lith.type = "text/css";
+        lith.id = "lighttheme";
+        lith.innerText = `#note {
+    background: #ffffffee;
+  }
+  .swal-modal {
+    background: #ffffffee !important;
+  }
+  .swal-title,
+  .swal-text {
+    color: #000 !important;
+  }
+  .dropdown-content {
+    background-color: #ffffffee !important;
+  }
+  .dropdown-content a {
+    color: #000 !important;
+  }
+  .dropdown-content a:hover {
+    background-color: #eee !important;
+  }
+  #choosecolor {
+    background: #ffffffee !important;
+    color: #000 !important;
+  }
+  .emoji-mart {
+    background: #ffffffee !important;
+  }
+  .emoji-mart-category-label span {
+    background: #fff !important;
+  }
+  .emoji-mart * {
+    color: #000 !important;
+  }
+  .emoji-mart-search input {
+    color: #fff !important;
+    background: #000;
+  }
+  #hideemoji {
+    color: #000 !important;
+    background: #ffffffee !important;
+  }
+  #window-title2 span:hover {
+    color: #000 !important;
+  }`;
+        document.head.appendChild(lith);
+      } else {
+        try {
+          document.head.removeChild(document.getElementById("lighttheme"));
+        } catch {}
+      }
       try {
         if (store.get("closed").closed == "yes") {
           remote.getCurrentWindow().close();
