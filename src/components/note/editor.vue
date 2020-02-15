@@ -98,7 +98,6 @@ SOFTWARE.
 // Import Required Packages
 import { remote } from "electron";
 import Quill from "quill";
-import katex from "katex";
 import store from "store";
 import $ from "./../../assets/script/jquery.js";
 import wordsarray from "an-array-of-english-words";

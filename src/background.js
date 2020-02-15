@@ -27,19 +27,9 @@ import {
   createProtocol,
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
-import { autoUpdater } from "electron-updater";
 import AutoLaunch from "auto-launch";
 import { setTimeout } from "timers";
 
-autoUpdater.checkForUpdatesAndNotify();
-require("electron-context-menu")({
-  prepend: () => [
-    {
-      label: "v0.4.0"
-    }
-  ],
-  showInspectElement: false
-});
 let launchonstart = new AutoLaunch({
   name: "StickyNotes"
 });
