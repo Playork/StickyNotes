@@ -464,17 +464,17 @@ export default {
 
     // Delete All Note Function
     deleteall() {
-      if (store.get("warn").on == "yes") {
-        swal({
-          title: "Are you sure?",
-          text: "Want To Delete All Notes!",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true
-        }).then(willDelete => {
-          if (willDelete) {
-            store.set("closed", { closed: "yes" });
-            if (store.get("closed").closed == "yes") {
+      if (document.getElementById("notetext")) {
+        if (store.get("warn").on == "yes") {
+          swal({
+            title: "Are you sure?",
+            text: "Want To Delete All Notes!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+          }).then(willDelete => {
+            if (willDelete) {
+              store.set("closed", { closed: "yes" });
               window.setTimeout(() => {
                 store.each((value, key) => {
                   if (
@@ -489,13 +489,10 @@ export default {
                     store.remove(key);
                   }
                 });
-              }, 50);
+              }, 800);
             }
-          }
-        });
-      } else {
-        store.set("closed", { closed: "yes" });
-        if (store.get("closed").closed == "yes") {
+          });
+        } else {
           store.set("closed", { closed: "yes" });
           window.setTimeout(() => {
             store.each((value, key) => {
@@ -511,8 +508,10 @@ export default {
                 store.remove(key);
               }
             });
-          }, 50);
+          }, 800);
         }
+      } else {
+        swal("Nothing To Delete");
       }
     },
 

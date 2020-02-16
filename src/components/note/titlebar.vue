@@ -323,9 +323,8 @@ export default {
 
     // Add Audio To Note
     clicksong() {
-      document.getElementById("note").style.pointerEvents = "none";
-      remote.dialog.showOpenDialog(
-        {
+      remote.dialog
+        .showOpenDialog({
           filters: [
             {
               name: "Audo Files(mp3,wav,ogg)",
@@ -333,27 +332,23 @@ export default {
             }
           ],
           defaultPath: os.homedir()
-        },
-        audios => {
-          document.getElementById("note").style.pointerEvents = "auto";
-          if (audios === undefined) return;
-          let audiofile = audios[0];
+        })
+        .then(audios => {
+          if (audios.filePaths[0] === undefined) return;
           try {
             document.querySelector(
               ".ql-snow .ql-editor"
-            ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///${audiofile}' controls></audio>"></iframe>`;
+            ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///audios.filePaths[0]' controls></audio>"></iframe>`;
           } catch {
             swal("Not Supported");
           }
-        }
-      );
+        });
     },
 
     // Add Video To Note
     clickvideo() {
-      document.getElementById("note").style.pointerEvents = "none";
-      remote.dialog.showOpenDialog(
-        {
+      remote.dialog
+        .showOpenDialog({
           filters: [
             {
               name: "Video Files(mp4,webm,ogg)",
@@ -370,20 +365,17 @@ export default {
             }
           ],
           defaultPath: os.homedir()
-        },
-        videos => {
-          document.getElementById("note").style.pointerEvents = "auto";
-          if (videos === undefined) return;
-          let videofile = videos[0];
+        })
+        .then(videos => {
+          if (videos.filePaths[0] === undefined) return;
           try {
             document.querySelector(
               ".ql-snow .ql-editor"
-            ).innerHTML += `<iframe srcdoc="<video src='file:///${videofile}' height='150px' controls preload='none'></video>" id="video"></iframe>`;
+            ).innerHTML += `<iframe srcdoc="<video src='file:///${videos.filePaths[0]}' height='150px' controls preload='none'></video>" id="video"></iframe>`;
           } catch {
             swal("Not Supported");
           }
-        }
-      );
+        });
     }
   }
 };

@@ -84,7 +84,7 @@ button {
 #about {
   display: none;
   background: #202020ee;
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
@@ -106,7 +106,7 @@ button {
 #settings {
   display: none;
   background: #202020ee;
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
@@ -145,7 +145,7 @@ button {
 #sync {
   display: none;
   background: #202020ee;
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
