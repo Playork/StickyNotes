@@ -94,7 +94,8 @@ export default {
         let lith = document.createElement("style");
         lith.type = "text/css";
         lith.id = "lighttheme";
-        lith.innerText = `#note {
+        lith.innerText = `
+  #note {
     background: #ffffffee;
   }
   .swal-modal {
@@ -136,6 +137,11 @@ export default {
   }
   #window-title2 span:hover {
     color: #000 !important;
+  }
+  .dropdown-menu,
+  .textcomplete-dropdown {
+    background: #aaaaaaaa;
+    border: #222222aa 4px solid;
   }`;
         document.head.appendChild(lith);
       } else {

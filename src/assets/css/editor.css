@@ -136,13 +136,13 @@ SOFTWARE. */
 }
 .dropdown-menu,
 .textcomplete-dropdown {
-  background: #202020;
+  background: #202020aa;
   border-radius: 10px;
   text-align: center;
   list-style: none;
   padding: 10px;
   font-family: "Nunito";
-  border: #000 4px solid;
+  border: #000000aa 4px solid;
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }
 .textcomplete-item {

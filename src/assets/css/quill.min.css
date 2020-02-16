@@ -415,7 +415,7 @@
   float: left;
   height: 24px;
   padding: 3px 5px;
-  width: 23px;
+  width: 21px;
 }
 .ql-snow.ql-toolbar button svg,
 .ql-snow .ql-toolbar button svg {
@@ -827,7 +827,7 @@
   font-size: 0.67em;
 }
 .ql-snow .ql-picker.ql-font {
-  width: 108px;
+  width: 90px;
 }
 .ql-snow .ql-picker.ql-font .ql-picker-label::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item::before {
@@ -848,7 +848,7 @@
   font-family: Monaco, Courier New, monospace;
 }
 .ql-snow .ql-picker.ql-size {
-  width: 98px;
+  width: 70px;
 }
 .ql-snow .ql-picker.ql-size .ql-picker-label::before,
 .ql-snow .ql-picker.ql-size .ql-picker-item::before {
