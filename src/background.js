@@ -22,13 +22,13 @@ SOFTWARE. */
 
 "use strict";
 
-import { app, BrowserWindow, ipcMain } from "electron";
-import {
+let { app, BrowserWindow, ipcMain } = require("electron");
+let {
   createProtocol,
   installVueDevtools
-} from "vue-cli-plugin-electron-builder/lib";
-import AutoLaunch from "auto-launch";
-import { setTimeout } from "timers";
+} = require("vue-cli-plugin-electron-builder/lib");
+let AutoLaunch = require("auto-launch");
+let { setTimeout } = require("timers");
 
 require("electron-context-menu")({
   prepend: () => [
