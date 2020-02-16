@@ -5,7 +5,7 @@
   "author": "B. Ramnath Shenoy <bekalshenoy@gmail.com>",
   "main": "./src/background.js",
   "scripts": {
-    "build": "vue-cli-service electron:build --config ./src/background.js",
+    "build": "vue-cli-service electron:build --config --linux",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "start": "vue-cli-service electron:serve"
