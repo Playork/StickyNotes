@@ -123,6 +123,7 @@ SOFTWARE.
 // Import Required Packages
 import store from "store";
 import swal from "sweetalert";
+import fs from "fs";
 import { setTimeout, setInterval } from "timers";
 import { Dropbox } from "dropbox";
 import { remote, ipcRenderer, shell } from "electron";
@@ -370,8 +371,8 @@ export default {
   methods: {
     // Import Notes
     importnotes() {
-      remote.dialog.showOpenDialog(
-        {
+      remote.dialog
+        .showOpenDialog({
           filters: [
             {
               name: "Notes(.spsd)",
@@ -379,44 +380,43 @@ export default {
             }
           ],
           defaultPath: os.homedir() + "/note.spsd"
-        },
-        notes => {
-          if (notes === undefined) return;
-          let notesfile = notes[0];
-          fs.readFile(notesfile, (e, d) => {
-            if (e) {
-              swal("Not Supported");
-            } else {
-              if (d != "") {
-                d = d.toString().split("\n");
-                for (let i = 0; i < d.length; i++) {
-                  if (i % 2 == 0 && d[i] != "") {
-                    let js = JSON.parse(d[i + 1]);
-                    if (store.get(d[i]) == undefined) {
-                      store.set(d[i], js);
-                    } else {
-                      if (
-                        js.first != store.get(d[i]).first ||
-                        js.image != store.get(d[i]).image
-                      ) {
-                        let g = new Date().getTime();
-                        let id = Number(d[i]) * g;
-                        store.set(id.toString(), js);
+        })
+        .then(notes => {
+          if (notes.filePaths[0] != undefined) {
+            fs.readFile(notes.filePaths[0], (e, d) => {
+              if (e) {
+                swal("Not Supported");
+              } else {
+                if (d != "") {
+                  d = d.toString().split("\n");
+                  for (let i = 0; i < d.length; i++) {
+                    if (i % 2 == 0 && d[i] != "") {
+                      let js = JSON.parse(d[i + 1]);
+                      if (store.get(d[i]) == undefined) {
+                        store.set(d[i], js);
+                      } else {
+                        if (
+                          js.first != store.get(d[i]).first ||
+                          js.image != store.get(d[i]).image
+                        ) {
+                          let g = new Date().getTime();
+                          let id = Number(d[i]) * g;
+                          store.set(id.toString(), js);
+                        }
                       }
                     }
                   }
                 }
               }
-            }
-          });
-        }
-      );
+            });
+          }
+        });
     },
 
     // Export Notes
     exportnotes() {
-      remote.dialog.showSaveDialog(
-        {
+      remote.dialog
+        .showSaveDialog({
           filters: [
             {
               name: "Notes(.spsd)",
@@ -424,9 +424,9 @@ export default {
             }
           ],
           defaultPath: os.homedir() + "/notes.spsd"
-        },
-        notes => {
-          if (notes != undefined) {
+        })
+        .then(notes => {
+          if (notes.filePath != undefined) {
             let data = "";
             store.each((value, key) => {
               if (
@@ -446,14 +446,13 @@ export default {
                 data = data + key + "\n" + JSON.stringify(value) + "\n";
               }
             });
-            fs.writeFile(notes, data, e => {
+            fs.writeFile(notes.filePath, data, e => {
               if (e) {
                 swal("Not Supported");
               }
             });
           }
-        }
-      );
+        });
     },
 
     // Report Bug

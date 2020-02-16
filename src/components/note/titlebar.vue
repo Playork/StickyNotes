@@ -53,9 +53,6 @@ SOFTWARE.
               <a title="Select Video" id="audio1" v-on:click="clicksong">
                 <span>&#xE8D6;</span>Add Audio
               </a>
-              <a v-on:click="savenote" title="Save Note">
-                <span>&#xE74E;</span>Save
-              </a>
               <a v-on:click="importnote" id="import" title="Import Note">
                 <span>&#xE8B5;</span>Import
               </a>
@@ -230,37 +227,10 @@ export default {
       document.getElementById("menu-content").classList.toggle("show");
     },
 
-    // Save Note Function
-    savenote() {
-      if (document.getElementById("draw").style.display != "block") {
-        let ifr = document.createElement("iframe");
-        ifr.style = "height: 0px; width: 0px; position: absolute";
-        document.body.appendChild(ifr);
-        ifr.contentDocument.body.innerHTML = document.querySelector(
-          ".ql-snow .ql-editor"
-        ).innerHTML;
-        ifr.contentWindow.print();
-        ifr.parentElement.removeChild(ifr);
-      } else {
-        let link = document.createElement("a");
-        document.body.appendChild(link);
-        link.addEventListener(
-          "click",
-          function(ev) {
-            link.href = document.getElementById("draw").toDataURL();
-            link.download = "note.png";
-          },
-          false
-        );
-        link.click();
-        link.parentElement.removeChild(link);
-      }
-    },
-
     // Import Note Function
     importnote() {
-      remote.dialog.showOpenDialog(
-        {
+      remote.dialog
+        .showOpenDialog({
           filters: [
             {
               name: "Note(.spst)",
@@ -268,41 +238,48 @@ export default {
             }
           ],
           defaultPath: os.homedir() + "/note.spst"
-        },
-        note => {
-          if (note === undefined) return;
-          let notefile = note[0];
-          fs.readFile(notefile, (e, d) => {
-            if (e) {
-              swal("Not Supported");
-            } else {
-              d = d.toString().split("\n");
-              if (document.getElementById("draw").style.display != "block") {
-                document.querySelector(".ql-snow .ql-editor").innerHTML = d[0];
-                window.resizeTo(Number(d[3]), Number([4]));
+        })
+        .then(note => {
+          if (note.filePaths[0] != undefined) {
+            fs.readFile(note.filePaths[0], (e, d) => {
+              if (e) {
+                swal("Not Supported");
               } else {
-                window.resizeTo(Number(d[3]), Number([4]));
-                let canvas = document.getElementById("draw");
-                let ctx = canvas.getContext("2d");
-                let img = new Image();
-                img.src = d[0];
-                img.onload = function() {
-                  ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
-                };
+                d = d.toString().split("\n");
+                if (document.getElementById("draw").style.display != "block") {
+                  document.querySelector(".ql-snow .ql-editor").innerHTML =
+                    d[0];
+                  window.resizeTo(Number(d[3]), Number([4]));
+                } else {
+                  window.resizeTo(Number(d[3]), Number([4]));
+                  let canvas = document.getElementById("draw");
+                  let ctx = canvas.getContext("2d");
+                  let img = new Image();
+                  img.src = d[0];
+                  img.onload = function() {
+                    ctx.drawImage(
+                      img,
+                      0,
+                      0,
+                      img.naturalWidth,
+                      img.naturalHeight
+                    );
+                  };
+                }
+                document.getElementById("lightYellow").style.backgroundColor =
+                  d[1];
+                document.getElementById("titlebar").style.backgroundColor =
+                  d[2];
               }
-              document.getElementById("lightYellow").style.backgroundColor =
-                d[1];
-              document.getElementById("titlebar").style.backgroundColor = d[2];
-            }
-          });
-        }
-      );
+            });
+          }
+        });
     },
 
     // Exportb Note Function
     exportnote() {
-      remote.dialog.showSaveDialog(
-        {
+      remote.dialog
+        .showSaveDialog({
           filters: [
             {
               name: "Note(.spst)",
@@ -310,38 +287,38 @@ export default {
             }
           ],
           defaultPath: os.homedir() + "/note.spst"
-        },
-        note => {
-          if (note === undefined) return;
-          let data;
-          if (document.getElementById("draw").style.display != "block") {
-            data = document.querySelector(".ql-snow .ql-editor").innerHTML;
-          } else {
-            data = document.getElementById("draw").toDataURL();
-          }
-          fs.writeFile(
-            note,
-            data +
-              "\n" +
-              window
-                .getComputedStyle(document.getElementById("lightYellow"))
-                .getPropertyValue("background-color") +
-              "\n" +
-              window
-                .getComputedStyle(document.getElementById("titlebar"))
-                .getPropertyValue("background-color") +
-              "\n" +
-              window.innerWidth.toString() +
-              "\n" +
-              window.innerHeight.toString(),
-            e => {
-              if (e) {
-                swal("Not Supported");
-              }
+        })
+        .then(note => {
+          if (note.filePath != undefined) {
+            let data;
+            if (document.getElementById("draw").style.display != "block") {
+              data = document.querySelector(".ql-snow .ql-editor").innerHTML;
+            } else {
+              data = document.getElementById("draw").toDataURL();
             }
-          );
-        }
-      );
+            fs.writeFile(
+              note.filePath,
+              data +
+                "\n" +
+                window
+                  .getComputedStyle(document.getElementById("lightYellow"))
+                  .getPropertyValue("background-color") +
+                "\n" +
+                window
+                  .getComputedStyle(document.getElementById("titlebar"))
+                  .getPropertyValue("background-color") +
+                "\n" +
+                window.innerWidth.toString() +
+                "\n" +
+                window.innerHeight.toString(),
+              e => {
+                if (e) {
+                  swal("Not Supported");
+                }
+              }
+            );
+          }
+        });
     },
 
     // Add Audio To Note
