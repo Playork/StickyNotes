@@ -5,7 +5,7 @@
   "author": "B. Ramnath Shenoy <bekalshenoy@gmail.com>",
   "main": "background.js",
   "scripts": {
-    "build": "vue-cli-service electron:build --config",
+    "build": "vue-cli-service electron:build",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "start": "vue-cli-service electron:serve"
@@ -22,8 +22,7 @@
   },
   "devDependencies": {
     "@vue/cli-service": "latest",
-    "electron": "v6",
-    "electron-builder": "latest",
+    "electron": "^6.0.0",
     "vue": "latest",
     "vue-cli-plugin-electron-builder": "latest",
     "vue-router": "latest",
