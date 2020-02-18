@@ -3,7 +3,7 @@
   "version": "0.4.0",
   "description": "A Sticky Note Application.",
   "author": "B. Ramnath Shenoy <bekalshenoy@gmail.com>",
-  "main": "./src/background.js",
+  "main": "background.js",
   "scripts": {
     "build": "vue-cli-service electron:build",
     "postinstall": "electron-builder install-app-deps",
@@ -22,8 +22,7 @@
   },
   "devDependencies": {
     "@vue/cli-service": "latest",
-    "electron": "latest",
-    "electron-builder": "latest",
+    "electron": "^6.0.0",
     "vue": "latest",
     "vue-cli-plugin-electron-builder": "latest",
     "vue-router": "latest",
