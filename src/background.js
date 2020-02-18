@@ -22,10 +22,13 @@ SOFTWARE. */
 
 "use strict";
 
-import { app, BrowserWindow, ipcMain } from "electron";
-import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
-import AutoLaunch from "auto-launch";
-import { setTimeout } from "timers";
+let { app, BrowserWindow, ipcMain } = require("electron");
+let {
+  createProtocol,
+  installVueDevtools
+} = require("vue-cli-plugin-electron-builder/lib");
+let AutoLaunch = require("auto-launch");
+let { setTimeout } = require("timers");
 
 require("electron-context-menu")({
   prepend: () => [
@@ -114,6 +117,15 @@ function createNote() {
 
 ipcMain.on("create-new-instance", () => {
   createNote();
+});
+
+app.on("ready", async () => {
+  if (isDevelopment && !process.env.IS_TEST) {
+    await installVueDevtools();
+  }
+  setTimeout(() => {
+    createWindow();
+  }, 500);
 });
 
 app.on("activate", () => {
