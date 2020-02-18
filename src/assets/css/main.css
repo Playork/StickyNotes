@@ -60,7 +60,7 @@ button {
 .start div {
   position: absolute;
   top: 20%;
-  left: 15%;
+  left: 5%;
   user-select: none;
 }
 #options {
