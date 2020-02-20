@@ -81,13 +81,6 @@ SOFTWARE.
 
 <!-- Javascript -->
 <script>
-// Import Required Packages
-import { remote } from "electron";
-import { setInterval } from "timers";
-import fs from "fs";
-import swal from "sweetalert";
-import os from "os";
-
 // Vue Class
 export default {
   // Props
@@ -108,10 +101,6 @@ export default {
         document.getElementById("draw").style.display = "block";
         document.getElementById("video1").style.display = "none";
         document.getElementById("audio1").style.display = "none";
-        document.getElementById("emoji").style.display = "none";
-        document.getElementsByClassName("emoji-mart")[0].style.visibility =
-          "hidden";
-        document.getElementById("hideemoji").style.display = "none";
         document.getElementById("redo").style.display = "none";
         document.getElementById("undo").style.display = "none";
       } else {
@@ -122,7 +111,6 @@ export default {
         document.getElementById("video1").style.display = "block";
         document.getElementById("audio1").style.display = "block";
         document.getElementById("candit").style.display = "none";
-        document.getElementById("emoji").style.display = "block";
         document.getElementById("redo").style.display = "block";
         document.getElementById("undo").style.display = "block";
       }
@@ -154,6 +142,7 @@ export default {
         select5.style.pointerEvents = "none";
         select6.style.pointerEvents = "none";
         select7.style.display = "none";
+        let { setInterval } = require("timers");
         let clearint = window.setInterval(() => {
           document.getElementById("color").style.height = "0";
           document.getElementById("locks").style.marginLeft = "-35px";
@@ -162,16 +151,14 @@ export default {
           document.getElementById("minimize").style.display = "none";
           document.getElementById("close").style.display = "none";
           document.getElementById("menu").style.display = "none";
-          document.getElementsByClassName("emoji-mart")[0].style.visibility =
-            "hidden";
-          document.getElementById("emoji").style.display = "none";
-          document.getElementById("hideemoji").style.display = "none";
           document.getElementById("lightYellow").style.paddingTop = "30px";
           if (
             document.getElementById("menu-content").classList.contains("show")
           ) {
             document.getElementById("menu-content").classList.remove("show");
           }
+          let { remote } = require("electron");
+
           remote.getCurrentWindow().setMaximumSize(350, 375);
           if (select.style.pointerEvents == "auto") {
             document.getElementById("color").style.height = "40px";
@@ -229,6 +216,8 @@ export default {
 
     // Import Note Function
     importnote() {
+      let { remote } = require("electron");
+      let os = require("os");
       remote.dialog
         .showOpenDialog({
           filters: [
@@ -241,8 +230,11 @@ export default {
         })
         .then(note => {
           if (note.filePaths[0] != undefined) {
+            let fs = require("fs");
             fs.readFile(note.filePaths[0], (e, d) => {
               if (e) {
+                let swal = require("sweetalert");
+
                 swal("Not Supported");
               } else {
                 d = d.toString().split("\n");
@@ -278,6 +270,8 @@ export default {
 
     // Exportb Note Function
     exportnote() {
+      let { remote } = require("electron");
+      let os = require("os");
       remote.dialog
         .showSaveDialog({
           filters: [
@@ -296,6 +290,7 @@ export default {
             } else {
               data = document.getElementById("draw").toDataURL();
             }
+            let fs = require("fs");
             fs.writeFile(
               note.filePath,
               data +
@@ -313,6 +308,8 @@ export default {
                 window.innerHeight.toString(),
               e => {
                 if (e) {
+                  let swal = require("sweetalert");
+
                   swal("Not Supported");
                 }
               }
@@ -323,6 +320,8 @@ export default {
 
     // Add Audio To Note
     clicksong() {
+      let { remote } = require("electron");
+      let os = require("os");
       remote.dialog
         .showOpenDialog({
           filters: [
@@ -334,19 +333,24 @@ export default {
           defaultPath: os.homedir()
         })
         .then(audios => {
-          if (audios.filePaths[0] === undefined) return;
-          try {
-            document.querySelector(
-              ".ql-snow .ql-editor"
-            ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///audios.filePaths[0]' controls></audio>"></iframe>`;
-          } catch {
-            swal("Not Supported");
+          if (audios.filePaths[0]) {
+            try {
+              document.querySelector(
+                ".ql-snow .ql-editor"
+              ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///audios.filePaths[0]' controls></audio>"></iframe>`;
+            } catch {
+              let swal = require("sweetalert");
+
+              swal("Not Supported");
+            }
           }
         });
     },
 
     // Add Video To Note
     clickvideo() {
+      let { remote } = require("electron");
+      let os = require("os");
       remote.dialog
         .showOpenDialog({
           filters: [
@@ -367,13 +371,16 @@ export default {
           defaultPath: os.homedir()
         })
         .then(videos => {
-          if (videos.filePaths[0] === undefined) return;
-          try {
-            document.querySelector(
-              ".ql-snow .ql-editor"
-            ).innerHTML += `<iframe srcdoc="<video src='file:///${videos.filePaths[0]}' height='150px' controls preload='none'></video>" id="video"></iframe>`;
-          } catch {
-            swal("Not Supported");
+          if (videos.filePaths[0]) {
+            try {
+              document.querySelector(
+                ".ql-snow .ql-editor"
+              ).innerHTML += `<iframe srcdoc="<video src='file:///${videos.filePaths[0]}' height='150px' controls preload='none'></video>" id="video"></iframe>`;
+            } catch {
+              let swal = require("sweetalert");
+
+              swal("Not Supported");
+            }
           }
         });
     }

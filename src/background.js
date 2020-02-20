@@ -21,28 +21,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 "use strict";
-
-let { app, BrowserWindow, ipcMain } = require("electron");
-let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
-let AutoLaunch = require("auto-launch");
 let { setTimeout } = require("timers");
-
-require("electron-context-menu")({
-  prepend: (defaultActions, params, browserWindow) => {
-    let a = []
-    params.dictionarySuggestions.forEach((d) => {
-      a.push({ label: d })
-    })
-    return a
-  },
-  showInspectElement: false
-});
-
-let launchonstart = new AutoLaunch({
-  name: "StickyNotes"
-});
-launchonstart.enable();
-
+let { app, BrowserWindow, ipcMain } = require("electron");
 const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
 function createWindow() {
@@ -64,6 +44,7 @@ function createWindow() {
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
     if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
+    let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
     createProtocol("app");
     win.loadURL("app://./index.html");
   }
@@ -80,6 +61,14 @@ function createWindow() {
     }, 150);
   });
 }
+
+app.on("activate", () => {
+  if (win === null) {
+    setTimeout(() => {
+      createWindow();
+    }, 500);
+  }
+});
 
 app.commandLine.appendSwitch("disable-web-security");
 let winnote;
@@ -102,6 +91,7 @@ function createNote() {
     winnote.loadURL("http://localhost:8080/#/note");
     if (!process.env.IS_TEST) winnote.webContents.openDevTools();
   } else {
+    let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
     createProtocol("app");
     winnote.loadURL("app://./index.html#note");
   }
@@ -124,12 +114,15 @@ app.on("ready", async () => {
   createWindow();
 });
 
-app.on("activate", () => {
-  if (win === null) {
-    setTimeout(() => {
-      createWindow();
-    }, 500);
-  }
+require("electron-context-menu")({
+  prepend: (defaultActions, params, browserWindow) => {
+    let a = []
+    params.dictionarySuggestions.forEach((d) => {
+      a.push({ label: d })
+    })
+    return a
+  },
+  showInspectElement: false
 });
 
 if (isDevelopment) {

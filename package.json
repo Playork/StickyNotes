@@ -11,11 +11,8 @@
     "start": "vue-cli-service electron:serve"
   },
   "dependencies": {
-    "an-array-of-english-words": "latest",
-    "auto-launch": "latest",
     "dropbox": "^4.0.17",
     "electron-context-menu": "latest",
-    "emoji-mart-vue": "latest",
     "quill": "latest",
     "sweetalert": "latest"
   },

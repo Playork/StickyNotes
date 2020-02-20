@@ -73,11 +73,6 @@ SOFTWARE.
               <input type="checkbox" id="colorswitch" checked="checked" />
               <span class="checkmark"></span>
             </label>
-            <p>Emoji Selector</p>
-            <label class="container">
-              <input type="checkbox" id="emojiswitch" checked="checked" />
-              <span class="checkmark"></span>
-            </label>
             <p>Warn Before Delete</p>
             <label class="container">
               <input type="checkbox" id="warnswitch" checked="checked" />
@@ -116,12 +111,9 @@ SOFTWARE.
 <!-- Javascript -->
 <script>
 // Import Required Packages
-import swal from "sweetalert";
 import fs from "fs";
-import { setTimeout, setInterval } from "timers";
 import { Dropbox } from "dropbox";
-import { remote, ipcRenderer, shell } from "electron";
-import os from "os";
+import { remote } from "electron";
 
 // Vue Class
 export default {
@@ -159,19 +151,6 @@ export default {
           document.getElementById("colorswitch").checked = true;
         } else {
           document.getElementById("colorswitch").checked = false;
-        }
-      }
-    });
-    fs.readFile("data/emoji", (e, d) => {
-      if (e) {
-        document.getElementById("emojiswitch").checked = true;
-        fs.writeFile("data/emoji", JSON.stringify({ on: "yes" }), e => {});
-      } else {
-        d = JSON.parse(d);
-        if (d.on == "yes") {
-          document.getElementById("emojiswitch").checked = true;
-        } else {
-          document.getElementById("emojiswitch").checked = false;
         }
       }
     });
@@ -255,14 +234,6 @@ export default {
         }
       };
     });
-
-    document.getElementById("emojiswitch").onclick = () => {
-      if (document.getElementById("emojiswitch").checked == true) {
-        fs.writeFile("data/emoji", JSON.stringify({ on: "yes" }), e => {});
-      } else {
-        fs.writeFile("data/emoji", JSON.stringify({ on: "no" }), e => {});
-      }
-    };
     document.getElementById("warnswitch").onclick = () => {
       if (document.getElementById("warnswitch").checked == true) {
         fs.writeFile("data/warn", JSON.stringify({ on: "yes" }), e => {});
@@ -332,23 +303,6 @@ export default {
     background: #ffffffee !important;
     color: #000 !important;
   }
-  .emoji-mart {
-    background: #ffffffee !important;
-  }
-  .emoji-mart-category-label span {
-    background: #fff !important;
-  }
-  .emoji-mart * {
-    color: #000 !important;
-  }
-  .emoji-mart-search input {
-    color: #fff !important;
-    background: #000;
-  }
-  #hideemoji {
-    color: #000 !important;
-    background: #ffffffee !important;
-  }
   #window-title2 span:hover {
     color: #000 !important;
   }`;
@@ -363,6 +317,7 @@ export default {
   methods: {
     // Import Notes
     importnotes() {
+      let os = require("os");
       remote.dialog
         .showOpenDialog({
           filters: [
@@ -377,6 +332,7 @@ export default {
           if (notes.filePaths[0] != undefined) {
             fs.readFile(notes.filePaths[0], (e, d) => {
               if (e) {
+                let swal = require("sweetalert");
                 swal("Not Supported");
               } else {
                 if (d != "") {
@@ -415,6 +371,7 @@ export default {
 
     // Export Notes
     exportnotes() {
+      let os = require("os");
       remote.dialog
         .showSaveDialog({
           filters: [
@@ -450,6 +407,7 @@ export default {
 
     // Report Bug
     report() {
+      let { shell } = require("electron");
       shell.openExternal(
         "mailto:playork@outlook.com?subject=Sticky%20Notes%20Bug"
       );
@@ -458,9 +416,11 @@ export default {
     // Delete All Note Function
     deleteall() {
       if (document.getElementById("notetext")) {
+        let { setTimeout } = require("timers");
         fs.readFile("data/warn", (e, d) => {
           d = JSON.parse(d);
           if (d.on == "yes") {
+            let swal = require("sweetalert");
             swal({
               title: "Are you sure?",
               text: "Want To Delete All Notes!",
@@ -472,9 +432,29 @@ export default {
                 fs.writeFile(
                   "data/closed",
                   JSON.stringify({ closed: "yes" }),
-                  e => {}
+                  e => {
+                    window.setTimeout(() => {
+                      fs.readdir("data/notes/", function(e, files) {
+                        if (e) {
+                        } else {
+                          files.forEach(function(key, index) {
+                            fs.readFile("data/notes/" + key, (e, d) => {
+                              let value = JSON.parse(d);
+                              fs.unlink("data/notes/" + key, e => {});
+                            });
+                          });
+                        }
+                      });
+                    }, 800);
+                  }
                 );
-
+              }
+            });
+          } else {
+            fs.writeFile(
+              "data/closed",
+              JSON.stringify({ closed: "yes" }),
+              e => {
                 window.setTimeout(() => {
                   fs.readdir("data/notes/", function(e, files) {
                     if (e) {
@@ -489,29 +469,11 @@ export default {
                   });
                 }, 800);
               }
-            });
-          } else {
-            fs.writeFile(
-              "data/closed",
-              JSON.stringify({ closed: "yes" }),
-              e => {}
             );
-            window.setTimeout(() => {
-              fs.readdir("data/notes/", function(e, files) {
-                if (e) {
-                } else {
-                  files.forEach(function(key, index) {
-                    fs.readFile("data/notes/" + key, (e, d) => {
-                      let value = JSON.parse(d);
-                      fs.unlink("data/notes/" + key, e => {});
-                    });
-                  });
-                }
-              });
-            }, 800);
           }
         });
       } else {
+        let swal = require("sweetalert");
         swal("Nothing To Delete");
       }
     },
@@ -533,7 +495,10 @@ export default {
       let id = document.getElementById("sync");
       id.style.display = "block";
       document.getElementById("home").style.overflowY = "hidden";
-      if (!navigator.onLine) swal("Your Device Is Offline");
+      if (!navigator.onLine) {
+        let swal = require("sweetalert");
+        swal("Your Device Is Offline");
+      }
     },
 
     // Show Sync Page Function

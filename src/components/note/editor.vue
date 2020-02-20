@@ -26,28 +26,6 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div>
-    <span title="Add Emoji" id="emoji" v-on:click="emoji">&#xE76E;</span>
-    <span title="close" id="hideemoji" v-on:click="hideemoji">&#xE8BB;</span>
-    <div id="emojip">
-      <picker
-        set="google"
-        @select="addEmoji"
-        title="Pick your emoji…"
-        emoji="point_up"
-        :style="{
-          position: 'absolute',
-          top: '40px',
-          right: '0',
-          zIndex: '7',
-          width: '275px',
-          height: '335px'
-        }"
-        :i18n="{
-          search: 'Search',
-          categories: { search: 'Results Of Your Search', recent: 'Recent' }
-        }"
-      />
-    </div>
     <div id="lightYellow">
       <div id="editor"></div>
     </div>
@@ -96,12 +74,9 @@ SOFTWARE.
 <!-- Javascript -->
 <script>
 // Import Required Packages
-import { remote } from "electron";
 import Quill from "quill";
 import fs from "fs";
-import wordsarray from "an-array-of-english-words";
-import { setTimeout, setInterval } from "timers";
-import { Picker } from "emoji-mart-vue";
+import { setInterval } from "timers";
 
 // Vue Class
 export default {
@@ -349,22 +324,6 @@ export default {
         .getPropertyValue("background-color");
     }, 1);
 
-    // Create Text Suggestion Words Array
-    let words = wordsarray.filter(word => word.match(/^/i));
-    let cap = [];
-    let upp = [];
-    window.setTimeout(() => {
-      for (let i = 0; i < words.length; i++) {
-        cap[i] = words[i].charAt(0).toUpperCase() + words[i].substr(1);
-      }
-      for (let i = 0; i < words.length; i++) {
-        upp[i] = words[i].toUpperCase();
-      }
-    }, 50);
-    window.setTimeout(() => {
-      words = words.concat(cap, upp);
-    }, 50);
-
     // Load Editor And Save Note On Several Events
     let BackgroundClass = Quill.import("attributors/class/background");
     let ColorClass = Quill.import("attributors/class/color");
@@ -494,42 +453,41 @@ export default {
             e => {}
           );
         }
-        window.onbeforeunload = e => {
-          e.returnValue = true;
-          fs.readFile("data/notes/" + obj.toString(), (e, d) => {
-            if (e || JSON.parse(d).deleted == "no") {
+      };
+      window.onbeforeunload = e => {
+        e.returnValue = true;
+        let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
+        let url = document.getElementById("draw").toDataURL();
+        let color1 = window
+          .getComputedStyle(document.getElementById("lightYellow"))
+          .getPropertyValue("background-color");
+        let color2 = window
+          .getComputedStyle(document.getElementById("titlebar"))
+          .getPropertyValue("background-color");
+        let winwidth = window.innerWidth.toString();
+        let winheight = window.innerHeight.toString();
+        let lock;
+        if (
+          document.getElementById("close-button").style.pointerEvents == "none"
+        ) {
+          lock = "yes";
+        } else {
+          lock = "no";
+        }
+        let { remote } = require("electron");
+        fs.readFile("data/notes/" + obj.toString(), (e, d) => {
+          if (e || JSON.parse(d).deleted == "no") {
+            if (
+              document.getElementById("lightYellow").style.display != "none"
+            ) {
               if (
-                document.getElementById("lightYellow").style.display != "none"
+                document.querySelector(".ql-snow .ql-editor").innerHTML !=
+                "<p><br></p>"
               ) {
-                if (
-                  document.querySelector(".ql-snow .ql-editor").innerHTML !=
-                  "<p><br></p>"
-                ) {
-                  fs.writeFile(
-                    "data/notes/" + obj.toString(),
-                    JSON.stringify({
-                      first: text,
-                      back: color1,
-                      title: color2,
-                      wid: winwidth,
-                      hei: winheight,
-                      deleted: "no",
-                      closed: "yes",
-                      locked: lock
-                    }),
-                    e => {
-                      remote.getCurrentWindow().destroy();
-                    }
-                  );
-                } else {
-                  fs.unlink("data/notes/" + obj.toString(), e => {});
-                  remote.getCurrentWindow().destroy();
-                }
-              } else {
                 fs.writeFile(
                   "data/notes/" + obj.toString(),
                   JSON.stringify({
-                    image: url,
+                    first: text,
                     back: color1,
                     title: color2,
                     wid: winwidth,
@@ -542,27 +500,47 @@ export default {
                     remote.getCurrentWindow().destroy();
                   }
                 );
+              } else {
+                fs.unlink("data/notes/" + obj.toString(), e => {});
+                remote.getCurrentWindow().destroy();
               }
-            }
-          });
-        };
-        window.setInterval(() => {
-          fs.readFile("data/notes/" + obj.toString(), (e, d) => {
-            if (e) {
             } else {
-              if (JSON.parse(d).deleted == "yes") {
-                fs.unlink("data/notes/" + obj.toString(), e => {
-                  if (e) {
-                    console.log(e);
-                  }
-
+              fs.writeFile(
+                "data/notes/" + obj.toString(),
+                JSON.stringify({
+                  image: url,
+                  back: color1,
+                  title: color2,
+                  wid: winwidth,
+                  hei: winheight,
+                  deleted: "no",
+                  closed: "yes",
+                  locked: lock
+                }),
+                e => {
                   remote.getCurrentWindow().destroy();
-                });
-              }
+                }
+              );
             }
-          });
-        }, 1);
+          }
+        });
       };
+      fs.watch("data/notes/" + obj.toString(), (e, r) => {
+        fs.readFile("data/notes/" + obj.toString(), (e, d) => {
+          if (e) {
+          } else {
+            if (JSON.parse(d).deleted == "yes") {
+              fs.unlink("data/notes/" + obj.toString(), e => {
+                if (e) {
+                  console.log(e);
+                }
+                let { remote } = require("electron");
+                remote.getCurrentWindow().destroy();
+              });
+            }
+          }
+        });
+      });
       quill.on("text-change", () => repeafunc());
       // quill.on("text-change", () => {
       //   let cont = document.querySelector(".ql-snow .ql-editor").innerHTML;
@@ -593,9 +571,7 @@ export default {
         .addEventListener("click", () => repeafunc());
       document
         .getElementById("changec")
-        .addEventListener("click", () =>
-          window.setTimeout(() => repeafunc(), 100)
-        );
+        .addEventListener("click", () => repeafunc());
       document
         .getElementById("locks")
         .addEventListener("click", () => repeafunc());
@@ -612,27 +588,6 @@ export default {
     });
   },
   methods: {
-    // Add emoji
-    addEmoji(e) {
-      document.querySelector(
-        ".ql-snow .ql-editor"
-      ).lastElementChild.innerHTML += e.native;
-    },
-
-    // Add Emoji
-    emoji() {
-      document.getElementsByClassName("emoji-mart")[0].style.visibility =
-        "visible";
-      document.getElementById("hideemoji").style.display = "block";
-    },
-
-    // Hide Emoji
-    hideemoji() {
-      document.getElementsByClassName("emoji-mart")[0].style.visibility =
-        "hidden";
-      document.getElementById("hideemoji").style.display = "none";
-    },
-
     // Clear Canvas
     clearCanvas() {
       document
