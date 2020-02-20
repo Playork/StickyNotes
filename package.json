@@ -17,7 +17,6 @@
     "electron-context-menu": "latest",
     "emoji-mart-vue": "latest",
     "quill": "latest",
-    "store": "latest",
     "sweetalert": "latest"
   },
   "devDependencies": {

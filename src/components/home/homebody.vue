@@ -121,7 +121,6 @@ SOFTWARE.
 <!-- Javascript -->
 <script>
 // Import Required Packages
-import store from "store";
 import swal from "sweetalert";
 import fs from "fs";
 import { setTimeout, setInterval } from "timers";
@@ -134,7 +133,7 @@ export default {
   // Do On Start
   mounted() {
     let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
-    let authUrl = dbx.getAuthenticationUrl("app://./auth.html");
+    let authUrl = dbx.getAuthenticationUrl("src/assets/auth.html");
     document.getElementById("drb").addEventListener("click", () => {
       const win = new remote.BrowserWindow({
         width: 800,
@@ -154,57 +153,72 @@ export default {
         win.focus();
       });
     });
-    if (store.get("color") == undefined) {
-      document.getElementById("colorswitch").checked = true;
-      store.set("color", { on: "yes" });
-    } else {
-      if (store.get("color").on == "yes") {
+
+    fs.readFile("data/color", (e, d) => {
+      if (e) {
         document.getElementById("colorswitch").checked = true;
+        fs.writeFile("data/color", JSON.stringify({ on: "yes" }), e => {});
       } else {
-        document.getElementById("colorswitch").checked = false;
+        d = JSON.parse(d);
+        if (d.on == "yes") {
+          document.getElementById("colorswitch").checked = true;
+        } else {
+          document.getElementById("colorswitch").checked = false;
+        }
       }
-    }
-    if (store.get("text") == undefined) {
-      document.getElementById("textswitch").checked = true;
-      store.set("text", { on: "yes" });
-    } else {
-      if (store.get("text").on == "yes") {
+    });
+    fs.readFile("data/text", (e, d) => {
+      if (e) {
         document.getElementById("textswitch").checked = true;
+        fs.writeFile("data/text", JSON.stringify({ on: "yes" }), e => {});
       } else {
-        document.getElementById("textswitch").checked = false;
+        d = JSON.parse(d);
+        if (d.on == "yes") {
+          document.getElementById("textswitch").checked = true;
+        } else {
+          document.getElementById("textswitch").checked = false;
+        }
       }
-    }
-    if (store.get("emoji") == undefined) {
-      document.getElementById("emojiswitch").checked = true;
-      store.set("emoji", { on: "yes" });
-    } else {
-      if (store.get("emoji").on == "yes") {
+    });
+    fs.readFile("data/emoji", (e, d) => {
+      if (e) {
         document.getElementById("emojiswitch").checked = true;
+        fs.writeFile("data/emoji", JSON.stringify({ on: "yes" }), e => {});
       } else {
-        document.getElementById("emojiswitch").checked = false;
+        d = JSON.parse(d);
+        if (d.on == "yes") {
+          document.getElementById("emojiswitch").checked = true;
+        } else {
+          document.getElementById("emojiswitch").checked = false;
+        }
       }
-    }
-    if (store.get("warn") == undefined) {
-      document.getElementById("warnswitch").checked = true;
-      store.set("warn", { on: "yes" });
-    } else {
-      if (store.get("warn").on == "yes") {
+    });
+    fs.readFile("data/warn", (e, d) => {
+      if (e) {
         document.getElementById("warnswitch").checked = true;
+        fs.writeFile("data/warn", JSON.stringify({ on: "yes" }), e => {});
       } else {
-        document.getElementById("warnswitch").checked = false;
+        d = JSON.parse(d);
+        if (d.on == "yes") {
+          document.getElementById("warnswitch").checked = true;
+        } else {
+          document.getElementById("warnswitch").checked = false;
+        }
       }
-    }
-    if (store.get("theme") == undefined) {
-      document.getElementById("theme").selectedIndex = 0;
-      store.set("theme", { on: 0 });
-    } else {
-      let num = store.get("theme").on;
-      document.getElementById("theme").selectedIndex = num;
-      if (num == 1) {
-        let lith = document.createElement("style");
-        lith.type = "text/css";
-        lith.id = "lighttheme";
-        lith.innerText = `
+    });
+    fs.readFile("data/theme", (e, d) => {
+      if (e) {
+        document.getElementById("theme").selectedIndex = 0;
+        fs.writeFile("data/theme", JSON.stringify({ on: 0 }), e => {});
+      } else {
+        d = JSON.parse(d);
+        let num = d.on;
+        document.getElementById("theme").selectedIndex = num;
+        if (num == 1) {
+          let lith = document.createElement("style");
+          lith.type = "text/css";
+          lith.id = "lighttheme";
+          lith.innerText = `
   #home {
     background: #ffffffee;
   }
@@ -248,40 +262,43 @@ export default {
   #window-title2 span:hover {
     color: #000 !important;
   }`;
-        document.head.appendChild(lith);
+          document.head.appendChild(lith);
+        }
       }
-    }
-    document.getElementById("colorswitch").onclick = () => {
-      if (document.getElementById("colorswitch").checked == true) {
-        store.set("color", { on: "yes" });
-      } else {
-        store.set("color", { on: "no" });
-      }
-    };
+      document.getElementById("colorswitch").onclick = () => {
+        if (document.getElementById("colorswitch").checked == true) {
+          fs.writeFile("data/color", JSON.stringify({ on: "yes" })), e => {};
+        } else {
+          fs.writeFile("data/color", JSON.stringify({ on: "no" }), e => {});
+        }
+      };
+    });
+
     document.getElementById("textswitch").onclick = () => {
       if (document.getElementById("textswitch").checked == true) {
-        store.set("text", { on: "yes" });
+        fs.writeFile("data/text", JSON.stringify({ on: "yes" }), e => {});
       } else {
-        store.set("text", { on: "no" });
+        fs.writeFile("data/text", JSON.stringify({ on: "no" }), e => {});
       }
     };
     document.getElementById("emojiswitch").onclick = () => {
       if (document.getElementById("emojiswitch").checked == true) {
-        store.set("emoji", { on: "yes" });
+        fs.writeFile("data/emoji", JSON.stringify({ on: "yes" }), e => {});
       } else {
-        store.set("emoji", { on: "no" });
+        fs.writeFile("data/emoji", JSON.stringify({ on: "no" }), e => {});
       }
     };
     document.getElementById("warnswitch").onclick = () => {
       if (document.getElementById("warnswitch").checked == true) {
-        store.set("warn", { on: "yes" });
+        fs.writeFile("data/warn", JSON.stringify({ on: "yes" }), e => {});
       } else {
-        store.set("warn", { on: "no" });
+        fs.writeFile("data/warn", JSON.stringify({ on: "no" }), e => {});
       }
     };
     document.getElementById("theme").onchange = () => {
       let num = document.getElementById("theme").selectedIndex;
-      store.set("theme", { on: num });
+      fs.writeFile("data/theme", JSON.stringify({ on: num }), e => {});
+
       if (num == 1) {
         let lith = document.createElement("style");
         lith.type = "text/css";
@@ -392,18 +409,26 @@ export default {
                   for (let i = 0; i < d.length; i++) {
                     if (i % 2 == 0 && d[i] != "") {
                       let js = JSON.parse(d[i + 1]);
-                      if (store.get(d[i]) == undefined) {
-                        store.set(d[i], js);
-                      } else {
-                        if (
-                          js.first != store.get(d[i]).first ||
-                          js.image != store.get(d[i]).image
-                        ) {
-                          let g = new Date().getTime();
-                          let id = Number(d[i]) * g;
-                          store.set(id.toString(), js);
+                      fs.readFile("data/notes/" + d[i], (e, d) => {
+                        if (e) {
+                          fs.writeFile(
+                            "data/notes/" + id[i],
+                            JSON.stringify(js),
+                            e => {}
+                          );
+                        } else {
+                          d = JSON.parse(d);
+                          if (js.first != d.first || js.image != d.image) {
+                            let g = new Date().getTime();
+                            let id = Number(d[i]) * g;
+                            fs.writeFile(
+                              "data/notes/" + id.toString(),
+                              JSON.stringify(js),
+                              e => {}
+                            );
+                          }
                         }
-                      }
+                      });
                     }
                   }
                 }
@@ -428,22 +453,15 @@ export default {
         .then(notes => {
           if (notes.filePath != undefined) {
             let data = "";
-            store.each((value, key) => {
-              if (
-                key != "id" &&
-                key != "loglevel:webpack-dev-server" &&
-                key != "closed" &&
-                key != "emoji-mart.frequently" &&
-                key != "emoji-mart.last" &&
-                key != "access" &&
-                key != "text" &&
-                key != "warn" &&
-                key != "color" &&
-                key != "emoji" &&
-                key != "theme" &&
-                key != "default"
-              ) {
-                data = data + key + "\n" + JSON.stringify(value) + "\n";
+            fs.readdir("data/notes/", function(e, files) {
+              if (e) {
+              } else {
+                files.forEach(function(key, index) {
+                  fs.readFile("data/notes/" + key, (e, d) => {
+                    let value = JSON.parse(d);
+                    data = data + key + "\n" + JSON.stringify(value) + "\n";
+                  });
+                });
               }
             });
             fs.writeFile(notes.filePath, data, e => {
@@ -465,51 +483,59 @@ export default {
     // Delete All Note Function
     deleteall() {
       if (document.getElementById("notetext")) {
-        if (store.get("warn").on == "yes") {
-          swal({
-            title: "Are you sure?",
-            text: "Want To Delete All Notes!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true
-          }).then(willDelete => {
-            if (willDelete) {
-              store.set("closed", { closed: "yes" });
-              window.setTimeout(() => {
-                store.each((value, key) => {
-                  if (
-                    key != "access" &&
-                    key != "text" &&
-                    key != "warn" &&
-                    key != "color" &&
-                    key != "emoji" &&
-                    key != "theme" &&
-                    key != "default"
-                  ) {
-                    store.remove(key);
-                  }
-                });
-              }, 800);
-            }
-          });
-        } else {
-          store.set("closed", { closed: "yes" });
-          window.setTimeout(() => {
-            store.each((value, key) => {
-              if (
-                key != "access" &&
-                key != "text" &&
-                key != "warn" &&
-                key != "color" &&
-                key != "emoji" &&
-                key != "theme" &&
-                key != "default"
-              ) {
-                store.remove(key);
+        fs.readFile("data/warn", (e, d) => {
+          d = JSON.parse(d);
+          if (d.on == "yes") {
+            swal({
+              title: "Are you sure?",
+              text: "Want To Delete All Notes!",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true
+            }).then(willDelete => {
+              if (willDelete) {
+                fs.writeFile(
+                  "data/closed",
+                  JSON.stringify({ closed: "yes" }),
+                  e => {}
+                );
+
+                window.setTimeout(() => {
+                  fs.readdir("data/notes/", function(e, files) {
+                    if (e) {
+                    } else {
+                      files.forEach(function(key, index) {
+                        fs.readFile("data/notes/" + key, (e, d) => {
+                          let value = JSON.parse(d);
+                          fs.unlink("data/notes/" + key, e => {});
+                        });
+                      });
+                    }
+                  });
+                }, 800);
               }
             });
-          }, 800);
-        }
+          } else {
+            fs.writeFile(
+              "data/closed",
+              JSON.stringify({ closed: "yes" }),
+              e => {}
+            );
+            window.setTimeout(() => {
+              fs.readdir("data/notes/", function(e, files) {
+                if (e) {
+                } else {
+                  files.forEach(function(key, index) {
+                    fs.readFile("data/notes/" + key, (e, d) => {
+                      let value = JSON.parse(d);
+                      fs.unlink("data/notes/" + key, e => {});
+                    });
+                  });
+                }
+              });
+            }, 800);
+          }
+        });
       } else {
         swal("Nothing To Delete");
       }
@@ -517,7 +543,7 @@ export default {
 
     // Sign Out
     out() {
-      store.remove("access");
+      fs.unlink("data/access", e => {});
     },
 
     // Show About Page Function

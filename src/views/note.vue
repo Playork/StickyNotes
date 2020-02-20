@@ -41,7 +41,7 @@ SOFTWARE.
 <script>
 // Import Required Packages
 import { remote, ipcRenderer } from "electron";
-import store from "store";
+import fs from "fs";
 import editor from "../components/note/editor.vue";
 import titlebar from "../components/note/titlebar.vue";
 import colors from "../components/note/colors.vue";
@@ -61,24 +61,34 @@ export default {
   // Do On Start
   mounted() {
     // Delete Note
-    let noteid = store.get("id").ids;
-    document.getElementById("deletenote").addEventListener("click", () => {
-      if (store.get("warn").on == "yes") {
-        swal({
-          title: "Are you sure?",
-          text: "Want To Delete Your Note!",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true
-        }).then(willDelete => {
-          if (willDelete) {
-            store.remove(noteid);
-            remote.getCurrentWindow().destroy();
-          }
-        });
+    fs.readFile("data/id", (e, d) => {
+      if (e) {
       } else {
-        store.remove(noteid);
-        remote.getCurrentWindow().destroy();
+        let noteid = JSON.parse(d).ids;
+        document.getElementById("deletenote").addEventListener("click", () => {
+          fs.readFile("data/id", (e, r) => {
+            if (e) {
+            } else {
+              if (JSON.parse(r).on == "yes") {
+                swal({
+                  title: "Are you sure?",
+                  text: "Want To Delete Your Note!",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true
+                }).then(willDelete => {
+                  if (willDelete) {
+                    fs.unlink("data/notes/" + noteid, e => {});
+                    remote.getCurrentWindow().destroy();
+                  }
+                });
+              } else {
+                fs.unlink("data/notes/" + noteid, e => {});
+                remote.getCurrentWindow().destroy();
+              }
+            }
+          });
+        });
       }
     });
 
@@ -89,12 +99,13 @@ export default {
 
     // Close When Closing Home
     window.setInterval(() => {
-      let num = store.get("theme").on;
-      if (num == 1) {
-        let lith = document.createElement("style");
-        lith.type = "text/css";
-        lith.id = "lighttheme";
-        lith.innerText = `
+      fs.readFile("data/theme", (e, d) => {
+        let num = JSON.parse(d).on;
+        if (num == 1) {
+          let lith = document.createElement("style");
+          lith.type = "text/css";
+          lith.id = "lighttheme";
+          lith.innerText = `
   #note {
     background: #ffffffee;
   }
@@ -143,54 +154,74 @@ export default {
     background: #aaaaaaaa;
     border: #222222aa 4px solid;
   }`;
-        document.head.appendChild(lith);
-      } else {
-        try {
-          document.head.removeChild(document.getElementById("lighttheme"));
-        } catch {}
-      }
-      try {
-        if (store.get("closed").closed == "yes") {
-          remote.getCurrentWindow().close();
+          document.head.appendChild(lith);
+        } else {
+          try {
+            document.head.removeChild(document.getElementById("lighttheme"));
+          } catch {}
         }
-      } catch {}
+        fs.readFile("data/closed", (e, d) => {
+          if (e) {
+          } else {
+            if (JSON.parse(d).closed == "yes") {
+              remote.getCurrentWindow().close();
+            }
+          }
+        });
+      });
     }, 1);
 
     // Restore Saved Note
-    try {
-      let text = store.get(store.get("id").ids);
-      if (text.first == undefined) {
-        document.getElementById("mouch").click();
-        let canvas = document.getElementById("draw");
-        let ctx = canvas.getContext("2d");
-        let img = new Image();
-        img.src = text.image;
-        img.onload = function() {
-          window.setTimeout(() => {
-            ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
-          }, 50);
-        };
+    fs.readFile("data/id", (e, d) => {
+      if (e) {
       } else {
-        document.querySelector(".ql-snow .ql-editor").innerHTML = text.first;
+        fs.readFile("data/notes/" + JSON.parse(d).ids, (e, r) => {
+          if (e) {
+            window.resizeTo(300, 325);
+            document.querySelector(".ql-toolbar").style.backgroundColor =
+              "#FFF2AB";
+          } else {
+            let text = JSON.parse(r);
+            if (!text.first) {
+              document.getElementById("mouch").click();
+              let canvas = document.getElementById("draw");
+              let ctx = canvas.getContext("2d");
+              let img = new Image();
+              img.src = text.image;
+              img.onload = function() {
+                window.setTimeout(() => {
+                  ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
+                }, 50);
+              };
+            } else {
+              document.querySelector(".ql-snow .ql-editor").innerHTML =
+                text.first;
+            }
+            document.querySelector(".ql-toolbar").style.backgroundColor =
+              text.back;
+            window.resizeTo(Number(text.wid), Number(text.hei));
+            document.getElementById("lightYellow").style.backgroundColor =
+              text.back;
+            document.getElementById("titlebar").style.backgroundColor =
+              text.title;
+          }
+        });
       }
-      document.querySelector(".ql-toolbar").style.backgroundColor = text.back;
-      window.resizeTo(Number(text.wid), Number(text.hei));
-      document.getElementById("lightYellow").style.backgroundColor = text.back;
-      document.getElementById("titlebar").style.backgroundColor = text.title;
-    } catch {
-      window.resizeTo(300, 325);
-      document.querySelector(".ql-toolbar").style.backgroundColor = "#FFF2AB";
-    }
-    if (store.get("color").on == "no") {
-      document.getElementById("color").style.visibility = "hidden";
-    } else {
-      document.getElementById("color").style.visibility = "visible";
-    }
-    if (store.get("emoji").on == "no") {
-      document.getElementById("emoji").style.visibility = "hidden";
-    } else {
-      document.getElementById("emoji").style.visibility = "visible";
-    }
+    });
+    fs.readFile("data/color", (e, d) => {
+      if (JSON.parse(d).on == "no") {
+        document.getElementById("color").style.visibility = "hidden";
+      } else {
+        document.getElementById("color").style.visibility = "visible";
+      }
+    });
+    fs.readFile("data/emoji", (e, d) => {
+      if (JSON.parse(d).on == "no") {
+        document.getElementById("emoji").style.visibility = "hidden";
+      } else {
+        document.getElementById("emoji").style.visibility = "visible";
+      }
+    });
     // document
     //   .querySelector(".ql-snow .ql-editor")
     //   .addEventListener("input", () => {
@@ -217,15 +248,21 @@ export default {
     note() {
       let func = obj => {
         obj++;
-        store.set("id", { ids: obj.toString() });
+        fs.writeFile(
+          "data/id",
+          JSON.stringify({ ids: obj.toString() }),
+          e => {}
+        );
       };
-      try {
-        let id = Number(store.get("id").ids);
-        func(id);
-      } catch {
-        let id = 1;
-        func(id);
-      }
+      fs.readFile("data/id", (e, d) => {
+        if (e) {
+          let id = 1;
+          func(id);
+        } else {
+          let id = Number(JSON.parse(d).ids);
+          func(id);
+        }
+      });
       ipcRenderer.send("create-new-instance");
     },
 

@@ -8,6 +8,7 @@
   </head>
   <body>
     <script>
+      let fs = require("fs");
       const hash = window.location.hash;
       const params = {};
       hash
@@ -17,8 +18,8 @@
           const val = pair.split("=");
           params[val[0]] = val[1];
         });
-      localStorage.setItem("access", params.access_token);
-      localStorage.setItem("sync", { sync: "yes" });
+      fs.writeFile("data/access", params.access_token, e => {});
+      fs.writeFile("data/sync", JSON.stringify({ sync: "yes" }), e => {});
       window.setTimeout(() => {
         window.close();
       }, 500);

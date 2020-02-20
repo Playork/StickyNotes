@@ -98,7 +98,7 @@ SOFTWARE.
 // Import Required Packages
 import { remote } from "electron";
 import Quill from "quill";
-import store from "store";
+import fs from "fs";
 import $ from "./../../assets/script/jquery.js";
 import wordsarray from "an-array-of-english-words";
 import { setTimeout, setInterval } from "timers";
@@ -464,8 +464,26 @@ export default {
             document.querySelector(".ql-snow .ql-editor").innerHTML !=
             "<p><br></p>"
           ) {
-            store.set(obj.toString(), {
-              first: text,
+            fs.writeFile(
+              "data/notes/" + obj.toString(),
+              JSON.stringify({
+                first: text,
+                back: color1,
+                title: color2,
+                wid: winwidth,
+                hei: winheight,
+                deleted: "no",
+                closed: "no",
+                locked: lock
+              }),
+              e => {}
+            );
+          }
+        } else {
+          fs.writeFile(
+            "data/notes/" + obj.toString(),
+            JSON.stringify({
+              image: url,
               back: color1,
               title: color2,
               wid: winwidth,
@@ -473,78 +491,77 @@ export default {
               deleted: "no",
               closed: "no",
               locked: lock
-            });
-          }
-        } else {
-          store.set(obj.toString(), {
-            image: url,
-            back: color1,
-            title: color2,
-            wid: winwidth,
-            hei: winheight,
-            deleted: "no",
-            closed: "no",
-            locked: lock
-          });
+            }),
+            e => {}
+          );
         }
         window.onbeforeunload = e => {
           e.returnValue = true;
-          if (
-            store.get(obj.toString()) == undefined ||
-            store.get(obj.toString()).deleted == "no"
-          ) {
-            if (
-              document.getElementById("lightYellow").style.display != "none"
-            ) {
+          fs.readFile("data/notes/" + obj.toString(), (e, d) => {
+            if (e || JSON.parse(d).deleted == "no") {
               if (
-                document.querySelector(".ql-snow .ql-editor").innerHTML !=
-                "<p><br></p>"
+                document.getElementById("lightYellow").style.display != "none"
               ) {
-                store.set(obj.toString(), {
-                  first: text,
-                  back: color1,
-                  title: color2,
-                  wid: winwidth,
-                  hei: winheight,
-                  deleted: "no",
-                  closed: "yes",
-                  locked: lock
-                });
+                if (
+                  document.querySelector(".ql-snow .ql-editor").innerHTML !=
+                  "<p><br></p>"
+                ) {
+                  fs.writeFile(
+                    "data/notes/" + obj.toString(),
+                    JSON.stringify({
+                      first: text,
+                      back: color1,
+                      title: color2,
+                      wid: winwidth,
+                      hei: winheight,
+                      deleted: "no",
+                      closed: "yes",
+                      locked: lock
+                    }),
+                    e => {
+                      remote.getCurrentWindow().destroy();
+                    }
+                  );
+                } else {
+                  fs.unlink("data/notes/" + obj.toString(), e => {});
+                  remote.getCurrentWindow().destroy();
+                }
               } else {
-                store.remove(obj.toString());
-                remote.getCurrentWindow().destroy();
+                fs.writeFile(
+                  "data/notes/" + obj.toString(),
+                  JSON.stringify({
+                    image: url,
+                    back: color1,
+                    title: color2,
+                    wid: winwidth,
+                    hei: winheight,
+                    deleted: "no",
+                    closed: "yes",
+                    locked: lock
+                  }),
+                  e => {
+                    remote.getCurrentWindow().destroy();
+                  }
+                );
               }
-            } else {
-              store.set(obj.toString(), {
-                image: url,
-                back: color1,
-                title: color2,
-                wid: winwidth,
-                hei: winheight,
-                deleted: "no",
-                closed: "yes",
-                locked: lock
-              });
             }
-          }
-          window.setTimeout(() => {
-            if (
-              store.get(obj.toString()).closed == "yes" ||
-              store.get(obj.toString()).deleted == "yes"
-            ) {
-              remote.getCurrentWindow().destroy();
-            }
-          }, 50);
+          });
         };
         window.setInterval(() => {
-          try {
-            if (store.get(obj.toString()).deleted == "yes") {
-              store.remove(obj.toString());
-              if (store.get(obj.toString()) == undefined) {
-                remote.getCurrentWindow().destroy();
+          fs.readFile("data/notes/" + obj.toString(), (e, d) => {
+            if (e) {
+            } else {
+              if (JSON.parse(d).deleted == "yes") {
+                fs.unlink("data/notes/" + obj.toString(), e => {
+                  if (e) {
+                    console.log(e);
+                  }
+
+                  remote.getCurrentWindow().destroy();
+                });
               }
             }
-          } catch {}
+          });
         }, 1);
       };
       quill.on("text-change", () => repeafunc());
@@ -585,32 +602,39 @@ export default {
         .addEventListener("click", () => repeafunc());
       window.addEventListener("resize", () => repeafunc());
     };
-    try {
-      let id = Number(store.get("id").ids);
-      func(id);
-    } catch {
-      let id = 1;
-      func(id);
-    }
-    if (store.get("text").on == "yes") {
-      window.setTimeout(() => {
-        $(".ql-snow .ql-editor").textcomplete([
-          {
-            match: /(^|\b)(\w{2,})$/,
-            search: (term, callback) => {
-              callback(
-                $.map(words, word => {
-                  return word.indexOf(term) === 0 ? word : null;
-                })
-              );
-            },
-            replace: word => {
-              return word + " ";
-            }
-          }
-        ]);
-      }, 500);
-    }
+    fs.readFile("data/id", (e, d) => {
+      if (e) {
+        let id = 1;
+        func(id);
+      } else {
+        let id = Number(JSON.parse(d).ids);
+        func(id);
+      }
+    });
+    fs.readFile("data/text", (e, d) => {
+      if (e) {
+      } else {
+        if (JSON.parse(d).on == "yes") {
+          window.setTimeout(() => {
+            $(".ql-snow .ql-editor").textcomplete([
+              {
+                match: /(^|\b)(\w{2,})$/,
+                search: (term, callback) => {
+                  callback(
+                    $.map(words, word => {
+                      return word.indexOf(term) === 0 ? word : null;
+                    })
+                  );
+                },
+                replace: word => {
+                  return word + " ";
+                }
+              }
+            ]);
+          }, 500);
+        }
+      }
+    });
   },
   methods: {
     // Add emoji
