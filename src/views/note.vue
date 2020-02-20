@@ -155,7 +155,7 @@ export default {
           }
         }
       });
-    }, 1);
+    });
 
     // Restore Saved Note
     fs.readFile("data/id", (e, d) => {
