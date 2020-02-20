@@ -110,16 +110,19 @@ function createNote() {
   winnote.webContents.on('context-menu', (e, p) => {
     e.preventDefault()
     let menu = new Menu()
-    params.dictionarySuggestions.forEach((d) => {
+    p.dictionarySuggestions.forEach((d) => {
       menu.append(new MenuItem({
-        label: d
+        label: d,
+        click: () => {
+          winnote.webContents.replaceMisspelling(d)
+        }
       }))
     })
     menu.append(new MenuItem({ type: 'separator' }))
     menu.append(new MenuItem({ role: "cut" }))
     menu.append(new MenuItem({ role: "copy" }))
     menu.append(new MenuItem({ role: "paste" }))
-    menu.popup(winnote, params.x, params.y)
+    menu.popup(winnote, p.x, p.y)
   }, false)
 }
 

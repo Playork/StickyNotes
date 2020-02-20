@@ -38,8 +38,12 @@ SOFTWARE.
           <div class="button" id="menus" title="Menu">
             <span id="menu" v-on:click="menu">&#xE712;</span>
             <div id="menu-content" class="dropdown-content">
-              <a title="Undo" id="undo"> <span>&#xE7A7;</span>Undo </a>
-              <a title="Redo" id="redo"> <span>&#xE7A6;</span>Redo </a>
+              <a title="Undo" id="undo">
+                <span>&#xE7A7;</span>Undo
+              </a>
+              <a title="Redo" id="redo">
+                <span>&#xE7A6;</span>Redo
+              </a>
               <a title="Select Audio" id="video1" v-on:click="clickvideo">
                 <span>&#xE714;</span>Add Video
               </a>
