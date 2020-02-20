@@ -38,13 +38,6 @@ SOFTWARE.
           <div class="button" id="menus" title="Menu">
             <span id="menu" v-on:click="menu">&#xE712;</span>
             <div id="menu-content" class="dropdown-content">
-              <a
-                id="mouch"
-                title="Change Between Touch Mode And Typing Mode"
-                v-on:click="mouch"
-              >
-                <span>&#xE815;</span>Touch Mode
-              </a>
               <a title="Undo" id="undo"> <span>&#xE7A7;</span>Undo </a>
               <a title="Redo" id="redo"> <span>&#xE7A6;</span>Redo </a>
               <a title="Select Audio" id="video1" v-on:click="clickvideo">
@@ -92,30 +85,6 @@ export default {
 
   // Functions
   methods: {
-    // Canvace Mode
-    mouch() {
-      if (/Touch Mode/.test(document.getElementById("mouch").innerHTML)) {
-        document.getElementById("mouch").innerHTML =
-          "<span>&#xE765;</span>Typing Mode";
-        document.getElementById("lightYellow").style.display = "none";
-        document.getElementById("draw").style.display = "block";
-        document.getElementById("video1").style.display = "none";
-        document.getElementById("audio1").style.display = "none";
-        document.getElementById("redo").style.display = "none";
-        document.getElementById("undo").style.display = "none";
-      } else {
-        document.getElementById("mouch").innerHTML =
-          "<span>&#xE815;</span>Touch Mode";
-        document.getElementById("lightYellow").style.display = "block";
-        document.getElementById("draw").style.display = "none";
-        document.getElementById("video1").style.display = "block";
-        document.getElementById("audio1").style.display = "block";
-        document.getElementById("candit").style.display = "none";
-        document.getElementById("redo").style.display = "block";
-        document.getElementById("undo").style.display = "block";
-      }
-    },
-
     // Locking Note Function
     locks() {
       let id = document.getElementById("lock");
@@ -126,8 +95,6 @@ export default {
       let select3 = document.querySelector(".ql-snow.ql-toolbar");
       let select4 = document.getElementById("window-title1");
       let select5 = document.getElementById("menus");
-      let select6 = document.getElementById("draw");
-      let select7 = document.getElementById("candit");
       if (
         select.style.pointerEvents == "auto" ||
         select.style.pointerEvents == ""
@@ -140,8 +107,6 @@ export default {
         select3.style.display = "none";
         select4.style.display = "none";
         select5.style.pointerEvents = "none";
-        select6.style.pointerEvents = "none";
-        select7.style.display = "none";
         let { setInterval } = require("timers");
         let clearint = window.setInterval(() => {
           document.getElementById("color").style.height = "0";
@@ -181,7 +146,6 @@ export default {
         select2.style.pointerEvents = "auto";
         select4.style.display = "flex";
         select5.style.pointerEvents = "auto";
-        select6.style.pointerEvents = "auto";
       }
     },
 
@@ -189,23 +153,14 @@ export default {
     showedit() {
       let select = document.querySelector(".ql-snow.ql-toolbar");
       let select0 = document.getElementById("color");
-      let select1 = document.getElementById("candit");
-      if (document.getElementById("draw").style.display != "block") {
-        if (select.style.display == "none" || select.style.display == "") {
-          select.style.display = "block";
-          select0.style.height = "0";
-          document.getElementById("lightYellow").style.paddingTop = "90px";
-        } else {
-          select.style.display = "none";
-          select0.style.height = "40px";
-          document.getElementById("lightYellow").style.paddingTop = "30px";
-        }
+      if (select.style.display == "none" || select.style.display == "") {
+        select.style.display = "block";
+        select0.style.height = "0";
+        document.getElementById("lightYellow").style.paddingTop = "90px";
       } else {
-        if (select1.style.display == "none" || select1.style.display == "") {
-          select1.style.display = "block";
-        } else {
-          select1.style.display = "none";
-        }
+        select.style.display = "none";
+        select0.style.height = "40px";
+        document.getElementById("lightYellow").style.paddingTop = "30px";
       }
     },
 
@@ -238,26 +193,8 @@ export default {
                 swal("Not Supported");
               } else {
                 d = d.toString().split("\n");
-                if (document.getElementById("draw").style.display != "block") {
-                  document.querySelector(".ql-snow .ql-editor").innerHTML =
-                    d[0];
-                  window.resizeTo(Number(d[3]), Number([4]));
-                } else {
-                  window.resizeTo(Number(d[3]), Number([4]));
-                  let canvas = document.getElementById("draw");
-                  let ctx = canvas.getContext("2d");
-                  let img = new Image();
-                  img.src = d[0];
-                  img.onload = function() {
-                    ctx.drawImage(
-                      img,
-                      0,
-                      0,
-                      img.naturalWidth,
-                      img.naturalHeight
-                    );
-                  };
-                }
+                document.querySelector(".ql-snow .ql-editor").innerHTML = d[0];
+                window.resizeTo(Number(d[3]), Number([4]));
                 document.getElementById("lightYellow").style.backgroundColor =
                   d[1];
                 document.getElementById("titlebar").style.backgroundColor =
@@ -284,12 +221,7 @@ export default {
         })
         .then(note => {
           if (note.filePath != undefined) {
-            let data;
-            if (document.getElementById("draw").style.display != "block") {
-              data = document.querySelector(".ql-snow .ql-editor").innerHTML;
-            } else {
-              data = document.getElementById("draw").toDataURL();
-            }
+            let data = document.querySelector(".ql-snow .ql-editor").innerHTML;
             let fs = require("fs");
             fs.writeFile(
               note.filePath,

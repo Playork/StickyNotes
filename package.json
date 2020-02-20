@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "dropbox": "^4.0.17",
-    "electron-context-menu": "latest",
     "quill": "latest",
     "sweetalert": "latest"
   },

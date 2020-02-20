@@ -437,6 +437,7 @@ export default {
                       fs.readdir("data/notes/", function(e, files) {
                         if (e) {
                         } else {
+                          fs.unlink("data/closed", e => {});
                           files.forEach(function(key, index) {
                             fs.readFile("data/notes/" + key, (e, d) => {
                               let value = JSON.parse(d);
@@ -459,6 +460,7 @@ export default {
                   fs.readdir("data/notes/", function(e, files) {
                     if (e) {
                     } else {
+                      fs.unlink("data/closed", e => {});
                       files.forEach(function(key, index) {
                         fs.readFile("data/notes/" + key, (e, d) => {
                           let value = JSON.parse(d);

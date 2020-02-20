@@ -26,11 +26,7 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div id="note" v-on:click="showhide">
-    <titlebar
-      v-bind:close="close"
-      v-bind:note="note"
-      v-bind:minimize="minimize"
-    />
+    <titlebar v-bind:close="close" v-bind:note="note" v-bind:minimize="minimize" />
     <editor />
     <colors />
     <choosecolor />
@@ -168,19 +164,8 @@ export default {
               "#FFF2AB";
           } else {
             let text = JSON.parse(r);
-            if (!text.first) {
-              document.getElementById("mouch").click();
-              let canvas = document.getElementById("draw");
-              let ctx = canvas.getContext("2d");
-              let img = new Image();
-              img.src = text.image;
-              img.onload = function() {
-                ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
-              };
-            } else {
-              document.querySelector(".ql-snow .ql-editor").innerHTML =
-                text.first;
-            }
+            document.querySelector(".ql-snow .ql-editor").innerHTML =
+              text.first;
             document.querySelector(".ql-toolbar").style.backgroundColor =
               text.back;
             window.resizeTo(Number(text.wid), Number(text.hei));

@@ -209,7 +209,7 @@ export default {
     });
 
     // Load Saved Notes
-    fs.watch("data/notes/", (e, rrrr) => {
+    function savenotes() {
       fs.readFile("data/sync", (e, d) => {
         if (e) {
         } else {
@@ -248,7 +248,7 @@ export default {
                               );
                             } else {
                               d = JSON.parse(d);
-                              if (js.first != d.first || js.image != d.image) {
+                              if (js.first != d.first) {
                                 let g = new Date().getTime();
                                 let id = Number(d[i]) * g;
                                 fs.writeFile(
@@ -292,25 +292,20 @@ export default {
           }
         }
       });
-      document.getElementById("notes").innerHTML = "";
       fs.readdir("data/notes/", function(e, files) {
         if (e) {
+          document.getElementById("notes").innerHTML = "";
         } else {
+          document.getElementById("notes").innerHTML = "";
           files.forEach(function(key, index) {
             try {
               fs.readFile("data/notes/" + key, (e, d) => {
                 let value = JSON.parse(d);
-                let content;
-                if (value.first == undefined) {
-                  content = `<img src="${value.image}" style="max-width:90%;"`;
-                } else {
-                  content = value.first;
-                }
                 document
                   .getElementById("notes")
                   .insertAdjacentHTML(
                     "afterbegin",
-                    `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span><div id="cont">${content}</div></div>`
+                    `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span><div id="cont">${value.first}</div></div>`
                   );
                 if (document.getElementById("search").value != "") {
                   let cont = document.getElementById("cont").innerHTML;
@@ -418,6 +413,10 @@ export default {
           });
         }
       });
+    }
+    savenotes();
+    fs.watch("data/notes/", (e, rrrr) => {
+      savenotes();
     });
   },
 

@@ -22,7 +22,9 @@ SOFTWARE. */
 
 "use strict";
 let { setTimeout } = require("timers");
-let { app, BrowserWindow, ipcMain } = require("electron");
+let { app, BrowserWindow, ipcMain, Menu, MenuItem } = require("electron");
+
+app.allowRendererProcessReuse = false;
 const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
 function createWindow() {
@@ -104,7 +106,24 @@ function createNote() {
     win.webContents.send("closenote", "closeit");
   });
   winnote.webContents.session.setSpellCheckerLanguages["en-US"]
+
+  winnote.on('context-menu', (e, p) => {
+    e.preventDefault()
+    let menu = new Menu()
+    params.dictionarySuggestions.forEach((d) => {
+      menu.append(new MenuItem({
+        label: d
+      }))
+    })
+    menu.append(new MenuItem({ type: 'separator' }))
+    menu.append(new MenuItem({ role: "cut" }))
+    menu.append(new MenuItem({ role: "copy" }))
+    menu.append(new MenuItem({ role: "paste" }))
+    menu.popup(winnote)
+  }, false)
 }
+
+
 
 ipcMain.on("create-new-instance", () => {
   createNote();
@@ -112,17 +131,6 @@ ipcMain.on("create-new-instance", () => {
 
 app.on("ready", async () => {
   createWindow();
-});
-
-require("electron-context-menu")({
-  prepend: (defaultActions, params, browserWindow) => {
-    let a = []
-    params.dictionarySuggestions.forEach((d) => {
-      a.push({ label: d })
-    })
-    return a
-  },
-  showInspectElement: false
 });
 
 if (isDevelopment) {
