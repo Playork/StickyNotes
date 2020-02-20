@@ -8,7 +8,7 @@ dependencies:
   sweetalert: 2.1.2
 devDependencies:
   '@vue/cli-service': 4.2.2_3ba79f25d83a0eec19ee2a15b92e6af9
-  electron: 8.0.1
+  electron: 9.0.0-beta.2
   vue: 2.6.11
   vue-cli-plugin-electron-builder: 1.4.5
   vue-router: 3.1.5
@@ -2603,7 +2603,7 @@ packages:
     dev: true
     resolution:
       integrity: sha512-L8zhV8k7Znp2q3wWXYDzCyfTBeGauEX0rX/FtgmnDgmvHRqwu9NVN614wOkXx9sDZmJZpNMBaEFMXTu/vbr+Kg==
-  /electron/8.0.1:
+  /electron/9.0.0-beta.2:
     dependencies:
       '@electron/get': 1.7.6
       '@types/node': 12.12.27
@@ -2614,7 +2614,7 @@ packages:
     hasBin: true
     requiresBuild: true
     resolution:
-      integrity: sha512-kLZAQkbrAFNjQVpcHJUnjRYQNafuuWKnsdxzag5do1ewMqN0J4Pi/hPE27+5/1YAFMcbvCrPqhWIpcMsi8mKXQ==
+      integrity: sha512-WkRkUh5gE5B+b9XdTDvC67VvG118J0+wURcBpcXlBZJ9k+oqn0qcX+D3NG1WitXjcrAdV18cx5taUOat8zxAeA==
   /elliptic/6.5.2:
     dependencies:
       bn.js: 4.11.8
@@ -3309,6 +3309,15 @@ packages:
     requiresBuild: true
     resolution:
       integrity: sha512-+ux3lx6peh0BpvY0JebGyZoiR4D+oYzdPZMKJwkZ+sFkNJzpL7tXc/wehS49gUAxg3tmMHPHZkA8JU2rhhgDHw==
+  /fsevents/2.1.2:
+    dev: true
+    engines:
+      node: ^8.16.0 || ^10.6.0 || >=11.0.0
+    optional: true
+    os:
+      - darwin
+    resolution:
+      integrity: sha512-R4wDiBwZ0KzpgOWetKDug1FZcYhqYnUYKtfZYt4mD5SBz76q0KR4Q9o7GIPamsVPGmW3EYPPJ0dOOjvx32ldZA==
   /function-bind/1.1.1:
     resolution:
       integrity: sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==
@@ -8766,7 +8775,7 @@ specifiers:
   an-array-of-english-words: latest
   auto-launch: latest
   dropbox: ^4.0.17
-  electron: latest
+  electron: beta
   electron-context-menu: latest
   emoji-mart-vue: latest
   quill: latest

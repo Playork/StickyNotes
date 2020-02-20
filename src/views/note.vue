@@ -148,11 +148,6 @@ export default {
   }
   #window-title2 span:hover {
     color: #000 !important;
-  }
-  .dropdown-menu,
-  .textcomplete-dropdown {
-    background: #aaaaaaaa;
-    border: #222222aa 4px solid;
   }`;
           document.head.appendChild(lith);
         } else {

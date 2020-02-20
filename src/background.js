@@ -23,19 +23,18 @@ SOFTWARE. */
 "use strict";
 
 let { app, BrowserWindow, ipcMain } = require("electron");
-let {
-  createProtocol,
-  installVueDevtools
-} = require("vue-cli-plugin-electron-builder/lib");
+let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
 let AutoLaunch = require("auto-launch");
 let { setTimeout } = require("timers");
 
 require("electron-context-menu")({
-  prepend: () => [
-    {
-      label: "v0.4.0"
-    }
-  ],
+  prepend: (defaultActions, params, browserWindow) => {
+    let a = []
+    params.dictionarySuggestions.forEach((d) => {
+      a.push({ label: d })
+    })
+    return a
+  },
   showInspectElement: false
 });
 
@@ -50,7 +49,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 350,
     height: 600,
-    icon: "public/favicon.ico",
+    icon: "public/favicon.png",
     transparent: true,
     title: "Playork Sticky Notes",
     frame: false,
@@ -88,11 +87,12 @@ function createNote() {
   winnote = new BrowserWindow({
     width: 300,
     height: 325,
-    icon: "public/favicon.ico",
+    icon: "public/favicon.png",
     transparent: true,
     title: "Playork Sticky Notes",
     frame: false,
     show: false,
+    spellcheck: true,
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true
@@ -113,6 +113,7 @@ function createNote() {
   winnote.on("close", () => {
     win.webContents.send("closenote", "closeit");
   });
+  winnote.webContents.session.setSpellCheckerLanguages["en-US"]
 }
 
 ipcMain.on("create-new-instance", () => {
@@ -120,12 +121,7 @@ ipcMain.on("create-new-instance", () => {
 });
 
 app.on("ready", async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
-    await installVueDevtools();
-  }
-  setTimeout(() => {
-    createWindow();
-  }, 500);
+  createWindow();
 });
 
 app.on("activate", () => {

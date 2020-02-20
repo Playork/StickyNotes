@@ -99,7 +99,6 @@ SOFTWARE.
 import { remote } from "electron";
 import Quill from "quill";
 import fs from "fs";
-import $ from "./../../assets/script/jquery.js";
 import wordsarray from "an-array-of-english-words";
 import { setTimeout, setInterval } from "timers";
 import { Picker } from "emoji-mart-vue";
@@ -609,30 +608,6 @@ export default {
       } else {
         let id = Number(JSON.parse(d).ids);
         func(id);
-      }
-    });
-    fs.readFile("data/text", (e, d) => {
-      if (e) {
-      } else {
-        if (JSON.parse(d).on == "yes") {
-          window.setTimeout(() => {
-            $(".ql-snow .ql-editor").textcomplete([
-              {
-                match: /(^|\b)(\w{2,})$/,
-                search: (term, callback) => {
-                  callback(
-                    $.map(words, word => {
-                      return word.indexOf(term) === 0 ? word : null;
-                    })
-                  );
-                },
-                replace: word => {
-                  return word + " ";
-                }
-              }
-            ]);
-          }, 500);
-        }
       }
     });
   },

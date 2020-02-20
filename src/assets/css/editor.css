@@ -134,23 +134,6 @@ SOFTWARE. */
 .ql-font-comicsans {
   font-family: "ComicSans";
 }
-.dropdown-menu,
-.textcomplete-dropdown {
-  background: #202020aa;
-  border-radius: 10px;
-  text-align: center;
-  list-style: none;
-  padding: 10px;
-  font-family: "Nunito";
-  border: #000000aa 4px solid;
-  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
-}
-.textcomplete-item {
-  cursor: pointer;
-}
-.textcomplete-item a:hover {
-  color: #000 !important;
-}
 .ql-toolbar {
   position: fixed !important;
   top: 0 !important;

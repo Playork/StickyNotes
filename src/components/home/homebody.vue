@@ -73,11 +73,6 @@ SOFTWARE.
               <input type="checkbox" id="colorswitch" checked="checked" />
               <span class="checkmark"></span>
             </label>
-            <p>Text Suggestions</p>
-            <label class="container">
-              <input type="checkbox" id="textswitch" checked="checked" />
-              <span class="checkmark"></span>
-            </label>
             <p>Emoji Selector</p>
             <label class="container">
               <input type="checkbox" id="emojiswitch" checked="checked" />
@@ -133,7 +128,7 @@ export default {
   // Do On Start
   mounted() {
     let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
-    let authUrl = dbx.getAuthenticationUrl("src/assets/auth.html");
+    let authUrl = dbx.getAuthenticationUrl("app://./auth.html");
     document.getElementById("drb").addEventListener("click", () => {
       const win = new remote.BrowserWindow({
         width: 800,
@@ -164,19 +159,6 @@ export default {
           document.getElementById("colorswitch").checked = true;
         } else {
           document.getElementById("colorswitch").checked = false;
-        }
-      }
-    });
-    fs.readFile("data/text", (e, d) => {
-      if (e) {
-        document.getElementById("textswitch").checked = true;
-        fs.writeFile("data/text", JSON.stringify({ on: "yes" }), e => {});
-      } else {
-        d = JSON.parse(d);
-        if (d.on == "yes") {
-          document.getElementById("textswitch").checked = true;
-        } else {
-          document.getElementById("textswitch").checked = false;
         }
       }
     });
@@ -274,13 +256,6 @@ export default {
       };
     });
 
-    document.getElementById("textswitch").onclick = () => {
-      if (document.getElementById("textswitch").checked == true) {
-        fs.writeFile("data/text", JSON.stringify({ on: "yes" }), e => {});
-      } else {
-        fs.writeFile("data/text", JSON.stringify({ on: "no" }), e => {});
-      }
-    };
     document.getElementById("emojiswitch").onclick = () => {
       if (document.getElementById("emojiswitch").checked == true) {
         fs.writeFile("data/emoji", JSON.stringify({ on: "yes" }), e => {});
