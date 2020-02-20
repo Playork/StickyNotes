@@ -107,7 +107,7 @@ function createNote() {
   });
   winnote.webContents.session.setSpellCheckerLanguages["en-US"]
 
-  winnote.on('context-menu', (e, p) => {
+  winnote.webContents.on('context-menu', (e, p) => {
     e.preventDefault()
     let menu = new Menu()
     params.dictionarySuggestions.forEach((d) => {
@@ -119,7 +119,7 @@ function createNote() {
     menu.append(new MenuItem({ role: "cut" }))
     menu.append(new MenuItem({ role: "copy" }))
     menu.append(new MenuItem({ role: "paste" }))
-    menu.popup(winnote)
+    menu.popup(winnote, params.x, params.y)
   }, false)
 }
 
