@@ -524,15 +524,17 @@ export default {
         fs.readFile("data/notes/" + obj.toString(), (e, d) => {
           if (e) {
           } else {
-            if (JSON.parse(d).deleted == "yes") {
-              fs.unlink("data/notes/" + obj.toString(), e => {
-                if (e) {
-                  console.log(e);
-                }
-                let { remote } = require("electron");
-                remote.getCurrentWindow().destroy();
-              });
-            }
+            try {
+              if (JSON.parse(d).deleted == "yes") {
+                fs.unlink("data/notes/" + obj.toString(), e => {
+                  if (e) {
+                    console.log(e);
+                  }
+                  let { remote } = require("electron");
+                  remote.getCurrentWindow().destroy();
+                });
+              }
+            } catch {}
           }
         });
       }, 1);

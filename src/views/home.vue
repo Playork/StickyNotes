@@ -297,117 +297,124 @@ export default {
         if (e) {
         } else {
           files.forEach(function(key, index) {
-            fs.readFile("data/notes/" + key, (e, d) => {
-              let value = JSON.parse(d);
-              let content;
-              if (value.first == undefined) {
-                content = `<img src="${value.image}" style="max-width:90%;"`;
-              } else {
-                content = value.first;
-              }
-              document
-                .getElementById("notes")
-                .insertAdjacentHTML(
-                  "afterbegin",
-                  `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span><div id="cont">${content}</div></div>`
-                );
-              if (document.getElementById("search").value != "") {
-                let cont = document.getElementById("cont").innerHTML;
-                let index = cont.indexOf(
-                  document.getElementById("search").value
-                );
-                if (index >= 0) {
-                  let highcontent =
-                    cont.substring(0, index) +
-                    "<span style='background-color: yellow;border-radius:10px;'>" +
-                    cont.substring(
-                      index,
-                      index + document.getElementById("search").value.length
-                    ) +
-                    "</span>" +
-                    cont.substring(
-                      index + document.getElementById("search").value.length
-                    );
-                  document.getElementById("cont").innerHTML = highcontent;
+            try {
+              fs.readFile("data/notes/" + key, (e, d) => {
+                let value = JSON.parse(d);
+                let content;
+                if (value.first == undefined) {
+                  content = `<img src="${value.image}" style="max-width:90%;"`;
                 } else {
-                  document.getElementById("notetext").style.display = "none";
+                  content = value.first;
                 }
-              }
-
-              if (value.closed == "yes") {
-                document.getElementById("startnote").style.display = "inline";
-              }
-              if (value.closed == "no") {
-                document.getElementById("startnote").style.display = "none";
-              }
-              if (value.locked == "yes") {
-                document.getElementById("deletenote").style.pointerEvents =
-                  "none";
-                document.getElementById("deleteall").style.pointerEvents =
-                  "none";
-              }
-              if (value.locked == "no") {
-                document.getElementById("deletenote").style.pointerEvents =
-                  "auto";
-                document.getElementById("deleteall").style.pointerEvents =
-                  "auto";
-              }
-              document.getElementById("startnote").onclick = () => {
-                let id = new Date().getTime();
-                fs.writeFile("data/id", JSON.stringify({ ids: key }), e => {});
-                ipcRenderer.send("create-new-instance");
-                window.setTimeout(() => {
-                  if (value.closed == "no") {
-                    fs.writeFile(
-                      "data/id",
-                      JSON.stringify({ ids: id }),
-                      e => {}
-                    );
-                  }
-                }, 500);
-              };
-              document.getElementById("deletenote").onclick = () => {
-                fs.readFile("data/warn", (e, d) => {
-                  if (JSON.parse(d).on == "yes") {
-                    let swal = require("sweetalert");
-                    swal({
-                      title: "Are you sure?",
-                      text: "Want To Delete Your Note!",
-                      icon: "warning",
-                      buttons: true,
-                      dangerMode: true
-                    }).then(willDelete => {
-                      if (willDelete) {
-                        if (value.closed == "no") {
-                          fs.writeFile(
-                            "data/notes/" + key,
-                            JSON.stringify({ deleted: "yes" }),
-                            e => {}
-                          );
-                        }
-                        if (value.closed == "yes") {
-                          fs.unlink("data/notes/" + key, e => {});
-                        }
-                      }
-                    });
+                document
+                  .getElementById("notes")
+                  .insertAdjacentHTML(
+                    "afterbegin",
+                    `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span><div id="cont">${content}</div></div>`
+                  );
+                if (document.getElementById("search").value != "") {
+                  let cont = document.getElementById("cont").innerHTML;
+                  let index = cont.indexOf(
+                    document.getElementById("search").value
+                  );
+                  if (index >= 0) {
+                    let highcontent =
+                      cont.substring(0, index) +
+                      "<span style='background-color: yellow;border-radius:10px;'>" +
+                      cont.substring(
+                        index,
+                        index + document.getElementById("search").value.length
+                      ) +
+                      "</span>" +
+                      cont.substring(
+                        index + document.getElementById("search").value.length
+                      );
+                    document.getElementById("cont").innerHTML = highcontent;
                   } else {
+                    document.getElementById("notetext").style.display = "none";
+                  }
+                }
+
+                if (value.closed == "yes") {
+                  document.getElementById("startnote").style.display = "inline";
+                }
+                if (value.closed == "no") {
+                  document.getElementById("startnote").style.display = "none";
+                }
+                if (value.locked == "yes") {
+                  document.getElementById("deletenote").style.pointerEvents =
+                    "none";
+                  document.getElementById("deleteall").style.pointerEvents =
+                    "none";
+                }
+                if (value.locked == "no") {
+                  document.getElementById("deletenote").style.pointerEvents =
+                    "auto";
+                  document.getElementById("deleteall").style.pointerEvents =
+                    "auto";
+                }
+                document.getElementById("startnote").onclick = () => {
+                  let id = new Date().getTime();
+                  fs.writeFile(
+                    "data/id",
+                    JSON.stringify({ ids: key }),
+                    e => {}
+                  );
+                  ipcRenderer.send("create-new-instance");
+                  window.setTimeout(() => {
                     if (value.closed == "no") {
                       fs.writeFile(
-                        "data/notes/" + key,
-                        JSON.stringify({ deleted: "yes" }, e => {})
+                        "data/id",
+                        JSON.stringify({ ids: id }),
+                        e => {}
                       );
                     }
-                    if (value.closed == "yes") {
-                      fs.unlink("data/notes/" + key, e => {});
+                  }, 500);
+                };
+                document.getElementById("deletenote").onclick = () => {
+                  fs.readFile("data/warn", (e, d) => {
+                    if (JSON.parse(d).on == "yes") {
+                      let swal = require("sweetalert");
+                      swal({
+                        title: "Are you sure?",
+                        text: "Want To Delete Your Note!",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true
+                      }).then(willDelete => {
+                        if (willDelete) {
+                          if (value.closed == "no") {
+                            fs.writeFile(
+                              "data/notes/" + key,
+                              JSON.stringify({ deleted: "yes" }),
+                              e => {}
+                            );
+                          }
+                          if (value.closed == "yes") {
+                            fs.unlink("data/notes/" + key, e => {});
+                          }
+                        }
+                      });
+                    } else {
+                      if (value.closed == "no") {
+                        fs.writeFile(
+                          "data/notes/" + key,
+                          JSON.stringify({ deleted: "yes" }),
+                          e => {}
+                        );
+                      }
+                      if (value.closed == "yes") {
+                        fs.unlink("data/notes/" + key, e => {});
+                      }
                     }
-                  }
-                });
-              };
-              document.getElementById("notetext").style.backgroundColor =
-                value.back;
-              document.getElementById("notetext").style.border =
-                "5px solid " + value.title;
-            });
+                  });
+                };
+                document.getElementById("notetext").style.backgroundColor =
+                  value.back;
+                document.getElementById("notetext").style.border =
+                  "5px solid " + value.title;
+              });
+            } catch {}
           });
         }
       });

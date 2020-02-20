@@ -228,7 +228,7 @@ export default {
       }
       document.getElementById("colorswitch").onclick = () => {
         if (document.getElementById("colorswitch").checked == true) {
-          fs.writeFile("data/color", JSON.stringify({ on: "yes" })), e => {};
+          fs.writeFile("data/color", JSON.stringify({ on: "yes" }), e => {});
         } else {
           fs.writeFile("data/color", JSON.stringify({ on: "no" }), e => {});
         }
