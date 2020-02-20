@@ -38,15 +38,12 @@ SOFTWARE.
 <!-- Javascript -->
 <script>
 // Import Required Packages
-import { remote, ipcRenderer } from "electron";
-import swal from "sweetalert";
+import { ipcRenderer } from "electron";
 import homebody from "../components/home/homebody.vue";
 import titlebar1 from "../components/home/titlebar1.vue";
-import { setTimeout, setInterval } from "timers";
-import os from "os";
+import { setTimeout } from "timers";
 import { Dropbox } from "dropbox/lib/dropbox";
 import fs from "fs";
-import https from "https";
 
 // Vue Class
 export default {
@@ -108,6 +105,7 @@ export default {
     dbx
       .filesGetTemporaryLink({ path: "/Playork Sticky Notes/notes.spst" })
       .then(data => {
+        let https = require("https");
         let file = fs.createWriteStream("notes.spst");
         let request = https.get(data.link, function(response) {
           response.pipe(file);
@@ -160,6 +158,7 @@ export default {
     ipcRenderer.on("closeall", () => {
       fs.writeFile("data/closed", JSON.stringify({ closed: "yes" }), e => {});
       window.setTimeout(() => {
+        let { remote } = require("electron");
         remote.getCurrentWindow().destroy();
       }, 200);
     });
@@ -210,7 +209,7 @@ export default {
     });
 
     // Load Saved Notes
-    window.setInterval(() => {
+    fs.watch("data/notes/", (e, rrrr) => {
       fs.readFile("data/sync", (e, d) => {
         if (e) {
         } else {
@@ -222,6 +221,7 @@ export default {
           dbx
             .filesGetTemporaryLink({ path: "/Playork Sticky Notes/notes.spst" })
             .then(data => {
+              let https = require("https");
               let file = fs.createWriteStream("notes.spst");
               let request = https.get(data.link, function(response) {
                 response.pipe(file);
@@ -369,6 +369,7 @@ export default {
               document.getElementById("deletenote").onclick = () => {
                 fs.readFile("data/warn", (e, d) => {
                   if (JSON.parse(d).on == "yes") {
+                    let swal = require("sweetalert");
                     swal({
                       title: "Are you sure?",
                       text: "Want To Delete Your Note!",
@@ -410,7 +411,7 @@ export default {
           });
         }
       });
-    }, 2000);
+    });
   },
 
   // Functions
@@ -433,9 +434,11 @@ export default {
         });
         fs.writeFile("data/closed", JSON.stringify({ closed: "yes" }), e => {});
         window.setTimeout(() => {
+          let { remote } = require("electron");
           remote.getCurrentWindow().close();
         }, 100);
       } else {
+        let swal = require("sweetalert");
         swal("Can't Close Note Is Locked");
       }
     },
@@ -464,6 +467,7 @@ export default {
 
     // Minimize Window
     minimize() {
+      let { remote } = require("electron");
       remote.getCurrentWindow().minimize();
     }
   }

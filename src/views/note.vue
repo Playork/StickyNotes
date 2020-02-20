@@ -40,13 +40,12 @@ SOFTWARE.
 <!-- Javascript -->
 <script>
 // Import Required Packages
-import { remote, ipcRenderer } from "electron";
+import { ipcRenderer } from "electron";
 import fs from "fs";
 import editor from "../components/note/editor.vue";
 import titlebar from "../components/note/titlebar.vue";
 import colors from "../components/note/colors.vue";
 import choosecolor from "../components/note/choosecolor.vue";
-import swal from "sweetalert";
 
 // Vue Class
 export default {
@@ -70,6 +69,7 @@ export default {
             if (e) {
             } else {
               if (JSON.parse(r).on == "yes") {
+                let swal = require("sweetalert");
                 swal({
                   title: "Are you sure?",
                   text: "Want To Delete Your Note!",
@@ -79,11 +79,13 @@ export default {
                 }).then(willDelete => {
                   if (willDelete) {
                     fs.unlink("data/notes/" + noteid, e => {});
+                    let { remote } = require("electron");
                     remote.getCurrentWindow().destroy();
                   }
                 });
               } else {
                 fs.unlink("data/notes/" + noteid, e => {});
+                let { remote } = require("electron");
                 remote.getCurrentWindow().destroy();
               }
             }
@@ -94,11 +96,12 @@ export default {
 
     // Close For Main Process Close
     ipcRenderer.on("closenote", () => {
+      let { remote } = require("electron");
       remote.getCurrentWindow().close();
     });
 
-    // Close When Closing Home
-    window.setInterval(() => {
+    //theme change
+    fs.watch("data/theme", (e, r) => {
       fs.readFile("data/theme", (e, d) => {
         let num = JSON.parse(d).on;
         if (num == 1) {
@@ -129,23 +132,6 @@ export default {
     background: #ffffffee !important;
     color: #000 !important;
   }
-  .emoji-mart {
-    background: #ffffffee !important;
-  }
-  .emoji-mart-category-label span {
-    background: #fff !important;
-  }
-  .emoji-mart * {
-    color: #000 !important;
-  }
-  .emoji-mart-search input {
-    color: #fff !important;
-    background: #000;
-  }
-  #hideemoji {
-    color: #000 !important;
-    background: #ffffffee !important;
-  }
   #window-title2 span:hover {
     color: #000 !important;
   }`;
@@ -155,14 +141,19 @@ export default {
             document.head.removeChild(document.getElementById("lighttheme"));
           } catch {}
         }
-        fs.readFile("data/closed", (e, d) => {
-          if (e) {
-          } else {
-            if (JSON.parse(d).closed == "yes") {
-              remote.getCurrentWindow().close();
-            }
+      });
+    });
+
+    //closing home
+    window.setInterval(() => {
+      fs.readFile("data/closed", (e, d) => {
+        if (e) {
+        } else {
+          if (JSON.parse(d).closed == "yes") {
+            let { remote } = require("electron");
+            remote.getCurrentWindow().close();
           }
-        });
+        }
       });
     }, 1);
 
@@ -184,9 +175,7 @@ export default {
               let img = new Image();
               img.src = text.image;
               img.onload = function() {
-                window.setTimeout(() => {
-                  ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
-                }, 50);
+                ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
               };
             } else {
               document.querySelector(".ql-snow .ql-editor").innerHTML =
@@ -210,13 +199,6 @@ export default {
         document.getElementById("color").style.visibility = "visible";
       }
     });
-    fs.readFile("data/emoji", (e, d) => {
-      if (JSON.parse(d).on == "no") {
-        document.getElementById("emoji").style.visibility = "hidden";
-      } else {
-        document.getElementById("emoji").style.visibility = "visible";
-      }
-    });
     // document
     //   .querySelector(".ql-snow .ql-editor")
     //   .addEventListener("input", () => {
@@ -236,6 +218,7 @@ export default {
   methods: {
     // Close Function
     close() {
+      let { remote } = require("electron");
       remote.getCurrentWindow().close();
     },
 
@@ -263,6 +246,7 @@ export default {
 
     // Minimize Function
     minimize() {
+      let { remote } = require("electron");
       remote.getCurrentWindow().minimize();
     },
 
@@ -285,9 +269,6 @@ export default {
           document.getElementById("minimize").style.display = "flex";
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
-          if (/Touch Mode/.test(document.getElementById("mouch").innerHTML)) {
-            document.getElementById("emoji").style.display = "block";
-          }
         },
         true
       );
@@ -308,9 +289,6 @@ export default {
           document.getElementById("minimize").style.display = "flex";
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
-          if (/Touch Mode/.test(document.getElementById("mouch").innerHTML)) {
-            document.getElementById("emoji").style.display = "block";
-          }
           if (!e.target.matches("#menus")) {
             let dropdowns = document.getElementById("menu-content");
             if (dropdowns.classList.contains("show")) {
@@ -331,7 +309,6 @@ export default {
           document.getElementById("minimize").style.display = "none";
           document.getElementById("close").style.display = "none";
           document.getElementById("menu").style.display = "none";
-          document.getElementById("emoji").style.display = "none";
         },
         true
       );
