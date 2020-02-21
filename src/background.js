@@ -1,6 +1,6 @@
 /* MIT License
 
-Copyright (c) 2019 Playork
+Copyright (c) 2020 Playork
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@ SOFTWARE. */
 "use strict";
 let { setTimeout } = require("timers");
 let { app, BrowserWindow, ipcMain, Menu, MenuItem } = require("electron");
+let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
 
 app.allowRendererProcessReuse = false;
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -46,7 +47,6 @@ function createWindow() {
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
     if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
-    let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
     createProtocol("app");
     win.loadURL("app://./index.html");
   }
@@ -93,7 +93,6 @@ function createNote() {
     winnote.loadURL("http://localhost:8080/#/note");
     if (!process.env.IS_TEST) winnote.webContents.openDevTools();
   } else {
-    let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
     createProtocol("app");
     winnote.loadURL("app://./index.html#note");
   }
