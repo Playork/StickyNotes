@@ -38,12 +38,8 @@ SOFTWARE.
           <div class="button" id="menus" title="Menu">
             <span id="menu" v-on:click="menu">&#xE712;</span>
             <div id="menu-content" class="dropdown-content">
-              <a title="Undo" id="undo">
-                <span>&#xE7A7;</span>Undo
-              </a>
-              <a title="Redo" id="redo">
-                <span>&#xE7A6;</span>Redo
-              </a>
+              <a title="Undo" id="undo"> <span>&#xE7A7;</span>Undo </a>
+              <a title="Redo" id="redo"> <span>&#xE7A6;</span>Redo </a>
               <a title="Select Audio" id="video1" v-on:click="clickvideo">
                 <span>&#xE714;</span>Add Video
               </a>
@@ -174,151 +170,92 @@ export default {
     },
 
     // Import Note Function
-    importnote() {
-      let { remote } = require("electron");
-      let os = require("os");
-      remote.dialog
-        .showOpenDialog({
-          filters: [
-            {
-              name: "Note(.spst)",
-              extensions: ["spst"]
-            }
-          ],
-          defaultPath: os.homedir() + "/note.spst"
-        })
-        .then(note => {
-          if (note.filePaths[0] != undefined) {
-            let fs = require("fs");
-            fs.readFile(note.filePaths[0], (e, d) => {
-              if (e) {
-                let swal = require("sweetalert");
+    async importnote() {
+      let { ipcRenderer } = require("electron");
+      let notes = await ipcRenderer.invoke("importnote");
+      if (note.filePaths[0] != undefined) {
+        let fs = require("fs");
+        fs.readFile(note.filePaths[0], (e, d) => {
+          if (e) {
+            let swal = require("sweetalert");
 
-                swal("Not Supported");
-              } else {
-                d = d.toString().split("\n");
-                document.querySelector(".ql-snow .ql-editor").innerHTML = d[0];
-                window.resizeTo(Number(d[3]), Number([4]));
-                document.getElementById("lightYellow").style.backgroundColor =
-                  d[1];
-                document.getElementById("titlebar").style.backgroundColor =
-                  d[2];
-              }
-            });
+            swal("Not Supported");
+          } else {
+            d = d.toString().split("\n");
+            document.querySelector(".ql-snow .ql-editor").innerHTML = d[0];
+            window.resizeTo(Number(d[3]), Number([4]));
+            document.getElementById("lightYellow").style.backgroundColor = d[1];
+            document.getElementById("titlebar").style.backgroundColor = d[2];
           }
         });
+      }
     },
 
     // Exportb Note Function
-    exportnote() {
-      let { remote } = require("electron");
-      let os = require("os");
-      remote.dialog
-        .showSaveDialog({
-          filters: [
-            {
-              name: "Note(.spst)",
-              extensions: ["spst"]
-            }
-          ],
-          defaultPath: os.homedir() + "/note.spst"
-        })
-        .then(note => {
-          if (note.filePath != undefined) {
-            let data = document.querySelector(".ql-snow .ql-editor").innerHTML;
-            let fs = require("fs");
-            fs.writeFile(
-              note.filePath,
-              data +
-                "\n" +
-                window
-                  .getComputedStyle(document.getElementById("lightYellow"))
-                  .getPropertyValue("background-color") +
-                "\n" +
-                window
-                  .getComputedStyle(document.getElementById("titlebar"))
-                  .getPropertyValue("background-color") +
-                "\n" +
-                window.innerWidth.toString() +
-                "\n" +
-                window.innerHeight.toString(),
-              e => {
-                if (e) {
-                  let swal = require("sweetalert");
+    async exportnote() {
+      let { ipcRenderer } = require("electron");
+      let notes = await ipcRenderer.invoke("exportnote");
+      if (note.filePath != undefined) {
+        let data = document.querySelector(".ql-snow .ql-editor").innerHTML;
+        let fs = require("fs");
+        fs.writeFile(
+          note.filePath,
+          data +
+            "\n" +
+            window
+              .getComputedStyle(document.getElementById("lightYellow"))
+              .getPropertyValue("background-color") +
+            "\n" +
+            window
+              .getComputedStyle(document.getElementById("titlebar"))
+              .getPropertyValue("background-color") +
+            "\n" +
+            window.innerWidth.toString() +
+            "\n" +
+            window.innerHeight.toString(),
+          e => {
+            if (e) {
+              let swal = require("sweetalert");
 
-                  swal("Not Supported");
-                }
-              }
-            );
+              swal("Not Supported");
+            }
           }
-        });
+        );
+      }
     },
 
     // Add Audio To Note
-    clicksong() {
-      let { remote } = require("electron");
-      let os = require("os");
-      remote.dialog
-        .showOpenDialog({
-          filters: [
-            {
-              name: "Audo Files(mp3,wav,ogg)",
-              extensions: ["mp3", "MP3", "wav", "WAV", "ogg", "OGG"]
-            }
-          ],
-          defaultPath: os.homedir()
-        })
-        .then(audios => {
-          if (audios.filePaths[0]) {
-            try {
-              document.querySelector(
-                ".ql-snow .ql-editor"
-              ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///audios.filePaths[0]' controls></audio>"></iframe>`;
-            } catch {
-              let swal = require("sweetalert");
+    async clicksong() {
+      let { ipcRenderer } = require("electron");
+      let audios = await ipcRenderer.invoke("audio");
+      if (audios.filePaths[0]) {
+        try {
+          document.querySelector(
+            ".ql-snow .ql-editor"
+          ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///audios.filePaths[0]' controls></audio>"></iframe>`;
+        } catch {
+          let swal = require("sweetalert");
 
-              swal("Not Supported");
-            }
-          }
-        });
+          swal("Not Supported");
+        }
+      }
     },
 
     // Add Video To Note
-    clickvideo() {
-      let { remote } = require("electron");
-      let os = require("os");
-      remote.dialog
-        .showOpenDialog({
-          filters: [
-            {
-              name: "Video Files(mp4,webm,ogg)",
-              extensions: [
-                "mp4",
-                "MP4",
-                "webm",
-                "WEBM",
-                "WebM",
-                "ogg",
-                "OGG",
-                "Ogg"
-              ]
-            }
-          ],
-          defaultPath: os.homedir()
-        })
-        .then(videos => {
-          if (videos.filePaths[0]) {
-            try {
-              document.querySelector(
-                ".ql-snow .ql-editor"
-              ).innerHTML += `<iframe srcdoc="<video src='file:///${videos.filePaths[0]}' height='150px' controls preload='none'></video>" id="video"></iframe>`;
-            } catch {
-              let swal = require("sweetalert");
+    async clickvideo() {
+      let { ipcRenderer } = require("electron");
+      let videos = await ipcRenderer.invoke("video");
+      if (videos.filePaths[0]) {
+        try {
+          document.querySelector(
+            ".ql-snow .ql-editor"
+          ).innerHTML += `<iframe srcdoc="<video src='file:///${videos.filePaths[0]}' height='150px' controls preload='none'></video>" id="video"></iframe>`;
+        } catch {
+          let swal = require("sweetalert");
 
-              swal("Not Supported");
-            }
-          }
-        });
+          swal("Not Supported");
+        }
+      }
     }
   }
 };

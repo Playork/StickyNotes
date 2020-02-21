@@ -26,11 +26,7 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div id="home">
-    <titlebar1
-      v-bind:close="close"
-      v-bind:note="note"
-      v-bind:minimize="minimize"
-    />
+    <titlebar1 v-bind:close="close" v-bind:note="note" v-bind:minimize="minimize" />
     <homebody />
   </div>
 </template>
@@ -209,7 +205,7 @@ export default {
     });
 
     // Load Saved Notes
-    function savenotes() {
+    window.setInterval(() => {
       fs.readFile("data/sync", (e, d) => {
         if (e) {
         } else {
@@ -413,11 +409,7 @@ export default {
           });
         }
       });
-    }
-    savenotes();
-    fs.watch("data/notes/", (e, rrrr) => {
-      savenotes();
-    });
+    }, 2000);
   },
 
   // Functions

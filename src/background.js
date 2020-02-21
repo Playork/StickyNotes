@@ -110,18 +110,37 @@ function createNote() {
   winnote.webContents.on('context-menu', (e, p) => {
     e.preventDefault()
     let menu = new Menu()
-    p.dictionarySuggestions.forEach((d) => {
+    if (p.misspelledWord) {
+      p.dictionarySuggestions.forEach((d) => {
+        menu.append(new MenuItem({
+          label: d,
+          click: () => {
+            winnote.webContents.replaceMisspelling(d)
+          }
+        }))
+      })
+      menu.append(new MenuItem({ type: 'separator' }))
       menu.append(new MenuItem({
-        label: d,
+        label: 'Add Word To Dictionary',
         click: () => {
-          winnote.webContents.replaceMisspelling(d)
+          winnote.webContents.session.addWordToSpellCheckerDictionary(p.misspelledWord)
         }
       }))
-    })
-    menu.append(new MenuItem({ type: 'separator' }))
-    menu.append(new MenuItem({ role: "cut" }))
-    menu.append(new MenuItem({ role: "copy" }))
-    menu.append(new MenuItem({ role: "paste" }))
+    }
+    if (p.editFlags.canCut || p.editFlags.canCopy || p.editFlags.canPaste) {
+      if (p.misspelledWord) {
+        menu.append(new MenuItem({ type: 'separator' }))
+      }
+      if (p.editFlags.canCut) {
+        menu.append(new MenuItem({ role: "cut" }))
+      }
+      if (p.editFlags.canCopy) {
+        menu.append(new MenuItem({ role: "copy" }))
+      }
+      if (p.editFlags.canPaste) {
+        menu.append(new MenuItem({ role: "paste" }))
+      }
+    }
     menu.popup(winnote, p.x, p.y)
   }, false)
 }
@@ -135,6 +154,110 @@ ipcMain.on("create-new-instance", () => {
 app.on("ready", async () => {
   createWindow();
 });
+
+ipcMain.handle("importnotes", async (event) => {
+  let os = require("os");
+  let { dialog } = require("electron")
+  let path = await dialog
+    .showOpenDialog({
+      filters: [
+        {
+          name: "Notes(.spsd)",
+          extensions: ["spsd"]
+        }
+      ],
+      defaultPath: os.homedir() + "/note.spsd"
+    })
+  return path
+})
+
+ipcMain.handle("exportnotes", async (event) => {
+  let os = require("os");
+  let { dialog } = require("electron")
+  let path = await dialog
+    .showSaveDialog({
+      filters: [
+        {
+          name: "Notes(.spsd)",
+          extensions: ["spsd"]
+        }
+      ],
+      defaultPath: os.homedir() + "/notes.spsd"
+    })
+  return path
+})
+
+ipcMain.handle("importnote", async (event) => {
+  let os = require("os");
+  let { dialog } = require("electron")
+  let path = await dialog
+    .showOpenDialog({
+      filters: [
+        {
+          name: "Note(.spst)",
+          extensions: ["spst"]
+        }
+      ],
+      defaultPath: os.homedir() + "/note.spst"
+    })
+  return path
+})
+
+ipcMain.handle("exportnote", async (event) => {
+  let os = require("os");
+  let { dialog } = require("electron")
+  let path = await dialog
+    .showSaveDialog({
+      filters: [
+        {
+          name: "Note(.spst)",
+          extensions: ["spst"]
+        }
+      ],
+      defaultPath: os.homedir() + "/note.spst"
+    })
+  return path
+})
+
+ipcMain.handle("audio", async (event) => {
+  let os = require("os");
+  let { dialog } = require("electron")
+  let path = await dialog.showOpenDialog({
+    filters: [
+      {
+        name: "Audo Files(mp3,wav,ogg)",
+        extensions: ["mp3", "MP3", "wav", "WAV", "ogg", "OGG"]
+      }
+    ],
+    defaultPath: os.homedir()
+  })
+  return path
+})
+
+ipcMain.handle("video", async (event) => {
+  let os = require("os");
+  let { dialog } = require("electron")
+  let path = await dialog
+    .showOpenDialog({
+      filters: [
+        {
+          name: "Video Files(mp4,webm,ogg)",
+          extensions: [
+            "mp4",
+            "MP4",
+            "webm",
+            "WEBM",
+            "WebM",
+            "ogg",
+            "OGG",
+            "Ogg"
+          ]
+        }
+      ],
+      defaultPath: os.homedir()
+    })
+  return path
+})
 
 if (isDevelopment) {
   if (process.platform === "win32") {

@@ -125,7 +125,7 @@ export default {
       const win = new remote.BrowserWindow({
         width: 800,
         height: 600,
-        icon: "public/favicon.ico",
+        icon: "public/favicon.png",
         backgroundColor: "#202020",
         title: "Playork Sticky Notes",
         resizable: false,
@@ -316,93 +316,71 @@ export default {
   // Functions
   methods: {
     // Import Notes
-    importnotes() {
-      let os = require("os");
-      remote.dialog
-        .showOpenDialog({
-          filters: [
-            {
-              name: "Notes(.spsd)",
-              extensions: ["spsd"]
-            }
-          ],
-          defaultPath: os.homedir() + "/note.spsd"
-        })
-        .then(notes => {
-          if (notes.filePaths[0] != undefined) {
-            fs.readFile(notes.filePaths[0], (e, d) => {
-              if (e) {
-                let swal = require("sweetalert");
-                swal("Not Supported");
-              } else {
-                if (d != "") {
-                  d = d.toString().split("\n");
-                  for (let i = 0; i < d.length; i++) {
-                    if (i % 2 == 0 && d[i] != "") {
-                      let js = JSON.parse(d[i + 1]);
-                      fs.readFile("data/notes/" + d[i], (e, d) => {
-                        if (e) {
-                          fs.writeFile(
-                            "data/notes/" + id[i],
-                            JSON.stringify(js),
-                            e => {}
-                          );
-                        } else {
-                          d = JSON.parse(d);
-                          if (js.first != d.first || js.image != d.image) {
-                            let g = new Date().getTime();
-                            let id = Number(d[i]) * g;
-                            fs.writeFile(
-                              "data/notes/" + id.toString(),
-                              JSON.stringify(js),
-                              e => {}
-                            );
-                          }
-                        }
-                      });
+    async importnotes() {
+      let { ipcRenderer } = require("electron");
+      let notes = await ipcRenderer.invoke("importnotes");
+      if (notes.filePaths[0]) {
+        fs.readFile(notes.filePaths[0], (e, d) => {
+          if (e) {
+            let swal = require("sweetalert");
+            swal("Not Supported");
+          } else {
+            if (d != "") {
+              d = d.toString().split("\n");
+              for (let i = 0; i < d.length; i++) {
+                if (i % 2 == 0 && d[i] != "") {
+                  let js = JSON.parse(d[i + 1]);
+                  fs.readFile("data/notes/" + d[i], (e, d) => {
+                    if (e) {
+                      fs.writeFile(
+                        "data/notes/" + id[i],
+                        JSON.stringify(js),
+                        e => {}
+                      );
+                    } else {
+                      d = JSON.parse(d);
+                      if (js.first != d.first || js.image != d.image) {
+                        let g = new Date().getTime();
+                        let id = Number(d[i]) * g;
+                        fs.writeFile(
+                          "data/notes/" + id.toString(),
+                          JSON.stringify(js),
+                          e => {}
+                        );
+                      }
                     }
-                  }
+                  });
                 }
               }
-            });
+            }
           }
         });
+      }
     },
 
     // Export Notes
-    exportnotes() {
-      let os = require("os");
-      remote.dialog
-        .showSaveDialog({
-          filters: [
-            {
-              name: "Notes(.spsd)",
-              extensions: ["spsd"]
-            }
-          ],
-          defaultPath: os.homedir() + "/notes.spsd"
-        })
-        .then(notes => {
-          if (notes.filePath != undefined) {
-            let data = "";
-            fs.readdir("data/notes/", function(e, files) {
-              if (e) {
-              } else {
-                files.forEach(function(key, index) {
-                  fs.readFile("data/notes/" + key, (e, d) => {
-                    let value = JSON.parse(d);
-                    data = data + key + "\n" + JSON.stringify(value) + "\n";
-                  });
-                });
-              }
-            });
-            fs.writeFile(notes.filePath, data, e => {
-              if (e) {
-                swal("Not Supported");
-              }
+    async exportnotes() {
+      let { ipcRenderer } = require("electron");
+      let notes = await ipcRenderer.invoke("exportnotes");
+      if (notes.filePath != undefined) {
+        let data = "";
+        fs.readdir("data/notes/", function(e, files) {
+          if (e) {
+          } else {
+            files.forEach(function(key, index) {
+              fs.readFile("data/notes/" + key, (e, d) => {
+                let value = JSON.parse(d);
+                data = data + key + "\n" + JSON.stringify(value) + "\n";
+              });
             });
           }
         });
+        fs.writeFile(notes.filePath, data, e => {
+          if (e) {
+            swal("Not Supported");
+          }
+        });
+      }
     },
 
     // Report Bug
