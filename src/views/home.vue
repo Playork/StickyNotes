@@ -1,7 +1,7 @@
 <!--
 MIT License
 
-Copyright (c) 2019 Playork
+Copyright (c) 2020 Playork
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,11 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div id="home">
-    <titlebar1 v-bind:close="close" v-bind:note="note" v-bind:minimize="minimize" />
+    <titlebar1
+      v-bind:close="close"
+      v-bind:note="note"
+      v-bind:minimize="minimize"
+    />
     <homebody />
   </div>
 </template>

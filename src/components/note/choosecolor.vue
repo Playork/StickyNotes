@@ -1,7 +1,7 @@
 <!--
 MIT License
 
-Copyright (c) 2019 Playork
+Copyright (c) 2020 Playork
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,13 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <section id="choosecolor">
-    <h1>Titlebar</h1>Color:
-    <input type="color" value="#ffeb81" id="color1">
-    <h1>Note</h1>Color:
-    <input type="color" value="#fff2ab" id="color2">
-    <br>
+    <h1>Titlebar</h1>
+    Color:
+    <input type="color" value="#ffeb81" id="color1" />
+    <h1>Note</h1>
+    Color:
+    <input type="color" value="#fff2ab" id="color2" />
+    <br />
     <button class="button1" v-on:click="cancel">Cancel</button>
     <button id="changec" class="button1" v-on:click="newColor">done</button>
   </section>
