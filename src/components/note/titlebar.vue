@@ -107,7 +107,6 @@ export default {
         select3.style.display = "none";
         select4.style.display = "none";
         select5.style.pointerEvents = "none";
-        let { setInterval } = require("timers");
         let clearint = window.setInterval(() => {
           document.getElementById("color").style.height = "0";
           document.getElementById("locks").style.marginLeft = "-35px";
@@ -124,7 +123,7 @@ export default {
           }
           let { remote } = require("electron");
 
-          remote.getCurrentWindow().setMaximumSize(350, 375);
+          remote.getCurrentWindow().setMaximumSize(300, 325);
           if (select.style.pointerEvents == "auto") {
             document.getElementById("color").style.height = "40px";
             document.getElementById("locks").style.marginLeft = "0";

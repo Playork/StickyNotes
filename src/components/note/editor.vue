@@ -38,7 +38,6 @@ SOFTWARE.
 // Import Required Packages
 import Quill from "quill";
 import fs from "fs";
-import { setInterval } from "timers";
 
 // Vue Class
 export default {
@@ -49,15 +48,7 @@ export default {
         .getComputedStyle(document.getElementById("lightYellow"))
         .getPropertyValue("background-color");
       document.getElementById("backc").style.backgroundColor = color1;
-    }, 1);
-
-    // matching Toolbar Color To Note
-    window.setInterval(() => {
-      document.querySelector(
-        ".ql-toolbar"
-      ).style.backgroundColor = window
-        .getComputedStyle(document.getElementById("lightYellow"))
-        .getPropertyValue("background-color");
+      document.querySelector(".ql-toolbar").style.backgroundColor = color1;
     }, 1);
 
     // Load Editor And Save Note On Several Events
@@ -221,7 +212,7 @@ export default {
           }
         });
       };
-      window.setInterval(() => {
+      fs.watch("data/notes/", (e, r) => {
         fs.readFile("data/notes/" + obj.toString(), (e, d) => {
           if (e) {
           } else {
@@ -238,7 +229,7 @@ export default {
             } catch {}
           }
         });
-      }, 1);
+      });
       quill.on("text-change", () => repeafunc());
       // quill.on("text-change", () => {
       //   let cont = document.querySelector(".ql-snow .ql-editor").innerHTML;

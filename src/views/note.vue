@@ -26,7 +26,11 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div id="note" v-on:click="showhide">
-    <titlebar v-bind:close="close" v-bind:note="note" v-bind:minimize="minimize" />
+    <titlebar
+      v-bind:close="close"
+      v-bind:note="note"
+      v-bind:minimize="minimize"
+    />
     <editor />
     <colors />
     <choosecolor />
@@ -141,7 +145,7 @@ export default {
     });
 
     //closing home
-    window.setInterval(() => {
+    fs.watch("data", (e, r) => {
       fs.readFile("data/closed", (e, d) => {
         if (e) {
         } else {

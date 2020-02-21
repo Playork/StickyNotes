@@ -112,34 +112,36 @@ SOFTWARE.
 <script>
 // Import Required Packages
 import fs from "fs";
-import { Dropbox } from "dropbox";
-import { remote } from "electron";
 
 // Vue Class
 export default {
   // Do On Start
   mounted() {
-    let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
-    let authUrl = dbx.getAuthenticationUrl("app://./auth.html");
-    document.getElementById("drb").addEventListener("click", () => {
-      const win = new remote.BrowserWindow({
-        width: 800,
-        height: 600,
-        icon: "public/favicon.png",
-        backgroundColor: "#202020",
-        title: "Playork Sticky Notes",
-        resizable: false,
-        show: false,
-        webPreferences: {
-          nodeIntegration: false
-        }
+    if (navigator.onLine) {
+      let { Dropbox } = require("dropbox");
+      let { remote } = require("electron");
+      let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
+      let authUrl = dbx.getAuthenticationUrl("app://./auth.html");
+      document.getElementById("drb").addEventListener("click", () => {
+        const win = new remote.BrowserWindow({
+          width: 800,
+          height: 600,
+          icon: "public/favicon.png",
+          backgroundColor: "#202020",
+          title: "Playork Sticky Notes",
+          resizable: false,
+          show: false,
+          webPreferences: {
+            nodeIntegration: false
+          }
+        });
+        win.loadURL(authUrl);
+        win.on("ready-to-show", () => {
+          win.show();
+          win.focus();
+        });
       });
-      win.loadURL(authUrl);
-      win.on("ready-to-show", () => {
-        win.show();
-        win.focus();
-      });
-    });
+    }
 
     fs.readFile("data/color", (e, d) => {
       if (e) {
@@ -394,7 +396,6 @@ export default {
     // Delete All Note Function
     deleteall() {
       if (document.getElementById("notetext")) {
-        let { setTimeout } = require("timers");
         fs.readFile("data/warn", (e, d) => {
           d = JSON.parse(d);
           if (d.on == "yes") {
