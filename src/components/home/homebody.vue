@@ -346,26 +346,31 @@ export default {
 
     // Export Notes
     async exportnotes() {
-      let { ipcRenderer } = require("electron");
-      let notes = await ipcRenderer.invoke("exportnotes");
-      if (notes.filePath != undefined) {
-        let data = "";
-        fs.readdir("data/notes/", function(e, files) {
-          if (e) {
-          } else {
-            files.forEach(function(key, index) {
-              fs.readFile("data/notes/" + key, (e, d) => {
-                let value = JSON.parse(d);
-                data = data + key + "\n" + JSON.stringify(value) + "\n";
+      if (document.getElementById("notetext")) {
+        let { ipcRenderer } = require("electron");
+        let notes = await ipcRenderer.invoke("exportnotes");
+        if (notes.filePath != undefined) {
+          let data = "";
+          fs.readdir("data/notes/", function(e, files) {
+            if (e) {
+            } else {
+              files.forEach(function(key, index) {
+                fs.readFile("data/notes/" + key, (e, d) => {
+                  let value = JSON.parse(d);
+                  data = data + key + "\n" + JSON.stringify(value) + "\n";
+                });
               });
-            });
-          }
-        });
-        fs.writeFile(notes.filePath, data, e => {
-          if (e) {
-            swal("Not Supported");
-          }
-        });
+            }
+          });
+          fs.writeFile(notes.filePath, data, e => {
+            if (e) {
+              swal("Not Supported");
+            }
+          });
+        }
+      } else {
+        let swal = require("sweetalert");
+        swal("Nothing To Export");
       }
     },
 
