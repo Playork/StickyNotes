@@ -127,15 +127,13 @@ export default {
     });
     ipcRenderer.on("closedsync", (e, u) => {
       let params = {};
-      u.substr(1)
-        .split("#")
-        .map(hash => {
-          hash[1].split("&").map(pair => {
-            let val = pair.split("=");
-            params[val[0]] = val[1];
-          });
+      u.split("#").map(hash => {
+        hash[1].split("&").map(pair => {
+          let val = pair.split("=");
+          params[val[0]] = val[1];
         });
-      fs.writeFile("data/access", params.access_token);
+      });
+      fs.writeFile("data/access", params.access_token, e => {});
     });
 
     fs.readFile("data/color", (e, d) => {
