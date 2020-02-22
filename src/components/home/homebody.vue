@@ -112,41 +112,31 @@ SOFTWARE.
 <script>
 // Import Required Packages
 import fs from "fs";
+import { ipcRenderer } from "electron";
 
 // Vue Class
 export default {
   // Do On Start
   mounted() {
-    if (navigator.onLine) {
-      let { Dropbox } = require("dropbox");
-      let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
-      let url = dbx.getAuthenticationUrl("app://./auth.html");
-      document.getElementById("drb").addEventListener("click", () => {
-        let { ipcRenderer } = require("electron");
-        ipcRenderer.invoke("syncwindow", url);
-        let storeaccess = windows.setInterval(() => {
-          if (localStorage.getItem("access")) {
-            fs.writeFile(
-              ".data-sn/access",
-              localStorage.getItem("access"),
-              e => {}
-            );
-            fs.writeFile(
-              ".data-sn/sync",
-              JSON.stringify({ sync: "yes" }),
-              e => {}
-            );
-            clearInterval(storeaccess);
-          } else {
-            if (localStorage.getItem("closed")) {
-              localStorage.removeItem("closed");
-              clearInterval(storeaccess);
-            }
-          }
-        }, 1);
-        storeaccess;
-      });
-    }
+    let { Dropbox } = require("dropbox");
+    let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
+    let url = dbx.getAuthenticationUrl("app://./auth.html");
+    document.getElementById("drb").addEventListener("click", () => {
+      let { ipcRenderer } = require("electron");
+      ipcRenderer.invoke("syncwindow", url);
+    });
+    ipcRenderer.on("closedsync", (e, u) => {
+      let params = {};
+      u.substr(1)
+        .split("#")
+        .map(hash => {
+          hash[1].split("&").map(pair => {
+            let val = pair.split("=");
+            params[val[0]] = val[1];
+          });
+        });
+      fs.writeFile("data/access", params.access_token);
+    });
 
     fs.readFile("data/color", (e, d) => {
       if (e) {

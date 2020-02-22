@@ -183,6 +183,9 @@ ipcMain.handle("syncwindow", (e, url) => {
     }
   });
   syncwindow.loadURL(url);
+  syncwindow.on("close", () => {
+    win.webContents.send("closedsync", syncwindow.webContents.getURL());
+  })
   syncwindow.on("ready-to-show", () => {
     syncwindow.show();
     syncwindow.focus();
