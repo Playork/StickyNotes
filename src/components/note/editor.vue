@@ -103,8 +103,6 @@ export default {
             { align: "" },
             { align: "center" },
             { align: "right" },
-            "link",
-            "formula",
             "clean",
             "image"
           ]
