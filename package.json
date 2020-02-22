@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@vue/cli-service": "latest",
-    "electron": "beta",
+    "electron": "latest",
     "vue": "latest",
     "vue-cli-plugin-electron-builder": "latest",
     "vue-router": "latest",

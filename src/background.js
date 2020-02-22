@@ -25,7 +25,6 @@ let { setTimeout } = require("timers");
 let { app, BrowserWindow, ipcMain, Menu, MenuItem } = require("electron");
 let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
 
-const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
 function createWindow() {
   win = new BrowserWindow({
@@ -62,14 +61,6 @@ function createWindow() {
     }, 150);
   });
 }
-
-app.on("activate", () => {
-  if (win === null) {
-    setTimeout(() => {
-      createWindow();
-    }, 500);
-  }
-});
 
 app.on("ready", async () => {
   createWindow();
