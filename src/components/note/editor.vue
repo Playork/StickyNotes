@@ -70,7 +70,6 @@ export default {
             { size: ["10px", "18px", "27px", "37px"] },
             "bold",
             "italic",
-            "underline",
             "strike",
             { script: "super" },
             { script: "sub" },
