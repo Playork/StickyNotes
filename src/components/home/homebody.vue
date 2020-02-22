@@ -125,7 +125,7 @@ export default {
         let { ipcRenderer } = require("electron");
         ipcRenderer.invoke("syncwindow", url);
         let storeaccess = windows.setInterval(() => {
-          if (sessionStorage.getItem("access")) {
+          if (localStorage.getItem("access")) {
             fs.writeFile(
               ".data-sn/access",
               localStorage.getItem("access"),
@@ -138,8 +138,8 @@ export default {
             );
             clearInterval(storeaccess);
           } else {
-            if (sessionStorage.getItem("closed")) {
-              sessionStorage.removeItem("closed");
+            if (localStorage.getItem("closed")) {
+              localStorage.removeItem("closed");
               clearInterval(storeaccess);
             }
           }
