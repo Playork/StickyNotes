@@ -11,9 +11,7 @@
 
 ### Choose Background And Title Bar Color You Like
 
-### Editing Options Like Font,Bold,Size,Math Formula,Link,Italic,List,Align.etc
-
-### Emoji Selector
+### Editing Options Like Font,Bold,Size,Italic,List,Align.etc
 
 ### Add Images To Note From Local Drive
 
@@ -23,17 +21,11 @@
 
 ### Lock The Note
 
-### Text Suggestions
-
 ### Import Note From A File
 
 ### Export Note To A File
 
-### Save Note
-
 ### Undo,Redo Options
-
-### Touch Mode For Touch Or Pen Devices(Support Many Editing And Import,Export And Save Options)
 
 ### If you like my App please consider buying me a coffee at [HERE!](https://www.buymeacoffee.com/playork)
 
@@ -42,10 +34,6 @@
 ## For Linux
 
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/stickynotes)
-
-## For Windows
-
-[Get it from the Softpedia](https://www.softpedia.com/get/Office-tools/Diary-Organizers-Calendar/Playork-stickynotes.shtml)
 
 # Unstable Release
 
