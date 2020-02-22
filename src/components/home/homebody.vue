@@ -36,9 +36,7 @@ SOFTWARE.
     <div id="notes"></div>
     <div>
       <div id="options">
-        <span id="deleteall" v-on:click="deleteall" title="Delete All Notes"
-          >&#xE74D;</span
-        >
+        <span id="deleteall" v-on:click="deleteall" title="Delete All Notes">&#xE74D;</span>
         <span v-on:click="syncshow" title="Sync">&#xE895;</span>
         <span v-on:click="settingsshow" title="Settings">&#xE713;</span>
         <span v-on:click="importnotes" title="Import Notes">&#xE8B5;</span>
@@ -84,23 +82,13 @@ SOFTWARE.
       <div id="about">
         <span v-on:click="hide">&#xE8BB;</span>
         <div>
-          <img
-            src="../../assets/logo.png"
-            style="padding-top:20px;"
-            width="150px"
-          />
+          <img src="../../assets/logo.png" style="padding-top:20px;" width="150px" />
           <div style="font-size:30px;">Playork</div>
           <div style="font-size:40px;">Sticky Notes</div>
           <div style="font-size:20px;">bekalshenoy@gmail.com</div>
           <div id="view" style="font-size:20px;">©2020</div>
           <div>
-            <p
-              id="report"
-              v-on:click="report"
-              style="font-size:18px;cursor: pointer;"
-            >
-              report bug
-            </p>
+            <p id="report" v-on:click="report" style="font-size:18px;cursor: pointer;">report bug</p>
           </div>
         </div>
       </div>
