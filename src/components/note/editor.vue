@@ -145,7 +145,7 @@ export default {
           "<p><br></p>"
         ) {
           fs.writeFile(
-            ".data-sn/notes/" + obj.toString(),
+            "data/notes/" + obj.toString(),
             JSON.stringify({
               first: text,
               back: color1,
@@ -179,7 +179,7 @@ export default {
         } else {
           lock = "no";
         }
-        fs.readFile(".data-sn/notes/" + obj.toString(), (e, d) => {
+        fs.readFile("data/notes/" + obj.toString(), (e, d) => {
           if (e || JSON.parse(d).deleted == "no") {
             let { ipcRenderer } = require("electron");
             if (
@@ -187,7 +187,7 @@ export default {
               "<p><br></p>"
             ) {
               fs.writeFile(
-                ".data-sn/notes/" + obj.toString(),
+                "data/notes/" + obj.toString(),
                 JSON.stringify({
                   first: text,
                   back: color1,
@@ -203,19 +203,19 @@ export default {
                 }
               );
             } else {
-              fs.unlink(".data-sn/notes/" + obj.toString(), e => {});
+              fs.unlink("data/notes/" + obj.toString(), e => {});
               ipcRenderer.invoke("destroy");
             }
           }
         });
       };
-      fs.watch(".data-sn/notes/", (e, r) => {
-        fs.readFile(".data-sn/notes/" + obj.toString(), (e, d) => {
+      fs.watch("data/notes/", (e, r) => {
+        fs.readFile("data/notes/" + obj.toString(), (e, d) => {
           if (e) {
           } else {
             try {
               if (JSON.parse(d).deleted == "yes") {
-                fs.unlink(".data-sn/notes/" + obj.toString(), e => {
+                fs.unlink("data/notes/" + obj.toString(), e => {
                   if (e) {
                     console.log(e);
                   }
@@ -239,7 +239,7 @@ export default {
         .addEventListener("click", () => repeafunc());
       window.addEventListener("resize", () => repeafunc());
     };
-    fs.readFile(".data-sn/id", (e, d) => {
+    fs.readFile("data/id", (e, d) => {
       if (e) {
         let id = 1;
         func(id);

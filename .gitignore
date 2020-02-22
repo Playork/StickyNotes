@@ -1,7 +1,7 @@
 .DS_Store
 node_modules
 /dist
-/.data-sn
+/data
 client_id
 
 # local env files
