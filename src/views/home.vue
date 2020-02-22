@@ -26,11 +26,7 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div id="home">
-    <titlebar1
-      v-bind:close="close"
-      v-bind:note="note"
-      v-bind:minimize="minimize"
-    />
+    <titlebar1 v-bind:close="close" v-bind:note="note" v-bind:minimize="minimize" />
     <homebody />
   </div>
 </template>
@@ -55,14 +51,14 @@ export default {
   // Do On Start
   mounted() {
     // create data
-    if (!fs.existsSync("data")) {
-      fs.mkdirSync("data");
-      fs.mkdirSync("data/notes/");
+    if (!fs.existsSync(".data-sn")) {
+      fs.mkdirSync(".data-sn");
+      fs.mkdirSync(".data-sn/notes/");
     }
 
     // Sync Seup
     let accesst;
-    fs.readFile("data/access", (e, d) => {
+    fs.readFile(".data-sn/access", (e, d) => {
       if (e) {
         document.getElementById("sign").innerHTML =
           "Not Signed In(Not Syncing)";
@@ -128,10 +124,10 @@ export default {
                   for (let i = 0; i < d.length; i++) {
                     if (i % 2 == 0 && d[i] != "") {
                       let js = JSON.parse(d[i + 1]);
-                      fs.readFile("data/notes/" + d[i], (e, d) => {
+                      fs.readFile(".data-sn/notes/" + d[i], (e, d) => {
                         if (e) {
                           fs.writeFile(
-                            "data/notes/" + id[i],
+                            ".data-sn/notes/" + id[i],
                             JSON.stringify(js),
                             e => {}
                           );
@@ -141,7 +137,7 @@ export default {
                             let g = new Date().getTime();
                             let id = Number(d[i]) * g;
                             fs.writeFile(
-                              "data/notes/" + id.toString(),
+                              ".data-sn/notes/" + id.toString(),
                               JSON.stringify(js),
                               e => {}
                             );
@@ -162,42 +158,46 @@ export default {
 
     // close on app.quit()
     ipcRenderer.on("closeall", () => {
-      fs.writeFile("data/closed", JSON.stringify({ closed: "yes" }), e => {});
+      fs.writeFile(
+        ".data-sn/closed",
+        JSON.stringify({ closed: "yes" }),
+        e => {}
+      );
       window.setTimeout(() => {
         ipcRenderer.invoke("destroy");
       }, 200);
     });
 
     // Remove Closed
-    fs.unlink("data/closed", e => {
+    fs.unlink(".data-sn/closed", e => {
       if (e) {
       }
     });
 
     // Sync
-    fs.watch("data/notes/", (e, r) => {
+    fs.watch(".data-sn/notes/", (e, r) => {
       if (navigator.onLine) {
-        fs.readFile("data/sync", (e, d) => {
+        fs.readFile(".data-sn/sync", (e, d) => {
           if (e || JSON.parse(d).sync == "no") {
             if (!e) {
-              fs.unlink("data/sync", e => {
+              fs.unlink(".data-sn/sync", e => {
                 if (e) {
                 }
               });
             }
             let notes = "";
-            fs.readdir("data/notes/", function(e, files) {
+            fs.readdir(".data-sn/notes/", function(e, files) {
               if (e) {
               } else {
                 files.forEach(function(key, index) {
-                  fs.readFile("data/notes/" + key, (e, d) => {
+                  fs.readFile(".data-sn/notes/" + key, (e, d) => {
                     let value = JSON.parse(d);
                     notes = notes + key + "\n" + JSON.stringify(value) + "\n";
                   });
                 });
               }
             });
-            fs.readFile("data/access", (e, d) => {
+            fs.readFile(".data-sn/access", (e, d) => {
               if (e) {
               } else {
                 let dbx = new Dropbox({ fetch, accessToken: accesst });
@@ -218,10 +218,14 @@ export default {
     // Load Saved Notes
     window.setInterval(() => {
       if (navigator.onLine) {
-        fs.readFile("data/sync", (e, d) => {
+        fs.readFile(".data-sn/sync", (e, d) => {
           if (e) {
           } else {
-            fs.writeFile("data/sync", JSON.stringify({ sync: "no" }), e => {});
+            fs.writeFile(
+              ".data-sn/sync",
+              JSON.stringify({ sync: "no" }),
+              e => {}
+            );
             let dbx = new Dropbox({ fetch, accessToken: accesst });
             dbx
               .filesGetTemporaryLink({
@@ -246,10 +250,10 @@ export default {
                         for (let i = 0; i < d.length; i++) {
                           if (i % 2 == 0 && d[i] != "") {
                             let js = JSON.parse(d[i + 1]);
-                            fs.readFile("data/notes/" + d[i], (e, d) => {
+                            fs.readFile(".data-sn/notes/" + d[i], (e, d) => {
                               if (e) {
                                 fs.writeFile(
-                                  "data/notes/" + id[i],
+                                  ".data-sn/notes/" + id[i],
                                   JSON.stringify(js),
                                   e => {}
                                 );
@@ -259,7 +263,7 @@ export default {
                                   let g = new Date().getTime();
                                   let id = Number(d[i]) * g;
                                   fs.writeFile(
-                                    "data/notes/" + id.toString(),
+                                    ".data-sn/notes/" + id.toString(),
                                     JSON.stringify(js),
                                     e => {}
                                   );
@@ -279,7 +283,7 @@ export default {
           }
         });
       }
-      fs.readFile("data/access", (e, d) => {
+      fs.readFile(".data-sn/access", (e, d) => {
         if (e) {
           document.getElementById("sign").innerHTML =
             "Not Signed In(Not Syncing)";
@@ -300,14 +304,14 @@ export default {
           }
         }
       });
-      fs.readdir("data/notes/", function(e, files) {
+      fs.readdir(".data-sn/notes/", function(e, files) {
         if (e) {
           document.getElementById("notes").innerHTML = "";
         } else {
           document.getElementById("notes").innerHTML = "";
           files.forEach(function(key, index) {
             try {
-              fs.readFile("data/notes/" + key, (e, d) => {
+              fs.readFile(".data-sn/notes/" + key, (e, d) => {
                 let value = JSON.parse(d);
                 document
                   .getElementById("notes")
@@ -359,7 +363,7 @@ export default {
                 document.getElementById("startnote").onclick = () => {
                   let id = new Date().getTime();
                   fs.writeFile(
-                    "data/id",
+                    ".data-sn/id",
                     JSON.stringify({ ids: key }),
                     e => {}
                   );
@@ -367,7 +371,7 @@ export default {
                   window.setTimeout(() => {
                     if (value.closed == "no") {
                       fs.writeFile(
-                        "data/id",
+                        ".data-sn/id",
                         JSON.stringify({ ids: id }),
                         e => {}
                       );
@@ -375,7 +379,7 @@ export default {
                   }, 500);
                 };
                 document.getElementById("deletenote").onclick = () => {
-                  fs.readFile("data/warn", (e, d) => {
+                  fs.readFile(".data-sn/warn", (e, d) => {
                     if (JSON.parse(d).on == "yes") {
                       let swal = require("sweetalert");
                       swal({
@@ -388,26 +392,26 @@ export default {
                         if (willDelete) {
                           if (value.closed == "no") {
                             fs.writeFile(
-                              "data/notes/" + key,
+                              ".data-sn/notes/" + key,
                               JSON.stringify({ deleted: "yes" }),
                               e => {}
                             );
                           }
                           if (value.closed == "yes") {
-                            fs.unlink("data/notes/" + key, e => {});
+                            fs.unlink(".data-sn/notes/" + key, e => {});
                           }
                         }
                       });
                     } else {
                       if (value.closed == "no") {
                         fs.writeFile(
-                          "data/notes/" + key,
+                          ".data-sn/notes/" + key,
                           JSON.stringify({ deleted: "yes" }),
                           e => {}
                         );
                       }
                       if (value.closed == "yes") {
-                        fs.unlink("data/notes/" + key, e => {});
+                        fs.unlink(".data-sn/notes/" + key, e => {});
                       }
                     }
                   });
@@ -429,23 +433,27 @@ export default {
     // Close Function
     close() {
       if (document.getElementById("deleteall").style.pointerEvents != "none") {
-        fs.readdir("data/notes/", function(e, files) {
+        fs.readdir(".data-sn/notes/", function(e, files) {
           if (e) {
           } else {
             files.forEach(function(key, index) {
-              fs.readFile("data/notes/" + key, (e, d) => {
+              fs.readFile(".data-sn/notes/" + key, (e, d) => {
                 let value = JSON.parse(d);
                 if (value.first == "<p><br></p>") {
-                  fs.unlink("data/notes/" + key, e => {});
+                  fs.unlink(".data-sn/notes/" + key, e => {});
                 }
               });
             });
           }
         });
-        fs.writeFile("data/closed", JSON.stringify({ closed: "yes" }), e => {});
+        fs.writeFile(
+          ".data-sn/closed",
+          JSON.stringify({ closed: "yes" }),
+          e => {}
+        );
         window.setTimeout(() => {
           ipcRenderer.invoke("close");
-        }, 100);
+        }, 1000);
       } else {
         let swal = require("sweetalert");
         swal("Can't Close Note Is Locked");
@@ -457,12 +465,12 @@ export default {
       let func = obj => {
         obj++;
         fs.writeFile(
-          "data/id",
+          ".data-sn/id",
           JSON.stringify({ ids: obj.toString() }),
           e => {}
         );
       };
-      fs.readFile("data/id", (e, d) => {
+      fs.readFile(".data-sn/id", (e, d) => {
         if (e) {
           let id = 1;
           func(id);

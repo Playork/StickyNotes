@@ -56,9 +56,8 @@ function createWindow() {
     e.preventDefault();
     win.webContents.send("closeall", "closeit");
     setTimeout(() => {
-      win.destroy();
       app.quit();
-    }, 150);
+    }, 1000);
   });
 }
 
