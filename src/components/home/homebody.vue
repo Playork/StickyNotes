@@ -127,12 +127,14 @@ export default {
     });
     ipcRenderer.on("closedsync", (e, u) => {
       let params = {};
-      u.split("#").map(hash => {
-        hash[1].split("&").map(pair => {
-          let val = pair.split("=");
-          params[val[0]] = val[1];
+      u.substr(1)
+        .split("#")
+        .map(hash => {
+          hash[1].split("&").map(pair => {
+            let val = pair.split("=");
+            params[val[0]] = val[1];
+          });
         });
-      });
       fs.writeFile("data/access", params.access_token, e => {});
     });
 
