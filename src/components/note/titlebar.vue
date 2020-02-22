@@ -99,6 +99,7 @@ export default {
         select.style.pointerEvents == "auto" ||
         select.style.pointerEvents == ""
       ) {
+        let { ipcRenderer } = require("electron");
         id.innerHTML = "&#xE72E;";
         select.style.pointerEvents = "none";
         select0.style.pointerEvents = "none";
@@ -121,9 +122,8 @@ export default {
           ) {
             document.getElementById("menu-content").classList.remove("show");
           }
-          let { remote } = require("electron");
 
-          remote.getCurrentWindow().setMaximumSize(300, 325);
+          ipcRenderer.invoke("setMaximumSize", 300, 325);
           if (select.style.pointerEvents == "auto") {
             document.getElementById("color").style.height = "40px";
             document.getElementById("locks").style.marginLeft = "0";
@@ -132,7 +132,7 @@ export default {
             document.getElementById("minimize").style.display = "flex";
             document.getElementById("close").style.display = "flex";
             document.getElementById("menu").style.display = "flex";
-            remote.getCurrentWindow().setMaximumSize(100000, 100000);
+            ipcRenderer.invoke("setMaximumSize", 100000, 100000);
             clearInterval(clearint);
           }
         }, 0.001);

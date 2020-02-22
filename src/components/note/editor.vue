@@ -182,9 +182,9 @@ export default {
         } else {
           lock = "no";
         }
-        let { remote } = require("electron");
         fs.readFile("data/notes/" + obj.toString(), (e, d) => {
           if (e || JSON.parse(d).deleted == "no") {
+            let { ipcRenderer } = require("electron");
             if (
               document.querySelector(".ql-snow .ql-editor").innerHTML !=
               "<p><br></p>"
@@ -202,12 +202,12 @@ export default {
                   locked: lock
                 }),
                 e => {
-                  remote.getCurrentWindow().destroy();
+                  ipcRenderer.invoke("destroy");
                 }
               );
             } else {
               fs.unlink("data/notes/" + obj.toString(), e => {});
-              remote.getCurrentWindow().destroy();
+              ipcRenderer.invoke("destroy");
             }
           }
         });
@@ -222,8 +222,8 @@ export default {
                   if (e) {
                     console.log(e);
                   }
-                  let { remote } = require("electron");
-                  remote.getCurrentWindow().destroy();
+                  let { ipcRenderer } = require("electron");
+                  ipcRenderer.invoke("destroy");
                 });
               }
             } catch {}

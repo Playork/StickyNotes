@@ -164,8 +164,7 @@ export default {
     ipcRenderer.on("closeall", () => {
       fs.writeFile("data/closed", JSON.stringify({ closed: "yes" }), e => {});
       window.setTimeout(() => {
-        let { remote } = require("electron");
-        remote.getCurrentWindow().destroy();
+        ipcRenderer.invoke("destroy");
       }, 200);
     });
 
@@ -445,8 +444,7 @@ export default {
         });
         fs.writeFile("data/closed", JSON.stringify({ closed: "yes" }), e => {});
         window.setTimeout(() => {
-          let { remote } = require("electron");
-          remote.getCurrentWindow().close();
+          ipcRenderer.invoke("close");
         }, 100);
       } else {
         let swal = require("sweetalert");
@@ -478,8 +476,7 @@ export default {
 
     // Minimize Window
     minimize() {
-      let { remote } = require("electron");
-      remote.getCurrentWindow().minimize();
+      ipcRenderer.invoke("minimize");
     }
   }
 };

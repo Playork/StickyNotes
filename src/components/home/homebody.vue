@@ -119,27 +119,11 @@ export default {
   mounted() {
     if (navigator.onLine) {
       let { Dropbox } = require("dropbox");
-      let { remote } = require("electron");
       let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
-      let authUrl = dbx.getAuthenticationUrl("app://./auth.html");
+      let url = dbx.getAuthenticationUrl("app://./auth.html");
       document.getElementById("drb").addEventListener("click", () => {
-        const win = new remote.BrowserWindow({
-          width: 800,
-          height: 600,
-          icon: "public/favicon.png",
-          backgroundColor: "#202020",
-          title: "Playork Sticky Notes",
-          resizable: false,
-          show: false,
-          webPreferences: {
-            nodeIntegration: false
-          }
-        });
-        win.loadURL(authUrl);
-        win.on("ready-to-show", () => {
-          win.show();
-          win.focus();
-        });
+        let { ipcRenderer } = require("electron");
+        ipcRenderer.invoke("syncwindow", url);
       });
     }
 

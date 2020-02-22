@@ -79,14 +79,12 @@ export default {
                 }).then(willDelete => {
                   if (willDelete) {
                     fs.unlink("data/notes/" + noteid, e => {});
-                    let { remote } = require("electron");
-                    remote.getCurrentWindow().destroy();
+                    ipcRenderer.invoke("destroy");
                   }
                 });
               } else {
                 fs.unlink("data/notes/" + noteid, e => {});
-                let { remote } = require("electron");
-                remote.getCurrentWindow().destroy();
+                ipcRenderer.invoke("destroy");
               }
             }
           });
@@ -96,8 +94,7 @@ export default {
 
     // Close For Main Process Close
     ipcRenderer.on("closenote", () => {
-      let { remote } = require("electron");
-      remote.getCurrentWindow().close();
+      ipcRenderer.invoke("close");
     });
 
     //theme change
@@ -150,8 +147,7 @@ export default {
         if (e) {
         } else {
           if (JSON.parse(d).closed == "yes") {
-            let { remote } = require("electron");
-            remote.getCurrentWindow().close();
+            ipcRenderer.invoke("close");
           }
         }
       });
@@ -207,8 +203,7 @@ export default {
   methods: {
     // Close Function
     close() {
-      let { remote } = require("electron");
-      remote.getCurrentWindow().close();
+      ipcRenderer.invoke("close");
     },
 
     // Start New Note
@@ -235,8 +230,7 @@ export default {
 
     // Minimize Function
     minimize() {
-      let { remote } = require("electron");
-      remote.getCurrentWindow().minimize();
+      ipcRenderer.invoke("minimize");
     },
 
     // Focus Blur Event Function

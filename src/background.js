@@ -25,7 +25,6 @@ let { setTimeout } = require("timers");
 let { app, BrowserWindow, ipcMain, Menu, MenuItem } = require("electron");
 let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
 
-app.allowRendererProcessReuse = false;
 const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
 function createWindow() {
@@ -70,6 +69,10 @@ app.on("activate", () => {
       createWindow();
     }, 500);
   }
+});
+
+app.on("ready", async () => {
+  createWindow();
 });
 
 app.commandLine.appendSwitch("disable-web-security");
@@ -158,9 +161,41 @@ ipcMain.on("create-new-instance", () => {
   createNote();
 });
 
-app.on("ready", async () => {
-  createWindow();
-});
+ipcMain.handle("close", event => {
+  BrowserWindow.getFocusedWindow().close()
+})
+
+ipcMain.handle("minimize", event => {
+  BrowserWindow.getFocusedWindow().minimize()
+})
+
+ipcMain.handle("destroy", event => {
+  BrowserWindow.getFocusedWindow().destroy()
+})
+
+ipcMain.handle("setMaximumSize", (event, a, b) => {
+  BrowserWindow.getFocusedWindow().setMaximumSize(a, b)
+})
+
+ipcMain.handle("syncwindow", (e, url) => {
+  let win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    icon: "public/favicon.png",
+    backgroundColor: "#202020",
+    title: "Playork Sticky Notes",
+    resizable: false,
+    show: false,
+    webPreferences: {
+      nodeIntegration: false
+    }
+  });
+  win.loadURL(url);
+  win.on("ready-to-show", () => {
+    win.show();
+    win.focus();
+  });
+})
 
 ipcMain.handle("importnotes", async event => {
   let os = require("os");
