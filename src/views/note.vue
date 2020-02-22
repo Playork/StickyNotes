@@ -184,19 +184,6 @@ export default {
         document.getElementById("color").style.visibility = "visible";
       }
     });
-    // document
-    //   .querySelector(".ql-snow .ql-editor")
-    //   .addEventListener("input", () => {
-    //     let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
-    //     let regexnow = /((1[0-2]|0?[1-9])(:|\.)([0-5][0-9]) ?([AaPp][Mm]))/;
-    //     if (regexnow.test(text)) {
-    //       document.querySelector(
-    //         ".ql-snow .ql-editor"
-    //       ).innerHTML = text.replace(regexnow, x => {
-    //         return "<span id='alarm' style='color:blue;'>" + x + "</span>";
-    //       });
-    //     }
-    //   });
   },
 
   // Functions

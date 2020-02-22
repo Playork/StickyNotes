@@ -178,7 +178,7 @@ ipcMain.handle("setMaximumSize", (event, a, b) => {
 })
 
 ipcMain.handle("syncwindow", (e, url) => {
-  let win = new BrowserWindow({
+  let syncwindow = new BrowserWindow({
     width: 800,
     height: 600,
     icon: "public/favicon.png",
@@ -190,10 +190,10 @@ ipcMain.handle("syncwindow", (e, url) => {
       nodeIntegration: false
     }
   });
-  win.loadURL(url);
-  win.on("ready-to-show", () => {
-    win.show();
-    win.focus();
+  syncwindow.loadURL(url);
+  syncwindow.on("ready-to-show", () => {
+    syncwindow.show();
+    syncwindow.focus();
   });
 })
 
@@ -286,17 +286,3 @@ ipcMain.handle("video", async event => {
   });
   return path;
 });
-
-if (isDevelopment) {
-  if (process.platform === "win32") {
-    process.on("message", data => {
-      if (data === "graceful-exit") {
-        app.quit();
-      }
-    });
-  } else {
-    process.on("SIGTERM", () => {
-      app.quit();
-    });
-  }
-}

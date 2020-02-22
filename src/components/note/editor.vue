@@ -231,21 +231,6 @@ export default {
         });
       });
       quill.on("text-change", () => repeafunc());
-      // quill.on("text-change", () => {
-      //   let cont = document.querySelector(".ql-snow .ql-editor").innerHTML;
-      //   let index = cont.indexOf(
-      //     /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/
-      //   );
-      //   if (index >= 0) {
-      //     let highcontent =
-      //       cont.substring(0, index) +
-      //       "<a>" +
-      //       cont.substring(index, index + 8) +
-      //       "</a>" +
-      //       cont.substring(index + 8);
-      //     document.querySelector(".ql-snow .ql-editor").innerHTML = highcontent;
-      //   }
-      // });
       document
         .getElementById("color")
         .addEventListener("click", () => repeafunc());
