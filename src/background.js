@@ -25,6 +25,7 @@ let { setTimeout } = require("timers");
 let { app, BrowserWindow, ipcMain, Menu, MenuItem } = require("electron");
 let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
 
+app.allowRendererProcessReuse = false;
 let win;
 function createWindow() {
   win = new BrowserWindow({
@@ -56,9 +57,9 @@ function createWindow() {
     e.preventDefault();
     win.webContents.send("closeall", "closeit");
     setTimeout(() => {
-      win.destroy();
+      win.destroy()
       app.quit();
-    }, 150);
+    }, 500);
   });
 }
 

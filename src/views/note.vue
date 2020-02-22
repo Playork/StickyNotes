@@ -26,11 +26,7 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div id="note" v-on:click="showhide">
-    <titlebar
-      v-bind:close="close"
-      v-bind:note="note"
-      v-bind:minimize="minimize"
-    />
+    <titlebar v-bind:close="close" v-bind:note="note" v-bind:minimize="minimize" />
     <editor />
     <colors />
     <choosecolor />
@@ -60,12 +56,12 @@ export default {
   // Do On Start
   mounted() {
     // Delete Note
-    fs.readFile("data/id", (e, d) => {
+    fs.readFile(".data-sn/id", (e, d) => {
       if (e) {
       } else {
         let noteid = JSON.parse(d).ids;
         document.getElementById("deletenote").addEventListener("click", () => {
-          fs.readFile("data/id", (e, r) => {
+          fs.readFile(".data-sn/id", (e, r) => {
             if (e) {
             } else {
               if (JSON.parse(r).on == "yes") {
@@ -78,12 +74,12 @@ export default {
                   dangerMode: true
                 }).then(willDelete => {
                   if (willDelete) {
-                    fs.unlink("data/notes/" + noteid, e => {});
+                    fs.unlink(".data-sn/notes/" + noteid, e => {});
                     ipcRenderer.invoke("destroy");
                   }
                 });
               } else {
-                fs.unlink("data/notes/" + noteid, e => {});
+                fs.unlink(".data-sn/notes/" + noteid, e => {});
                 ipcRenderer.invoke("destroy");
               }
             }
@@ -98,8 +94,8 @@ export default {
     });
 
     //theme change
-    fs.watch("data/theme", (e, r) => {
-      fs.readFile("data/theme", (e, d) => {
+    fs.watch(".data-sn/theme", (e, r) => {
+      fs.readFile(".data-sn/theme", (e, d) => {
         let num = JSON.parse(d).on;
         if (num == 1) {
           let lith = document.createElement("style");
@@ -142,8 +138,8 @@ export default {
     });
 
     //closing home
-    fs.watch("data", (e, r) => {
-      fs.readFile("data/closed", (e, d) => {
+    fs.watch(".data-sn", (e, r) => {
+      fs.readFile(".data-sn/closed", (e, d) => {
         if (e) {
         } else {
           if (JSON.parse(d).closed == "yes") {
@@ -154,10 +150,10 @@ export default {
     });
 
     // Restore Saved Note
-    fs.readFile("data/id", (e, d) => {
+    fs.readFile(".data-sn/id", (e, d) => {
       if (e) {
       } else {
-        fs.readFile("data/notes/" + JSON.parse(d).ids, (e, r) => {
+        fs.readFile(".data-sn/notes/" + JSON.parse(d).ids, (e, r) => {
           if (e) {
             window.resizeTo(300, 325);
             document.querySelector(".ql-toolbar").style.backgroundColor =
@@ -177,7 +173,7 @@ export default {
         });
       }
     });
-    fs.readFile("data/color", (e, d) => {
+    fs.readFile(".data-sn/color", (e, d) => {
       if (JSON.parse(d).on == "no") {
         document.getElementById("color").style.visibility = "hidden";
       } else {
@@ -198,12 +194,12 @@ export default {
       let func = obj => {
         obj++;
         fs.writeFile(
-          "data/id",
+          ".data-sn/id",
           JSON.stringify({ ids: obj.toString() }),
           e => {}
         );
       };
-      fs.readFile("data/id", (e, d) => {
+      fs.readFile(".data-sn/id", (e, d) => {
         if (e) {
           let id = 1;
           func(id);

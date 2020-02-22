@@ -124,13 +124,34 @@ export default {
       document.getElementById("drb").addEventListener("click", () => {
         let { ipcRenderer } = require("electron");
         ipcRenderer.invoke("syncwindow", url);
+        let storeaccess = windows.setInterval(() => {
+          if (sessionStorage.getItem("access")) {
+            fs.writeFile(
+              ".data-sn/access",
+              localStorage.getItem("access"),
+              e => {}
+            );
+            fs.writeFile(
+              ".data-sn/sync",
+              JSON.stringify({ sync: "yes" }),
+              e => {}
+            );
+            clearInterval(storeaccess);
+          } else {
+            if (sessionStorage.getItem("closed")) {
+              sessionStorage.removeItem("closed");
+              clearInterval(storeaccess);
+            }
+          }
+        }, 1);
+        storeaccess;
       });
     }
 
-    fs.readFile("data/color", (e, d) => {
+    fs.readFile(".data-sn/color", (e, d) => {
       if (e) {
         document.getElementById("colorswitch").checked = true;
-        fs.writeFile("data/color", JSON.stringify({ on: "yes" }), e => {});
+        fs.writeFile(".data-sn/color", JSON.stringify({ on: "yes" }), e => {});
       } else {
         d = JSON.parse(d);
         if (d.on == "yes") {
@@ -140,10 +161,10 @@ export default {
         }
       }
     });
-    fs.readFile("data/warn", (e, d) => {
+    fs.readFile(".data-sn/warn", (e, d) => {
       if (e) {
         document.getElementById("warnswitch").checked = true;
-        fs.writeFile("data/warn", JSON.stringify({ on: "yes" }), e => {});
+        fs.writeFile(".data-sn/warn", JSON.stringify({ on: "yes" }), e => {});
       } else {
         d = JSON.parse(d);
         if (d.on == "yes") {
@@ -153,10 +174,10 @@ export default {
         }
       }
     });
-    fs.readFile("data/theme", (e, d) => {
+    fs.readFile(".data-sn/theme", (e, d) => {
       if (e) {
         document.getElementById("theme").selectedIndex = 0;
-        fs.writeFile("data/theme", JSON.stringify({ on: 0 }), e => {});
+        fs.writeFile(".data-sn/theme", JSON.stringify({ on: 0 }), e => {});
       } else {
         d = JSON.parse(d);
         let num = d.on;
@@ -214,22 +235,26 @@ export default {
       }
       document.getElementById("colorswitch").onclick = () => {
         if (document.getElementById("colorswitch").checked == true) {
-          fs.writeFile("data/color", JSON.stringify({ on: "yes" }), e => {});
+          fs.writeFile(
+            ".data-sn/color",
+            JSON.stringify({ on: "yes" }),
+            e => {}
+          );
         } else {
-          fs.writeFile("data/color", JSON.stringify({ on: "no" }), e => {});
+          fs.writeFile(".data-sn/color", JSON.stringify({ on: "no" }), e => {});
         }
       };
     });
     document.getElementById("warnswitch").onclick = () => {
       if (document.getElementById("warnswitch").checked == true) {
-        fs.writeFile("data/warn", JSON.stringify({ on: "yes" }), e => {});
+        fs.writeFile(".data-sn/warn", JSON.stringify({ on: "yes" }), e => {});
       } else {
-        fs.writeFile("data/warn", JSON.stringify({ on: "no" }), e => {});
+        fs.writeFile(".data-sn/warn", JSON.stringify({ on: "no" }), e => {});
       }
     };
     document.getElementById("theme").onchange = () => {
       let num = document.getElementById("theme").selectedIndex;
-      fs.writeFile("data/theme", JSON.stringify({ on: num }), e => {});
+      fs.writeFile(".data-sn/theme", JSON.stringify({ on: num }), e => {});
 
       if (num == 1) {
         let lith = document.createElement("style");
@@ -316,10 +341,10 @@ export default {
               for (let i = 0; i < d.length; i++) {
                 if (i % 2 == 0 && d[i] != "") {
                   let js = JSON.parse(d[i + 1]);
-                  fs.readFile("data/notes/" + d[i], (e, d) => {
+                  fs.readFile(".data-sn/notes/" + d[i], (e, d) => {
                     if (e) {
                       fs.writeFile(
-                        "data/notes/" + id[i],
+                        ".data-sn/notes/" + id[i],
                         JSON.stringify(js),
                         e => {}
                       );
@@ -329,7 +354,7 @@ export default {
                         let g = new Date().getTime();
                         let id = Number(d[i]) * g;
                         fs.writeFile(
-                          "data/notes/" + id.toString(),
+                          ".data-sn/notes/" + id.toString(),
                           JSON.stringify(js),
                           e => {}
                         );
@@ -351,11 +376,11 @@ export default {
         let notes = await ipcRenderer.invoke("exportnotes");
         if (notes.filePath != undefined) {
           let data = "";
-          fs.readdir("data/notes/", function(e, files) {
+          fs.readdir(".data-sn/notes/", function(e, files) {
             if (e) {
             } else {
               files.forEach(function(key, index) {
-                fs.readFile("data/notes/" + key, (e, d) => {
+                fs.readFile(".data-sn/notes/" + key, (e, d) => {
                   let value = JSON.parse(d);
                   data = data + key + "\n" + JSON.stringify(value) + "\n";
                 });
@@ -385,7 +410,7 @@ export default {
     // Delete All Note Function
     deleteall() {
       if (document.getElementById("notetext")) {
-        fs.readFile("data/warn", (e, d) => {
+        fs.readFile(".data-sn/warn", (e, d) => {
           d = JSON.parse(d);
           if (d.on == "yes") {
             let swal = require("sweetalert");
@@ -398,18 +423,18 @@ export default {
             }).then(willDelete => {
               if (willDelete) {
                 fs.writeFile(
-                  "data/closed",
+                  ".data-sn/closed",
                   JSON.stringify({ closed: "yes" }),
                   e => {
                     window.setTimeout(() => {
-                      fs.readdir("data/notes/", function(e, files) {
+                      fs.readdir(".data-sn/notes/", function(e, files) {
                         if (e) {
                         } else {
-                          fs.unlink("data/closed", e => {});
+                          fs.unlink(".data-sn/closed", e => {});
                           files.forEach(function(key, index) {
-                            fs.readFile("data/notes/" + key, (e, d) => {
+                            fs.readFile(".data-sn/notes/" + key, (e, d) => {
                               let value = JSON.parse(d);
-                              fs.unlink("data/notes/" + key, e => {});
+                              fs.unlink(".data-sn/notes/" + key, e => {});
                             });
                           });
                         }
@@ -421,18 +446,18 @@ export default {
             });
           } else {
             fs.writeFile(
-              "data/closed",
+              ".data-sn/closed",
               JSON.stringify({ closed: "yes" }),
               e => {
                 window.setTimeout(() => {
-                  fs.readdir("data/notes/", function(e, files) {
+                  fs.readdir(".data-sn/notes/", function(e, files) {
                     if (e) {
                     } else {
-                      fs.unlink("data/closed", e => {});
+                      fs.unlink(".data-sn/closed", e => {});
                       files.forEach(function(key, index) {
-                        fs.readFile("data/notes/" + key, (e, d) => {
+                        fs.readFile(".data-sn/notes/" + key, (e, d) => {
                           let value = JSON.parse(d);
-                          fs.unlink("data/notes/" + key, e => {});
+                          fs.unlink(".data-sn/notes/" + key, e => {});
                         });
                       });
                     }
@@ -450,7 +475,7 @@ export default {
 
     // Sign Out
     out() {
-      fs.unlink("data/access", e => {});
+      fs.unlink(".data-sn/access", e => {});
     },
 
     // Show About Page Function
