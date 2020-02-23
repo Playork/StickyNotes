@@ -3,6 +3,7 @@ node_modules
 /dist
 /data
 client_id
+notes.spst
 
 # local env files
 .env.local

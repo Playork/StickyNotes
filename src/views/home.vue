@@ -78,10 +78,10 @@ export default {
     });
 
     // Upload
-    window.setTimeout(() => {
+    window.setTimeout(async () => {
       let dbx = new Dropbox({ fetch, accessToken: accesst });
       let notes = "";
-      fs.readdir("data/notes/", function(e, files) {
+      await fs.promises.readdir("data/notes/", function(e, files) {
         if (e) {
         } else {
           files.forEach(function(key, index) {
@@ -185,7 +185,7 @@ export default {
 
     // Sync
     fs.watch("data/notes/", (e, r) => {
-      fs.readFile("data/sync", (e, p) => {
+      fs.readFile("data/sync", async (e, p) => {
         if (e || JSON.parse(p).sync == "no") {
           if (!e) {
             fs.unlink("data/sync", e => {
@@ -194,7 +194,7 @@ export default {
             });
           }
           let notes = "";
-          fs.readdir("data/notes/", function(e, files) {
+          await fs.promises.readdir("data/notes/", function(e, files) {
             if (e) {
             } else {
               files.forEach(function(key, index) {
@@ -222,8 +222,8 @@ export default {
     });
 
     // Load Saved Notes
-    window.setInterval(() => {
-      fs.readFile("data/sync", (e, r) => {
+    window.setInterval(async () => {
+      await fs.readFile("data/sync", (e, r) => {
         if (e) {
         } else {
           fs.writeFile("data/sync", JSON.stringify({ sync: "no" }), e => {});
@@ -254,9 +254,11 @@ export default {
                           fs.readFile("data/notes/" + d[i], (e, d) => {
                             if (e) {
                               fs.writeFile(
-                                "data/notes/" + id[i],
+                                "data/notes/" + d[i],
                                 JSON.stringify(js),
-                                e => {}
+                                e => {
+                                  console.log(e);
+                                }
                               );
                             } else {
                               d = JSON.parse(d);
