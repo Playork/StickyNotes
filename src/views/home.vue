@@ -184,7 +184,7 @@ export default {
     });
 
     // Sync
-    window.setInterval(() => {
+    fs.watch("data/notes/", (e, r) => {
       fs.readFile("data/sync", (e, p) => {
         if (e || JSON.parse(p).sync == "no") {
           if (!e) {
@@ -219,7 +219,7 @@ export default {
           });
         }
       });
-    }, 2000);
+    });
 
     // Load Saved Notes
     window.setInterval(() => {
