@@ -86,8 +86,7 @@ export default {
         } else {
           files.forEach(function(key, index) {
             fs.readFile("data/notes/" + key, (e, d) => {
-              let value = JSON.parse(d);
-              notes = notes + key + "\n" + JSON.stringify(value) + "\n";
+              notes = notes + key + "\n" + d + "\n";
             });
           });
         }
@@ -200,8 +199,7 @@ export default {
             } else {
               files.forEach(function(key, index) {
                 fs.readFile("data/notes/" + key, (e, d) => {
-                  let value = JSON.parse(d);
-                  notes = notes + key + "\n" + JSON.stringify(value) + "\n";
+                  notes = notes + key + "\n" + d + "\n";
                 });
               });
             }
