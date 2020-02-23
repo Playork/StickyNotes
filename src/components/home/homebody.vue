@@ -130,6 +130,7 @@ export default {
       let pair = hash[1].split("&");
       let val = pair[0].split("=");
       fs.writeFile("data/access", val[1], e => {});
+      fs.writeFile("data/sync", JSON.stringify({ sync: "yes" }), e => {});
     });
 
     fs.readFile("data/color", (e, d) => {

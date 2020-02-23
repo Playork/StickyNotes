@@ -186,8 +186,8 @@ export default {
 
     // Sync
     fs.watch("data/notes/", (e, r) => {
-      fs.readFile("data/sync", (e, d) => {
-        if (e || JSON.parse(d).sync == "no") {
+      fs.readFile("data/sync", (e, p) => {
+        if (e || JSON.parse(p).sync == "no") {
           if (!e) {
             fs.unlink("data/sync", e => {
               if (e) {
