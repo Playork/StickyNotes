@@ -78,87 +78,97 @@ export default {
     });
 
     // Upload
-    if (navigator.onLine) {
-      window.setTimeout(() => {
-        let dbx = new Dropbox({ fetch, accessToken: accesst });
-        dbx
-          .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
-          .then(() => {
+    window.setTimeout(() => {
+      let dbx = new Dropbox({ fetch, accessToken: accesst });
+      let notes = "";
+      fs.readdir("data/notes/", function(e, files) {
+        if (e) {
+        } else {
+          files.forEach(function(key, index) {
+            fs.readFile("data/notes/" + key, (e, d) => {
+              let value = JSON.parse(d);
+              notes = notes + key + "\n" + JSON.stringify(value) + "\n";
+            });
+          });
+        }
+      });
+      dbx
+        .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
+        .then(() => {
+          dbx
+            .filesUpload({
+              path: "/Playork Sticky Notes/notes.spst",
+              contents: notes,
+              mode: "overwrite"
+            })
+            .catch(() => {});
+        })
+        .catch(e => {
+          if (e) {
             dbx
               .filesUpload({
                 path: "/Playork Sticky Notes/notes.spst",
-                contents: notes
+                contents: notes,
+                mode: "overwrite"
               })
               .catch(() => {});
-          })
-          .catch(e => {
-            if (e) {
-              dbx
-                .filesUpload({
-                  path: "/Playork Sticky Notes/notes.spst",
-                  contents: notes
-                })
-                .catch(() => {});
-            }
-          });
-      }, 4000);
-    }
+          }
+        });
+    }, 4000);
 
     // Sync Restore
-    if (navigator.onLine) {
-      let dbx = new Dropbox({ fetch, accessToken: accesst });
-      dbx
-        .filesGetTemporaryLink({ path: "/Playork Sticky Notes/notes.spst" })
-        .then(data => {
-          let https = require("https");
-          let file = fs.createWriteStream("notes.spst");
-          let request = https.get(data.link, function(response) {
-            response.pipe(file);
-            file.on("finish", function() {
-              file.close();
-            });
+    let dbx = new Dropbox({ fetch, accessToken: accesst });
+    dbx
+      .filesGetTemporaryLink({ path: "/Playork Sticky Notes/notes.spst" })
+      .then(data => {
+        let https = require("https");
+        let file = fs.createWriteStream("notes.spst");
+        let request = https.get(data.link, function(response) {
+          response.pipe(file);
+          file.on("finish", function() {
+            file.close();
           });
-          window.setTimeout(() => {
-            fs.readFile("./notes.spst", "binary", (e, d) => {
-              if (e) {
-                console.log(e);
-              } else {
-                if (d != "") {
-                  d = d.toString().split("\n");
-                  for (let i = 0; i < d.length; i++) {
-                    if (i % 2 == 0 && d[i] != "") {
-                      let js = JSON.parse(d[i + 1]);
-                      fs.readFile("data/notes/" + d[i], (e, d) => {
-                        if (e) {
+        });
+        window.setTimeout(() => {
+          fs.readFile("./notes.spst", "binary", (e, d) => {
+            if (e) {
+              console.log(e);
+            } else {
+              if (d != "") {
+                d = d.toString().split("\n");
+                for (let i = 0; i < d.length; i++) {
+                  if (i % 2 == 0 && d[i] != "") {
+                    let js = JSON.parse(d[i + 1]);
+                    fs.readFile("data/notes/" + d[i], (e, d) => {
+                      if (e) {
+                        fs.writeFile(
+                          "data/notes/" + id[i],
+                          JSON.stringify(js),
+                          e => {}
+                        );
+                      } else {
+                        d = JSON.parse(d);
+                        if (js.first != d.first || js.image != d.image) {
+                          let g = new Date().getTime();
+                          let id = Number(d[i]) * g;
                           fs.writeFile(
-                            "data/notes/" + id[i],
+                            "data/notes/" + id.toString(),
                             JSON.stringify(js),
                             e => {}
                           );
-                        } else {
-                          d = JSON.parse(d);
-                          if (js.first != d.first || js.image != d.image) {
-                            let g = new Date().getTime();
-                            let id = Number(d[i]) * g;
-                            fs.writeFile(
-                              "data/notes/" + id.toString(),
-                              JSON.stringify(js),
-                              e => {}
-                            );
-                          }
                         }
-                      });
-                    }
+                      }
+                    });
                   }
                 }
               }
-            });
-          }, 2000);
-        })
-        .catch(e => {
-          if (e) console.log(e);
-        });
-    }
+            }
+          });
+        }, 2000);
+      })
+      .catch(e => {
+        if (e) console.log(e);
+      });
 
     // close on app.quit()
     ipcRenderer.on("closeall", () => {
@@ -176,109 +186,105 @@ export default {
 
     // Sync
     fs.watch("data/notes/", (e, r) => {
-      if (navigator.onLine) {
-        fs.readFile("data/sync", (e, d) => {
-          if (e || JSON.parse(d).sync == "no") {
-            if (!e) {
-              fs.unlink("data/sync", e => {
-                if (e) {
-                }
-              });
-            }
-            let notes = "";
-            fs.readdir("data/notes/", function(e, files) {
+      fs.readFile("data/sync", (e, d) => {
+        if (e || JSON.parse(d).sync == "no") {
+          if (!e) {
+            fs.unlink("data/sync", e => {
               if (e) {
-              } else {
-                files.forEach(function(key, index) {
-                  fs.readFile("data/notes/" + key, (e, d) => {
-                    let value = JSON.parse(d);
-                    notes = notes + key + "\n" + JSON.stringify(value) + "\n";
-                  });
-                });
-              }
-            });
-            fs.readFile("data/access", (e, d) => {
-              if (e) {
-              } else {
-                let dbx = new Dropbox({ fetch, accessToken: accesst });
-                dbx
-                  .filesUpload({
-                    path: "/Playork Sticky Notes/notes.spst",
-                    contents: notes,
-                    mode: "overwrite"
-                  })
-                  .catch(() => {});
               }
             });
           }
-        });
-      }
+          let notes = "";
+          fs.readdir("data/notes/", function(e, files) {
+            if (e) {
+            } else {
+              files.forEach(function(key, index) {
+                fs.readFile("data/notes/" + key, (e, d) => {
+                  let value = JSON.parse(d);
+                  notes = notes + key + "\n" + JSON.stringify(value) + "\n";
+                });
+              });
+            }
+          });
+          fs.readFile("data/access", (e, d) => {
+            if (e) {
+            } else {
+              let dbx = new Dropbox({ fetch, accessToken: accesst });
+              dbx
+                .filesUpload({
+                  path: "/Playork Sticky Notes/notes.spst",
+                  contents: notes,
+                  mode: "overwrite"
+                })
+                .catch(() => {});
+            }
+          });
+        }
+      });
     });
 
     // Load Saved Notes
     window.setInterval(() => {
-      if (navigator.onLine) {
-        fs.readFile("data/sync", (e, d) => {
-          if (e) {
-          } else {
-            fs.writeFile("data/sync", JSON.stringify({ sync: "no" }), e => {});
-            let dbx = new Dropbox({ fetch, accessToken: accesst });
-            dbx
-              .filesGetTemporaryLink({
-                path: "/Playork Sticky Notes/notes.spst"
-              })
-              .then(data => {
-                let https = require("https");
-                let file = fs.createWriteStream("notes.spst");
-                let request = https.get(data.link, function(response) {
-                  response.pipe(file);
-                  file.on("finish", function() {
-                    file.close();
-                  });
+      fs.readFile("data/sync", (e, r) => {
+        if (e) {
+        } else {
+          fs.writeFile("data/sync", JSON.stringify({ sync: "no" }), e => {});
+          let dbx = new Dropbox({ fetch, accessToken: accesst });
+          dbx
+            .filesGetTemporaryLink({
+              path: "/Playork Sticky Notes/notes.spst"
+            })
+            .then(data => {
+              let https = require("https");
+              let file = fs.createWriteStream("notes.spst");
+              let request = https.get(data.link, function(response) {
+                response.pipe(file);
+                file.on("finish", function() {
+                  file.close();
                 });
-                window.setTimeout(() => {
-                  fs.readFile("./notes.spst", "binary", (e, d) => {
-                    if (e) {
-                      console.log(e);
-                    } else {
-                      if (d != "") {
-                        d = d.toString().split("\n");
-                        for (let i = 0; i < d.length; i++) {
-                          if (i % 2 == 0 && d[i] != "") {
-                            let js = JSON.parse(d[i + 1]);
-                            fs.readFile("data/notes/" + d[i], (e, d) => {
-                              if (e) {
+              });
+              window.setTimeout(() => {
+                fs.readFile("./notes.spst", "binary", (e, d) => {
+                  if (e) {
+                    console.log(e);
+                  } else {
+                    if (d != "") {
+                      d = d.toString().split("\n");
+                      for (let i = 0; i < d.length; i++) {
+                        if (i % 2 == 0 && d[i] != "") {
+                          let js = JSON.parse(d[i + 1]);
+                          fs.readFile("data/notes/" + d[i], (e, d) => {
+                            if (e) {
+                              fs.writeFile(
+                                "data/notes/" + id[i],
+                                JSON.stringify(js),
+                                e => {}
+                              );
+                            } else {
+                              d = JSON.parse(d);
+                              if (js.first != d.first) {
+                                let g = new Date().getTime();
+                                let id = Number(d[i]) * g;
                                 fs.writeFile(
-                                  "data/notes/" + id[i],
+                                  "data/notes/" + id.toString(),
                                   JSON.stringify(js),
                                   e => {}
                                 );
-                              } else {
-                                d = JSON.parse(d);
-                                if (js.first != d.first) {
-                                  let g = new Date().getTime();
-                                  let id = Number(d[i]) * g;
-                                  fs.writeFile(
-                                    "data/notes/" + id.toString(),
-                                    JSON.stringify(js),
-                                    e => {}
-                                  );
-                                }
                               }
-                            });
-                          }
+                            }
+                          });
                         }
                       }
                     }
-                  });
-                }, 2000);
-              })
-              .catch(e => {
-                if (e) console.log(e);
-              });
-          }
-        });
-      }
+                  }
+                });
+              }, 2000);
+            })
+            .catch(e => {
+              if (e) console.log(e);
+            });
+        }
+      });
       fs.readFile("data/access", (e, d) => {
         if (e) {
           document.getElementById("sign").innerHTML =
