@@ -1,7 +1,7 @@
 <!--
 MIT License
 
-Copyright (c) 2019 Playork
+Copyright (c) 2020 Playork
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -73,16 +73,6 @@ SOFTWARE.
               <input type="checkbox" id="colorswitch" checked="checked" />
               <span class="checkmark"></span>
             </label>
-            <p>Text Suggestions</p>
-            <label class="container">
-              <input type="checkbox" id="textswitch" checked="checked" />
-              <span class="checkmark"></span>
-            </label>
-            <p>Emoji Selector</p>
-            <label class="container">
-              <input type="checkbox" id="emojiswitch" checked="checked" />
-              <span class="checkmark"></span>
-            </label>
             <p>Warn Before Delete</p>
             <label class="container">
               <input type="checkbox" id="warnswitch" checked="checked" />
@@ -121,90 +111,77 @@ SOFTWARE.
 <!-- Javascript -->
 <script>
 // Import Required Packages
-import store from "store";
-import swal from "sweetalert";
 import fs from "fs";
-import { setTimeout, setInterval } from "timers";
-import { Dropbox } from "dropbox";
-import { remote, ipcRenderer, shell } from "electron";
-import os from "os";
+import { ipcRenderer } from "electron";
 
 // Vue Class
 export default {
   // Do On Start
   mounted() {
+    //TODO: Backup, will be removed in next version
+    if (localStorage.getItem("access")) {
+      fs.writeFile("data/access", localStorage.getItem("access"), e => {});
+      fs.writeFile(
+        "data/sync",
+        JSON.stringify(localStorage.getItem("sync")),
+        e => {}
+      );
+    }
+
+    let { Dropbox } = require("dropbox");
     let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
-    let authUrl = dbx.getAuthenticationUrl("app://./auth.html");
+    let url = dbx.getAuthenticationUrl("app://./auth.html");
     document.getElementById("drb").addEventListener("click", () => {
-      const win = new remote.BrowserWindow({
-        width: 800,
-        height: 600,
-        icon: "public/favicon.ico",
-        backgroundColor: "#202020",
-        title: "Playork Sticky Notes",
-        resizable: false,
-        show: false,
-        webPreferences: {
-          nodeIntegration: false
-        }
-      });
-      win.loadURL(authUrl);
-      win.on("ready-to-show", () => {
-        win.show();
-        win.focus();
-      });
+      let { ipcRenderer } = require("electron");
+      ipcRenderer.invoke("syncwindow", url);
     });
-    if (store.get("color") == undefined) {
-      document.getElementById("colorswitch").checked = true;
-      store.set("color", { on: "yes" });
-    } else {
-      if (store.get("color").on == "yes") {
+    ipcRenderer.on("closedsync", (e, u) => {
+      let hash = u.split("#");
+      let pair = hash[1].split("&");
+      let val = pair[0].split("=");
+      fs.writeFile("data/access", val[1], e => {});
+      fs.writeFile("data/sync", JSON.stringify({ sync: "yes" }), e => {});
+    });
+
+    fs.readFile("data/color", (e, d) => {
+      if (e) {
         document.getElementById("colorswitch").checked = true;
+        fs.writeFile("data/color", JSON.stringify({ on: "yes" }), e => {});
       } else {
-        document.getElementById("colorswitch").checked = false;
+        d = JSON.parse(d);
+        if (d.on == "yes") {
+          document.getElementById("colorswitch").checked = true;
+        } else {
+          document.getElementById("colorswitch").checked = false;
+        }
       }
-    }
-    if (store.get("text") == undefined) {
-      document.getElementById("textswitch").checked = true;
-      store.set("text", { on: "yes" });
-    } else {
-      if (store.get("text").on == "yes") {
-        document.getElementById("textswitch").checked = true;
-      } else {
-        document.getElementById("textswitch").checked = false;
-      }
-    }
-    if (store.get("emoji") == undefined) {
-      document.getElementById("emojiswitch").checked = true;
-      store.set("emoji", { on: "yes" });
-    } else {
-      if (store.get("emoji").on == "yes") {
-        document.getElementById("emojiswitch").checked = true;
-      } else {
-        document.getElementById("emojiswitch").checked = false;
-      }
-    }
-    if (store.get("warn") == undefined) {
-      document.getElementById("warnswitch").checked = true;
-      store.set("warn", { on: "yes" });
-    } else {
-      if (store.get("warn").on == "yes") {
+    });
+    fs.readFile("data/warn", (e, d) => {
+      if (e) {
         document.getElementById("warnswitch").checked = true;
+        fs.writeFile("data/warn", JSON.stringify({ on: "yes" }), e => {});
       } else {
-        document.getElementById("warnswitch").checked = false;
+        d = JSON.parse(d);
+        if (d.on == "yes") {
+          document.getElementById("warnswitch").checked = true;
+        } else {
+          document.getElementById("warnswitch").checked = false;
+        }
       }
-    }
-    if (store.get("theme") == undefined) {
-      document.getElementById("theme").selectedIndex = 0;
-      store.set("theme", { on: 0 });
-    } else {
-      let num = store.get("theme").on;
-      document.getElementById("theme").selectedIndex = num;
-      if (num == 1) {
-        let lith = document.createElement("style");
-        lith.type = "text/css";
-        lith.id = "lighttheme";
-        lith.innerText = `
+    });
+    fs.readFile("data/theme", (e, d) => {
+      if (e) {
+        document.getElementById("theme").selectedIndex = 0;
+        fs.writeFile("data/theme", JSON.stringify({ on: 0 }), e => {});
+      } else {
+        d = JSON.parse(d);
+        let num = d.on;
+        document.getElementById("theme").selectedIndex = num;
+        if (num == 1) {
+          let lith = document.createElement("style");
+          lith.type = "text/css";
+          lith.id = "lighttheme";
+          lith.innerText = `
   #home {
     background: #ffffffee;
   }
@@ -248,40 +225,28 @@ export default {
   #window-title2 span:hover {
     color: #000 !important;
   }`;
-        document.head.appendChild(lith);
+          document.head.appendChild(lith);
+        }
       }
-    }
-    document.getElementById("colorswitch").onclick = () => {
-      if (document.getElementById("colorswitch").checked == true) {
-        store.set("color", { on: "yes" });
-      } else {
-        store.set("color", { on: "no" });
-      }
-    };
-    document.getElementById("textswitch").onclick = () => {
-      if (document.getElementById("textswitch").checked == true) {
-        store.set("text", { on: "yes" });
-      } else {
-        store.set("text", { on: "no" });
-      }
-    };
-    document.getElementById("emojiswitch").onclick = () => {
-      if (document.getElementById("emojiswitch").checked == true) {
-        store.set("emoji", { on: "yes" });
-      } else {
-        store.set("emoji", { on: "no" });
-      }
-    };
+      document.getElementById("colorswitch").onclick = () => {
+        if (document.getElementById("colorswitch").checked == true) {
+          fs.writeFile("data/color", JSON.stringify({ on: "yes" }), e => {});
+        } else {
+          fs.writeFile("data/color", JSON.stringify({ on: "no" }), e => {});
+        }
+      };
+    });
     document.getElementById("warnswitch").onclick = () => {
       if (document.getElementById("warnswitch").checked == true) {
-        store.set("warn", { on: "yes" });
+        fs.writeFile("data/warn", JSON.stringify({ on: "yes" }), e => {});
       } else {
-        store.set("warn", { on: "no" });
+        fs.writeFile("data/warn", JSON.stringify({ on: "no" }), e => {});
       }
     };
     document.getElementById("theme").onchange = () => {
       let num = document.getElementById("theme").selectedIndex;
-      store.set("theme", { on: num });
+      fs.writeFile("data/theme", JSON.stringify({ on: num }), e => {});
+
       if (num == 1) {
         let lith = document.createElement("style");
         lith.type = "text/css";
@@ -340,23 +305,6 @@ export default {
     background: #ffffffee !important;
     color: #000 !important;
   }
-  .emoji-mart {
-    background: #ffffffee !important;
-  }
-  .emoji-mart-category-label span {
-    background: #fff !important;
-  }
-  .emoji-mart * {
-    color: #000 !important;
-  }
-  .emoji-mart-search input {
-    color: #fff !important;
-    background: #000;
-  }
-  #hideemoji {
-    color: #000 !important;
-    background: #ffffffee !important;
-  }
   #window-title2 span:hover {
     color: #000 !important;
   }`;
@@ -370,93 +318,81 @@ export default {
   // Functions
   methods: {
     // Import Notes
-    importnotes() {
-      remote.dialog
-        .showOpenDialog({
-          filters: [
-            {
-              name: "Notes(.spsd)",
-              extensions: ["spsd"]
-            }
-          ],
-          defaultPath: os.homedir() + "/note.spsd"
-        })
-        .then(notes => {
-          if (notes.filePaths[0] != undefined) {
-            fs.readFile(notes.filePaths[0], (e, d) => {
-              if (e) {
-                swal("Not Supported");
-              } else {
-                if (d != "") {
-                  d = d.toString().split("\n");
-                  for (let i = 0; i < d.length; i++) {
-                    if (i % 2 == 0 && d[i] != "") {
-                      let js = JSON.parse(d[i + 1]);
-                      if (store.get(d[i]) == undefined) {
-                        store.set(d[i], js);
-                      } else {
-                        if (
-                          js.first != store.get(d[i]).first ||
-                          js.image != store.get(d[i]).image
-                        ) {
-                          let g = new Date().getTime();
-                          let id = Number(d[i]) * g;
-                          store.set(id.toString(), js);
-                        }
+    async importnotes() {
+      let { ipcRenderer } = require("electron");
+      let notes = await ipcRenderer.invoke("importnotes");
+      if (notes.filePaths[0]) {
+        fs.readFile(notes.filePaths[0], (e, d) => {
+          if (e) {
+            let swal = require("sweetalert");
+            swal("Not Supported");
+          } else {
+            if (d != "") {
+              d = d.toString().split("\n");
+              for (let i = 0; i < d.length; i++) {
+                if (i % 2 == 0 && d[i] != "") {
+                  let js = JSON.parse(d[i + 1]);
+                  fs.readFile("data/notes/" + d[i], (e, d) => {
+                    if (e) {
+                      fs.writeFile(
+                        "data/notes/" + id[i],
+                        JSON.stringify(js),
+                        e => {}
+                      );
+                    } else {
+                      d = JSON.parse(d);
+                      if (js.first != d.first || js.image != d.image) {
+                        let g = new Date().getTime();
+                        let id = Number(d[i]) * g;
+                        fs.writeFile(
+                          "data/notes/" + id.toString(),
+                          JSON.stringify(js),
+                          e => {}
+                        );
                       }
                     }
-                  }
+                  });
                 }
               }
-            });
+            }
           }
         });
+      }
     },
 
     // Export Notes
-    exportnotes() {
-      remote.dialog
-        .showSaveDialog({
-          filters: [
-            {
-              name: "Notes(.spsd)",
-              extensions: ["spsd"]
+    async exportnotes() {
+      if (document.getElementById("notetext")) {
+        let { ipcRenderer } = require("electron");
+        let notes = await ipcRenderer.invoke("exportnotes");
+        if (notes.filePath != undefined) {
+          let data = "";
+          fs.readdir("data/notes/", function(e, files) {
+            if (e) {
+            } else {
+              files.forEach(function(key, index) {
+                fs.readFile("data/notes/" + key, (e, d) => {
+                  let value = JSON.parse(d);
+                  data = data + key + "\n" + JSON.stringify(value) + "\n";
+                });
+              });
             }
-          ],
-          defaultPath: os.homedir() + "/notes.spsd"
-        })
-        .then(notes => {
-          if (notes.filePath != undefined) {
-            let data = "";
-            store.each((value, key) => {
-              if (
-                key != "id" &&
-                key != "loglevel:webpack-dev-server" &&
-                key != "closed" &&
-                key != "emoji-mart.frequently" &&
-                key != "emoji-mart.last" &&
-                key != "access" &&
-                key != "text" &&
-                key != "warn" &&
-                key != "color" &&
-                key != "emoji" &&
-                key != "theme" &&
-                key != "default"
-              ) {
-                data = data + key + "\n" + JSON.stringify(value) + "\n";
-              }
-            });
-            fs.writeFile(notes.filePath, data, e => {
-              if (e) {
-                swal("Not Supported");
-              }
-            });
-          }
-        });
+          });
+          fs.writeFile(notes.filePath, data, e => {
+            if (e) {
+              swal("Not Supported");
+            }
+          });
+        }
+      } else {
+        let swal = require("sweetalert");
+        swal("Nothing To Export");
+      }
     },
 
     // Report Bug
     report() {
+      let { shell } = require("electron");
       shell.openExternal(
         "mailto:playork@outlook.com?subject=Sticky%20Notes%20Bug"
       );
@@ -465,59 +401,72 @@ export default {
     // Delete All Note Function
     deleteall() {
       if (document.getElementById("notetext")) {
-        if (store.get("warn").on == "yes") {
-          swal({
-            title: "Are you sure?",
-            text: "Want To Delete All Notes!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true
-          }).then(willDelete => {
-            if (willDelete) {
-              store.set("closed", { closed: "yes" });
-              window.setTimeout(() => {
-                store.each((value, key) => {
-                  if (
-                    key != "access" &&
-                    key != "text" &&
-                    key != "warn" &&
-                    key != "color" &&
-                    key != "emoji" &&
-                    key != "theme" &&
-                    key != "default"
-                  ) {
-                    store.remove(key);
+        fs.readFile("data/warn", (e, d) => {
+          d = JSON.parse(d);
+          if (d.on == "yes") {
+            let swal = require("sweetalert");
+            swal({
+              title: "Are you sure?",
+              text: "Want To Delete All Notes!",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true
+            }).then(willDelete => {
+              if (willDelete) {
+                fs.writeFile(
+                  "data/closed",
+                  JSON.stringify({ closed: "yes" }),
+                  e => {
+                    window.setTimeout(() => {
+                      fs.readdir("data/notes/", function(e, files) {
+                        if (e) {
+                        } else {
+                          fs.unlink("data/closed", e => {});
+                          files.forEach(function(key, index) {
+                            fs.readFile("data/notes/" + key, (e, d) => {
+                              let value = JSON.parse(d);
+                              fs.unlink("data/notes/" + key, e => {});
+                            });
+                          });
+                        }
+                      });
+                    }, 800);
                   }
-                });
-              }, 800);
-            }
-          });
-        } else {
-          store.set("closed", { closed: "yes" });
-          window.setTimeout(() => {
-            store.each((value, key) => {
-              if (
-                key != "access" &&
-                key != "text" &&
-                key != "warn" &&
-                key != "color" &&
-                key != "emoji" &&
-                key != "theme" &&
-                key != "default"
-              ) {
-                store.remove(key);
+                );
               }
             });
-          }, 800);
-        }
+          } else {
+            fs.writeFile(
+              "data/closed",
+              JSON.stringify({ closed: "yes" }),
+              e => {
+                window.setTimeout(() => {
+                  fs.readdir("data/notes/", function(e, files) {
+                    if (e) {
+                    } else {
+                      fs.unlink("data/closed", e => {});
+                      files.forEach(function(key, index) {
+                        fs.readFile("data/notes/" + key, (e, d) => {
+                          let value = JSON.parse(d);
+                          fs.unlink("data/notes/" + key, e => {});
+                        });
+                      });
+                    }
+                  });
+                }, 800);
+              }
+            );
+          }
+        });
       } else {
+        let swal = require("sweetalert");
         swal("Nothing To Delete");
       }
     },
 
     // Sign Out
     out() {
-      store.remove("access");
+      fs.unlink("data/access", e => {});
     },
 
     // Show About Page Function
@@ -532,7 +481,10 @@ export default {
       let id = document.getElementById("sync");
       id.style.display = "block";
       document.getElementById("home").style.overflowY = "hidden";
-      if (!navigator.onLine) swal("Your Device Is Offline");
+      if (!navigator.onLine) {
+        let swal = require("sweetalert");
+        swal("Your Device Is Offline");
+      }
     },
 
     // Show Sync Page Function

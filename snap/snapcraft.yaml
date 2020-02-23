@@ -6,17 +6,14 @@ description: |
   Automatically Save Notes. 
   Sync Your Note With Dropbox Account(Use This Account To Start Your Sticky Notes Where You Left Off). 
   Choose Background And Title Bar Color You Like. 
-  Editing Options Like Font,Bold,Size,Math Formula,Link,Italic,List,Align.etc. 
-  Emoji Selector. 
+  Editing Options Like Font,Bold,Size,Italic,List,Align.etc. 
   Add Images To Note From Local Drive. 
   Add Audio To Note From Local Drive. 
   Add Video To Note From Local Drive. 
   Lock The Note. 
-  Text Suggestions. 
   Import Note From A File. 
-  Export Note To A File. 
-  Svae Note. 
-  Touch Mode For Touch Or Pen Devices(Support Many Eding And Import,Export And Save Options).
+  Export Note To A File.
+  Undo,Redo Options.
 grade: stable
 confinement: strict
 parts:

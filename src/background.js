@@ -1,6 +1,6 @@
 /* MIT License
 
-Copyright (c) 2019 Playork
+Copyright (c) 2020 Playork
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,36 +21,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 "use strict";
-
-let { app, BrowserWindow, ipcMain } = require("electron");
-let {
-  createProtocol,
-  installVueDevtools
-} = require("vue-cli-plugin-electron-builder/lib");
-let AutoLaunch = require("auto-launch");
 let { setTimeout } = require("timers");
+let { app, BrowserWindow, ipcMain, Menu, MenuItem } = require("electron");
+let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
 
-require("electron-context-menu")({
-  prepend: () => [
-    {
-      label: "v0.4.0"
-    }
-  ],
-  showInspectElement: false
-});
-
-let launchonstart = new AutoLaunch({
-  name: "StickyNotes"
-});
-launchonstart.enable();
-
-const isDevelopment = process.env.NODE_ENV !== "production";
 let win;
 function createWindow() {
   win = new BrowserWindow({
     width: 350,
     height: 600,
-    icon: "public/favicon.ico",
+    icon: "public/favicon.png",
     transparent: true,
     title: "Playork Sticky Notes",
     frame: false,
@@ -76,11 +56,15 @@ function createWindow() {
     e.preventDefault();
     win.webContents.send("closeall", "closeit");
     setTimeout(() => {
-      win.destroy();
+      win.destroy()
       app.quit();
-    }, 150);
+    }, 500);
   });
 }
+
+app.on("ready", async () => {
+  createWindow();
+});
 
 app.commandLine.appendSwitch("disable-web-security");
 let winnote;
@@ -88,11 +72,12 @@ function createNote() {
   winnote = new BrowserWindow({
     width: 300,
     height: 325,
-    icon: "public/favicon.ico",
+    icon: "public/favicon.png",
     transparent: true,
     title: "Playork Sticky Notes",
     frame: false,
     show: false,
+    spellcheck: true,
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true
@@ -113,39 +98,185 @@ function createNote() {
   winnote.on("close", () => {
     win.webContents.send("closenote", "closeit");
   });
+  winnote.webContents.session.setSpellCheckerLanguages["en-US"];
+
+  winnote.webContents.on(
+    "context-menu",
+    (e, p) => {
+      e.preventDefault();
+      let menu = new Menu();
+      if (p.misspelledWord) {
+        p.dictionarySuggestions.forEach(d => {
+          menu.append(
+            new MenuItem({
+              label: d,
+              click: () => {
+                winnote.webContents.replaceMisspelling(d);
+              }
+            })
+          );
+        });
+        menu.append(new MenuItem({ type: "separator" }));
+        menu.append(
+          new MenuItem({
+            label: "Add Word To Dictionary",
+            click: () => {
+              winnote.webContents.session.addWordToSpellCheckerDictionary(
+                p.misspelledWord
+              );
+            }
+          })
+        );
+      }
+      if (p.editFlags.canCut || p.editFlags.canCopy || p.editFlags.canPaste) {
+        if (p.misspelledWord) {
+          menu.append(new MenuItem({ type: "separator" }));
+        }
+        if (p.editFlags.canCut) {
+          menu.append(new MenuItem({ role: "cut" }));
+        }
+        if (p.editFlags.canCopy) {
+          menu.append(new MenuItem({ role: "copy" }));
+        }
+        if (p.editFlags.canPaste) {
+          menu.append(new MenuItem({ role: "paste" }));
+        }
+      }
+      menu.popup(winnote, p.x, p.y);
+    },
+    false
+  );
 }
 
 ipcMain.on("create-new-instance", () => {
   createNote();
 });
 
-app.on("ready", async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
-    await installVueDevtools();
-  }
-  setTimeout(() => {
-    createWindow();
-  }, 500);
-});
+ipcMain.handle("close", event => {
+  BrowserWindow.getFocusedWindow().close()
+})
 
-app.on("activate", () => {
-  if (win === null) {
-    setTimeout(() => {
-      createWindow();
-    }, 500);
-  }
-});
+ipcMain.handle("minimize", event => {
+  BrowserWindow.getFocusedWindow().minimize()
+})
 
-if (isDevelopment) {
-  if (process.platform === "win32") {
-    process.on("message", data => {
-      if (data === "graceful-exit") {
-        app.quit();
+ipcMain.handle("destroy", event => {
+  BrowserWindow.getFocusedWindow().destroy()
+})
+
+ipcMain.handle("setMaximumSize", (event, a, b) => {
+  BrowserWindow.getFocusedWindow().setMaximumSize(a, b)
+})
+
+ipcMain.handle("syncwindow", (e, url) => {
+  let syncwindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    icon: "public/favicon.png",
+    backgroundColor: "#202020",
+    title: "Playork Sticky Notes",
+    resizable: false,
+    show: false,
+    webPreferences: {
+      nodeIntegration: false
+    }
+  });
+  syncwindow.loadURL(url);
+  syncwindow.on("close", () => {
+    win.webContents.send("closedsync", syncwindow.webContents.getURL());
+  })
+  syncwindow.on("ready-to-show", () => {
+    syncwindow.show();
+    syncwindow.focus();
+  });
+})
+
+ipcMain.handle("importnotes", async event => {
+  let os = require("os");
+  let { dialog } = require("electron");
+  let path = await dialog.showOpenDialog({
+    filters: [
+      {
+        name: "Notes(.spsd)",
+        extensions: ["spsd"]
       }
-    });
-  } else {
-    process.on("SIGTERM", () => {
-      app.quit();
-    });
-  }
-}
+    ],
+    defaultPath: os.homedir() + "/note.spsd"
+  });
+  return path;
+});
+
+ipcMain.handle("exportnotes", async event => {
+  let os = require("os");
+  let { dialog } = require("electron");
+  let path = await dialog.showSaveDialog({
+    filters: [
+      {
+        name: "Notes(.spsd)",
+        extensions: ["spsd"]
+      }
+    ],
+    defaultPath: os.homedir() + "/notes.spsd"
+  });
+  return path;
+});
+
+ipcMain.handle("importnote", async event => {
+  let os = require("os");
+  let { dialog } = require("electron");
+  let path = await dialog.showOpenDialog({
+    filters: [
+      {
+        name: "Note(.spst)",
+        extensions: ["spst"]
+      }
+    ],
+    defaultPath: os.homedir() + "/note.spst"
+  });
+  return path;
+});
+
+ipcMain.handle("exportnote", async event => {
+  let os = require("os");
+  let { dialog } = require("electron");
+  let path = await dialog.showSaveDialog({
+    filters: [
+      {
+        name: "Note(.spst)",
+        extensions: ["spst"]
+      }
+    ],
+    defaultPath: os.homedir() + "/note.spst"
+  });
+  return path;
+});
+
+ipcMain.handle("audio", async event => {
+  let os = require("os");
+  let { dialog } = require("electron");
+  let path = await dialog.showOpenDialog({
+    filters: [
+      {
+        name: "Audo Files(mp3,wav,ogg)",
+        extensions: ["mp3", "MP3", "wav", "WAV", "ogg", "OGG"]
+      }
+    ],
+    defaultPath: os.homedir()
+  });
+  return path;
+});
+
+ipcMain.handle("video", async event => {
+  let os = require("os");
+  let { dialog } = require("electron");
+  let path = await dialog.showOpenDialog({
+    filters: [
+      {
+        name: "Video Files(mp4,webm,ogg)",
+        extensions: ["mp4", "MP4", "webm", "WEBM", "WebM", "ogg", "OGG", "Ogg"]
+      }
+    ],
+    defaultPath: os.homedir()
+  });
+  return path;
+});

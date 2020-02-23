@@ -1,7 +1,7 @@
 <!--
 MIT License
 
-Copyright (c) 2019 Playork
+Copyright (c) 2020 Playork
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,12 @@ SOFTWARE.
       <button id="dark" class="buttons">
         <span id="seven" class="selected hide">&#xE73E;</span>
       </button>
-      <button id="colors" class="buttons" v-on:click="showthis" title="Choose Color">
+      <button
+        id="colors"
+        class="buttons"
+        v-on:click="showthis"
+        title="Choose Color"
+      >
         <span>&#xE710;</span>
       </button>
     </div>

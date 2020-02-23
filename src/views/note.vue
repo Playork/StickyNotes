@@ -1,7 +1,7 @@
 <!--
 MIT License
 
-Copyright (c) 2019 Playork
+Copyright (c) 2020 Playork
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -40,13 +40,12 @@ SOFTWARE.
 <!-- Javascript -->
 <script>
 // Import Required Packages
-import { remote, ipcRenderer } from "electron";
-import store from "store";
+import { ipcRenderer } from "electron";
+import fs from "fs";
 import editor from "../components/note/editor.vue";
 import titlebar from "../components/note/titlebar.vue";
 import colors from "../components/note/colors.vue";
 import choosecolor from "../components/note/choosecolor.vue";
-import swal from "sweetalert";
 
 // Vue Class
 export default {
@@ -61,40 +60,52 @@ export default {
   // Do On Start
   mounted() {
     // Delete Note
-    let noteid = store.get("id").ids;
-    document.getElementById("deletenote").addEventListener("click", () => {
-      if (store.get("warn").on == "yes") {
-        swal({
-          title: "Are you sure?",
-          text: "Want To Delete Your Note!",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true
-        }).then(willDelete => {
-          if (willDelete) {
-            store.remove(noteid);
-            remote.getCurrentWindow().destroy();
-          }
-        });
+    fs.readFile("data/id", (e, d) => {
+      if (e) {
       } else {
-        store.remove(noteid);
-        remote.getCurrentWindow().destroy();
+        let noteid = JSON.parse(d).ids;
+        document.getElementById("deletenote").addEventListener("click", () => {
+          fs.readFile("data/id", (e, r) => {
+            if (e) {
+            } else {
+              if (JSON.parse(r).on == "yes") {
+                let swal = require("sweetalert");
+                swal({
+                  title: "Are you sure?",
+                  text: "Want To Delete Your Note!",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true
+                }).then(willDelete => {
+                  if (willDelete) {
+                    fs.unlink("data/notes/" + noteid, e => {});
+                    ipcRenderer.invoke("destroy");
+                  }
+                });
+              } else {
+                fs.unlink("data/notes/" + noteid, e => {});
+                ipcRenderer.invoke("destroy");
+              }
+            }
+          });
+        });
       }
     });
 
     // Close For Main Process Close
     ipcRenderer.on("closenote", () => {
-      remote.getCurrentWindow().close();
+      ipcRenderer.invoke("close");
     });
 
-    // Close When Closing Home
-    window.setInterval(() => {
-      let num = store.get("theme").on;
-      if (num == 1) {
-        let lith = document.createElement("style");
-        lith.type = "text/css";
-        lith.id = "lighttheme";
-        lith.innerText = `
+    //theme change
+    fs.watch("data/theme", (e, r) => {
+      fs.readFile("data/theme", (e, d) => {
+        let num = JSON.parse(d).on;
+        if (num == 1) {
+          let lith = document.createElement("style");
+          lith.type = "text/css";
+          lith.id = "lighttheme";
+          lith.innerText = `
   #note {
     background: #ffffffee;
   }
@@ -118,120 +129,95 @@ export default {
     background: #ffffffee !important;
     color: #000 !important;
   }
-  .emoji-mart {
-    background: #ffffffee !important;
-  }
-  .emoji-mart-category-label span {
-    background: #fff !important;
-  }
-  .emoji-mart * {
-    color: #000 !important;
-  }
-  .emoji-mart-search input {
-    color: #fff !important;
-    background: #000;
-  }
-  #hideemoji {
-    color: #000 !important;
-    background: #ffffffee !important;
-  }
   #window-title2 span:hover {
     color: #000 !important;
-  }
-  .dropdown-menu,
-  .textcomplete-dropdown {
-    background: #aaaaaaaa;
-    border: #222222aa 4px solid;
   }`;
-        document.head.appendChild(lith);
-      } else {
-        try {
-          document.head.removeChild(document.getElementById("lighttheme"));
-        } catch {}
-      }
-      try {
-        if (store.get("closed").closed == "yes") {
-          remote.getCurrentWindow().close();
+          document.head.appendChild(lith);
+        } else {
+          try {
+            document.head.removeChild(document.getElementById("lighttheme"));
+          } catch {}
         }
-      } catch {}
-    }, 1);
+      });
+    });
+
+    //closing home
+    fs.watch("data", (e, r) => {
+      fs.readFile("data/closed", (e, d) => {
+        if (e) {
+        } else {
+          if (JSON.parse(d).closed == "yes") {
+            ipcRenderer.invoke("close");
+          }
+        }
+      });
+    });
 
     // Restore Saved Note
-    try {
-      let text = store.get(store.get("id").ids);
-      if (text.first == undefined) {
-        document.getElementById("mouch").click();
-        let canvas = document.getElementById("draw");
-        let ctx = canvas.getContext("2d");
-        let img = new Image();
-        img.src = text.image;
-        img.onload = function() {
-          window.setTimeout(() => {
-            ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
-          }, 50);
-        };
+    fs.readFile("data/id", (e, d) => {
+      if (e) {
       } else {
-        document.querySelector(".ql-snow .ql-editor").innerHTML = text.first;
+        fs.readFile("data/notes/" + JSON.parse(d).ids, (e, r) => {
+          if (e) {
+            window.resizeTo(300, 325);
+            document.querySelector(".ql-toolbar").style.backgroundColor =
+              "#FFF2AB";
+          } else {
+            let text = JSON.parse(r);
+            document.querySelector(".ql-snow .ql-editor").innerHTML =
+              text.first;
+            document.querySelector(".ql-toolbar").style.backgroundColor =
+              text.back;
+            window.resizeTo(Number(text.wid), Number(text.hei));
+            document.getElementById("lightYellow").style.backgroundColor =
+              text.back;
+            document.getElementById("titlebar").style.backgroundColor =
+              text.title;
+          }
+        });
       }
-      document.querySelector(".ql-toolbar").style.backgroundColor = text.back;
-      window.resizeTo(Number(text.wid), Number(text.hei));
-      document.getElementById("lightYellow").style.backgroundColor = text.back;
-      document.getElementById("titlebar").style.backgroundColor = text.title;
-    } catch {
-      window.resizeTo(300, 325);
-      document.querySelector(".ql-toolbar").style.backgroundColor = "#FFF2AB";
-    }
-    if (store.get("color").on == "no") {
-      document.getElementById("color").style.visibility = "hidden";
-    } else {
-      document.getElementById("color").style.visibility = "visible";
-    }
-    if (store.get("emoji").on == "no") {
-      document.getElementById("emoji").style.visibility = "hidden";
-    } else {
-      document.getElementById("emoji").style.visibility = "visible";
-    }
-    // document
-    //   .querySelector(".ql-snow .ql-editor")
-    //   .addEventListener("input", () => {
-    //     let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
-    //     let regexnow = /((1[0-2]|0?[1-9])(:|\.)([0-5][0-9]) ?([AaPp][Mm]))/;
-    //     if (regexnow.test(text)) {
-    //       document.querySelector(
-    //         ".ql-snow .ql-editor"
-    //       ).innerHTML = text.replace(regexnow, x => {
-    //         return "<span id='alarm' style='color:blue;'>" + x + "</span>";
-    //       });
-    //     }
-    //   });
+    });
+    fs.readFile("data/color", (e, d) => {
+      if (JSON.parse(d).on == "no") {
+        document.getElementById("color").style.visibility = "hidden";
+      } else {
+        document.getElementById("color").style.visibility = "visible";
+      }
+    });
   },
 
   // Functions
   methods: {
     // Close Function
     close() {
-      remote.getCurrentWindow().close();
+      ipcRenderer.invoke("close");
     },
 
     // Start New Note
     note() {
       let func = obj => {
         obj++;
-        store.set("id", { ids: obj.toString() });
+        fs.writeFile(
+          "data/id",
+          JSON.stringify({ ids: obj.toString() }),
+          e => {}
+        );
       };
-      try {
-        let id = Number(store.get("id").ids);
-        func(id);
-      } catch {
-        let id = 1;
-        func(id);
-      }
+      fs.readFile("data/id", (e, d) => {
+        if (e) {
+          let id = 1;
+          func(id);
+        } else {
+          let id = Number(JSON.parse(d).ids);
+          func(id);
+        }
+      });
       ipcRenderer.send("create-new-instance");
     },
 
     // Minimize Function
     minimize() {
-      remote.getCurrentWindow().minimize();
+      ipcRenderer.invoke("minimize");
     },
 
     // Focus Blur Event Function
@@ -253,9 +239,6 @@ export default {
           document.getElementById("minimize").style.display = "flex";
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
-          if (/Touch Mode/.test(document.getElementById("mouch").innerHTML)) {
-            document.getElementById("emoji").style.display = "block";
-          }
         },
         true
       );
@@ -276,9 +259,6 @@ export default {
           document.getElementById("minimize").style.display = "flex";
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
-          if (/Touch Mode/.test(document.getElementById("mouch").innerHTML)) {
-            document.getElementById("emoji").style.display = "block";
-          }
           if (!e.target.matches("#menus")) {
             let dropdowns = document.getElementById("menu-content");
             if (dropdowns.classList.contains("show")) {
@@ -299,7 +279,6 @@ export default {
           document.getElementById("minimize").style.display = "none";
           document.getElementById("close").style.display = "none";
           document.getElementById("menu").style.display = "none";
-          document.getElementById("emoji").style.display = "none";
         },
         true
       );
