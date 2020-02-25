@@ -259,10 +259,37 @@ export default {
       });
       quill.on("text-change", () => {
         // if (
+        //   /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/gm.test(
+        //     document.querySelector(".ql-snow .ql-editor").innerHTML
+        //   )
+        // ) {
+        //   document.querySelector(
+        //     ".ql-snow .ql-editor"
+        //   ).innerHTML = document
+        //     .querySelector(".ql-snow .ql-editor")
+        //     .innerHTML.replace(
+        //       /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/gm,
+        //       x => {
+        //         if (
+        //           new RegExp('link-quill">' + x).test(
+        //             document.querySelector(".ql-snow .ql-editor").innerHTML
+        //           ) ||
+        //           new RegExp(x + '" class').test(
+        //             document.querySelector(".ql-snow .ql-editor").innerHTML
+        //           )
+        //         ) {
+        //           return x;
+        //         } else {
+        //           return `<a href="mailto:${x}" class="link-quill">${x}</a>`;
+        //         }
+        //       }
+        //     );
+        // }
+        // if (
         //   /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim.test(
         //     document.querySelector(".ql-snow .ql-editor").innerHTML
         //   )
-        // )
+        // ) {
         //   document.querySelector(
         //     ".ql-snow .ql-editor"
         //   ).innerHTML = document
@@ -271,45 +298,20 @@ export default {
         //       /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim,
         //       x => {
         //         if (
-        //           !new RegExp("/^" + x + "<\/a>$/").test(
-        //             document.querySelector(".ql-snow .ql-editor")
-        //           ) &&
-        //           !new RegExp("/^" + x + '" target$/').test(
-        //             document.querySelector(".ql-snow .ql-editor")
+        //           new RegExp(x + "</a>").test(
+        //             document.querySelector(".ql-snow .ql-editor").innerHTML
+        //           ) ||
+        //           new RegExp(x + '" target').test(
+        //             document.querySelector(".ql-snow .ql-editor").innerHTML
         //           )
         //         ) {
-        //           return `<a href="${x}" target="_blank" class="link-quill">${x}</a>`;
-        //         } else {
         //           return x;
+        //         } else {
+        //           return `<a href="${x}" target="_blank" class="link-quill">${x}</a>`; rag
         //         }
         //       }
         //     );
-        // if (
-        //   /^([A-Za-z0-9_\-\.])+\@(?!(?:[A-Za-z0-9_\-\.]+\.)?([A-Za-z]{2,4})\.\2)([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/gm.test(
-        //     document.querySelector(".ql-snow .ql-editor").innerHTML
-        //   )
-        // )
-        //   document.querySelector(
-        //     ".ql-snow .ql-editor"
-        //   ).innerHTML = document
-        //     .querySelector(".ql-snow .ql-editor")
-        //     .innerHTML.replace(
-        //       /^([A-Za-z0-9_\-\.])+\@(?!(?:[A-Za-z0-9_\-\.]+\.)?([A-Za-z]{2,4})\.\2)([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/gm,
-        //       x => {
-        //         if (
-        //           !new RegExp("/^" + x + "<\/a>$/").test(
-        //             document.querySelector(".ql-snow .ql-editor") &&
-        //               !new RegExp("/^" + x + '" class$/').test(
-        //                 document.querySelector(".ql-snow .ql-editor")
-        //               )
-        //           )
-        //         ) {
-        //           return `<a href="mailto:${x}" class="link-quill">${x}</a>`;
-        //         } else {
-        //           return x;
-        //         }
-        //       }
-        //     );
+        // }
         repeafunc();
       });
       document
