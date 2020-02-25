@@ -59,6 +59,12 @@ SOFTWARE.
         <div>
           <h1>Settings</h1>
           <div id="setting">
+            <h2>User</h2>
+            <br />
+            <h4 v-on:click="pass" id="pass">
+              Change Password/Create Password
+            </h4>
+            <br />
             <h2>Appearance</h2>
             <br />
             <p>Theme</p>
@@ -125,7 +131,7 @@ export default {
   mounted() {
     //TODO: Backup, will be removed in next version
     if (localStorage.getItem("access")) {
-      fs.writeFile("data/access", localStorage.getItem("access"), e => {});
+      fs.writeFile("data/.access", localStorage.getItem("access"), e => {});
       fs.writeFile(
         "data/sync",
         JSON.stringify(localStorage.getItem("sync")),
@@ -144,7 +150,7 @@ export default {
       let hash = u.split("#");
       let pair = hash[1].split("&");
       let val = pair[0].split("=");
-      fs.writeFile("data/access", val[1], e => {});
+      fs.writeFile("data/.access", val[1], e => {});
       fs.writeFile("data/sync", JSON.stringify({ sync: "yes" }), e => {});
     });
 
@@ -244,6 +250,8 @@ export default {
     color: #000 !important;
   }`;
           document.head.appendChild(lith);
+        } else {
+          document.head.removeChild(document.getElementById("lighttheme"));
         }
       }
       document.getElementById("colorswitch").onclick = () => {
@@ -491,7 +499,7 @@ export default {
 
     // Sign Out
     out() {
-      fs.unlink("data/access", e => {});
+      fs.unlink("data/.access", e => {});
     },
 
     // Show About Page Function
@@ -517,6 +525,86 @@ export default {
       let id = document.getElementById("settings");
       id.style.display = "block";
       document.getElementById("home").style.overflowY = "hidden";
+    },
+
+    // Change Password
+    pass() {
+      let pass = () => {
+        fs.readFile("data/pass", (error, data) => {
+          if (error) {
+            fs.readFile("data/.pass", (e, d) => {
+              let swal = require("sweetalert");
+              if (e) {
+                swal({
+                  title: "Create Password For Protection(Recommend)",
+                  text: "If You Want No Password Leave This Input Blank",
+                  content: {
+                    element: "input",
+                    attributes: {
+                      placeholder: "Type your password",
+                      type: "password"
+                    }
+                  },
+                  closeOnClickOutside: false
+                }).then(value => {
+                  if (value) {
+                    fs.writeFile("data/.pass", value, e => {});
+                  } else {
+                    fs.writeFile("data/pass", "", e => {});
+                  }
+                });
+              } else {
+                swal({
+                  title: "Type Password To Enter",
+                  content: {
+                    element: "input",
+                    attributes: {
+                      placeholder: "Type your password",
+                      type: "password"
+                    }
+                  },
+                  closeOnClickOutside: false
+                }).then(value => {
+                  if (value == d) {
+                    swal({
+                      title: "Change Password",
+                      text:
+                        "If You Do Not Want To Change Password Leave This Input Blank",
+                      content: {
+                        element: "input",
+                        attributes: {
+                          placeholder: "Type your password",
+                          type: "password"
+                        }
+                      },
+                      closeOnClickOutside: false
+                    }).then(value => {
+                      if (value) {
+                        fs.writeFile("data/.pass", value, e => {});
+                      } else {
+                      }
+                    });
+                  } else {
+                    swal({
+                      title: "Wrong Password",
+                      text: "Do You Do Not Want To Change Password?",
+                      icon: "warning",
+                      buttons: true,
+                      dangerMode: true
+                    }).then(ok => {
+                      if (ok) {
+                      } else {
+                        pass();
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+      };
+      pass();
     },
 
     // Hide About Page Function

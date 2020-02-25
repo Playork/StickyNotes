@@ -54,7 +54,71 @@ export default {
 
   // Do On Start
   mounted() {
-    // create data
+    // Create Password
+    let pass = () => {
+      fs.readFile("data/pass", (error, data) => {
+        if (error) {
+          fs.readFile("data/.pass", (e, d) => {
+            let swal = require("sweetalert");
+            if (e) {
+              swal({
+                title: "Create Password For Protection(Recommend)",
+                text: "If You Want No Password Leave This Input Blank",
+                content: {
+                  element: "input",
+                  attributes: {
+                    placeholder: "Type your password",
+                    type: "password"
+                  }
+                },
+                closeOnClickOutside: false
+              }).then(value => {
+                if (value) {
+                  fs.writeFile("data/.pass", value, e => {});
+                } else {
+                  fs.writeFile("data/pass", "", e => {});
+                }
+              });
+            } else {
+              swal({
+                title: "Type Password To Enter",
+                content: {
+                  element: "input",
+                  attributes: {
+                    placeholder: "Type your password",
+                    type: "password"
+                  }
+                },
+                closeOnClickOutside: false
+              }).then(value => {
+                if (value == d) {
+                  fs.writeFile("data/sign", "", e => {});
+                } else {
+                  swal({
+                    title: "Wrong Password",
+                    text: "Do You Want To Close?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                  }).then(ok => {
+                    if (ok) {
+                      this.close();
+                    } else {
+                      pass();
+                    }
+                  });
+                }
+              });
+            }
+          });
+        } else {
+          fs.writeFile("data/sign", "", e => {});
+        }
+      });
+    };
+    pass();
+
+    // Create Data
     if (!fs.existsSync("data")) {
       fs.mkdirSync("data");
       fs.mkdirSync("data/notes/");
@@ -62,7 +126,7 @@ export default {
 
     // Sync Seup
     let accesst;
-    fs.readFile("data/access", (e, d) => {
+    fs.readFile("data/.access", (e, d) => {
       if (e) {
         document.getElementById("sign").innerHTML =
           "Not Signed In(Not Syncing)";
@@ -204,7 +268,7 @@ export default {
               });
             }
           });
-          fs.readFile("data/access", (e, d) => {
+          fs.readFile("data/.access", (e, d) => {
             if (e) {
             } else {
               let dbx = new Dropbox({ fetch, accessToken: accesst });
@@ -222,208 +286,234 @@ export default {
     });
 
     // Load Saved Notes
-    window.setInterval(async () => {
-      await fs.readFile("data/sync", (e, r) => {
+    window.setInterval(() => {
+      fs.readFile("data/sign", async e => {
         if (e) {
         } else {
-          fs.writeFile("data/sync", JSON.stringify({ sync: "no" }), e => {});
-          let dbx = new Dropbox({ fetch, accessToken: accesst });
-          dbx
-            .filesGetTemporaryLink({
-              path: "/Playork Sticky Notes/notes.spst"
-            })
-            .then(data => {
-              let https = require("https");
-              let file = fs.createWriteStream("notes.spst");
-              let request = https.get(data.link, function(response) {
-                response.pipe(file);
-                file.on("finish", function() {
-                  file.close();
-                });
-              });
-              window.setTimeout(() => {
-                fs.readFile("./notes.spst", "binary", (e, d) => {
-                  if (e) {
-                    console.log(e);
-                  } else {
-                    if (d != "") {
-                      d = d.toString().split("\n");
-                      for (let i = 0; i < d.length; i++) {
-                        if (i % 2 == 0 && d[i] != "") {
-                          let js = JSON.parse(d[i + 1]);
-                          fs.readFile("data/notes/" + d[i], (e, d) => {
-                            if (e) {
-                              fs.writeFile(
-                                "data/notes/" + d[i],
-                                JSON.stringify(js),
-                                e => {
-                                  console.log(e);
+          await fs.readFile("data/sync", (e, r) => {
+            if (e) {
+            } else {
+              fs.writeFile(
+                "data/sync",
+                JSON.stringify({ sync: "no" }),
+                e => {}
+              );
+              let dbx = new Dropbox({ fetch, accessToken: accesst });
+              dbx
+                .filesGetTemporaryLink({
+                  path: "/Playork Sticky Notes/notes.spst"
+                })
+                .then(data => {
+                  let https = require("https");
+                  let file = fs.createWriteStream("notes.spst");
+                  let request = https.get(data.link, function(response) {
+                    response.pipe(file);
+                    file.on("finish", function() {
+                      file.close();
+                    });
+                  });
+                  window.setTimeout(() => {
+                    fs.readFile("./notes.spst", "binary", (e, d) => {
+                      if (e) {
+                        console.log(e);
+                      } else {
+                        if (d != "") {
+                          d = d.toString().split("\n");
+                          for (let i = 0; i < d.length; i++) {
+                            if (i % 2 == 0 && d[i] != "") {
+                              let js = JSON.parse(d[i + 1]);
+                              fs.readFile("data/notes/" + d[i], (e, d) => {
+                                if (e) {
+                                  fs.writeFile(
+                                    "data/notes/" + d[i],
+                                    JSON.stringify(js),
+                                    e => {
+                                      console.log(e);
+                                    }
+                                  );
+                                } else {
+                                  d = JSON.parse(d);
+                                  if (js.first != d.first) {
+                                    let g = new Date().getTime();
+                                    let id = Number(d[i]) * g;
+                                    fs.writeFile(
+                                      "data/notes/" + id.toString(),
+                                      JSON.stringify(js),
+                                      e => {}
+                                    );
+                                  }
                                 }
-                              );
-                            } else {
-                              d = JSON.parse(d);
-                              if (js.first != d.first) {
-                                let g = new Date().getTime();
-                                let id = Number(d[i]) * g;
-                                fs.writeFile(
-                                  "data/notes/" + id.toString(),
-                                  JSON.stringify(js),
-                                  e => {}
-                                );
-                              }
+                              });
                             }
-                          });
+                          }
                         }
                       }
-                    }
-                  }
+                    });
+                  }, 2000);
+                })
+                .catch(e => {
+                  if (e) console.log(e);
                 });
-              }, 2000);
-            })
-            .catch(e => {
-              if (e) console.log(e);
-            });
-        }
-      });
-      fs.readFile("data/access", (e, d) => {
-        if (e) {
-          document.getElementById("sign").innerHTML =
-            "Not Signed In(Not Syncing)";
-          document.getElementById("out").innerHTML = "";
-          document.getElementById("drb").innerHTML = "Sync With Dropbox";
-        } else {
-          if (d != accesst) {
-            accesst = d;
-            document.getElementById("sign").innerHTML = "Signed In(Syncing)";
-            document.getElementById("out").innerHTML = "Sign Out";
-            document.getElementById("drb").innerHTML =
-              "Change Sync Dropbox Account";
-          } else {
-            document.getElementById("sign").innerHTML = "Signed In(Syncing)";
-            document.getElementById("out").innerHTML = "Sign Out";
-            document.getElementById("drb").innerHTML =
-              "Change Sync Dropbox Account";
-          }
-        }
-      });
-      fs.readdir("data/notes/", function(e, files) {
-        if (e) {
-          document.getElementById("notes").innerHTML = "";
-        } else {
-          document.getElementById("notes").innerHTML = "";
-          files.forEach(function(key, index) {
-            try {
-              fs.readFile("data/notes/" + key, (e, d) => {
-                let value = JSON.parse(d);
-                document
-                  .getElementById("notes")
-                  .insertAdjacentHTML(
-                    "afterbegin",
-                    `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span><div id="cont">${value.first}</div></div>`
-                  );
-                if (document.getElementById("search").value != "") {
-                  let cont = document.getElementById("cont").innerHTML;
-                  let index = cont.indexOf(
-                    document.getElementById("search").value
-                  );
-                  if (index >= 0) {
-                    let highcontent =
-                      cont.substring(0, index) +
-                      "<span style='background-color: yellow;border-radius:10px;'>" +
-                      cont.substring(
-                        index,
-                        index + document.getElementById("search").value.length
-                      ) +
-                      "</span>" +
-                      cont.substring(
-                        index + document.getElementById("search").value.length
-                      );
-                    document.getElementById("cont").innerHTML = highcontent;
-                  } else {
-                    document.getElementById("notetext").style.display = "none";
-                  }
-                }
+            }
+          });
+          fs.readFile("data/.access", (e, d) => {
+            if (e) {
+              document.getElementById("sign").innerHTML =
+                "Not Signed In(Not Syncing)";
+              document.getElementById("out").innerHTML = "";
+              document.getElementById("drb").innerHTML = "Sync With Dropbox";
+            } else {
+              if (d != accesst) {
+                accesst = d;
+                document.getElementById("sign").innerHTML =
+                  "Signed In(Syncing)";
+                document.getElementById("out").innerHTML = "Sign Out";
+                document.getElementById("drb").innerHTML =
+                  "Change Sync Dropbox Account";
+              } else {
+                document.getElementById("sign").innerHTML =
+                  "Signed In(Syncing)";
+                document.getElementById("out").innerHTML = "Sign Out";
+                document.getElementById("drb").innerHTML =
+                  "Change Sync Dropbox Account";
+              }
+            }
+          });
+          fs.readdir("data/notes/", function(e, files) {
+            if (e) {
+              document.getElementById("notes").innerHTML = "";
+            } else {
+              document.getElementById("notes").innerHTML = "";
+              files.forEach(function(key, index) {
+                try {
+                  fs.readFile("data/notes/" + key, (e, d) => {
+                    if (e) {
+                    } else {
+                      let value = JSON.parse(d);
+                      document
+                        .getElementById("notes")
+                        .insertAdjacentHTML(
+                          "afterbegin",
+                          `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span><div id="cont">${value.first}</div></div>`
+                        );
+                      if (document.getElementById("search").value != "") {
+                        let cont = document.getElementById("cont").innerHTML;
+                        let index = cont.indexOf(
+                          document.getElementById("search").value
+                        );
+                        if (index >= 0) {
+                          let highcontent =
+                            cont.substring(0, index) +
+                            "<span style='background-color: yellow;border-radius:10px;'>" +
+                            cont.substring(
+                              index,
+                              index +
+                                document.getElementById("search").value.length
+                            ) +
+                            "</span>" +
+                            cont.substring(
+                              index +
+                                document.getElementById("search").value.length
+                            );
+                          document.getElementById(
+                            "cont"
+                          ).innerHTML = highcontent;
+                        } else {
+                          document.getElementById("notetext").style.display =
+                            "none";
+                        }
+                      }
 
-                if (value.closed == "yes") {
-                  document.getElementById("startnote").style.display = "inline";
-                }
-                if (value.closed == "no") {
-                  document.getElementById("startnote").style.display = "none";
-                }
-                if (value.locked == "yes") {
-                  document.getElementById("deletenote").style.pointerEvents =
-                    "none";
-                  document.getElementById("deleteall").style.pointerEvents =
-                    "none";
-                }
-                if (value.locked == "no") {
-                  document.getElementById("deletenote").style.pointerEvents =
-                    "auto";
-                  document.getElementById("deleteall").style.pointerEvents =
-                    "auto";
-                }
-                document.getElementById("startnote").onclick = () => {
-                  let id = new Date().getTime();
-                  fs.writeFile(
-                    "data/id",
-                    JSON.stringify({ ids: key }),
-                    e => {}
-                  );
-                  ipcRenderer.send("create-new-instance");
-                  window.setTimeout(() => {
-                    if (value.closed == "no") {
-                      fs.writeFile(
-                        "data/id",
-                        JSON.stringify({ ids: id }),
-                        e => {}
-                      );
-                    }
-                  }, 500);
-                };
-                document.getElementById("deletenote").onclick = () => {
-                  fs.readFile("data/warn", (e, d) => {
-                    if (JSON.parse(d).on == "yes") {
-                      let swal = require("sweetalert");
-                      swal({
-                        title: "Are you sure?",
-                        text: "Want To Delete Your Note!",
-                        icon: "warning",
-                        buttons: true,
-                        dangerMode: true
-                      }).then(willDelete => {
-                        if (willDelete) {
+                      if (value.closed == "yes") {
+                        document.getElementById("startnote").style.display =
+                          "inline";
+                      }
+                      if (value.closed == "no") {
+                        document.getElementById("startnote").style.display =
+                          "none";
+                      }
+                      if (value.locked == "yes") {
+                        document.getElementById(
+                          "deletenote"
+                        ).style.pointerEvents = "none";
+                        document.getElementById(
+                          "deleteall"
+                        ).style.pointerEvents = "none";
+                      }
+                      if (value.locked == "no") {
+                        document.getElementById(
+                          "deletenote"
+                        ).style.pointerEvents = "auto";
+                        document.getElementById(
+                          "deleteall"
+                        ).style.pointerEvents = "auto";
+                      }
+                      document.getElementById("startnote").onclick = () => {
+                        let id = new Date().getTime();
+                        fs.writeFile(
+                          "data/id",
+                          JSON.stringify({ ids: key }),
+                          e => {}
+                        );
+                        ipcRenderer.send("create-new-instance");
+                        window.setTimeout(() => {
                           if (value.closed == "no") {
                             fs.writeFile(
-                              "data/notes/" + key,
-                              JSON.stringify({ deleted: "yes" }),
+                              "data/id",
+                              JSON.stringify({ ids: id }),
                               e => {}
                             );
                           }
-                          if (value.closed == "yes") {
-                            fs.unlink("data/notes/" + key, e => {});
+                        }, 500);
+                      };
+                      document.getElementById("deletenote").onclick = () => {
+                        fs.readFile("data/warn", (e, d) => {
+                          if (JSON.parse(d).on == "yes") {
+                            let swal = require("sweetalert");
+                            swal({
+                              title: "Are you sure?",
+                              text: "Want To Delete Your Note!",
+                              icon: "warning",
+                              buttons: true,
+                              dangerMode: true
+                            }).then(willDelete => {
+                              if (willDelete) {
+                                if (value.closed == "no") {
+                                  fs.writeFile(
+                                    "data/notes/" + key,
+                                    JSON.stringify({ deleted: "yes" }),
+                                    e => {}
+                                  );
+                                }
+                                if (value.closed == "yes") {
+                                  fs.unlink("data/notes/" + key, e => {});
+                                }
+                              }
+                            });
+                          } else {
+                            if (value.closed == "no") {
+                              fs.writeFile(
+                                "data/notes/" + key,
+                                JSON.stringify({ deleted: "yes" }),
+                                e => {}
+                              );
+                            }
+                            if (value.closed == "yes") {
+                              fs.unlink("data/notes/" + key, e => {});
+                            }
                           }
-                        }
-                      });
-                    } else {
-                      if (value.closed == "no") {
-                        fs.writeFile(
-                          "data/notes/" + key,
-                          JSON.stringify({ deleted: "yes" }),
-                          e => {}
-                        );
-                      }
-                      if (value.closed == "yes") {
-                        fs.unlink("data/notes/" + key, e => {});
-                      }
+                        });
+                      };
+                      document.getElementById(
+                        "notetext"
+                      ).style.backgroundColor = value.back;
+                      document.getElementById("notetext").style.border =
+                        "5px solid " + value.title;
                     }
                   });
-                };
-                document.getElementById("notetext").style.backgroundColor =
-                  value.back;
-                document.getElementById("notetext").style.border =
-                  "5px solid " + value.title;
+                } catch {}
               });
-            } catch {}
+            }
           });
         }
       });
@@ -435,6 +525,7 @@ export default {
     // Close Function
     close() {
       if (document.getElementById("deleteall").style.pointerEvents != "none") {
+        fs.unlink("data/sign", e => {});
         fs.readdir("data/notes/", function(e, files) {
           if (e) {
           } else {

@@ -116,9 +116,10 @@ button {
   padding-top: 35px;
   text-align: center;
   color: #fff;
+  overflow-y: auto;
 }
 #settings span {
-  position: absolute;
+  position: fixed;
   top: 45px;
   bottom: 100%;
   left: 5px;
@@ -231,7 +232,7 @@ button {
   width: 0;
 }
 .checkmark {
-  position: absolute;
+  position: absolute !important;
   top: 0;
   left: 0;
   height: 25px;
@@ -269,4 +270,8 @@ button {
   grid-template-columns: 90% 10%;
   text-align: left;
   padding: 0 70px;
+}
+#pass {
+  color: blue;
+  cursor: pointer;
 }
