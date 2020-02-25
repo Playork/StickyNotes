@@ -242,23 +242,6 @@ export default {
   }
   #window-title2 span:hover {
     color: #000 !important;
-  }
-  .emoji-mart {
-    background: #ffffffee !important;
-  }
-  .emoji-mart-category-label span {
-    background: #fff !important;
-  }
-  .emoji-mart * {
-    color: #000 !important;
-  }
-  .emoji-mart-search input {
-    color: #fff !important;
-    background: #000;
-  }
-  #hideemoji {
-    color: #000 !important;
-    background: #ffffffee !important;
   }`;
           document.head.appendChild(lith);
         }
@@ -349,23 +332,6 @@ export default {
   }
   #window-title2 span:hover {
     color: #000 !important;
-  }
-  .emoji-mart {
-    background: #ffffffee !important;
-  }
-  .emoji-mart-category-label span {
-    background: #fff !important;
-  }
-  .emoji-mart * {
-    color: #000 !important;
-  }
-  .emoji-mart-search input {
-    color: #fff !important;
-    background: #000;
-  }
-  #hideemoji {
-    color: #000 !important;
-    background: #ffffffee !important;
   }`;
         document.head.appendChild(lith);
       } else {

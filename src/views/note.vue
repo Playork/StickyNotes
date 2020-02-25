@@ -64,7 +64,7 @@ export default {
       if (e) {
       } else {
         let noteid = JSON.parse(d).ids;
-        document.getElementById("deletenote").addEventListener("click", () => {
+        document.getElementById("deletenote1").addEventListener("click", () => {
           fs.readFile("data/id", (e, r) => {
             if (e) {
             } else {
@@ -148,6 +148,10 @@ export default {
   #hideemoji {
     color: #000 !important;
     background: #ffffffee !important;
+  }
+  #emoji,#undo,#redo,#deletenote1{
+    color:#000;
+    background:#ffffffee;
   }`;
           document.head.appendChild(lith);
         } else {
@@ -264,6 +268,9 @@ export default {
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
           document.getElementById("emoji").style.display = "block";
+          document.getElementById("undo").style.display = "block";
+          document.getElementById("redo").style.display = "block";
+          document.getElementById("deletenote1").style.display = "block";
         },
         true
       );
@@ -285,6 +292,9 @@ export default {
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
           document.getElementById("emoji").style.display = "block";
+          document.getElementById("undo").style.display = "block";
+          document.getElementById("redo").style.display = "block";
+          document.getElementById("deletenote1").style.display = "block";
           if (!e.target.matches("#menus")) {
             let dropdowns = document.getElementById("menu-content");
             if (dropdowns.classList.contains("show")) {
@@ -306,6 +316,9 @@ export default {
           document.getElementById("close").style.display = "none";
           document.getElementById("menu").style.display = "none";
           document.getElementById("emoji").style.display = "none";
+          document.getElementById("undo").style.display = "none";
+          document.getElementById("redo").style.display = "none";
+          document.getElementById("deletenote1").style.display = "none";
         },
         true
       );

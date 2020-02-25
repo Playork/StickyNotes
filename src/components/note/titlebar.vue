@@ -38,8 +38,6 @@ SOFTWARE.
           <div class="button" id="menus" title="Menu">
             <span id="menu" v-on:click="menu">&#xE712;</span>
             <div id="menu-content" class="dropdown-content">
-              <a title="Undo" id="undo"> <span>&#xE7A7;</span>Undo </a>
-              <a title="Redo" id="redo"> <span>&#xE7A6;</span>Redo </a>
               <a title="Select Image" id="image1" v-on:click="clickimage">
                 <span>&#xEB9F;</span>Add Image
               </a>
@@ -54,9 +52,6 @@ SOFTWARE.
               </a>
               <a v-on:click="exportnote" id="export" title="Export Note">
                 <span>&#xEDE1;</span>Export
-              </a>
-              <a id="deletenote" title="Delete Note">
-                <span>&#xE74D;</span>Delete
               </a>
             </div>
           </div>
@@ -122,6 +117,15 @@ export default {
           document.getElementsByClassName("emoji-mart")[0].style.visibility =
             "hidden";
           document.getElementById("emoji").style.display = "none";
+          document.getElementById("undo").style.display = "none";
+          document.getElementById("redo").style.display = "none";
+          document.getElementById("deletenote1").style.display = "none";
+          document.getElementById("undo").style.display = "none";
+          document.getElementById("redo").style.display = "none";
+          document.getElementById("deletenote1").style.display = "none";
+          document.getElementById("undo").style.display = "none";
+          document.getElementById("redo").style.display = "none";
+          document.getElementById("deletenote1").style.display = "none";
           document.getElementById("hideemoji").style.display = "none";
           document.getElementById("lightYellow").style.paddingTop = "30px";
           if (
@@ -140,6 +144,9 @@ export default {
             document.getElementById("close").style.display = "flex";
             document.getElementById("menu").style.display = "flex";
             document.getElementById("emoji").style.display = "block";
+            document.getElementById("undo").style.display = "block";
+            document.getElementById("redo").style.display = "block";
+            document.getElementById("deletenote1").style.display = "block";
             ipcRenderer.invoke("setMaximumSize", 100000, 100000);
             clearInterval(clearint);
           }

@@ -296,13 +296,47 @@ SOFTWARE. */
 }
 #emoji {
   font-family: "segoe";
-  font-size: 15px;
+  font-size: 20px;
   position: absolute;
-  top: 40px;
+  bottom: 40px;
   right: 0;
   z-index: 7;
-  color: #000;
+  color: #fff;
   padding: 5px;
+  background: #202020ee;
+}
+#undo {
+  font-family: "segoe";
+  font-size: 20px;
+  position: absolute;
+  bottom: 40px;
+  right: 60px;
+  z-index: 7;
+  color: #fff;
+  padding: 5px;
+  background: #202020ee;
+}
+#redo {
+  font-family: "segoe";
+  font-size: 20px;
+  position: absolute;
+  bottom: 40px;
+  right: 30px;
+  z-index: 7;
+  color: #fff;
+  padding: 5px;
+  background: #202020ee;
+}
+#deletenote1 {
+  font-family: "segoe";
+  font-size: 20px;
+  position: absolute;
+  bottom: 40px;
+  right: 90px;
+  z-index: 7;
+  color: #fff;
+  padding: 5px;
+  background: #202020ee;
 }
 .link-quill {
   color: blue;

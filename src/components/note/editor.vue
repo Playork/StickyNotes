@@ -27,6 +27,9 @@ SOFTWARE.
 <template>
   <div>
     <span title="Add Emoji" id="emoji" v-on:click="emoji">&#xE76E;</span>
+    <span title="Undo" id="undo">&#xE7A7;</span>
+    <span title="Redo" id="redo">&#xE7A6;</span>
+    <span id="deletenote1" title="Delete Note">&#xE74D;</span>
     <span title="close" id="hideemoji" v-on:click="hideemoji">&#xE8BB;</span>
     <div id="emojip">
       <picker
@@ -254,7 +257,61 @@ export default {
           }
         });
       });
-      quill.on("text-change", () => repeafunc());
+      quill.on("text-change", () => {
+        // if (
+        //   /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim.test(
+        //     document.querySelector(".ql-snow .ql-editor").innerHTML
+        //   )
+        // )
+        //   document.querySelector(
+        //     ".ql-snow .ql-editor"
+        //   ).innerHTML = document
+        //     .querySelector(".ql-snow .ql-editor")
+        //     .innerHTML.replace(
+        //       /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim,
+        //       x => {
+        //         if (
+        //           !new RegExp("/^" + x + "<\/a>$/").test(
+        //             document.querySelector(".ql-snow .ql-editor")
+        //           ) &&
+        //           !new RegExp("/^" + x + '" target$/').test(
+        //             document.querySelector(".ql-snow .ql-editor")
+        //           )
+        //         ) {
+        //           return `<a href="${x}" target="_blank" class="link-quill">${x}</a>`;
+        //         } else {
+        //           return x;
+        //         }
+        //       }
+        //     );
+        // if (
+        //   /^([A-Za-z0-9_\-\.])+\@(?!(?:[A-Za-z0-9_\-\.]+\.)?([A-Za-z]{2,4})\.\2)([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/gm.test(
+        //     document.querySelector(".ql-snow .ql-editor").innerHTML
+        //   )
+        // )
+        //   document.querySelector(
+        //     ".ql-snow .ql-editor"
+        //   ).innerHTML = document
+        //     .querySelector(".ql-snow .ql-editor")
+        //     .innerHTML.replace(
+        //       /^([A-Za-z0-9_\-\.])+\@(?!(?:[A-Za-z0-9_\-\.]+\.)?([A-Za-z]{2,4})\.\2)([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/gm,
+        //       x => {
+        //         if (
+        //           !new RegExp("/^" + x + "<\/a>$/").test(
+        //             document.querySelector(".ql-snow .ql-editor") &&
+        //               !new RegExp("/^" + x + '" class$/').test(
+        //                 document.querySelector(".ql-snow .ql-editor")
+        //               )
+        //           )
+        //         ) {
+        //           return `<a href="mailto:${x}" class="link-quill">${x}</a>`;
+        //         } else {
+        //           return x;
+        //         }
+        //       }
+        //     );
+        repeafunc();
+      });
       document
         .getElementById("color")
         .addEventListener("click", () => repeafunc());
