@@ -102,8 +102,7 @@ export default {
             { align: "" },
             { align: "center" },
             { align: "right" },
-            "clean",
-            "image"
+            "clean"
           ]
         ],
         history: {

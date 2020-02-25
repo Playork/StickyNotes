@@ -40,6 +40,9 @@ SOFTWARE.
             <div id="menu-content" class="dropdown-content">
               <a title="Undo" id="undo"> <span>&#xE7A7;</span>Undo </a>
               <a title="Redo" id="redo"> <span>&#xE7A6;</span>Redo </a>
+              <a title="Select Image" id="image1" v-on:click="clickimage">
+                <span>&#xE714;</span>Add Image
+              </a>
               <a title="Select Audio" id="video1" v-on:click="clickvideo">
                 <span>&#xE714;</span>Add Video
               </a>
@@ -223,6 +226,22 @@ export default {
       }
     },
 
+    // Add image To Note
+    async clickimage() {
+      let { ipcRenderer } = require("electron");
+      let images = await ipcRenderer.invoke("image");
+      if (images.filePaths[0]) {
+        try {
+          document.querySelector(
+            ".ql-snow .ql-editor"
+          ).innerHTML += `<img src="file:///${images.filePaths[0]}" style="width: 100%;height: auto;">`;
+        } catch {
+          let swal = require("sweetalert");
+          swal("Not Supported");
+        }
+      }
+    },
+
     // Add Audio To Note
     async clicksong() {
       let { ipcRenderer } = require("electron");
@@ -231,7 +250,7 @@ export default {
         try {
           document.querySelector(
             ".ql-snow .ql-editor"
-          ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///audios.filePaths[0]' controls></audio>"></iframe>`;
+          ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///${audios.filePaths[0]}' controls></audio>"></iframe>`;
         } catch {
           let swal = require("sweetalert");
 

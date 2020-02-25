@@ -251,6 +251,21 @@ ipcMain.handle("exportnote", async event => {
   return path;
 });
 
+ipcMain.handle("image", async event => {
+  let os = require("os");
+  let { dialog } = require("electron");
+  let path = await dialog.showOpenDialog({
+    filters: [
+      {
+        name: "Image Files(apng,bmp,ico,cur,jpg,jpeg,jfif,pjpeg,pjp,png,svg,webp)",
+        extensions: ["apng", "bmp", "ico", "cur", "jpg", "jpeg", "jfif", "pjpeg", "pjp", "png", "svg", "webp"]
+      }
+    ],
+    defaultPath: os.homedir()
+  });
+  return path;
+});
+
 ipcMain.handle("audio", async event => {
   let os = require("os");
   let { dialog } = require("electron");

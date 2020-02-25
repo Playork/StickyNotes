@@ -264,3 +264,13 @@ SOFTWARE. */
 #save {
   display: none;
 }
+.link-quill {
+  color: blue;
+  cursor: pointer;
+}
+.link-quill:hover {
+  color: darkblue;
+}
+.link-quill:active {
+  color: violet;
+}
