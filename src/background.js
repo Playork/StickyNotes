@@ -153,7 +153,11 @@ ipcMain.on("create-new-instance", () => {
 });
 
 ipcMain.handle("close", event => {
-  BrowserWindow.getFocusedWindow().close()
+  BrowserWindow.getAllWindows().forEach((b) => {
+    if (b.webContents == event.sender.webContents) {
+      b.close()
+    }
+  })
 })
 
 ipcMain.handle("minimize", event => {
@@ -161,7 +165,11 @@ ipcMain.handle("minimize", event => {
 })
 
 ipcMain.handle("destroy", event => {
-  BrowserWindow.getFocusedWindow().destroy()
+  BrowserWindow.getAllWindows().forEach((b) => {
+    if (b.webContents == event.sender.webContents) {
+      b.destroy()
+    }
+  })
 })
 
 ipcMain.handle("setMaximumSize", (event, a, b) => {
