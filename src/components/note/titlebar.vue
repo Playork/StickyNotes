@@ -41,7 +41,7 @@ SOFTWARE.
               <a title="Undo" id="undo"> <span>&#xE7A7;</span>Undo </a>
               <a title="Redo" id="redo"> <span>&#xE7A6;</span>Redo </a>
               <a title="Select Image" id="image1" v-on:click="clickimage">
-                <span>&#xE714;</span>Add Image
+                <span>&#xEB9F;</span>Add Image
               </a>
               <a title="Select Audio" id="video1" v-on:click="clickvideo">
                 <span>&#xE714;</span>Add Video
@@ -139,10 +139,7 @@ export default {
             document.getElementById("minimize").style.display = "flex";
             document.getElementById("close").style.display = "flex";
             document.getElementById("menu").style.display = "flex";
-            document.getElementsByClassName("emoji-mart")[0].style.visibility =
-              "visible";
             document.getElementById("emoji").style.display = "block";
-            document.getElementById("hideemoji").style.display = "block";
             ipcRenderer.invoke("setMaximumSize", 100000, 100000);
             clearInterval(clearint);
           }
