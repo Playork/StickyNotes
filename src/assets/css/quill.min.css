@@ -397,8 +397,8 @@
 }
 #video {
   border: none;
-  height: 200px;
-  width: 350px;
+  height: auto;
+  max-width: 100%;
 }
 #audio {
   border: none;

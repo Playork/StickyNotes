@@ -73,6 +73,11 @@ SOFTWARE.
               <input type="checkbox" id="colorswitch" checked="checked" />
               <span class="checkmark"></span>
             </label>
+            <p>Emoji Selector</p>
+            <label class="container">
+              <input type="checkbox" id="emojiswitch" checked="checked" />
+              <span class="checkmark"></span>
+            </label>
             <p>Warn Before Delete</p>
             <label class="container">
               <input type="checkbox" id="warnswitch" checked="checked" />
@@ -156,6 +161,19 @@ export default {
         }
       }
     });
+    fs.readFile("data/emoji", (e, d) => {
+      if (e) {
+        document.getElementById("emojiswitch").checked = true;
+        fs.writeFile("data/emoji", JSON.stringify({ on: "yes" }), e => {});
+      } else {
+        d = JSON.parse(d);
+        if (d.on == "yes") {
+          document.getElementById("emojiswitch").checked = true;
+        } else {
+          document.getElementById("emojiswitch").checked = false;
+        }
+      }
+    });
     fs.readFile("data/warn", (e, d) => {
       if (e) {
         document.getElementById("warnswitch").checked = true;
@@ -224,6 +242,23 @@ export default {
   }
   #window-title2 span:hover {
     color: #000 !important;
+  }
+  .emoji-mart {
+    background: #ffffffee !important;
+  }
+  .emoji-mart-category-label span {
+    background: #fff !important;
+  }
+  .emoji-mart * {
+    color: #000 !important;
+  }
+  .emoji-mart-search input {
+    color: #fff !important;
+    background: #000;
+  }
+  #hideemoji {
+    color: #000 !important;
+    background: #ffffffee !important;
   }`;
           document.head.appendChild(lith);
         }
@@ -236,6 +271,13 @@ export default {
         }
       };
     });
+    document.getElementById("emojiswitch").onclick = () => {
+      if (document.getElementById("emojiswitch").checked == true) {
+        fs.writeFile("data/emoji", JSON.stringify({ on: "yes" }), e => {});
+      } else {
+        fs.writeFile("data/emoji", JSON.stringify({ on: "no" }), e => {});
+      }
+    };
     document.getElementById("warnswitch").onclick = () => {
       if (document.getElementById("warnswitch").checked == true) {
         fs.writeFile("data/warn", JSON.stringify({ on: "yes" }), e => {});
@@ -307,6 +349,23 @@ export default {
   }
   #window-title2 span:hover {
     color: #000 !important;
+  }
+  .emoji-mart {
+    background: #ffffffee !important;
+  }
+  .emoji-mart-category-label span {
+    background: #fff !important;
+  }
+  .emoji-mart * {
+    color: #000 !important;
+  }
+  .emoji-mart-search input {
+    color: #fff !important;
+    background: #000;
+  }
+  #hideemoji {
+    color: #000 !important;
+    background: #ffffffee !important;
   }`;
         document.head.appendChild(lith);
       } else {

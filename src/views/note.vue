@@ -131,6 +131,23 @@ export default {
   }
   #window-title2 span:hover {
     color: #000 !important;
+  }
+  .emoji-mart {
+    background: #ffffffee !important;
+  }
+  .emoji-mart-category-label span {
+    background: #fff !important;
+  }
+  .emoji-mart * {
+    color: #000 !important;
+  }
+  .emoji-mart-search input {
+    color: #fff !important;
+    background: #000;
+  }
+  #hideemoji {
+    color: #000 !important;
+    background: #ffffffee !important;
   }`;
           document.head.appendChild(lith);
         } else {
@@ -182,6 +199,13 @@ export default {
         document.getElementById("color").style.visibility = "hidden";
       } else {
         document.getElementById("color").style.visibility = "visible";
+      }
+    });
+    fs.readFile("data/emoji", (e, d) => {
+      if (JSON.parse(d).on == "no") {
+        document.getElementById("emoji").style.visibility = "hidden";
+      } else {
+        document.getElementById("emoji").style.visibility = "visible";
       }
     });
   },
@@ -239,6 +263,7 @@ export default {
           document.getElementById("minimize").style.display = "flex";
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
+          document.getElementById("emoji").style.display = "block";
         },
         true
       );
@@ -259,6 +284,7 @@ export default {
           document.getElementById("minimize").style.display = "flex";
           document.getElementById("close").style.display = "flex";
           document.getElementById("menu").style.display = "flex";
+          document.getElementById("emoji").style.display = "block";
           if (!e.target.matches("#menus")) {
             let dropdowns = document.getElementById("menu-content");
             if (dropdowns.classList.contains("show")) {
@@ -279,6 +305,7 @@ export default {
           document.getElementById("minimize").style.display = "none";
           document.getElementById("close").style.display = "none";
           document.getElementById("menu").style.display = "none";
+          document.getElementById("emoji").style.display = "none";
         },
         true
       );

@@ -13,7 +13,8 @@
   "dependencies": {
     "dropbox": "^4.0.17",
     "quill": "latest",
-    "sweetalert": "latest"
+    "sweetalert": "latest",
+    "emoji-mart-vue": "latest"
   },
   "devDependencies": {
     "@vue/cli-service": "latest",

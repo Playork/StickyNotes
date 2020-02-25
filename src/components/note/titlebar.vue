@@ -119,6 +119,10 @@ export default {
           document.getElementById("minimize").style.display = "none";
           document.getElementById("close").style.display = "none";
           document.getElementById("menu").style.display = "none";
+          document.getElementsByClassName("emoji-mart")[0].style.visibility =
+            "hidden";
+          document.getElementById("emoji").style.display = "none";
+          document.getElementById("hideemoji").style.display = "none";
           document.getElementById("lightYellow").style.paddingTop = "30px";
           if (
             document.getElementById("menu-content").classList.contains("show")
@@ -135,6 +139,10 @@ export default {
             document.getElementById("minimize").style.display = "flex";
             document.getElementById("close").style.display = "flex";
             document.getElementById("menu").style.display = "flex";
+            document.getElementsByClassName("emoji-mart")[0].style.visibility =
+              "visible";
+            document.getElementById("emoji").style.display = "block";
+            document.getElementById("hideemoji").style.display = "block";
             ipcRenderer.invoke("setMaximumSize", 100000, 100000);
             clearInterval(clearint);
           }
@@ -234,7 +242,7 @@ export default {
         try {
           document.querySelector(
             ".ql-snow .ql-editor"
-          ).innerHTML += `<img src="file:///${images.filePaths[0]}" style="width: 100%;height: auto;">`;
+          ).innerHTML += `<img src="file:///${images.filePaths[0]}" style="max-width: 100%;height: auto;">`;
         } catch {
           let swal = require("sweetalert");
           swal("Not Supported");

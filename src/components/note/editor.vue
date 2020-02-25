@@ -26,6 +26,28 @@ SOFTWARE.
 <!-- Html -->
 <template>
   <div>
+    <span title="Add Emoji" id="emoji" v-on:click="emoji">&#xE76E;</span>
+    <span title="close" id="hideemoji" v-on:click="hideemoji">&#xE8BB;</span>
+    <div id="emojip">
+      <picker
+        set="google"
+        @select="addEmoji"
+        title="Pick your emoji…"
+        emoji="point_up"
+        :style="{
+          position: 'absolute',
+          top: '40px',
+          right: '0',
+          zIndex: '7',
+          width: '275px',
+          height: '335px'
+        }"
+        :i18n="{
+          search: 'Search',
+          categories: { search: 'Results Of Your Search', recent: 'Recent' }
+        }"
+      />
+    </div>
     <div id="lightYellow">
       <div id="editor"></div>
     </div>
@@ -38,9 +60,15 @@ SOFTWARE.
 // Import Required Packages
 import Quill from "quill";
 import fs from "fs";
+import { Picker } from "emoji-mart-vue";
 
 // Vue Class
 export default {
+  // Components
+  components: {
+    Picker
+  },
+
   // Do On Start
   mounted() {
     window.setInterval(() => {
@@ -247,6 +275,26 @@ export default {
         func(id);
       }
     });
+  },
+  methods: {
+    // Add emoji
+    addEmoji(e) {
+      document.querySelector(
+        ".ql-snow .ql-editor"
+      ).lastElementChild.innerHTML += e.native;
+    },
+    // Add Emoji
+    emoji() {
+      document.getElementsByClassName("emoji-mart")[0].style.visibility =
+        "visible";
+      document.getElementById("hideemoji").style.display = "block";
+    },
+    // Hide Emoji
+    hideemoji() {
+      document.getElementsByClassName("emoji-mart")[0].style.visibility =
+        "hidden";
+      document.getElementById("hideemoji").style.display = "none";
+    }
   }
 };
 </script>

@@ -264,6 +264,46 @@ SOFTWARE. */
 #save {
   display: none;
 }
+.emoji-mart {
+  font-family: "Lobster" !important;
+  background: #202020ee !important;
+  visibility: hidden;
+  border: none !important;
+  border-radius: 0 !important;
+}
+.emoji-mart-category-label span {
+  background: #202020 !important;
+}
+.emoji-mart * {
+  border: none !important;
+  color: #fff !important;
+  border-radius: 20px !important;
+}
+.emoji-mart-search input {
+  color: #000 !important;
+}
+#hideemoji {
+  font-family: "segoe";
+  font-size: 15px;
+  position: absolute;
+  top: 40px;
+  right: 275px;
+  z-index: 8;
+  color: #fff;
+  padding: 14px 0 14px 10px;
+  background: #202020ee;
+  display: none;
+}
+#emoji {
+  font-family: "segoe";
+  font-size: 15px;
+  position: absolute;
+  top: 40px;
+  right: 0;
+  z-index: 7;
+  color: #000;
+  padding: 5px;
+}
 .link-quill {
   color: blue;
   cursor: pointer;
