@@ -163,12 +163,77 @@ export default {
         let winwidth = window.innerWidth.toString();
         let winheight = window.innerHeight.toString();
         let lock;
+        let pass;
         if (
           document.getElementById("close-button").style.pointerEvents == "none"
         ) {
           lock = "yes";
+          fs.readFile("data/notes/" + obj.toString(), (e, d) => {
+            if (e || !JSON.parse(d).pass) {
+              let swal = require("sweetalert");
+              swal({
+                title: "Create Password For Protection(Recommend)",
+                text: "If You Want No Password Leave This Input Blank",
+                content: {
+                  element: "input",
+                  attributes: {
+                    placeholder: "Type your password",
+                    type: "password"
+                  }
+                },
+                closeOnClickOutside: false
+              }).then(value => {
+                if (value) {
+                  pass = value;
+                } else {
+                  pass = "";
+                }
+              });
+            }
+          });
         } else {
-          lock = "no";
+          fs.readFile("data/notes/" + obj.toString(), (e, d) => {
+            if (e) {
+            } else {
+              if (JSON.parse(d).pass == "") {
+                lock = "no";
+              } else {
+                let swal = require("sweetalert");
+                let pass = () => {
+                  swal({
+                    title: "Type Password To Enter",
+                    content: {
+                      element: "input",
+                      attributes: {
+                        placeholder: "Type your password",
+                        type: "password"
+                      }
+                    },
+                    closeOnClickOutside: false
+                  }).then(value => {
+                    if (value == d) {
+                      lock = "no";
+                    } else {
+                      swal({
+                        title: "Wrong Password",
+                        text: "Do You Want To Cancel?",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true
+                      }).then(ok => {
+                        if (ok) {
+                          document.getElementById("locks").click();
+                        } else {
+                          pass();
+                        }
+                      });
+                    }
+                  });
+                };
+                pass();
+              }
+            }
+          });
         }
         if (
           document.querySelector(".ql-snow .ql-editor").innerHTML !=
@@ -184,7 +249,8 @@ export default {
               hei: winheight,
               deleted: "no",
               closed: "no",
-              locked: lock
+              locked: lock,
+              pass: pass
             }),
             e => {}
           );
