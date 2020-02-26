@@ -136,6 +136,7 @@ export default {
 
           ipcRenderer.invoke("setMaximumSize", 300, 325);
           if (select.style.pointerEvents == "auto") {
+            let fs = require("fs");
             fs.readFile("data/pass", (error, data) => {
               if (error) {
                 fs.readFile("data/.pass", (e, d) => {
