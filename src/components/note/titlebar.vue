@@ -154,6 +154,12 @@ export default {
                       closeOnClickOutside: false
                     }).then(value => {
                       if (value == d) {
+                        id.innerHTML = "&#xE785;";
+                        select0.style.pointerEvents = "auto";
+                        select1.style.pointerEvents = "auto";
+                        select2.style.pointerEvents = "auto";
+                        select4.style.display = "flex";
+                        select5.style.pointerEvents = "auto";
                         document.getElementById("color").style.height = "40px";
                         document.getElementById("locks").style.marginLeft = "0";
                         document.getElementById("add").style.display = "flex";
@@ -179,6 +185,7 @@ export default {
                           dangerMode: true
                         }).then(ok => {
                           if (ok) {
+                            select.style.pointerEvents = "none";
                           } else {
                             pass();
                           }
@@ -189,6 +196,12 @@ export default {
                   pass();
                 });
               } else {
+                id.innerHTML = "&#xE785;";
+                select0.style.pointerEvents = "auto";
+                select1.style.pointerEvents = "auto";
+                select2.style.pointerEvents = "auto";
+                select4.style.display = "flex";
+                select5.style.pointerEvents = "auto";
                 document.getElementById("color").style.height = "40px";
                 document.getElementById("locks").style.marginLeft = "0";
                 document.getElementById("add").style.display = "flex";
@@ -208,13 +221,7 @@ export default {
         }, 0.001);
         clearint;
       } else {
-        id.innerHTML = "&#xE785;";
         select.style.pointerEvents = "auto";
-        select0.style.pointerEvents = "auto";
-        select1.style.pointerEvents = "auto";
-        select2.style.pointerEvents = "auto";
-        select4.style.display = "flex";
-        select5.style.pointerEvents = "auto";
       }
     },
 
