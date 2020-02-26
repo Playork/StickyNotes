@@ -161,7 +161,11 @@ ipcMain.handle("close", event => {
 })
 
 ipcMain.handle("minimize", event => {
-  BrowserWindow.getFocusedWindow().minimize()
+  BrowserWindow.getAllWindows().forEach((b) => {
+    if (b.webContents == event.sender.webContents) {
+      b.minimize()
+    }
+  })
 })
 
 ipcMain.handle("destroy", event => {
@@ -172,8 +176,13 @@ ipcMain.handle("destroy", event => {
   })
 })
 
-ipcMain.handle("setMaximumSize", (event, a, b) => {
-  BrowserWindow.getFocusedWindow().setMaximumSize(a, b)
+ipcMain.handle("setMaximumSize", (event, a, c) => {
+  BrowserWindow.getAllWindows().forEach((b) => {
+    if (b.webContents == event.sender.webContents) {
+      b.setMaximumSize(a, c)
+    }
+  })
+
 })
 
 ipcMain.handle("syncwindow", (e, url) => {

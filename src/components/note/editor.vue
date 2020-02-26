@@ -258,8 +258,6 @@ export default {
         });
       });
       quill.on("text-change", () => {
-        //TODO
-
         // if (
         //   /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/gm.test(
         //     document.querySelector(".ql-snow .ql-editor").innerHTML
@@ -282,7 +280,7 @@ export default {
         //         ) {
         //           return x;
         //         } else {
-        //           return `<a href="mailto:${x}" class="link-quill">${x}</a>`;
+        //           return `<a onClick="this.contentEditable='true';" href="mailto:${x}" class="link-quill">${x}</a>`;
         //         }
         //       }
         //     );
@@ -309,7 +307,8 @@ export default {
         //         ) {
         //           return x;
         //         } else {
-        //           return `<a href="${x}" target="_blank" class="link-quill">${x}</a>`; rag
+        //           return `<a onClick="this.contentEditable='true';" href="${x}" target="_blank" class="link-quill">${x}</a>`;
+        //           rag;
         //         }
         //       }
         //     );

@@ -136,92 +136,30 @@ export default {
 
           ipcRenderer.invoke("setMaximumSize", 300, 325);
           if (select.style.pointerEvents == "auto") {
-            let fs = require("fs");
-            fs.readFile("data/pass", (error, data) => {
-              if (error) {
-                fs.readFile("data/.pass", (e, d) => {
-                  let swal = require("sweetalert");
-                  let pass = () => {
-                    swal({
-                      title: "Type Password To Unlock",
-                      content: {
-                        element: "input",
-                        attributes: {
-                          placeholder: "Type your password",
-                          type: "password"
-                        }
-                      },
-                      closeOnClickOutside: false
-                    }).then(value => {
-                      if (value == d) {
-                        id.innerHTML = "&#xE785;";
-                        select0.style.pointerEvents = "auto";
-                        select1.style.pointerEvents = "auto";
-                        select2.style.pointerEvents = "auto";
-                        select4.style.display = "flex";
-                        select5.style.pointerEvents = "auto";
-                        document.getElementById("color").style.height = "40px";
-                        document.getElementById("locks").style.marginLeft = "0";
-                        document.getElementById("add").style.display = "flex";
-                        document.getElementById("more").style.display = "flex";
-                        document.getElementById("minimize").style.display =
-                          "flex";
-                        document.getElementById("close").style.display = "flex";
-                        document.getElementById("menu").style.display = "flex";
-                        document.getElementById("emoji").style.display =
-                          "block";
-                        document.getElementById("undo").style.display = "block";
-                        document.getElementById("redo").style.display = "block";
-                        document.getElementById("deletenote1").style.display =
-                          "block";
-                        ipcRenderer.invoke("setMaximumSize", 100000, 100000);
-                        clearInterval(clearint);
-                      } else {
-                        swal({
-                          title: "Wrong Password",
-                          text: "Do You Want To Stay Locked?",
-                          icon: "warning",
-                          buttons: true,
-                          dangerMode: true
-                        }).then(ok => {
-                          if (ok) {
-                            select.style.pointerEvents = "none";
-                          } else {
-                            pass();
-                          }
-                        });
-                      }
-                    });
-                  };
-                  pass();
-                });
-              } else {
-                id.innerHTML = "&#xE785;";
-                select0.style.pointerEvents = "auto";
-                select1.style.pointerEvents = "auto";
-                select2.style.pointerEvents = "auto";
-                select4.style.display = "flex";
-                select5.style.pointerEvents = "auto";
-                document.getElementById("color").style.height = "40px";
-                document.getElementById("locks").style.marginLeft = "0";
-                document.getElementById("add").style.display = "flex";
-                document.getElementById("more").style.display = "flex";
-                document.getElementById("minimize").style.display = "flex";
-                document.getElementById("close").style.display = "flex";
-                document.getElementById("menu").style.display = "flex";
-                document.getElementById("emoji").style.display = "block";
-                document.getElementById("undo").style.display = "block";
-                document.getElementById("redo").style.display = "block";
-                document.getElementById("deletenote1").style.display = "block";
-                ipcRenderer.invoke("setMaximumSize", 100000, 100000);
-                clearInterval(clearint);
-              }
-            });
+            document.getElementById("color").style.height = "40px";
+            document.getElementById("locks").style.marginLeft = "0";
+            document.getElementById("add").style.display = "flex";
+            document.getElementById("more").style.display = "flex";
+            document.getElementById("minimize").style.display = "flex";
+            document.getElementById("close").style.display = "flex";
+            document.getElementById("menu").style.display = "flex";
+            document.getElementById("emoji").style.display = "block";
+            document.getElementById("undo").style.display = "block";
+            document.getElementById("redo").style.display = "block";
+            document.getElementById("deletenote1").style.display = "block";
+            ipcRenderer.invoke("setMaximumSize", 100000, 100000);
+            clearInterval(clearint);
           }
         }, 0.001);
         clearint;
       } else {
         select.style.pointerEvents = "auto";
+        id.innerHTML = "&#xE785;";
+        select0.style.pointerEvents = "auto";
+        select1.style.pointerEvents = "auto";
+        select2.style.pointerEvents = "auto";
+        select4.style.display = "flex";
+        select5.style.pointerEvents = "auto";
       }
     },
 
