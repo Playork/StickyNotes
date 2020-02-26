@@ -198,6 +198,7 @@ export default {
               if (JSON.parse(d).pass == "") {
                 lock = "no";
               } else {
+                let swal = require("sweetalert");
                 let pass = () => {
                   swal({
                     title: "Type Password To Enter",
@@ -221,7 +222,7 @@ export default {
                         dangerMode: true
                       }).then(ok => {
                         if (ok) {
-                          lock = "yes";
+                          document.getElementById("locks").click();
                         } else {
                           pass();
                         }
@@ -229,6 +230,7 @@ export default {
                     }
                   });
                 };
+                pass();
               }
             }
           });
@@ -247,7 +249,8 @@ export default {
               hei: winheight,
               deleted: "no",
               closed: "no",
-              locked: lock
+              locked: lock,
+              pass: pass
             }),
             e => {}
           );
