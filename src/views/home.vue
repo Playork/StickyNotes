@@ -75,8 +75,10 @@ export default {
               }).then(value => {
                 if (value) {
                   fs.writeFile("data/.pass", value, e => {});
+                  fs.writeFile("data/sign", "", e => {});
                 } else {
                   fs.writeFile("data/pass", "", e => {});
+                  fs.writeFile("data/sign", "", e => {});
                 }
               });
             } else {
