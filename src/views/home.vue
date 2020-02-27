@@ -64,7 +64,7 @@ export default {
     //  Profile
     let profile = "default";
     try {
-      await fs.promises.readFile("data/profile", async (e, d) => {
+      await fs.promises.readFile("data/profile", (e, d) => {
         if (d != "default") {
           profile = d;
         }
