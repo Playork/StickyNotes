@@ -63,14 +63,15 @@ export default {
     }
     //  Profile
     let profile = "default";
-    await fs.promises.readFile("data/profile", async (e, d) => {
-      if (e) {
-        await fs.promises.writeFile("data/profile", "default", e => {});
-      }
-      if (d != "default") {
-        profile = d;
-      }
-    });
+    try {
+      await fs.promises.readFile("data/profile", async (e, d) => {
+        if (d != "default") {
+          profile = d;
+        }
+      });
+    } catch {
+      await fs.promises.writeFile("data/profile", "default", e => {});
+    }
 
     // Create Password
     let pass = () => {
