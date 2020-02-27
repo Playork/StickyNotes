@@ -21,7 +21,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 "use strict";
-let { setTimeout } = require("timers");
 let { app, BrowserWindow, ipcMain, Menu, MenuItem } = require("electron");
 let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
 
@@ -55,10 +54,9 @@ function createWindow() {
   win.on("close", e => {
     e.preventDefault();
     win.webContents.send("closeall", "closeit");
-    setTimeout(() => {
-      win.destroy()
-      app.quit();
-    }, 500);
+    ipcMain.on("close", () => {
+      app.quit()
+    });
   });
 }
 
@@ -87,7 +85,6 @@ function createNote() {
     winnote.loadURL("http://localhost:8080/#/note");
     if (!process.env.IS_TEST) winnote.webContents.openDevTools();
   } else {
-    createProtocol("app");
     winnote.loadURL("app://./index.html#note");
   }
   winnote.on("ready-to-show", () => {
@@ -151,6 +148,14 @@ function createNote() {
 ipcMain.on("create-new-instance", () => {
   createNote();
 });
+
+ipcMain.handle("reload", event => {
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
+  } else {
+    win.loadURL("app://./index.html");
+  }
+})
 
 ipcMain.handle("close", event => {
   BrowserWindow.getAllWindows().forEach((b) => {

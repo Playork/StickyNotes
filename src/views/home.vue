@@ -53,12 +53,30 @@ export default {
   },
 
   // Do On Start
-  mounted() {
+  async mounted() {
+    if (!fs.existsSync("data")) {
+      fs.mkdirSync("data");
+      if (!fs.existsSync("data/default")) {
+        fs.mkdirSync("data/default");
+        fs.mkdirSync("data/default/notes/");
+      }
+    }
+    //  Profile
+    let profile = "default";
+    await fs.promises.readFile("data/profile", async (e, d) => {
+      if (e) {
+        await fs.promises.writeFile("data/profile", "default", e => {});
+      }
+      if (d != "default") {
+        profile = d;
+      }
+    });
+
     // Create Password
     let pass = () => {
-      fs.readFile("data/pass", (error, data) => {
+      fs.readFile("data/" + profile + "/pass", (error, data) => {
         if (error) {
-          fs.readFile("data/.pass", (e, d) => {
+          fs.readFile("data/" + profile + "/.pass", (e, d) => {
             let swal = require("sweetalert");
             if (e) {
               swal({
@@ -74,11 +92,11 @@ export default {
                 closeOnClickOutside: false
               }).then(value => {
                 if (value) {
-                  fs.writeFile("data/.pass", value, e => {});
-                  fs.writeFile("data/sign", "", e => {});
+                  fs.writeFile("data/" + profile + "/.pass", value, e => {});
+                  fs.writeFile("data/" + profile + "/sign", "", e => {});
                 } else {
-                  fs.writeFile("data/pass", "", e => {});
-                  fs.writeFile("data/sign", "", e => {});
+                  fs.writeFile("data/" + profile + "/pass", "", e => {});
+                  fs.writeFile("data/" + profile + "/sign", "", e => {});
                 }
               });
             } else {
@@ -94,7 +112,7 @@ export default {
                 closeOnClickOutside: false
               }).then(value => {
                 if (value == d) {
-                  fs.writeFile("data/sign", "", e => {});
+                  fs.writeFile("data/" + profile + "/sign", "", e => {});
                 } else {
                   swal({
                     title: "Wrong Password",
@@ -114,21 +132,15 @@ export default {
             }
           });
         } else {
-          fs.writeFile("data/sign", "", e => {});
+          fs.writeFile("data/" + profile + "/sign", "", e => {});
         }
       });
     };
     pass();
 
-    // Create Data
-    if (!fs.existsSync("data")) {
-      fs.mkdirSync("data");
-      fs.mkdirSync("data/notes/");
-    }
-
     // Sync Seup
     let accesst;
-    fs.readFile("data/.access", (e, d) => {
+    fs.readFile("data/" + profile + "/.access", (e, d) => {
       if (e) {
         document.getElementById("sign").innerHTML =
           "Not Signed In(Not Syncing)";
@@ -147,11 +159,14 @@ export default {
     window.setTimeout(async () => {
       let dbx = new Dropbox({ fetch, accessToken: accesst });
       let notes = "";
-      await fs.promises.readdir("data/notes/", function(e, files) {
+      await fs.promises.readdir("data/" + profile + "/notes/", function(
+        e,
+        files
+      ) {
         if (e) {
         } else {
           files.forEach(function(key, index) {
-            fs.readFile("data/notes/" + key, (e, d) => {
+            fs.readFile("data/" + profile + "/notes/" + key, (e, d) => {
               notes = notes + key + "\n" + d + "\n";
             });
           });
@@ -204,26 +219,29 @@ export default {
                 for (let i = 0; i < d.length; i++) {
                   if (i % 2 == 0 && d[i] != "") {
                     let js = JSON.parse(d[i + 1]);
-                    fs.readFile("data/notes/" + d[i], (e, d) => {
-                      if (e) {
-                        fs.writeFile(
-                          "data/notes/" + id[i],
-                          JSON.stringify(js),
-                          e => {}
-                        );
-                      } else {
-                        d = JSON.parse(d);
-                        if (js.first != d.first || js.image != d.image) {
-                          let g = new Date().getTime();
-                          let id = Number(d[i]) * g;
+                    fs.readFile(
+                      "data/" + profile + "/notes/" + d[i],
+                      (e, d) => {
+                        if (e) {
                           fs.writeFile(
-                            "data/notes/" + id.toString(),
+                            "data/" + profile + "/notes/" + id[i],
                             JSON.stringify(js),
                             e => {}
                           );
+                        } else {
+                          d = JSON.parse(d);
+                          if (js.first != d.first || js.image != d.image) {
+                            let g = new Date().getTime();
+                            let id = Number(d[i]) * g;
+                            fs.writeFile(
+                              "data/" + profile + "/notes/" + id.toString(),
+                              JSON.stringify(js),
+                              e => {}
+                            );
+                          }
                         }
                       }
-                    });
+                    );
                   }
                 }
               }
@@ -237,40 +255,68 @@ export default {
 
     // close on app.quit()
     ipcRenderer.on("closeall", () => {
-      fs.writeFile("data/closed", JSON.stringify({ closed: "yes" }), e => {});
-      window.setTimeout(() => {
-        ipcRenderer.invoke("destroy");
-      }, 200);
+      if (document.getElementById("deleteall").style.pointerEvents != "none") {
+        fs.unlink("data/" + profile + "/sign", e => {});
+        fs.unlink("data/profile", e => {});
+        fs.readdir("data/" + profile + "/notes/", function(e, files) {
+          if (e) {
+          } else {
+            files.forEach(function(key, index) {
+              fs.readFile("data/" + profile + "/notes/" + key, (e, d) => {
+                let value = JSON.parse(d);
+                if (value.first == "<p><br></p>") {
+                  fs.unlink("data/" + profile + "/notes/" + key, e => {});
+                }
+              });
+            });
+          }
+        });
+        fs.writeFile(
+          "data/" + profile + "/closed",
+          JSON.stringify({ closed: "yes" }),
+          e => {}
+        );
+        window.setTimeout(() => {
+          ipcRenderer.send("close");
+          ipcRenderer.invoke("destroy");
+        }, 200);
+      } else {
+        let swal = require("sweetalert");
+        swal("Can't Close Note Is Locked");
+      }
     });
 
     // Remove Closed
-    fs.unlink("data/closed", e => {
+    fs.unlink("data/" + profile + "/closed", e => {
       if (e) {
       }
     });
 
     // Sync
-    fs.watch("data/notes/", (e, r) => {
-      fs.readFile("data/sync", async (e, p) => {
+    fs.watch("data/" + profile + "/notes/", (e, r) => {
+      fs.readFile("data/" + profile + "/sync", async (e, p) => {
         if (e || JSON.parse(p).sync == "no") {
           if (!e) {
-            fs.unlink("data/sync", e => {
+            fs.unlink("data/" + profile + "/sync", e => {
               if (e) {
               }
             });
           }
           let notes = "";
-          await fs.promises.readdir("data/notes/", function(e, files) {
+          await fs.promises.readdir("data/" + profile + "/notes/", function(
+            e,
+            files
+          ) {
             if (e) {
             } else {
               files.forEach(function(key, index) {
-                fs.readFile("data/notes/" + key, (e, d) => {
+                fs.readFile("data/" + profile + "/notes/" + key, (e, d) => {
                   notes = notes + key + "\n" + d + "\n";
                 });
               });
             }
           });
-          fs.readFile("data/.access", (e, d) => {
+          fs.readFile("data/" + profile + "/.access", (e, d) => {
             if (e) {
             } else {
               let dbx = new Dropbox({ fetch, accessToken: accesst });
@@ -289,14 +335,14 @@ export default {
 
     // Load Saved Notes
     window.setInterval(() => {
-      fs.readFile("data/sign", async e => {
+      fs.readFile("data/" + profile + "/sign", async e => {
         if (e) {
         } else {
-          await fs.readFile("data/sync", (e, r) => {
+          await fs.readFile("data/" + profile + "/sync", (e, r) => {
             if (e) {
             } else {
               fs.writeFile(
-                "data/sync",
+                "data/" + profile + "/sync",
                 JSON.stringify({ sync: "no" }),
                 e => {}
               );
@@ -324,28 +370,34 @@ export default {
                           for (let i = 0; i < d.length; i++) {
                             if (i % 2 == 0 && d[i] != "") {
                               let js = JSON.parse(d[i + 1]);
-                              fs.readFile("data/notes/" + d[i], (e, d) => {
-                                if (e) {
-                                  fs.writeFile(
-                                    "data/notes/" + d[i],
-                                    JSON.stringify(js),
-                                    e => {
-                                      console.log(e);
-                                    }
-                                  );
-                                } else {
-                                  d = JSON.parse(d);
-                                  if (js.first != d.first) {
-                                    let g = new Date().getTime();
-                                    let id = Number(d[i]) * g;
+                              fs.readFile(
+                                "data/" + profile + "/notes/" + d[i],
+                                (e, d) => {
+                                  if (e) {
                                     fs.writeFile(
-                                      "data/notes/" + id.toString(),
+                                      "data/" + profile + "/notes/" + d[i],
                                       JSON.stringify(js),
-                                      e => {}
+                                      e => {
+                                        console.log(e);
+                                      }
                                     );
+                                  } else {
+                                    d = JSON.parse(d);
+                                    if (js.first != d.first) {
+                                      let g = new Date().getTime();
+                                      let id = Number(d[i]) * g;
+                                      fs.writeFile(
+                                        "data/" +
+                                          profile +
+                                          "/notes/" +
+                                          id.toString(),
+                                        JSON.stringify(js),
+                                        e => {}
+                                      );
+                                    }
                                   }
                                 }
-                              });
+                              );
                             }
                           }
                         }
@@ -358,7 +410,7 @@ export default {
                 });
             }
           });
-          fs.readFile("data/.access", (e, d) => {
+          fs.readFile("data/" + profile + "/.access", (e, d) => {
             if (e) {
               document.getElementById("sign").innerHTML =
                 "Not Signed In(Not Syncing)";
@@ -381,14 +433,14 @@ export default {
               }
             }
           });
-          fs.readdir("data/notes/", function(e, files) {
+          fs.readdir("data/" + profile + "/notes/", function(e, files) {
             if (e) {
               document.getElementById("notes").innerHTML = "";
             } else {
               document.getElementById("notes").innerHTML = "";
               files.forEach(function(key, index) {
                 try {
-                  fs.readFile("data/notes/" + key, (e, d) => {
+                  fs.readFile("data/" + profile + "/notes/" + key, (e, d) => {
                     if (e) {
                     } else {
                       let value = JSON.parse(d);
@@ -453,7 +505,7 @@ export default {
                       document.getElementById("startnote").onclick = () => {
                         let id = new Date().getTime();
                         fs.writeFile(
-                          "data/id",
+                          "data/" + profile + "/id",
                           JSON.stringify({ ids: key }),
                           e => {}
                         );
@@ -461,7 +513,7 @@ export default {
                         window.setTimeout(() => {
                           if (value.closed == "no") {
                             fs.writeFile(
-                              "data/id",
+                              "data/" + profile + "/id",
                               JSON.stringify({ ids: id }),
                               e => {}
                             );
@@ -469,7 +521,7 @@ export default {
                         }, 500);
                       };
                       document.getElementById("deletenote").onclick = () => {
-                        fs.readFile("data/warn", (e, d) => {
+                        fs.readFile("data/" + profile + "/warn", (e, d) => {
                           if (JSON.parse(d).on == "yes") {
                             let swal = require("sweetalert");
                             swal({
@@ -482,26 +534,32 @@ export default {
                               if (willDelete) {
                                 if (value.closed == "no") {
                                   fs.writeFile(
-                                    "data/notes/" + key,
+                                    "data/" + profile + "/notes/" + key,
                                     JSON.stringify({ deleted: "yes" }),
                                     e => {}
                                   );
                                 }
                                 if (value.closed == "yes") {
-                                  fs.unlink("data/notes/" + key, e => {});
+                                  fs.unlink(
+                                    "data/" + profile + "/notes/" + key,
+                                    e => {}
+                                  );
                                 }
                               }
                             });
                           } else {
                             if (value.closed == "no") {
                               fs.writeFile(
-                                "data/notes/" + key,
+                                "data/" + profile + "/notes/" + key,
                                 JSON.stringify({ deleted: "yes" }),
                                 e => {}
                               );
                             }
                             if (value.closed == "yes") {
-                              fs.unlink("data/notes/" + key, e => {});
+                              fs.unlink(
+                                "data/" + profile + "/notes/" + key,
+                                e => {}
+                              );
                             }
                           }
                         });
@@ -526,22 +584,35 @@ export default {
   methods: {
     // Close Function
     close() {
+      let profile = "default";
+      fs.readFile("data/profile", (e, d) => {
+        if (e) {
+          profile = "default";
+        } else {
+          profile = d;
+        }
+      });
       if (document.getElementById("deleteall").style.pointerEvents != "none") {
-        fs.unlink("data/sign", e => {});
-        fs.readdir("data/notes/", function(e, files) {
+        fs.unlink("data/" + profile + "/sign", e => {});
+        fs.unlink("data/profile", e => {});
+        fs.readdir("data/" + profile + "/notes/", function(e, files) {
           if (e) {
           } else {
             files.forEach(function(key, index) {
-              fs.readFile("data/notes/" + key, (e, d) => {
+              fs.readFile("data/" + profile + "/notes/" + key, (e, d) => {
                 let value = JSON.parse(d);
                 if (value.first == "<p><br></p>") {
-                  fs.unlink("data/notes/" + key, e => {});
+                  fs.unlink("data/" + profile + "/notes/" + key, e => {});
                 }
               });
             });
           }
         });
-        fs.writeFile("data/closed", JSON.stringify({ closed: "yes" }), e => {});
+        fs.writeFile(
+          "data/" + profile + "/closed",
+          JSON.stringify({ closed: "yes" }),
+          e => {}
+        );
         window.setTimeout(() => {
           ipcRenderer.invoke("close");
         }, 400);
@@ -553,15 +624,23 @@ export default {
 
     // Start New Note
     note() {
+      let profile = "default";
+      fs.readFile("data/profile", (e, d) => {
+        if (e) {
+          profile = "default";
+        } else {
+          profile = d;
+        }
+      });
       let func = obj => {
         obj++;
         fs.writeFile(
-          "data/id",
+          "data/" + profile + "/id",
           JSON.stringify({ ids: obj.toString() }),
           e => {}
         );
       };
-      fs.readFile("data/id", (e, d) => {
+      fs.readFile("data/" + profile + "/id", (e, d) => {
         if (e) {
           let id = 1;
           func(id);

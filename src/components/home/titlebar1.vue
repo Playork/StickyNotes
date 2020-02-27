@@ -31,6 +31,11 @@ SOFTWARE.
         <div class="id" id="window-title2" title="Add Note" v-on:click="note">
           <span id="add">&#xE710;</span>
         </div>
+        <div id="profiles">
+          <select id="profile">
+            <option value="default">default</option>
+          </select>
+        </div>
         <div id="window-controls">
           <div
             title="Minimize Window"

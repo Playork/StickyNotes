@@ -74,6 +74,16 @@ export default {
 
   // Do On Start
   mounted() {
+    //  Profile
+    let profile = "default";
+    fs.readFile("data/profile", (e, d) => {
+      if (e) {
+        profile = "default";
+      } else {
+        profile = d;
+      }
+    });
+
     window.setInterval(() => {
       let color1 = window
         .getComputedStyle(document.getElementById("lightYellow"))
@@ -175,7 +185,7 @@ export default {
           "<p><br></p>"
         ) {
           fs.writeFile(
-            "data/notes/" + obj.toString(),
+            "data/" + profile + "/notes/" + obj.toString(),
             JSON.stringify({
               first: text,
               back: color1,
@@ -209,7 +219,7 @@ export default {
         } else {
           lock = "no";
         }
-        fs.readFile("data/notes/" + obj.toString(), (e, d) => {
+        fs.readFile("data/" + profile + "/notes/" + obj.toString(), (e, d) => {
           if (e || JSON.parse(d).deleted == "no") {
             let { ipcRenderer } = require("electron");
             if (
@@ -217,7 +227,7 @@ export default {
               "<p><br></p>"
             ) {
               fs.writeFile(
-                "data/notes/" + obj.toString(),
+                "data/" + profile + "/notes/" + obj.toString(),
                 JSON.stringify({
                   first: text,
                   back: color1,
@@ -233,19 +243,22 @@ export default {
                 }
               );
             } else {
-              fs.unlink("data/notes/" + obj.toString(), e => {});
+              fs.unlink(
+                "data/" + profile + "/notes/" + obj.toString(),
+                e => {}
+              );
               ipcRenderer.invoke("destroy");
             }
           }
         });
       };
-      fs.watch("data/notes/", (e, r) => {
-        fs.readFile("data/notes/" + obj.toString(), (e, d) => {
+      fs.watch("data/" + profile + "/notes/", (e, r) => {
+        fs.readFile("data/" + profile + "/notes/" + obj.toString(), (e, d) => {
           if (e) {
           } else {
             try {
               if (JSON.parse(d).deleted == "yes") {
-                fs.unlink("data/notes/" + obj.toString(), e => {
+                fs.unlink("data/" + profile + "/notes/" + obj.toString(), e => {
                   if (e) {
                     console.log(e);
                   }
@@ -326,7 +339,7 @@ export default {
         .addEventListener("click", () => repeafunc());
       window.addEventListener("resize", () => repeafunc());
     };
-    fs.readFile("data/id", (e, d) => {
+    fs.readFile("data/" + profile + "/id", (e, d) => {
       if (e) {
         let id = 1;
         func(id);

@@ -59,10 +59,20 @@ SOFTWARE.
         <div>
           <h1>Settings</h1>
           <div id="setting">
-            <h2>User</h2>
+            <h2>Profile</h2>
             <br />
             <h4 v-on:click="pass" id="pass">
-              Change Password/Create Password
+              Change Password/Create Password Of This Profile
+            </h4>
+            <br />
+            <br />
+            <h4 v-on:click="createprofile" id="createprofile">
+              Create New Profile
+            </h4>
+            <br />
+            <br />
+            <h4 v-on:click="deleteprofile" id="deleteprofile">
+              Delete This Profile
             </h4>
             <br />
             <h2>Appearance</h2>
@@ -128,12 +138,64 @@ import { ipcRenderer } from "electron";
 // Vue Class
 export default {
   // Do On Start
-  mounted() {
+  async mounted() {
+    //  Profile
+    let profile = "default";
+    await fs.promises.readFile("data/profile", async (e, d) => {
+      if (e) {
+        await fs.promises.writeFile("data/profile", "default", e => {});
+      }
+      if (d != "default") {
+        profile = d;
+      }
+    });
+
+    // Profiles
+    await fs.promises.watch("data/", (e, d) => {
+      fs.readdirSync("data").forEach(function(file, index) {
+        if (
+          fs.lstatSync("data" + "/" + file).isDirectory() &&
+          file != "default" &&
+          !new RegExp(`<option value="${file}">${file}</option>`).test(
+            document.getElementById("profile").innerHTML
+          )
+        ) {
+          document
+            .getElementById("profile")
+            .insertAdjacentHTML(
+              "beforeend",
+              `<option value="${file}">${file}</option>`
+            );
+        }
+      });
+    });
+    await fs.promises.readFile("data/profile", async (e, d) => {
+      for (let i = -1; i > -1; i++) {
+        document.getElementById("profile").selectedIndex = i;
+        if (document.getElementById("profile").selectedOptions[0].value == d) {
+          break;
+        }
+      }
+    });
+    document.getElementById("profile").onchange = () => {
+      fs.writeFile(
+        "data/profile",
+        document.getElementById("profile").value,
+        e => {
+          ipcRenderer.invoke("reload");
+        }
+      );
+    };
+
     //TODO: Backup, will be removed in next version
     if (localStorage.getItem("access")) {
-      fs.writeFile("data/.access", localStorage.getItem("access"), e => {});
       fs.writeFile(
-        "data/sync",
+        "data/" + profile + "/.access",
+        localStorage.getItem("access"),
+        e => {}
+      );
+      fs.writeFile(
+        "data/" + profile + "/sync",
         JSON.stringify(localStorage.getItem("sync")),
         e => {}
       );
@@ -150,14 +212,22 @@ export default {
       let hash = u.split("#");
       let pair = hash[1].split("&");
       let val = pair[0].split("=");
-      fs.writeFile("data/.access", val[1], e => {});
-      fs.writeFile("data/sync", JSON.stringify({ sync: "yes" }), e => {});
+      fs.writeFile("data/" + profile + "/.access", val[1], e => {});
+      fs.writeFile(
+        "data/" + profile + "/sync",
+        JSON.stringify({ sync: "yes" }),
+        e => {}
+      );
     });
 
-    fs.readFile("data/color", (e, d) => {
+    fs.readFile("data/" + profile + "/color", (e, d) => {
       if (e) {
         document.getElementById("colorswitch").checked = true;
-        fs.writeFile("data/color", JSON.stringify({ on: "yes" }), e => {});
+        fs.writeFile(
+          "data/" + profile + "/color",
+          JSON.stringify({ on: "yes" }),
+          e => {}
+        );
       } else {
         d = JSON.parse(d);
         if (d.on == "yes") {
@@ -167,10 +237,14 @@ export default {
         }
       }
     });
-    fs.readFile("data/emoji", (e, d) => {
+    fs.readFile("data/" + profile + "/emoji", (e, d) => {
       if (e) {
         document.getElementById("emojiswitch").checked = true;
-        fs.writeFile("data/emoji", JSON.stringify({ on: "yes" }), e => {});
+        fs.writeFile(
+          "data/" + profile + "/emoji",
+          JSON.stringify({ on: "yes" }),
+          e => {}
+        );
       } else {
         d = JSON.parse(d);
         if (d.on == "yes") {
@@ -180,10 +254,14 @@ export default {
         }
       }
     });
-    fs.readFile("data/warn", (e, d) => {
+    fs.readFile("data/" + profile + "/warn", (e, d) => {
       if (e) {
         document.getElementById("warnswitch").checked = true;
-        fs.writeFile("data/warn", JSON.stringify({ on: "yes" }), e => {});
+        fs.writeFile(
+          "data/" + profile + "/warn",
+          JSON.stringify({ on: "yes" }),
+          e => {}
+        );
       } else {
         d = JSON.parse(d);
         if (d.on == "yes") {
@@ -193,10 +271,14 @@ export default {
         }
       }
     });
-    fs.readFile("data/theme", (e, d) => {
+    fs.readFile("data/" + profile + "/theme", (e, d) => {
       if (e) {
         document.getElementById("theme").selectedIndex = 0;
-        fs.writeFile("data/theme", JSON.stringify({ on: 0 }), e => {});
+        fs.writeFile(
+          "data/" + profile + "/theme",
+          JSON.stringify({ on: 0 }),
+          e => {}
+        );
       } else {
         d = JSON.parse(d);
         let num = d.on;
@@ -256,29 +338,57 @@ export default {
       }
       document.getElementById("colorswitch").onclick = () => {
         if (document.getElementById("colorswitch").checked == true) {
-          fs.writeFile("data/color", JSON.stringify({ on: "yes" }), e => {});
+          fs.writeFile(
+            "data/" + profile + "/color",
+            JSON.stringify({ on: "yes" }),
+            e => {}
+          );
         } else {
-          fs.writeFile("data/color", JSON.stringify({ on: "no" }), e => {});
+          fs.writeFile(
+            "data/" + profile + "/color",
+            JSON.stringify({ on: "no" }),
+            e => {}
+          );
         }
       };
     });
     document.getElementById("emojiswitch").onclick = () => {
       if (document.getElementById("emojiswitch").checked == true) {
-        fs.writeFile("data/emoji", JSON.stringify({ on: "yes" }), e => {});
+        fs.writeFile(
+          "data/" + profile + "/emoji",
+          JSON.stringify({ on: "yes" }),
+          e => {}
+        );
       } else {
-        fs.writeFile("data/emoji", JSON.stringify({ on: "no" }), e => {});
+        fs.writeFile(
+          "data/" + profile + "/emoji",
+          JSON.stringify({ on: "no" }),
+          e => {}
+        );
       }
     };
     document.getElementById("warnswitch").onclick = () => {
       if (document.getElementById("warnswitch").checked == true) {
-        fs.writeFile("data/warn", JSON.stringify({ on: "yes" }), e => {});
+        fs.writeFile(
+          "data/" + profile + "/warn",
+          JSON.stringify({ on: "yes" }),
+          e => {}
+        );
       } else {
-        fs.writeFile("data/warn", JSON.stringify({ on: "no" }), e => {});
+        fs.writeFile(
+          "data/" + profile + "/warn",
+          JSON.stringify({ on: "no" }),
+          e => {}
+        );
       }
     };
     document.getElementById("theme").onchange = () => {
       let num = document.getElementById("theme").selectedIndex;
-      fs.writeFile("data/theme", JSON.stringify({ on: num }), e => {});
+      fs.writeFile(
+        "data/" + profile + "/theme",
+        JSON.stringify({ on: num }),
+        e => {}
+      );
 
       if (num == 1) {
         let lith = document.createElement("style");
@@ -350,8 +460,177 @@ export default {
 
   // Functions
   methods: {
+    // Create Profile
+    createprofile() {
+      let swal = require("sweetalert");
+      swal({
+        title: "Create New Profile",
+        content: {
+          element: "input",
+          attributes: {
+            placeholder: "Profile Name"
+          }
+        },
+        closeOnClickOutside: false
+      }).then(profile => {
+        if (!profile) {
+          swal("Not Valid");
+        } else {
+          if (fs.existsSync("data/" + profile)) {
+            swal("Profile Name Already Exist");
+          } else {
+            fs.mkdirSync("data/" + profile);
+            fs.mkdirSync("data/" + profile + "/notes/");
+            let pass = () => {
+              fs.readFile("data/" + profile + "/pass", (error, data) => {
+                if (error) {
+                  fs.readFile("data/" + profile + "/.pass", (e, d) => {
+                    let swal = require("sweetalert");
+                    if (e) {
+                      swal({
+                        title: "Create Password For Protection(Recommend)",
+                        text: "If You Want No Password Leave This Input Blank",
+                        content: {
+                          element: "input",
+                          attributes: {
+                            placeholder: "Type your password",
+                            type: "password"
+                          }
+                        },
+                        closeOnClickOutside: false
+                      }).then(value => {
+                        if (value) {
+                          fs.writeFile(
+                            "data/" + profile + "/.pass",
+                            value,
+                            e => {}
+                          );
+                        } else {
+                          fs.writeFile(
+                            "data/" + profile + "/pass",
+                            "",
+                            e => {}
+                          );
+                        }
+                      });
+                    } else {
+                      swal({
+                        title: "Type Password To Enter",
+                        content: {
+                          element: "input",
+                          attributes: {
+                            placeholder: "Type your password",
+                            type: "password"
+                          }
+                        },
+                        closeOnClickOutside: false
+                      }).then(value => {
+                        if (value == d) {
+                          swal({
+                            title: "Change Password",
+                            text:
+                              "If You Do Not Want To Change Password Leave This Input Blank",
+                            content: {
+                              element: "input",
+                              attributes: {
+                                placeholder: "Type your password",
+                                type: "password"
+                              }
+                            },
+                            closeOnClickOutside: false
+                          }).then(value => {
+                            if (value) {
+                              fs.writeFile(
+                                "data/" + profile + "/.pass",
+                                value,
+                                e => {}
+                              );
+                            } else {
+                            }
+                          });
+                        } else {
+                          swal({
+                            title: "Wrong Password",
+                            text: "Do You Do Not Want To Change Password?",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true
+                          }).then(ok => {
+                            if (ok) {
+                            } else {
+                              pass();
+                            }
+                          });
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            };
+            pass();
+          }
+        }
+      });
+    },
+
+    // Delete Profile
+    deleteprofile() {
+      let swal = require("sweetalert");
+      fs.readFile("data/profile", (e, d) => {
+        if (d == "default") {
+          swal("Can't Delete Default Profile");
+        } else {
+          swal({
+            title: "Are You Sure?",
+            text: "Do You Want To Delete This Profile?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+          }).then(ok => {
+            if (ok) {
+              fs.writeFile(
+                "data/" + profile + "/closed",
+                JSON.stringify({ closed: "yes" }),
+                e => {
+                  fs.writeFile("data/profile", "default", e => {
+                    let deleteFolder = path => {
+                      fs.readdirSync(path)
+                        .forEach(function(file, index) {
+                          let curPath = path + "/" + file;
+                          if (fs.lstatSync(curPath).isDirectory()) {
+                            deleteFolder(curPath);
+                          } else {
+                            fs.unlinkSync(curPath);
+                          }
+                        })
+                        .then(() => {
+                          fs.rmdirSync(path).then(() => {
+                            ipcRenderer.invoke("reload");
+                          });
+                        });
+                    };
+                    deleteFolder("data/" + d);
+                  });
+                }
+              );
+            } else {
+            }
+          });
+        }
+      });
+    },
+
     // Import Notes
     async importnotes() {
+      let profile = "default";
+      fs.readFile("data/profile", (e, d) => {
+        if (e) {
+          profile = "default";
+        } else {
+          profile = d;
+        }
+      });
       let { ipcRenderer } = require("electron");
       let notes = await ipcRenderer.invoke("importnotes");
       if (notes.filePaths[0]) {
@@ -365,10 +644,10 @@ export default {
               for (let i = 0; i < d.length; i++) {
                 if (i % 2 == 0 && d[i] != "") {
                   let js = JSON.parse(d[i + 1]);
-                  fs.readFile("data/notes/" + d[i], (e, d) => {
+                  fs.readFile("data/" + profile + "/notes/" + d[i], (e, d) => {
                     if (e) {
                       fs.writeFile(
-                        "data/notes/" + id[i],
+                        "data/" + profile + "/notes/" + id[i],
                         JSON.stringify(js),
                         e => {}
                       );
@@ -378,7 +657,7 @@ export default {
                         let g = new Date().getTime();
                         let id = Number(d[i]) * g;
                         fs.writeFile(
-                          "data/notes/" + id.toString(),
+                          "data/" + profile + "/notes/" + id.toString(),
                           JSON.stringify(js),
                           e => {}
                         );
@@ -395,16 +674,24 @@ export default {
 
     // Export Notes
     async exportnotes() {
+      let profile = "default";
+      fs.readFile("data/profile", (e, d) => {
+        if (e) {
+          profile = "default";
+        } else {
+          profile = d;
+        }
+      });
       if (document.getElementById("notetext")) {
         let { ipcRenderer } = require("electron");
         let notes = await ipcRenderer.invoke("exportnotes");
         if (notes.filePath != undefined) {
           let data = "";
-          fs.readdir("data/notes/", function(e, files) {
+          fs.readdir("data/" + profile + "/notes/", function(e, files) {
             if (e) {
             } else {
               files.forEach(function(key, index) {
-                fs.readFile("data/notes/" + key, (e, d) => {
+                fs.readFile("data/" + profile + "/notes/" + key, (e, d) => {
                   let value = JSON.parse(d);
                   data = data + key + "\n" + JSON.stringify(value) + "\n";
                 });
@@ -433,8 +720,16 @@ export default {
 
     // Delete All Note Function
     deleteall() {
+      let profile = "default";
+      fs.readFile("data/profile", (e, d) => {
+        if (e) {
+          profile = "default";
+        } else {
+          profile = d;
+        }
+      });
       if (document.getElementById("notetext")) {
-        fs.readFile("data/warn", (e, d) => {
+        fs.readFile("data/" + profile + "/warn", (e, d) => {
           d = JSON.parse(d);
           if (d.on == "yes") {
             let swal = require("sweetalert");
@@ -447,19 +742,28 @@ export default {
             }).then(willDelete => {
               if (willDelete) {
                 fs.writeFile(
-                  "data/closed",
+                  "data/" + profile + "/closed",
                   JSON.stringify({ closed: "yes" }),
                   e => {
                     window.setTimeout(() => {
-                      fs.readdir("data/notes/", function(e, files) {
+                      fs.readdir("data/" + profile + "/notes/", function(
+                        e,
+                        files
+                      ) {
                         if (e) {
                         } else {
-                          fs.unlink("data/closed", e => {});
+                          fs.unlink("data/" + profile + "/closed", e => {});
                           files.forEach(function(key, index) {
-                            fs.readFile("data/notes/" + key, (e, d) => {
-                              let value = JSON.parse(d);
-                              fs.unlink("data/notes/" + key, e => {});
-                            });
+                            fs.readFile(
+                              "data/" + profile + "/notes/" + key,
+                              (e, d) => {
+                                let value = JSON.parse(d);
+                                fs.unlink(
+                                  "data/" + profile + "/notes/" + key,
+                                  e => {}
+                                );
+                              }
+                            );
                           });
                         }
                       });
@@ -470,19 +774,25 @@ export default {
             });
           } else {
             fs.writeFile(
-              "data/closed",
+              "data/" + profile + "/closed",
               JSON.stringify({ closed: "yes" }),
               e => {
                 window.setTimeout(() => {
-                  fs.readdir("data/notes/", function(e, files) {
+                  fs.readdir("data/" + profile + "/notes/", function(e, files) {
                     if (e) {
                     } else {
-                      fs.unlink("data/closed", e => {});
+                      fs.unlink("data/" + profile + "/closed", e => {});
                       files.forEach(function(key, index) {
-                        fs.readFile("data/notes/" + key, (e, d) => {
-                          let value = JSON.parse(d);
-                          fs.unlink("data/notes/" + key, e => {});
-                        });
+                        fs.readFile(
+                          "data/" + profile + "/notes/" + key,
+                          (e, d) => {
+                            let value = JSON.parse(d);
+                            fs.unlink(
+                              "data/" + profile + "/notes/" + key,
+                              e => {}
+                            );
+                          }
+                        );
                       });
                     }
                   });
@@ -499,7 +809,15 @@ export default {
 
     // Sign Out
     out() {
-      fs.unlink("data/.access", e => {});
+      let profile = "default";
+      fs.readFile("data/profile", (e, d) => {
+        if (e) {
+          profile = "default";
+        } else {
+          profile = d;
+        }
+      });
+      fs.unlink("data/" + profile + "/.access", e => {});
     },
 
     // Show About Page Function
@@ -529,10 +847,18 @@ export default {
 
     // Change Password
     pass() {
+      let profile = "default";
+      fs.readFile("data/profile", (e, d) => {
+        if (e) {
+          profile = "default";
+        } else {
+          profile = d;
+        }
+      });
       let pass = () => {
-        fs.readFile("data/pass", (error, data) => {
+        fs.readFile("data/" + profile + "/pass", (error, data) => {
           if (error) {
-            fs.readFile("data/.pass", (e, d) => {
+            fs.readFile("data/" + profile + "/.pass", (e, d) => {
               let swal = require("sweetalert");
               if (e) {
                 swal({
@@ -548,9 +874,9 @@ export default {
                   closeOnClickOutside: false
                 }).then(value => {
                   if (value) {
-                    fs.writeFile("data/.pass", value, e => {});
+                    fs.writeFile("data/" + profile + "/.pass", value, e => {});
                   } else {
-                    fs.writeFile("data/pass", "", e => {});
+                    fs.writeFile("data/" + profile + "/pass", "", e => {});
                   }
                 });
               } else {
@@ -580,7 +906,11 @@ export default {
                       closeOnClickOutside: false
                     }).then(value => {
                       if (value) {
-                        fs.writeFile("data/.pass", value, e => {});
+                        fs.writeFile(
+                          "data/" + profile + "/.pass",
+                          value,
+                          e => {}
+                        );
                       } else {
                       }
                     });

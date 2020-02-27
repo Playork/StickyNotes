@@ -220,3 +220,23 @@ SOFTWARE. */
 .show {
   display: block;
 }
+#profiles {
+  position: fixed;
+  top: 5px;
+  right: 100px;
+  -webkit-app-region: no-drag;
+}
+#profile {
+  font-family: "Lobster";
+  font-size: 15px;
+  color: #fff;
+  width: 100px;
+  height: 30px;
+  background: #111;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: -40px;
+  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
+}

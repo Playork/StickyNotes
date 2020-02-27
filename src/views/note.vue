@@ -59,13 +59,23 @@ export default {
 
   // Do On Start
   mounted() {
+    //  Profile
+    let profile = "default";
+    fs.readFile("data/profile", (e, d) => {
+      if (e) {
+        profile = "default";
+      } else {
+        profile = d;
+      }
+    });
+
     // Delete Note
-    fs.readFile("data/id", (e, d) => {
+    fs.readFile("data/" + profile + "/id", (e, d) => {
       if (e) {
       } else {
         let noteid = JSON.parse(d).ids;
         document.getElementById("deletenote1").addEventListener("click", () => {
-          fs.readFile("data/id", (e, r) => {
+          fs.readFile("data/" + profile + "/id", (e, r) => {
             if (e) {
             } else {
               if (JSON.parse(r).on == "yes") {
@@ -78,12 +88,12 @@ export default {
                   dangerMode: true
                 }).then(willDelete => {
                   if (willDelete) {
-                    fs.unlink("data/notes/" + noteid, e => {});
+                    fs.unlink("data/" + profile + "/notes/" + noteid, e => {});
                     ipcRenderer.invoke("destroy");
                   }
                 });
               } else {
-                fs.unlink("data/notes/" + noteid, e => {});
+                fs.unlink("data/" + profile + "/notes/" + noteid, e => {});
                 ipcRenderer.invoke("destroy");
               }
             }
@@ -98,8 +108,8 @@ export default {
     });
 
     //theme change
-    fs.watch("data/theme", (e, r) => {
-      fs.readFile("data/theme", (e, d) => {
+    fs.watch("data/" + profile + "/theme", (e, r) => {
+      fs.readFile("data/" + profile + "/theme", (e, d) => {
         let num = JSON.parse(d).on;
         if (num == 1) {
           let lith = document.createElement("style");
@@ -163,8 +173,8 @@ export default {
     });
 
     //closing home
-    fs.watch("data", (e, r) => {
-      fs.readFile("data/closed", (e, d) => {
+    fs.watch("data/" + profile, (e, r) => {
+      fs.readFile("data/" + profile + "/closed", (e, d) => {
         if (e) {
         } else {
           if (JSON.parse(d).closed == "yes") {
@@ -175,37 +185,40 @@ export default {
     });
 
     // Restore Saved Note
-    fs.readFile("data/id", (e, d) => {
+    fs.readFile("data/" + profile + "/id", (e, d) => {
       if (e) {
       } else {
-        fs.readFile("data/notes/" + JSON.parse(d).ids, (e, r) => {
-          if (e) {
-            window.resizeTo(300, 325);
-            document.querySelector(".ql-toolbar").style.backgroundColor =
-              "#FFF2AB";
-          } else {
-            let text = JSON.parse(r);
-            document.querySelector(".ql-snow .ql-editor").innerHTML =
-              text.first;
-            document.querySelector(".ql-toolbar").style.backgroundColor =
-              text.back;
-            window.resizeTo(Number(text.wid), Number(text.hei));
-            document.getElementById("lightYellow").style.backgroundColor =
-              text.back;
-            document.getElementById("titlebar").style.backgroundColor =
-              text.title;
+        fs.readFile(
+          "data/" + profile + "/notes/" + JSON.parse(d).ids,
+          (e, r) => {
+            if (e) {
+              window.resizeTo(300, 325);
+              document.querySelector(".ql-toolbar").style.backgroundColor =
+                "#FFF2AB";
+            } else {
+              let text = JSON.parse(r);
+              document.querySelector(".ql-snow .ql-editor").innerHTML =
+                text.first;
+              document.querySelector(".ql-toolbar").style.backgroundColor =
+                text.back;
+              window.resizeTo(Number(text.wid), Number(text.hei));
+              document.getElementById("lightYellow").style.backgroundColor =
+                text.back;
+              document.getElementById("titlebar").style.backgroundColor =
+                text.title;
+            }
           }
-        });
+        );
       }
     });
-    fs.readFile("data/color", (e, d) => {
+    fs.readFile("data/" + profile + "/color", (e, d) => {
       if (JSON.parse(d).on == "no") {
         document.getElementById("color").style.visibility = "hidden";
       } else {
         document.getElementById("color").style.visibility = "visible";
       }
     });
-    fs.readFile("data/emoji", (e, d) => {
+    fs.readFile("data/" + profile + "/emoji", (e, d) => {
       if (JSON.parse(d).on == "no") {
         document.getElementById("emoji").style.visibility = "hidden";
       } else {
@@ -223,15 +236,23 @@ export default {
 
     // Start New Note
     note() {
+      let profile = "default";
+      fs.readFile("data/profile", (e, d) => {
+        if (e) {
+          profile = "default";
+        } else {
+          profile = d;
+        }
+      });
       let func = obj => {
         obj++;
         fs.writeFile(
-          "data/id",
+          "data/" + profile + "/id",
           JSON.stringify({ ids: obj.toString() }),
           e => {}
         );
       };
-      fs.readFile("data/id", (e, d) => {
+      fs.readFile("data/" + profile + "/id", (e, d) => {
         if (e) {
           let id = 1;
           func(id);

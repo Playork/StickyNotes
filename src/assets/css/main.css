@@ -271,7 +271,9 @@ button {
   text-align: left;
   padding: 0 70px;
 }
-#pass {
+#pass,
+#createprofile,
+#deleteprofile {
   color: blue;
   cursor: pointer;
 }
