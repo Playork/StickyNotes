@@ -140,18 +140,44 @@ export default {
   // Do On Start
   async mounted() {
     //  Profile
-    let profile = "default";
+    let profile;
     try {
       await fs.promises.readFile("data/profile", async (e, d) => {
-        if (d != "default") {
-          profile = d;
-        }
+        profile = d;
       });
     } catch {
+      profile = "default";
       await fs.promises.writeFile("data/profile", "default", e => {});
     }
 
     // Profiles
+    fs.readdirSync("data")
+      .forEach(function(file, index) {
+        if (
+          fs.lstatSync("data" + "/" + file).isDirectory() &&
+          file != "default" &&
+          !new RegExp(`<option value="${file}">${file}</option>`).test(
+            document.getElementById("profile").innerHTML
+          )
+        ) {
+          document
+            .getElementById("profile")
+            .insertAdjacentHTML(
+              "beforeend",
+              `<option value="${file}">${file}</option>`
+            );
+        }
+      })
+      .then(async () => {
+        await fs.promises.readFile("data/profile", async (e, d) => {
+          for (let i = -1; i > -1; i++) {
+            document.getElementById("profile").selectedIndex = i;
+            if (document.getElementById("profile").value == d) {
+              break;
+            }
+          }
+        });
+      });
     fs.watch("data/", (e, d) => {
       fs.readdirSync("data").forEach(function(file, index) {
         if (
@@ -169,14 +195,6 @@ export default {
             );
         }
       });
-    });
-    await fs.promises.readFile("data/profile", async (e, d) => {
-      for (let i = -1; i > -1; i++) {
-        document.getElementById("profile").selectedIndex = i;
-        if (document.getElementById("profile").selectedOptions[0].value == d) {
-          break;
-        }
-      }
     });
     document.getElementById("profile").onchange = () => {
       fs.writeFile(
@@ -333,8 +351,6 @@ export default {
     color: #000 !important;
   }`;
           document.head.appendChild(lith);
-        } else {
-          document.head.removeChild(document.getElementById("lighttheme"));
         }
       }
       document.getElementById("colorswitch").onclick = () => {

@@ -258,7 +258,6 @@ export default {
     ipcRenderer.on("closeall", () => {
       if (document.getElementById("deleteall").style.pointerEvents != "none") {
         fs.unlink("data/" + profile + "/sign", e => {});
-        fs.unlink("data/profile", e => {});
         fs.readdir("data/" + profile + "/notes/", function(e, files) {
           if (e) {
           } else {
@@ -595,7 +594,6 @@ export default {
       });
       if (document.getElementById("deleteall").style.pointerEvents != "none") {
         fs.unlink("data/" + profile + "/sign", e => {});
-        fs.unlink("data/profile", e => {});
         fs.readdir("data/" + profile + "/notes/", function(e, files) {
           if (e) {
           } else {
