@@ -60,62 +60,64 @@ export default {
   // Do On Start
   mounted() {
     //  Profile
-    let profile = "default";
+    let profile;
     fs.readFile("data/profile", (e, d) => {
-      if (e) {
-        profile = "default";
-      } else {
-        profile = d;
-      }
+      profile = d;
     });
 
-    // Delete Note
-    fs.readFile("data/" + profile + "/id", (e, d) => {
-      if (e) {
-      } else {
-        let noteid = JSON.parse(d).ids;
-        document.getElementById("deletenote1").addEventListener("click", () => {
-          fs.readFile("data/" + profile + "/id", (e, r) => {
-            if (e) {
-            } else {
-              if (JSON.parse(r).on == "yes") {
-                let swal = require("sweetalert");
-                swal({
-                  title: "Are you sure?",
-                  text: "Want To Delete Your Note!",
-                  icon: "warning",
-                  buttons: true,
-                  dangerMode: true
-                }).then(willDelete => {
-                  if (willDelete) {
+    window.setTimeout(() => {
+      // Delete Note
+      fs.readFile("data/" + profile + "/id", (e, d) => {
+        if (e) {
+        } else {
+          let noteid = JSON.parse(d).ids;
+          document
+            .getElementById("deletenote1")
+            .addEventListener("click", () => {
+              fs.readFile("data/" + profile + "/id", (e, r) => {
+                if (e) {
+                } else {
+                  if (JSON.parse(r).on == "yes") {
+                    let swal = require("sweetalert");
+                    swal({
+                      title: "Are you sure?",
+                      text: "Want To Delete Your Note!",
+                      icon: "warning",
+                      buttons: true,
+                      dangerMode: true
+                    }).then(willDelete => {
+                      if (willDelete) {
+                        fs.unlink(
+                          "data/" + profile + "/notes/" + noteid,
+                          e => {}
+                        );
+                        ipcRenderer.invoke("destroy");
+                      }
+                    });
+                  } else {
                     fs.unlink("data/" + profile + "/notes/" + noteid, e => {});
                     ipcRenderer.invoke("destroy");
                   }
-                });
-              } else {
-                fs.unlink("data/" + profile + "/notes/" + noteid, e => {});
-                ipcRenderer.invoke("destroy");
-              }
-            }
-          });
-        });
-      }
-    });
+                }
+              });
+            });
+        }
+      });
 
-    // Close For Main Process Close
-    ipcRenderer.on("closenote", () => {
-      ipcRenderer.invoke("close");
-    });
+      // Close For Main Process Close
+      ipcRenderer.on("closenote", () => {
+        ipcRenderer.invoke("close");
+      });
 
-    //theme change
-    fs.watch("data/" + profile + "/theme", (e, r) => {
-      fs.readFile("data/" + profile + "/theme", (e, d) => {
-        let num = JSON.parse(d).on;
-        if (num == 1) {
-          let lith = document.createElement("style");
-          lith.type = "text/css";
-          lith.id = "lighttheme";
-          lith.innerText = `
+      //theme change
+      fs.watch("data/" + profile + "/theme", (e, r) => {
+        fs.readFile("data/" + profile + "/theme", (e, d) => {
+          let num = JSON.parse(d).on;
+          if (num == 1) {
+            let lith = document.createElement("style");
+            lith.type = "text/css";
+            lith.id = "lighttheme";
+            lith.innerText = `
   #note {
     background: #ffffffee;
   }
@@ -163,68 +165,69 @@ export default {
     color:#000;
     background:#ffffffee;
   }`;
-          document.head.appendChild(lith);
-        } else {
-          try {
-            document.head.removeChild(document.getElementById("lighttheme"));
-          } catch {}
-        }
-      });
-    });
-
-    //closing home
-    fs.watch("data/" + profile, (e, r) => {
-      fs.readFile("data/" + profile + "/closed", (e, d) => {
-        if (e) {
-        } else {
-          if (JSON.parse(d).closed == "yes") {
-            ipcRenderer.invoke("close");
+            document.head.appendChild(lith);
+          } else {
+            try {
+              document.head.removeChild(document.getElementById("lighttheme"));
+            } catch {}
           }
-        }
+        });
       });
-    });
 
-    // Restore Saved Note
-    fs.readFile("data/" + profile + "/id", (e, d) => {
-      if (e) {
-      } else {
-        fs.readFile(
-          "data/" + profile + "/notes/" + JSON.parse(d).ids,
-          (e, r) => {
-            if (e) {
-              window.resizeTo(300, 325);
-              document.querySelector(".ql-toolbar").style.backgroundColor =
-                "#FFF2AB";
-            } else {
-              let text = JSON.parse(r);
-              document.querySelector(".ql-snow .ql-editor").innerHTML =
-                text.first;
-              document.querySelector(".ql-toolbar").style.backgroundColor =
-                text.back;
-              window.resizeTo(Number(text.wid), Number(text.hei));
-              document.getElementById("lightYellow").style.backgroundColor =
-                text.back;
-              document.getElementById("titlebar").style.backgroundColor =
-                text.title;
+      //closing home
+      fs.watch("data/" + profile, (e, r) => {
+        fs.readFile("data/" + profile + "/closed", (e, d) => {
+          if (e) {
+          } else {
+            if (JSON.parse(d).closed == "yes") {
+              ipcRenderer.invoke("close");
             }
           }
-        );
-      }
-    });
-    fs.readFile("data/" + profile + "/color", (e, d) => {
-      if (JSON.parse(d).on == "no") {
-        document.getElementById("color").style.visibility = "hidden";
-      } else {
-        document.getElementById("color").style.visibility = "visible";
-      }
-    });
-    fs.readFile("data/" + profile + "/emoji", (e, d) => {
-      if (JSON.parse(d).on == "no") {
-        document.getElementById("emoji").style.visibility = "hidden";
-      } else {
-        document.getElementById("emoji").style.visibility = "visible";
-      }
-    });
+        });
+      });
+
+      // Restore Saved Note
+      fs.readFile("data/" + profile + "/id", (e, d) => {
+        if (e) {
+        } else {
+          fs.readFile(
+            "data/" + profile + "/notes/" + JSON.parse(d).ids,
+            (e, r) => {
+              if (e) {
+                window.resizeTo(300, 325);
+                document.querySelector(".ql-toolbar").style.backgroundColor =
+                  "#FFF2AB";
+              } else {
+                let text = JSON.parse(r);
+                document.querySelector(".ql-snow .ql-editor").innerHTML =
+                  text.first;
+                document.querySelector(".ql-toolbar").style.backgroundColor =
+                  text.back;
+                window.resizeTo(Number(text.wid), Number(text.hei));
+                document.getElementById("lightYellow").style.backgroundColor =
+                  text.back;
+                document.getElementById("titlebar").style.backgroundColor =
+                  text.title;
+              }
+            }
+          );
+        }
+      });
+      fs.readFile("data/" + profile + "/color", (e, d) => {
+        if (JSON.parse(d).on == "no") {
+          document.getElementById("color").style.visibility = "hidden";
+        } else {
+          document.getElementById("color").style.visibility = "visible";
+        }
+      });
+      fs.readFile("data/" + profile + "/emoji", (e, d) => {
+        if (JSON.parse(d).on == "no") {
+          document.getElementById("emoji").style.visibility = "hidden";
+        } else {
+          document.getElementById("emoji").style.visibility = "visible";
+        }
+      });
+    }, 1000);
   },
 
   // Functions
@@ -236,13 +239,9 @@ export default {
 
     // Start New Note
     note() {
-      let profile = "default";
+      let profile;
       fs.readFile("data/profile", (e, d) => {
-        if (e) {
-          profile = "default";
-        } else {
-          profile = d;
-        }
+        profile = d;
       });
       let func = obj => {
         obj++;
