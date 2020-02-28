@@ -166,117 +166,111 @@ export default {
           }
         });
       });
-      document.getElementById("profile").onchange = () => {
-        fs.writeFile(
-          "data/profile",
-          document.getElementById("profile").value,
-          e => {
-            ipcRenderer.invoke("reload");
-          }
-        );
-      };
 
-      //TODO: Backup, will be removed in next version
-      if (localStorage.getItem("access")) {
-        fs.writeFile(
-          "data/" + profile + "/.access",
-          localStorage.getItem("access"),
-          e => {}
-        );
-        fs.writeFile(
-          "data/" + profile + "/sync",
-          JSON.stringify(localStorage.getItem("sync")),
-          e => {}
-        );
-      }
-
-      let { Dropbox } = require("dropbox");
-      let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
-      let url = dbx.getAuthenticationUrl("app://./auth.html");
-      document.getElementById("drb").addEventListener("click", () => {
-        let { ipcRenderer } = require("electron");
-        ipcRenderer.invoke("syncwindow", url);
-      });
-      ipcRenderer.on("closedsync", (e, u) => {
-        let hash = u.split("#");
-        let pair = hash[1].split("&");
-        let val = pair[0].split("=");
-        fs.writeFile("data/" + profile + "/.access", val[1], e => {});
-        fs.writeFile(
-          "data/" + profile + "/sync",
-          JSON.stringify({ sync: "yes" }),
-          e => {}
-        );
-      });
-
-      fs.readFile("data/" + profile + "/color", (e, d) => {
-        if (e) {
-          document.getElementById("colorswitch").checked = true;
+      window.setTimeout(() => {
+        //TODO: Backup, will be removed in next version
+        if (localStorage.getItem("access")) {
           fs.writeFile(
-            "data/" + profile + "/color",
-            JSON.stringify({ on: "yes" }),
+            "data/" + profile + "/.access",
+            localStorage.getItem("access"),
             e => {}
           );
-        } else {
-          d = JSON.parse(d);
-          if (d.on == "yes") {
+          fs.writeFile(
+            "data/" + profile + "/sync",
+            JSON.stringify(localStorage.getItem("sync")),
+            e => {}
+          );
+        }
+
+        let { Dropbox } = require("dropbox");
+        let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
+        let url = dbx.getAuthenticationUrl("app://./auth.html");
+        document.getElementById("drb").addEventListener("click", () => {
+          let { ipcRenderer } = require("electron");
+          ipcRenderer.invoke("syncwindow", url);
+        });
+        ipcRenderer.on("closedsync", (e, u) => {
+          let hash = u.split("#");
+          let pair = hash[1].split("&");
+          let val = pair[0].split("=");
+          fs.writeFile("data/" + profile + "/.access", val[1], e => {});
+          fs.writeFile(
+            "data/" + profile + "/sync",
+            JSON.stringify({ sync: "yes" }),
+            e => {}
+          );
+        });
+
+        fs.readFile("data/" + profile + "/color", (e, d) => {
+          if (e) {
             document.getElementById("colorswitch").checked = true;
+            fs.writeFile(
+              "data/" + profile + "/color",
+              JSON.stringify({ on: "yes" }),
+              e => {}
+            );
           } else {
-            document.getElementById("colorswitch").checked = false;
+            d = JSON.parse(d);
+            if (d.on == "yes") {
+              document.getElementById("colorswitch").checked = true;
+            } else {
+              document.getElementById("colorswitch").checked = false;
+            }
           }
-        }
-      });
-      fs.readFile("data/" + profile + "/emoji", (e, d) => {
-        if (e) {
-          document.getElementById("emojiswitch").checked = true;
-          fs.writeFile(
-            "data/" + profile + "/emoji",
-            JSON.stringify({ on: "yes" }),
-            e => {}
-          );
-        } else {
-          d = JSON.parse(d);
-          if (d.on == "yes") {
+        });
+        fs.readFile("data/" + profile + "/emoji", (e, d) => {
+          if (e) {
             document.getElementById("emojiswitch").checked = true;
+            fs.writeFile(
+              "data/" + profile + "/emoji",
+              JSON.stringify({ on: "yes" }),
+              e => {}
+            );
           } else {
-            document.getElementById("emojiswitch").checked = false;
+            d = JSON.parse(d);
+            if (d.on == "yes") {
+              document.getElementById("emojiswitch").checked = true;
+            } else {
+              document.getElementById("emojiswitch").checked = false;
+            }
           }
-        }
-      });
-      fs.readFile("data/" + profile + "/warn", (e, d) => {
-        if (e) {
-          document.getElementById("warnswitch").checked = true;
-          fs.writeFile(
-            "data/" + profile + "/warn",
-            JSON.stringify({ on: "yes" }),
-            e => {}
-          );
-        } else {
-          d = JSON.parse(d);
-          if (d.on == "yes") {
+        });
+        fs.readFile("data/" + profile + "/warn", (e, d) => {
+          if (e) {
             document.getElementById("warnswitch").checked = true;
+            fs.writeFile(
+              "data/" + profile + "/warn",
+              JSON.stringify({ on: "yes" }),
+              e => {}
+            );
           } else {
-            document.getElementById("warnswitch").checked = false;
+            d = JSON.parse(d);
+            if (d.on == "yes") {
+              document.getElementById("warnswitch").checked = true;
+            } else {
+              document.getElementById("warnswitch").checked = false;
+            }
           }
-        }
-      });
-      fs.readFile("data/" + profile + "/theme", (e, d) => {
-        if (e) {
-          document.getElementById("theme").selectedIndex = 0;
-          fs.writeFile(
-            "data/" + profile + "/theme",
-            JSON.stringify({ on: 0 }),
-            e => {}
-          );
-        } else {
-          d = JSON.parse(d);
-          let num = d.on;
-          document.getElementById("theme").selectedIndex = num;
-          if (num == 1) {
-            let lith = document.createElement("style");
-            lith.type = "text/css";
-            lith.id = "lighttheme";
-            lith.innerText = `
+        });
+        fs.readFile(
+          "data/" + profile + "/theme",
+          (e, d) => {
+            if (e) {
+              document.getElementById("theme").selectedIndex = 0;
+              fs.writeFile(
+                "data/" + profile + "/theme",
+                JSON.stringify({ on: 0 }),
+                e => {}
+              );
+            } else {
+              d = JSON.parse(d);
+              let num = d.on;
+              document.getElementById("theme").selectedIndex = num;
+              if (num == 1) {
+                let lith = document.createElement("style");
+                lith.type = "text/css";
+                lith.id = "lighttheme";
+                lith.innerText = `
   #home {
     background: #ffffffee;
   }
@@ -320,9 +314,12 @@ export default {
   #window-title2 span:hover {
     color: #000 !important;
   }`;
-            document.head.appendChild(lith);
-          }
-        }
+                document.head.appendChild(lith);
+              }
+            }
+          },
+          1000
+        );
         document.getElementById("colorswitch").onclick = () => {
           if (document.getElementById("colorswitch").checked == true) {
             fs.writeFile(
@@ -442,6 +439,15 @@ export default {
         } else {
           document.head.removeChild(document.getElementById("lighttheme"));
         }
+      };
+      document.getElementById("profile").onchange = () => {
+        fs.writeFile(
+          "data/profile",
+          document.getElementById("profile").value,
+          e => {
+            ipcRenderer.invoke("reload");
+          }
+        );
       };
     }, 2000);
   },
