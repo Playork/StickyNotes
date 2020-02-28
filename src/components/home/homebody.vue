@@ -395,13 +395,15 @@ export default {
                 e => {
                   fs.writeFile("data/profile", "default", e => {
                     let deleteFolder = path => {
-                      fs.readdir(path, (file, index) => {
+                      fs.readdir(path, (e, files) => {
+                        files.forEach(file=>{
                         let curPath = path + "/" + file;
                         if (fs.lstatSync(curPath).isDirectory()) {
                           deleteFolder(curPath);
                         } else {
                           fs.unlink(curPath, e => {});
                         }
+                        })
                       });
                       fs.rmdir(path, e => {});
                       ipcRenderer.invoke("reload");
@@ -423,6 +425,7 @@ export default {
       fs.readFile("data/profile", (e, d) => {
         profile = d;
       });
+      window.setTimeout(()=>{
       let { ipcRenderer } = require("electron");
       let notes = await ipcRenderer.invoke("importnotes");
       if (notes.filePaths[0]) {
@@ -462,6 +465,7 @@ export default {
           }
         });
       }
+      },1000)
     },
 
     // Export Notes

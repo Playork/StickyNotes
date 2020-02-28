@@ -159,6 +159,25 @@ export default {
         quill.history.redo();
       });
       let func = obj => {
+        // Delete Note
+        document.getElementById("deletenote1").addEventListener("click", () => {
+          let swal = require("sweetalert");
+          swal({
+            title: "Are you sure?",
+            text: "Want To Delete Your Note!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+          }).then(willDelete => {
+            if (willDelete) {
+              fs.unlink(
+                "data/" + profile + "/notes/" + obj.toString(),
+                e => {}
+              );
+            }
+          });
+        });
+
         let repeafunc = () => {
           let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
           let color1 = window

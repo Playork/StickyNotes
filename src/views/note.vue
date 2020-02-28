@@ -66,31 +66,6 @@ export default {
     });
 
     window.setTimeout(() => {
-      // Delete Note
-      fs.readFile("data/" + profile + "/id", (e, d) => {
-        if (e) {
-        } else {
-          let noteid = JSON.parse(d).ids;
-          document
-            .getElementById("deletenote1")
-            .addEventListener("click", () => {
-              let swal = require("sweetalert");
-              swal({
-                title: "Are you sure?",
-                text: "Want To Delete Your Note!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true
-              }).then(willDelete => {
-                if (willDelete) {
-                  fs.unlink("data/" + profile + "/notes/" + noteid, e => {});
-                  ipcRenderer.invoke("destroy");
-                }
-              });
-            });
-        }
-      });
-
       // Close For Main Process Close
       ipcRenderer.on("closenote", () => {
         ipcRenderer.invoke("close");
