@@ -182,23 +182,24 @@ export default {
           e => {}
         );
       });
-      fs.readFile("data/" + profile + "/theme", (e, d) => {
-        if (e) {
-          document.getElementById("theme").selectedIndex = 0;
-          fs.writeFile(
-            "data/" + profile + "/theme",
-            JSON.stringify({ on: 0 }),
-            e => {}
-          );
-        } else {
-          d = JSON.parse(d);
-          let num = d.on;
-          document.getElementById("theme").selectedIndex = num;
-          if (num == 1) {
-            let lith = document.createElement("style");
-            lith.type = "text/css";
-            lith.id = "lighttheme";
-            lith.innerText = `
+      window.setTimeout(() => {
+        fs.readFile("data/" + profile + "/theme", (e, d) => {
+          if (e) {
+            document.getElementById("theme").selectedIndex = 0;
+            fs.writeFile(
+              "data/" + profile + "/theme",
+              JSON.stringify({ on: 0 }),
+              e => {}
+            );
+          } else {
+            d = JSON.parse(d);
+            let num = d.on;
+            document.getElementById("theme").selectedIndex = num;
+            if (num == 1) {
+              let lith = document.createElement("style");
+              lith.type = "text/css";
+              lith.id = "lighttheme";
+              lith.innerText = `
   #home {
     background: #ffffffee;
   }
@@ -242,10 +243,11 @@ export default {
   #window-title2 span:hover {
     color: #000 !important;
   }`;
-            document.head.appendChild(lith);
+              document.head.appendChild(lith);
+            }
           }
-        }
-      });
+        });
+      }, 1000);
       document.getElementById("theme").onchange = () => {
         let num = document.getElementById("theme").selectedIndex;
         fs.writeFile(
