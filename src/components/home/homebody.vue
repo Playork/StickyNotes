@@ -228,7 +228,7 @@ export default {
   #about span {
     color: #000;
   }
-  #theme {
+  #theme,#profile {
     background: #fff;
     color: #000;
   }
@@ -288,7 +288,7 @@ export default {
   #about span {
     color: #000;
   }
-  #theme {
+  #theme,#profile {
     background: #fff;
     color: #000;
   }
