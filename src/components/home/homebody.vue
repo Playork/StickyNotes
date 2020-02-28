@@ -82,6 +82,32 @@ SOFTWARE.
               <option value="Dark" selected>Dark</option>
               <option value="Light">Light</option>
             </select>
+            <h2>Keyboard Shortcuts</h2>
+            <br />
+            <p>Select All</p>
+            <p>Ctrl+A</p>
+            <p>Copy</p>
+            <p>Ctrl+C</p>
+            <p>Cut</p>
+            <p>Ctrl+X</p>
+            <p>Paste</p>
+            <p>Ctrl+V</p>
+            <p>Undo</p>
+            <p>Ctrl+Z</p>
+            <p>Redo</p>
+            <p>Ctrl+Y</p>
+            <p>New Note</p>
+            <p>Ctrl+N</p>
+            <p>Emoji</p>
+            <p>Ctrl+E</p>
+            <p>Lock Note</p>
+            <p>Ctrl+L</p>
+            <p>Delete</p>
+            <p>Ctrl+D</p>
+            <p>Import</p>
+            <p>Ctrl+I</p>
+            <p>Export</p>
+            <p>Ctrl+S</p>
           </div>
         </div>
       </div>
