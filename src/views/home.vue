@@ -524,33 +524,15 @@ export default {
                           }, 500);
                         };
                         document.getElementById("deletenote").onclick = () => {
-                          fs.readFile("data/" + profile + "/warn", (e, d) => {
-                            if (JSON.parse(d).on == "yes") {
-                              let swal = require("sweetalert");
-                              swal({
-                                title: "Are you sure?",
-                                text: "Want To Delete Your Note!",
-                                icon: "warning",
-                                buttons: true,
-                                dangerMode: true
-                              }).then(willDelete => {
-                                if (willDelete) {
-                                  if (value.closed == "no") {
-                                    fs.writeFile(
-                                      "data/" + profile + "/notes/" + key,
-                                      JSON.stringify({ deleted: "yes" }),
-                                      e => {}
-                                    );
-                                  }
-                                  if (value.closed == "yes") {
-                                    fs.unlink(
-                                      "data/" + profile + "/notes/" + key,
-                                      e => {}
-                                    );
-                                  }
-                                }
-                              });
-                            } else {
+                          let swal = require("sweetalert");
+                          swal({
+                            title: "Are you sure?",
+                            text: "Want To Delete Your Note!",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true
+                          }).then(willDelete => {
+                            if (willDelete) {
                               if (value.closed == "no") {
                                 fs.writeFile(
                                   "data/" + profile + "/notes/" + key,

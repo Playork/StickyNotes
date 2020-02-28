@@ -395,16 +395,21 @@ export default {
                 e => {
                   fs.writeFile("data/profile", "default", e => {
                     let deleteFolder = path => {
-                      fs.readdir(path, (file, index) => {
-                        let curPath = path + "/" + file;
-                        if (fs.lstatSync(curPath).isDirectory()) {
-                          deleteFolder(curPath);
-                        } else {
-                          fs.unlink(curPath, e => {});
-                        }
+                      fs.readdir(path, (e, files) => {
+                        files.forEach(file => {
+                          let curPath = path + "/" + file;
+                          fs.lstat(curPath, (e, r) => {
+                            if (r.isDirectory()) {
+                              deleteFolder(curPath);
+                            } else {
+                              fs.unlink(curPath, e => {});
+                            }
+                          });
+                        });
                       });
-                      fs.rmdir(path, e => {});
-                      ipcRenderer.invoke("reload");
+                      fs.rmdir(path, e => {
+                        ipcRenderer.invoke("reload");
+                      });
                     };
                     deleteFolder("data/" + d);
                   });
