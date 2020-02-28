@@ -144,6 +144,7 @@ export default {
     try {
       await fs.promises.readFile("data/profile", async (e, d) => {
         profile = d;
+        document.getElementById("profile").value = d;
       });
     } catch {
       profile = "default";
@@ -151,33 +152,22 @@ export default {
     }
 
     // Profiles
-    fs.readdirSync("data")
-      .forEach(function(file, index) {
-        if (
-          fs.lstatSync("data" + "/" + file).isDirectory() &&
-          file != "default" &&
-          !new RegExp(`<option value="${file}">${file}</option>`).test(
-            document.getElementById("profile").innerHTML
-          )
-        ) {
-          document
-            .getElementById("profile")
-            .insertAdjacentHTML(
-              "beforeend",
-              `<option value="${file}">${file}</option>`
-            );
-        }
-      })
-      .then(async () => {
-        await fs.promises.readFile("data/profile", async (e, d) => {
-          for (let i = -1; i > -1; i++) {
-            document.getElementById("profile").selectedIndex = i;
-            if (document.getElementById("profile").value == d) {
-              break;
-            }
-          }
-        });
-      });
+    fs.readdirSync("data").forEach((file, index) => {
+      if (
+        fs.lstatSync("data" + "/" + file).isDirectory() &&
+        file != "default" &&
+        !new RegExp(`<option value="${file}">${file}</option>`).test(
+          document.getElementById("profile").innerHTML
+        )
+      ) {
+        document
+          .getElementById("profile")
+          .insertAdjacentHTML(
+            "beforeend",
+            `<option value="${file}">${file}</option>`
+          );
+      }
+    });
     fs.watch("data/", (e, d) => {
       fs.readdirSync("data").forEach(function(file, index) {
         if (
