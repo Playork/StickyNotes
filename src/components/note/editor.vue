@@ -170,11 +170,9 @@ export default {
             dangerMode: true
           }).then(willDelete => {
             if (willDelete) {
-              fs.unlink(
-                "data/" + profile + "/notes/" + obj.toString(),
-                e => {}
-              );
-              ipcRenderer.invoke("destroy");
+              fs.unlink("data/" + profile + "/notes/" + obj.toString(), e => {
+                ipcRenderer.invoke("destroy");
+              });
             }
           });
         });

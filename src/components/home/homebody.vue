@@ -423,50 +423,55 @@ export default {
     },
 
     // Import Notes
-    async importnotes() {
+    importnotes() {
       let profile;
       fs.readFile("data/profile", (e, d) => {
         profile = d;
       });
-      let { ipcRenderer } = require("electron");
-      let notes = await ipcRenderer.invoke("importnotes");
-      if (notes.filePaths[0]) {
-        fs.readFile(notes.filePaths[0], (e, d) => {
-          if (e) {
-            let swal = require("sweetalert");
-            swal("Not Supported");
-          } else {
-            if (d != "") {
-              d = d.toString().split("\n");
-              for (let i = 0; i < d.length; i++) {
-                if (i % 2 == 0 && d[i] != "") {
-                  let js = JSON.parse(d[i + 1]);
-                  fs.readFile("data/" + profile + "/notes/" + d[i], (e, d) => {
-                    if (e) {
-                      fs.writeFile(
-                        "data/" + profile + "/notes/" + id[i],
-                        JSON.stringify(js),
-                        e => {}
-                      );
-                    } else {
-                      d = JSON.parse(d);
-                      if (js.first != d.first || js.image != d.image) {
-                        let g = new Date().getTime();
-                        let id = Number(d[i]) * g;
-                        fs.writeFile(
-                          "data/" + profile + "/notes/" + id.toString(),
-                          JSON.stringify(js),
-                          e => {}
-                        );
+      window.setTimeout(async () => {
+        let { ipcRenderer } = require("electron");
+        let notes = await ipcRenderer.invoke("importnotes");
+        if (notes.filePaths[0]) {
+          fs.readFile(notes.filePaths[0], (e, d) => {
+            if (e) {
+              let swal = require("sweetalert");
+              swal("Not Supported");
+            } else {
+              if (d != "") {
+                d = d.toString().split("\n");
+                for (let i = 0; i < d.length; i++) {
+                  if (i % 2 == 0 && d[i] != "") {
+                    let js = JSON.parse(d[i + 1]);
+                    fs.readFile(
+                      "data/" + profile + "/notes/" + d[i],
+                      (e, d) => {
+                        if (e) {
+                          fs.writeFile(
+                            "data/" + profile + "/notes/" + id[i],
+                            JSON.stringify(js),
+                            e => {}
+                          );
+                        } else {
+                          d = JSON.parse(d);
+                          if (js.first != d.first || js.image != d.image) {
+                            let g = new Date().getTime();
+                            let id = Number(d[i]) * g;
+                            fs.writeFile(
+                              "data/" + profile + "/notes/" + id.toString(),
+                              JSON.stringify(js),
+                              e => {}
+                            );
+                          }
+                        }
                       }
-                    }
-                  });
+                    );
+                  }
                 }
               }
             }
-          }
-        });
-      }
+          });
+        }
+      }, 1000);
     },
 
     // Export Notes
