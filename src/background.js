@@ -21,7 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 "use strict";
-let { app, BrowserWindow, ipcMain, Menu, MenuItem } = require("electron");
+let { app, BrowserWindow, ipcMain, Menu, MenuItem, globalShortcut } = require("electron");
 let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
 
 let win;
@@ -144,6 +144,42 @@ function createNote() {
     false
   );
 }
+
+app.whenReady().then(() => {
+  globalShortcut.register("Control+N", () => {
+    createNote();
+  })
+  globalShortcut.register("Control+Y", () => {
+    BrowserWindow.getAllWindows().forEach((b) => {
+      b.webContents.send("redo")
+    })
+  })
+  globalShortcut.register("Control+D", () => {
+    if (BrowserWindow.getFocusedWindow()) {
+      BrowserWindow.getFocusedWindow().webContents.send("delete")
+    }
+  })
+  globalShortcut.register("Control+E", () => {
+    if (BrowserWindow.getFocusedWindow()) {
+      BrowserWindow.getFocusedWindow().webContents.send("emoji")
+    }
+  })
+  globalShortcut.register("Control+L", () => {
+    if (BrowserWindow.getFocusedWindow()) {
+      BrowserWindow.getFocusedWindow().webContents.send("lock")
+    }
+  })
+  globalShortcut.register("Control+I", () => {
+    if (BrowserWindow.getFocusedWindow()) {
+      BrowserWindow.getFocusedWindow().webContents.send("import")
+    }
+  })
+  globalShortcut.register("Control+S", () => {
+    if (BrowserWindow.getFocusedWindow()) {
+      BrowserWindow.getFocusedWindow().webContents.send("export")
+    }
+  })
+})
 
 ipcMain.on("create-new-instance", () => {
   createNote();

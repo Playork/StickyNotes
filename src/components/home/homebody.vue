@@ -122,6 +122,16 @@ import { ipcRenderer } from "electron";
 export default {
   // Do On Start
   mounted() {
+    ipcRenderer.on("delete", () => {
+      this.deleteall();
+    });
+    ipcRenderer.on("import", () => {
+      this.importnotes();
+    });
+    ipcRenderer.on("export", () => {
+      this.exportnotes();
+    });
+
     window.setTimeout(() => {
       //  Profile
       let profile;

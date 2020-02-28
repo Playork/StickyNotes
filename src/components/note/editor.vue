@@ -64,6 +64,7 @@ SOFTWARE.
 import Quill from "quill";
 import fs from "fs";
 import { Picker } from "emoji-mart-vue";
+import { ipcRenderer } from "electron";
 
 // Vue Class
 export default {
@@ -74,6 +75,10 @@ export default {
 
   // Do On Start
   mounted() {
+    ipcRenderer.on("emoji", () => {
+      this.emoji();
+    });
+
     //  Profile
     let profile;
     fs.readFile("data/profile", (e, d) => {
@@ -158,9 +163,29 @@ export default {
       document.getElementById("redo").addEventListener("click", () => {
         quill.history.redo();
       });
+      ipcRenderer.on("redo", () => {
+        quill.history.redo();
+      });
       let func = obj => {
         // Delete Note
         document.getElementById("deletenote1").addEventListener("click", () => {
+          let swal = require("sweetalert");
+          swal({
+            title: "Are you sure?",
+            text: "Want To Delete Your Note!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+          }).then(willDelete => {
+            if (willDelete) {
+              fs.unlink("data/" + profile + "/notes/" + obj.toString(), e => {
+                let { ipcRenderer } = require("electron");
+                ipcRenderer.invoke("destroy");
+              });
+            }
+          });
+        });
+        ipcRenderer.on("delete", () => {
           let swal = require("sweetalert");
           swal({
             title: "Are you sure?",

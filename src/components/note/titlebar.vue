@@ -72,6 +72,7 @@ SOFTWARE.
 
 <!-- Javascript -->
 <script>
+import { ipcRenderer } from "electron";
 // Vue Class
 export default {
   // Props
@@ -79,6 +80,18 @@ export default {
     close: Function,
     note: Function,
     minimize: Function
+  },
+
+  mounted() {
+    ipcRenderer.on("lock", () => {
+      this.locks();
+    });
+    ipcRenderer.on("import", () => {
+      this.importnote();
+    });
+    ipcRenderer.on("export", () => {
+      this.exportnote();
+    });
   },
 
   // Functions
