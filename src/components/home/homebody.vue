@@ -150,20 +150,6 @@ export default {
         });
       });
 
-      //TODO: Backup, will be removed in next version
-      if (localStorage.getItem("access")) {
-        fs.writeFile(
-          "data/" + profile + "/.access",
-          localStorage.getItem("access"),
-          e => {}
-        );
-        fs.writeFile(
-          "data/" + profile + "/sync",
-          JSON.stringify(localStorage.getItem("sync")),
-          e => {}
-        );
-      }
-
       let { Dropbox } = require("dropbox");
       let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
       let url = dbx.getAuthenticationUrl("app://./auth.html");

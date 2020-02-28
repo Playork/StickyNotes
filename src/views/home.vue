@@ -55,10 +55,10 @@ export default {
   // Do On Start
   mounted() {
     if (!fs.existsSync("data")) {
-      fs.mkdirSync("data");
+      fs.mkdir("data", e => {});
       if (!fs.existsSync("data/default")) {
-        fs.mkdirSync("data/default");
-        fs.mkdirSync("data/default/notes/");
+        fs.mkdir("data/default", e => {});
+        fs.mkdir("data/default/notes/", e => {});
       }
     }
 
