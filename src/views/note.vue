@@ -74,30 +74,17 @@ export default {
           document
             .getElementById("deletenote1")
             .addEventListener("click", () => {
-              fs.readFile("data/" + profile + "/id", (e, r) => {
-                if (e) {
-                } else {
-                  if (JSON.parse(r).on == "yes") {
-                    let swal = require("sweetalert");
-                    swal({
-                      title: "Are you sure?",
-                      text: "Want To Delete Your Note!",
-                      icon: "warning",
-                      buttons: true,
-                      dangerMode: true
-                    }).then(willDelete => {
-                      if (willDelete) {
-                        fs.unlink(
-                          "data/" + profile + "/notes/" + noteid,
-                          e => {}
-                        );
-                        ipcRenderer.invoke("destroy");
-                      }
-                    });
-                  } else {
-                    fs.unlink("data/" + profile + "/notes/" + noteid, e => {});
-                    ipcRenderer.invoke("destroy");
-                  }
+              let swal = require("sweetalert");
+              swal({
+                title: "Are you sure?",
+                text: "Want To Delete Your Note!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+              }).then(willDelete => {
+                if (willDelete) {
+                  fs.unlink("data/" + profile + "/notes/" + noteid, e => {});
+                  ipcRenderer.invoke("destroy");
                 }
               });
             });
@@ -211,20 +198,6 @@ export default {
               }
             }
           );
-        }
-      });
-      fs.readFile("data/" + profile + "/color", (e, d) => {
-        if (JSON.parse(d).on == "no") {
-          document.getElementById("color").style.visibility = "hidden";
-        } else {
-          document.getElementById("color").style.visibility = "visible";
-        }
-      });
-      fs.readFile("data/" + profile + "/emoji", (e, d) => {
-        if (JSON.parse(d).on == "no") {
-          document.getElementById("emoji").style.visibility = "hidden";
-        } else {
-          document.getElementById("emoji").style.visibility = "visible";
         }
       });
     }, 1000);

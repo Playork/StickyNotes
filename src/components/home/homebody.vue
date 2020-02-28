@@ -82,23 +82,6 @@ SOFTWARE.
               <option value="Dark" selected>Dark</option>
               <option value="Light">Light</option>
             </select>
-            <h2>Features</h2>
-            <br />
-            <p>Background Colors</p>
-            <label class="container">
-              <input type="checkbox" id="colorswitch" checked="checked" />
-              <span class="checkmark"></span>
-            </label>
-            <p>Emoji Selector</p>
-            <label class="container">
-              <input type="checkbox" id="emojiswitch" checked="checked" />
-              <span class="checkmark"></span>
-            </label>
-            <p>Warn Before Delete</p>
-            <label class="container">
-              <input type="checkbox" id="warnswitch" checked="checked" />
-              <span class="checkmark"></span>
-            </label>
           </div>
         </div>
       </div>
@@ -199,58 +182,6 @@ export default {
           e => {}
         );
       });
-
-      fs.readFile("data/" + profile + "/color", (e, d) => {
-        if (e) {
-          document.getElementById("colorswitch").checked = true;
-          fs.writeFile(
-            "data/" + profile + "/color",
-            JSON.stringify({ on: "yes" }),
-            e => {}
-          );
-        } else {
-          d = JSON.parse(d);
-          if (d.on == "yes") {
-            document.getElementById("colorswitch").checked = true;
-          } else {
-            document.getElementById("colorswitch").checked = false;
-          }
-        }
-      });
-      fs.readFile("data/" + profile + "/emoji", (e, d) => {
-        if (e) {
-          document.getElementById("emojiswitch").checked = true;
-          fs.writeFile(
-            "data/" + profile + "/emoji",
-            JSON.stringify({ on: "yes" }),
-            e => {}
-          );
-        } else {
-          d = JSON.parse(d);
-          if (d.on == "yes") {
-            document.getElementById("emojiswitch").checked = true;
-          } else {
-            document.getElementById("emojiswitch").checked = false;
-          }
-        }
-      });
-      fs.readFile("data/" + profile + "/warn", (e, d) => {
-        if (e) {
-          document.getElementById("warnswitch").checked = true;
-          fs.writeFile(
-            "data/" + profile + "/warn",
-            JSON.stringify({ on: "yes" }),
-            e => {}
-          );
-        } else {
-          d = JSON.parse(d);
-          if (d.on == "yes") {
-            document.getElementById("warnswitch").checked = true;
-          } else {
-            document.getElementById("warnswitch").checked = false;
-          }
-        }
-      });
       fs.readFile("data/" + profile + "/theme", (e, d) => {
         if (e) {
           document.getElementById("theme").selectedIndex = 0;
@@ -315,51 +246,6 @@ export default {
           }
         }
       });
-      document.getElementById("colorswitch").onclick = () => {
-        if (document.getElementById("colorswitch").checked == true) {
-          fs.writeFile(
-            "data/" + profile + "/color",
-            JSON.stringify({ on: "yes" }),
-            e => {}
-          );
-        } else {
-          fs.writeFile(
-            "data/" + profile + "/color",
-            JSON.stringify({ on: "no" }),
-            e => {}
-          );
-        }
-      };
-      document.getElementById("emojiswitch").onclick = () => {
-        if (document.getElementById("emojiswitch").checked == true) {
-          fs.writeFile(
-            "data/" + profile + "/emoji",
-            JSON.stringify({ on: "yes" }),
-            e => {}
-          );
-        } else {
-          fs.writeFile(
-            "data/" + profile + "/emoji",
-            JSON.stringify({ on: "no" }),
-            e => {}
-          );
-        }
-      };
-      document.getElementById("warnswitch").onclick = () => {
-        if (document.getElementById("warnswitch").checked == true) {
-          fs.writeFile(
-            "data/" + profile + "/warn",
-            JSON.stringify({ on: "yes" }),
-            e => {}
-          );
-        } else {
-          fs.writeFile(
-            "data/" + profile + "/warn",
-            JSON.stringify({ on: "no" }),
-            e => {}
-          );
-        }
-      };
       document.getElementById("theme").onchange = () => {
         let num = document.getElementById("theme").selectedIndex;
         fs.writeFile(
@@ -639,50 +525,15 @@ export default {
         profile = d;
       });
       if (document.getElementById("notetext")) {
-        fs.readFile("data/" + profile + "/warn", (e, d) => {
-          d = JSON.parse(d);
-          if (d.on == "yes") {
-            let swal = require("sweetalert");
-            swal({
-              title: "Are you sure?",
-              text: "Want To Delete All Notes!",
-              icon: "warning",
-              buttons: true,
-              dangerMode: true
-            }).then(willDelete => {
-              if (willDelete) {
-                fs.writeFile(
-                  "data/" + profile + "/closed",
-                  JSON.stringify({ closed: "yes" }),
-                  e => {
-                    window.setTimeout(() => {
-                      fs.readdir("data/" + profile + "/notes/", function(
-                        e,
-                        files
-                      ) {
-                        if (e) {
-                        } else {
-                          fs.unlink("data/" + profile + "/closed", e => {});
-                          files.forEach(function(key, index) {
-                            fs.readFile(
-                              "data/" + profile + "/notes/" + key,
-                              (e, d) => {
-                                let value = JSON.parse(d);
-                                fs.unlink(
-                                  "data/" + profile + "/notes/" + key,
-                                  e => {}
-                                );
-                              }
-                            );
-                          });
-                        }
-                      });
-                    }, 800);
-                  }
-                );
-              }
-            });
-          } else {
+        let swal = require("sweetalert");
+        swal({
+          title: "Are you sure?",
+          text: "Want To Delete All Notes!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true
+        }).then(willDelete => {
+          if (willDelete) {
             fs.writeFile(
               "data/" + profile + "/closed",
               JSON.stringify({ closed: "yes" }),
