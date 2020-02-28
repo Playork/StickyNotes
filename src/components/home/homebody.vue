@@ -154,7 +154,6 @@ export default {
       let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
       let url = dbx.getAuthenticationUrl("app://./auth.html");
       document.getElementById("drb").addEventListener("click", () => {
-        let { ipcRenderer } = require("electron");
         ipcRenderer.invoke("syncwindow", url);
       });
       ipcRenderer.on("closedsync", (e, u) => {
@@ -392,8 +391,8 @@ export default {
               fs.writeFile(
                 "data/" + profile + "/closed",
                 JSON.stringify({ closed: "yes" }),
-                e => {
-                  fs.writeFile("data/profile", "default", e => {
+                async e => {
+                  await fs.promises.writeFile("data/profile", "default", e => {
                     let deleteFolder = path => {
                       fs.readdir(path, (e, files) => {
                         files.forEach(file => {
@@ -407,11 +406,10 @@ export default {
                           });
                         });
                       });
-                      fs.rmdir(path, e => {
-                        ipcRenderer.invoke("reload");
-                      });
+                      fs.rmdir(path, e => {});
                     };
                     deleteFolder("data/" + d);
+                    ipcRenderer.invoke("reload");
                   });
                 }
               );
@@ -423,55 +421,50 @@ export default {
     },
 
     // Import Notes
-    importnotes() {
+    async importnotes() {
       let profile;
       fs.readFile("data/profile", (e, d) => {
         profile = d;
       });
-      window.setTimeout(async () => {
-        let { ipcRenderer } = require("electron");
-        let notes = await ipcRenderer.invoke("importnotes");
-        if (notes.filePaths[0]) {
-          fs.readFile(notes.filePaths[0], (e, d) => {
-            if (e) {
-              let swal = require("sweetalert");
-              swal("Not Supported");
-            } else {
-              if (d != "") {
-                d = d.toString().split("\n");
-                for (let i = 0; i < d.length; i++) {
-                  if (i % 2 == 0 && d[i] != "") {
-                    let js = JSON.parse(d[i + 1]);
-                    fs.readFile(
-                      "data/" + profile + "/notes/" + d[i],
-                      (e, d) => {
-                        if (e) {
-                          fs.writeFile(
-                            "data/" + profile + "/notes/" + id[i],
-                            JSON.stringify(js),
-                            e => {}
-                          );
-                        } else {
-                          d = JSON.parse(d);
-                          if (js.first != d.first || js.image != d.image) {
-                            let g = new Date().getTime();
-                            let id = Number(d[i]) * g;
-                            fs.writeFile(
-                              "data/" + profile + "/notes/" + id.toString(),
-                              JSON.stringify(js),
-                              e => {}
-                            );
-                          }
-                        }
+      let notes = await ipcRenderer.invoke("importnotes");
+      console.log(notes);
+      if (notes.filePaths[0]) {
+        fs.readFile(notes.filePaths[0], (e, d) => {
+          if (e) {
+            let swal = require("sweetalert");
+            swal("Not Supported");
+          } else {
+            if (d != "") {
+              d = d.toString().split("\n");
+              for (let i = 0; i < d.length; i++) {
+                if (i % 2 == 0 && d[i] != "") {
+                  let js = JSON.parse(d[i + 1]);
+                  fs.readFile("data/" + profile + "/notes/" + d[i], (e, d) => {
+                    if (e) {
+                      fs.writeFile(
+                        "data/" + profile + "/notes/" + d[i],
+                        JSON.stringify(js),
+                        e => {}
+                      );
+                    } else {
+                      d = JSON.parse(d);
+                      if (js.first != d.first || js.image != d.image) {
+                        let g = new Date().getTime();
+                        let id = Number(d[i]) * g;
+                        fs.writeFile(
+                          "data/" + profile + "/notes/" + id.toString(),
+                          JSON.stringify(js),
+                          e => {}
+                        );
                       }
-                    );
-                  }
+                    }
+                  });
                 }
               }
             }
-          });
-        }
-      }, 1000);
+          }
+        });
+      }
     },
 
     // Export Notes
@@ -481,7 +474,6 @@ export default {
         profile = d;
       });
       if (document.getElementById("notetext")) {
-        let { ipcRenderer } = require("electron");
         let notes = await ipcRenderer.invoke("exportnotes");
         if (notes.filePath != undefined) {
           let data = "";

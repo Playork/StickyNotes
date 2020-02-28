@@ -187,12 +187,11 @@ export default {
     async importnote() {
       let { ipcRenderer } = require("electron");
       let notes = await ipcRenderer.invoke("importnote");
-      if (note.filePaths[0] != undefined) {
+      if (note.filePaths[0]) {
         let fs = require("fs");
         fs.readFile(note.filePaths[0], (e, d) => {
           if (e) {
             let swal = require("sweetalert");
-
             swal("Not Supported");
           } else {
             d = d.toString().split("\n");

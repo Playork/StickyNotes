@@ -171,6 +171,7 @@ export default {
           }).then(willDelete => {
             if (willDelete) {
               fs.unlink("data/" + profile + "/notes/" + obj.toString(), e => {
+                let { ipcRenderer } = require("electron");
                 ipcRenderer.invoke("destroy");
               });
             }
