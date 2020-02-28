@@ -138,165 +138,145 @@ import { ipcRenderer } from "electron";
 // Vue Class
 export default {
   // Do On Start
-  async mounted() {
-    //  Profile
-    let profile;
-    try {
-      await fs.promises.readFile("data/profile", async (e, d) => {
+  mounted() {
+    window.setTimeout(() => {
+      //  Profile
+      let profile;
+      fs.readFile("data/profile", async (e, d) => {
         profile = d;
         document.getElementById("profile").value = d;
       });
-    } catch {
-      profile = "default";
-      await fs.promises.writeFile("data/profile", "default", e => {});
-    }
 
-    // Profiles
-    fs.readdirSync("data").forEach((file, index) => {
-      if (
-        fs.lstatSync("data" + "/" + file).isDirectory() &&
-        file != "default" &&
-        !new RegExp(`<option value="${file}">${file}</option>`).test(
-          document.getElementById("profile").innerHTML
-        )
-      ) {
-        document
-          .getElementById("profile")
-          .insertAdjacentHTML(
-            "beforeend",
-            `<option value="${file}">${file}</option>`
-          );
+      // Profiles
+      fs.readdir("data", (e, files) => {
+        files.forEach(file => {
+          if (
+            fs.lstatSync("data/" + file).isDirectory() &&
+            file != "default" &&
+            !new RegExp(`<option value="${file}">${file}</option>`).test(
+              document.getElementById("profile").innerHTML
+            )
+          ) {
+            document
+              .getElementById("profile")
+              .insertAdjacentHTML(
+                "beforeend",
+                `<option value="${file}">${file}</option>`
+              );
+          }
+        });
+      });
+      document.getElementById("profile").onchange = () => {
+        fs.writeFile(
+          "data/profile",
+          document.getElementById("profile").value,
+          e => {
+            ipcRenderer.invoke("reload");
+          }
+        );
+      };
+
+      //TODO: Backup, will be removed in next version
+      if (localStorage.getItem("access")) {
+        fs.writeFile(
+          "data/" + profile + "/.access",
+          localStorage.getItem("access"),
+          e => {}
+        );
+        fs.writeFile(
+          "data/" + profile + "/sync",
+          JSON.stringify(localStorage.getItem("sync")),
+          e => {}
+        );
       }
-    });
-    fs.watch("data/", (e, d) => {
-      fs.readdirSync("data").forEach(function(file, index) {
-        if (
-          fs.lstatSync("data" + "/" + file).isDirectory() &&
-          file != "default" &&
-          !new RegExp(`<option value="${file}">${file}</option>`).test(
-            document.getElementById("profile").innerHTML
-          )
-        ) {
-          document
-            .getElementById("profile")
-            .insertAdjacentHTML(
-              "beforeend",
-              `<option value="${file}">${file}</option>`
-            );
+
+      let { Dropbox } = require("dropbox");
+      let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
+      let url = dbx.getAuthenticationUrl("app://./auth.html");
+      document.getElementById("drb").addEventListener("click", () => {
+        let { ipcRenderer } = require("electron");
+        ipcRenderer.invoke("syncwindow", url);
+      });
+      ipcRenderer.on("closedsync", (e, u) => {
+        let hash = u.split("#");
+        let pair = hash[1].split("&");
+        let val = pair[0].split("=");
+        fs.writeFile("data/" + profile + "/.access", val[1], e => {});
+        fs.writeFile(
+          "data/" + profile + "/sync",
+          JSON.stringify({ sync: "yes" }),
+          e => {}
+        );
+      });
+
+      fs.readFile("data/" + profile + "/color", (e, d) => {
+        if (e) {
+          document.getElementById("colorswitch").checked = true;
+          fs.writeFile(
+            "data/" + profile + "/color",
+            JSON.stringify({ on: "yes" }),
+            e => {}
+          );
+        } else {
+          d = JSON.parse(d);
+          if (d.on == "yes") {
+            document.getElementById("colorswitch").checked = true;
+          } else {
+            document.getElementById("colorswitch").checked = false;
+          }
         }
       });
-    });
-    document.getElementById("profile").onchange = () => {
-      fs.writeFile(
-        "data/profile",
-        document.getElementById("profile").value,
-        e => {
-          ipcRenderer.invoke("reload");
-        }
-      );
-    };
-
-    //TODO: Backup, will be removed in next version
-    if (localStorage.getItem("access")) {
-      fs.writeFile(
-        "data/" + profile + "/.access",
-        localStorage.getItem("access"),
-        e => {}
-      );
-      fs.writeFile(
-        "data/" + profile + "/sync",
-        JSON.stringify(localStorage.getItem("sync")),
-        e => {}
-      );
-    }
-
-    let { Dropbox } = require("dropbox");
-    let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
-    let url = dbx.getAuthenticationUrl("app://./auth.html");
-    document.getElementById("drb").addEventListener("click", () => {
-      let { ipcRenderer } = require("electron");
-      ipcRenderer.invoke("syncwindow", url);
-    });
-    ipcRenderer.on("closedsync", (e, u) => {
-      let hash = u.split("#");
-      let pair = hash[1].split("&");
-      let val = pair[0].split("=");
-      fs.writeFile("data/" + profile + "/.access", val[1], e => {});
-      fs.writeFile(
-        "data/" + profile + "/sync",
-        JSON.stringify({ sync: "yes" }),
-        e => {}
-      );
-    });
-
-    fs.readFile("data/" + profile + "/color", (e, d) => {
-      if (e) {
-        document.getElementById("colorswitch").checked = true;
-        fs.writeFile(
-          "data/" + profile + "/color",
-          JSON.stringify({ on: "yes" }),
-          e => {}
-        );
-      } else {
-        d = JSON.parse(d);
-        if (d.on == "yes") {
-          document.getElementById("colorswitch").checked = true;
-        } else {
-          document.getElementById("colorswitch").checked = false;
-        }
-      }
-    });
-    fs.readFile("data/" + profile + "/emoji", (e, d) => {
-      if (e) {
-        document.getElementById("emojiswitch").checked = true;
-        fs.writeFile(
-          "data/" + profile + "/emoji",
-          JSON.stringify({ on: "yes" }),
-          e => {}
-        );
-      } else {
-        d = JSON.parse(d);
-        if (d.on == "yes") {
+      fs.readFile("data/" + profile + "/emoji", (e, d) => {
+        if (e) {
           document.getElementById("emojiswitch").checked = true;
+          fs.writeFile(
+            "data/" + profile + "/emoji",
+            JSON.stringify({ on: "yes" }),
+            e => {}
+          );
         } else {
-          document.getElementById("emojiswitch").checked = false;
+          d = JSON.parse(d);
+          if (d.on == "yes") {
+            document.getElementById("emojiswitch").checked = true;
+          } else {
+            document.getElementById("emojiswitch").checked = false;
+          }
         }
-      }
-    });
-    fs.readFile("data/" + profile + "/warn", (e, d) => {
-      if (e) {
-        document.getElementById("warnswitch").checked = true;
-        fs.writeFile(
-          "data/" + profile + "/warn",
-          JSON.stringify({ on: "yes" }),
-          e => {}
-        );
-      } else {
-        d = JSON.parse(d);
-        if (d.on == "yes") {
+      });
+      fs.readFile("data/" + profile + "/warn", (e, d) => {
+        if (e) {
           document.getElementById("warnswitch").checked = true;
+          fs.writeFile(
+            "data/" + profile + "/warn",
+            JSON.stringify({ on: "yes" }),
+            e => {}
+          );
         } else {
-          document.getElementById("warnswitch").checked = false;
+          d = JSON.parse(d);
+          if (d.on == "yes") {
+            document.getElementById("warnswitch").checked = true;
+          } else {
+            document.getElementById("warnswitch").checked = false;
+          }
         }
-      }
-    });
-    fs.readFile("data/" + profile + "/theme", (e, d) => {
-      if (e) {
-        document.getElementById("theme").selectedIndex = 0;
-        fs.writeFile(
-          "data/" + profile + "/theme",
-          JSON.stringify({ on: 0 }),
-          e => {}
-        );
-      } else {
-        d = JSON.parse(d);
-        let num = d.on;
-        document.getElementById("theme").selectedIndex = num;
-        if (num == 1) {
-          let lith = document.createElement("style");
-          lith.type = "text/css";
-          lith.id = "lighttheme";
-          lith.innerText = `
+      });
+      fs.readFile("data/" + profile + "/theme", (e, d) => {
+        if (e) {
+          document.getElementById("theme").selectedIndex = 0;
+          fs.writeFile(
+            "data/" + profile + "/theme",
+            JSON.stringify({ on: 0 }),
+            e => {}
+          );
+        } else {
+          d = JSON.parse(d);
+          let num = d.on;
+          document.getElementById("theme").selectedIndex = num;
+          if (num == 1) {
+            let lith = document.createElement("style");
+            lith.type = "text/css";
+            lith.id = "lighttheme";
+            lith.innerText = `
   #home {
     background: #ffffffee;
   }
@@ -340,68 +320,68 @@ export default {
   #window-title2 span:hover {
     color: #000 !important;
   }`;
-          document.head.appendChild(lith);
+            document.head.appendChild(lith);
+          }
         }
-      }
-      document.getElementById("colorswitch").onclick = () => {
-        if (document.getElementById("colorswitch").checked == true) {
+        document.getElementById("colorswitch").onclick = () => {
+          if (document.getElementById("colorswitch").checked == true) {
+            fs.writeFile(
+              "data/" + profile + "/color",
+              JSON.stringify({ on: "yes" }),
+              e => {}
+            );
+          } else {
+            fs.writeFile(
+              "data/" + profile + "/color",
+              JSON.stringify({ on: "no" }),
+              e => {}
+            );
+          }
+        };
+      });
+      document.getElementById("emojiswitch").onclick = () => {
+        if (document.getElementById("emojiswitch").checked == true) {
           fs.writeFile(
-            "data/" + profile + "/color",
+            "data/" + profile + "/emoji",
             JSON.stringify({ on: "yes" }),
             e => {}
           );
         } else {
           fs.writeFile(
-            "data/" + profile + "/color",
+            "data/" + profile + "/emoji",
             JSON.stringify({ on: "no" }),
             e => {}
           );
         }
       };
-    });
-    document.getElementById("emojiswitch").onclick = () => {
-      if (document.getElementById("emojiswitch").checked == true) {
+      document.getElementById("warnswitch").onclick = () => {
+        if (document.getElementById("warnswitch").checked == true) {
+          fs.writeFile(
+            "data/" + profile + "/warn",
+            JSON.stringify({ on: "yes" }),
+            e => {}
+          );
+        } else {
+          fs.writeFile(
+            "data/" + profile + "/warn",
+            JSON.stringify({ on: "no" }),
+            e => {}
+          );
+        }
+      };
+      document.getElementById("theme").onchange = () => {
+        let num = document.getElementById("theme").selectedIndex;
         fs.writeFile(
-          "data/" + profile + "/emoji",
-          JSON.stringify({ on: "yes" }),
+          "data/" + profile + "/theme",
+          JSON.stringify({ on: num }),
           e => {}
         );
-      } else {
-        fs.writeFile(
-          "data/" + profile + "/emoji",
-          JSON.stringify({ on: "no" }),
-          e => {}
-        );
-      }
-    };
-    document.getElementById("warnswitch").onclick = () => {
-      if (document.getElementById("warnswitch").checked == true) {
-        fs.writeFile(
-          "data/" + profile + "/warn",
-          JSON.stringify({ on: "yes" }),
-          e => {}
-        );
-      } else {
-        fs.writeFile(
-          "data/" + profile + "/warn",
-          JSON.stringify({ on: "no" }),
-          e => {}
-        );
-      }
-    };
-    document.getElementById("theme").onchange = () => {
-      let num = document.getElementById("theme").selectedIndex;
-      fs.writeFile(
-        "data/" + profile + "/theme",
-        JSON.stringify({ on: num }),
-        e => {}
-      );
 
-      if (num == 1) {
-        let lith = document.createElement("style");
-        lith.type = "text/css";
-        lith.id = "lighttheme";
-        lith.innerText = `#note,
+        if (num == 1) {
+          let lith = document.createElement("style");
+          lith.type = "text/css";
+          lith.id = "lighttheme";
+          lith.innerText = `#note,
   #home {
     background: #ffffffee;
   }
@@ -458,11 +438,12 @@ export default {
   #window-title2 span:hover {
     color: #000 !important;
   }`;
-        document.head.appendChild(lith);
-      } else {
-        document.head.removeChild(document.getElementById("lighttheme"));
-      }
-    };
+          document.head.appendChild(lith);
+        } else {
+          document.head.removeChild(document.getElementById("lighttheme"));
+        }
+      };
+    }, 2000);
   },
 
   // Functions
@@ -503,9 +484,13 @@ export default {
                 closeOnClickOutside: false
               }).then(value => {
                 if (value) {
-                  fs.writeFile("data/" + profile + "/.pass", value, e => {});
+                  fs.writeFile("data/" + profile + "/.pass", value, e => {
+                    ipcRenderer.invoke("reload");
+                  });
                 } else {
-                  fs.writeFile("data/" + profile + "/pass", "", e => {});
+                  fs.writeFile("data/" + profile + "/pass", "", e => {
+                    ipcRenderer.invoke("reload");
+                  });
                 }
               });
             };
@@ -536,20 +521,16 @@ export default {
                 e => {
                   fs.writeFile("data/profile", "default", e => {
                     let deleteFolder = path => {
-                      fs.readdirSync(path)
-                        .forEach(function(file, index) {
-                          let curPath = path + "/" + file;
-                          if (fs.lstatSync(curPath).isDirectory()) {
-                            deleteFolder(curPath);
-                          } else {
-                            fs.unlinkSync(curPath);
-                          }
-                        })
-                        .then(() => {
-                          fs.rmdirSync(path).then(() => {
-                            ipcRenderer.invoke("reload");
-                          });
-                        });
+                      fs.readdir(path, (file, index) => {
+                        let curPath = path + "/" + file;
+                        if (fs.lstatSync(curPath).isDirectory()) {
+                          deleteFolder(curPath);
+                        } else {
+                          fs.unlink(curPath, e => {});
+                        }
+                      });
+                      fs.rmdir(path, e => {});
+                      ipcRenderer.invoke("reload");
                     };
                     deleteFolder("data/" + d);
                   });

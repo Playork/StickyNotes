@@ -53,7 +53,7 @@ export default {
   },
 
   // Do On Start
-  async mounted() {
+  mounted() {
     if (!fs.existsSync("data")) {
       fs.mkdirSync("data");
       if (!fs.existsSync("data/default")) {
@@ -61,17 +61,18 @@ export default {
         fs.mkdirSync("data/default/notes/");
       }
     }
+
     //  Profile
     let profile = "default";
-    try {
-      await fs.promises.readFile("data/profile", (e, d) => {
-        if (d != "default") {
-          profile = d;
-        }
-      });
-    } catch {
-      await fs.promises.writeFile("data/profile", "default", e => {});
-    }
+    fs.readFile("data/profile", (e, d) => {
+      if (e) {
+        profile = "default";
+        fs.writeFile("data/profile", "default", e => {});
+      } else {
+        profile = d;
+        document.getElementById("profile").value = d;
+      }
+    });
 
     // Create Password
     let pass = () => {
