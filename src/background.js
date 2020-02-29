@@ -23,6 +23,7 @@ SOFTWARE. */
 "use strict";
 let { app, BrowserWindow, ipcMain, Menu, MenuItem, globalShortcut } = require("electron");
 let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
+let path = require("path");
 
 let win;
 function createWindow() {
@@ -75,12 +76,14 @@ function createNote() {
     title: "Playork Sticky Notes",
     frame: false,
     show: false,
-    spellcheck: true,
     webPreferences: {
       webSecurity: false,
+      spellcheck: true,
       nodeIntegration: true
     }
   });
+  winnote.webContents.session.setSpellCheckerLanguages["en-US"];
+  winnote.webContents.session.setSpellCheckerDictionaryDownloadURL("file://" + path.resolve("./"))
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     winnote.loadURL("http://localhost:8080/#/note");
     if (!process.env.IS_TEST) winnote.webContents.openDevTools();
@@ -95,7 +98,6 @@ function createNote() {
   winnote.on("close", () => {
     win.webContents.send("closenote", "closeit");
   });
-  winnote.webContents.session.setSpellCheckerLanguages["en-US"];
 
   winnote.webContents.on(
     "context-menu",
