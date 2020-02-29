@@ -148,14 +148,20 @@ import { ipcRenderer } from "electron";
 export default {
   // Do On Start
   mounted() {
-    ipcRenderer.on("delete", () => {
-      this.deleteall();
+    document.addEventListener("keydown", k => {
+      if (k.key == "d" && k.ctrlKey) {
+        this.deleteall();
+      }
     });
-    ipcRenderer.on("import", () => {
-      this.importnotes();
+    document.addEventListener("keydown", k => {
+      if (k.key == "i" && k.ctrlKey) {
+        this.importnotes();
+      }
     });
-    ipcRenderer.on("export", () => {
-      this.exportnotes();
+    document.addEventListener("keydown", k => {
+      if (k.key == "s" && k.ctrlKey) {
+        this.exportnotes();
+      }
     });
 
     window.setTimeout(() => {

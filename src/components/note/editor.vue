@@ -75,8 +75,10 @@ export default {
 
   // Do On Start
   mounted() {
-    ipcRenderer.on("emoji", () => {
-      this.emoji();
+    document.addEventListener("keydown", k => {
+      if (k.key == "e" && k.ctrlKey) {
+        this.emoji();
+      }
     });
 
     //  Profile
@@ -163,8 +165,10 @@ export default {
       document.getElementById("redo").addEventListener("click", () => {
         quill.history.redo();
       });
-      ipcRenderer.on("redo", () => {
-        quill.history.redo();
+      document.addEventListener("keydown", k => {
+        if (k.key == "y" && k.ctrlKey) {
+          quill.history.redo();
+        }
       });
       let func = obj => {
         // Delete Note
@@ -185,22 +189,24 @@ export default {
             }
           });
         });
-        ipcRenderer.on("delete", () => {
-          let swal = require("sweetalert");
-          swal({
-            title: "Are you sure?",
-            text: "Want To Delete Your Note!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true
-          }).then(willDelete => {
-            if (willDelete) {
-              fs.unlink("data/" + profile + "/notes/" + obj.toString(), e => {
-                let { ipcRenderer } = require("electron");
-                ipcRenderer.invoke("destroy");
-              });
-            }
-          });
+        document.addEventListener("keydown", k => {
+          if (k.key == "d" && k.ctrlKey) {
+            let swal = require("sweetalert");
+            swal({
+              title: "Are you sure?",
+              text: "Want To Delete Your Note!",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true
+            }).then(willDelete => {
+              if (willDelete) {
+                fs.unlink("data/" + profile + "/notes/" + obj.toString(), e => {
+                  let { ipcRenderer } = require("electron");
+                  ipcRenderer.invoke("destroy");
+                });
+              }
+            });
+          }
         });
 
         let repeafunc = () => {

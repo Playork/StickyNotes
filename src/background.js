@@ -125,10 +125,11 @@ function createNote() {
           })
         );
       }
-      if (p.editFlags.canCut || p.editFlags.canCopy || p.editFlags.canPaste) {
+      if (p.editFlags.canCut || p.editFlags.canCopy || p.editFlags.canPaste || p.editFlags.canUndo || p.editFlags.canRedo) {
         if (p.misspelledWord) {
           menu.append(new MenuItem({ type: "separator" }));
         }
+        menu.append(new MenuItem({ role: "selectall" }));
         if (p.editFlags.canCut) {
           menu.append(new MenuItem({ role: "cut" }));
         }
@@ -138,6 +139,19 @@ function createNote() {
         if (p.editFlags.canPaste) {
           menu.append(new MenuItem({ role: "paste" }));
         }
+        if (p.editFlags.canUndo) {
+          menu.append(new MenuItem({ role: "undo" }));
+        }
+        if (p.editFlags.canRedo) {
+          menu.append(new MenuItem({ role: "redo" }));
+        }
+        menu.append(new MenuItem({ type: "separator" }));
+        menu.append(new MenuItem({ label: "New Note", click: () => { createNote() }, accelerator: "Control+N" }));
+        menu.append(new MenuItem({ label: "Emoji", click: () => { BrowserWindow.getFocusedWindow().webContents.send("emoji") } }));
+        menu.append(new MenuItem({ label: "Lock", click: () => { BrowserWindow.getFocusedWindow().webContents.send("lock") } }));
+        menu.append(new MenuItem({ label: "Import", click: () => { BrowserWindow.getFocusedWindow().webContents.send("import") } }));
+        menu.append(new MenuItem({ label: "Export", click: () => { BrowserWindow.getFocusedWindow().webContents.send("export") } }));
+        menu.append(new MenuItem({ label: "Delete", click: () => { BrowserWindow.getFocusedWindow().webContents.send("delete") } }));
       }
       menu.popup(winnote, p.x, p.y);
     },
@@ -147,36 +161,8 @@ function createNote() {
 
 app.whenReady().then(() => {
   globalShortcut.register("Control+N", () => {
-    createNote();
-  })
-  globalShortcut.register("Control+Y", () => {
-    BrowserWindow.getAllWindows().forEach((b) => {
-      b.webContents.send("redo")
-    })
-  })
-  globalShortcut.register("Control+D", () => {
     if (BrowserWindow.getFocusedWindow()) {
-      BrowserWindow.getFocusedWindow().webContents.send("delete")
-    }
-  })
-  globalShortcut.register("Control+E", () => {
-    if (BrowserWindow.getFocusedWindow()) {
-      BrowserWindow.getFocusedWindow().webContents.send("emoji")
-    }
-  })
-  globalShortcut.register("Control+L", () => {
-    if (BrowserWindow.getFocusedWindow()) {
-      BrowserWindow.getFocusedWindow().webContents.send("lock")
-    }
-  })
-  globalShortcut.register("Control+I", () => {
-    if (BrowserWindow.getFocusedWindow()) {
-      BrowserWindow.getFocusedWindow().webContents.send("import")
-    }
-  })
-  globalShortcut.register("Control+S", () => {
-    if (BrowserWindow.getFocusedWindow()) {
-      BrowserWindow.getFocusedWindow().webContents.send("export")
+      createNote();
     }
   })
 })

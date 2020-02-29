@@ -83,14 +83,20 @@ export default {
   },
 
   mounted() {
-    ipcRenderer.on("lock", () => {
-      this.locks();
+    document.addEventListener("keydown", k => {
+      if (k.key == "l" && k.ctrlKey) {
+        this.locks();
+      }
     });
-    ipcRenderer.on("import", () => {
-      this.importnote();
+    document.addEventListener("keydown", k => {
+      if (k.key == "i" && k.ctrlKey) {
+        this.importnote();
+      }
     });
-    ipcRenderer.on("export", () => {
-      this.exportnote();
+    document.addEventListener("keydown", k => {
+      if (k.key == "s" && k.ctrlKey) {
+        this.exportnote();
+      }
     });
   },
 
