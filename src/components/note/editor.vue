@@ -141,7 +141,9 @@ export default {
           .getComputedStyle(document.getElementById("lightYellow"))
           .getPropertyValue("background-color");
         document.getElementById("backc").style.backgroundColor = color1;
-        document.querySelector(".ql-toolbar").style.backgroundColor = color1;
+        try {
+          document.querySelector(".ql-toolbar").style.backgroundColor = color1;
+        } catch {}
       }, 1);
 
       // Load Editor And Save Note On Several Events
@@ -565,21 +567,46 @@ export default {
         document
           .getElementById("locks")
           .addEventListener("click", () => repeafunc());
-        document
-          .getElementById("note")
-          .addEventListener("mouseup", () => repeafunc());
-        document
-          .getElementById("note")
-          .addEventListener("touchend", () => repeafunc(), false);
-        document
-          .getElementById("note")
-          .addEventListener("touchcancel", () => repeafunc(), false);
-        document
-          .getElementById("note")
-          .addEventListener("touchleave", () => repeafunc(), false);
         window.addEventListener("resize", () => repeafunc());
+        let rfunc = () => {
+          if (document.getElementById("draw") == "block") {
+            repeafunc();
+          }
+        };
+        document
+          .getElementById("note")
+          .addEventListener("mousemove", () => rfunc(), false);
+        document
+          .getElementById("note")
+          .addEventListener("mouseup", () => rfunc());
+        document
+          .getElementById("note")
+          .addEventListener("mouseleave", () => rfunc(), false);
+        document
+          .getElementById("note")
+          .addEventListener("mouseenter", () => rfunc(), false);
+        document
+          .getElementById("note")
+          .addEventListener("mousedown", () => rfunc(), false);
+        document
+          .getElementById("note")
+          .addEventListener("mouseout", () => rfunc(), false);
+        document
+          .getElementById("note")
+          .addEventListener("touchstart", () => rfunc(), false);
+        document
+          .getElementById("note")
+          .addEventListener("touchmove", () => rfunc(), false);
+        document
+          .getElementById("note")
+          .addEventListener("touchend", () => rfunc(), false);
+        document
+          .getElementById("note")
+          .addEventListener("touchcancel", () => rfunc(), false);
+        document
+          .getElementById("note")
+          .addEventListener("touchleave", () => rfunc(), false);
       };
-
       fs.readFile("data/" + profile + "/id", (e, d) => {
         if (e) {
           let id = 1;
