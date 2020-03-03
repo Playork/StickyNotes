@@ -41,11 +41,11 @@ function createWindow() {
       nodeIntegration: true
     }
   });
+  createProtocol("app");
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
     if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
-    createProtocol("app");
     win.loadURL("app://./index.html");
   }
   win.on("ready-to-show", () => {
@@ -83,8 +83,7 @@ function createNote() {
     }
   });
   winnote.webContents.session.setSpellCheckerLanguages(["en-US"]);
-  createProtocol("app");
-  winnote.webContents.session.setSpellCheckerDictionaryDownloadURL("app://./")
+  winnote.webContents.session.setSpellCheckerDictionaryDownloadURL("app://./spell/")
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     winnote.loadURL("http://localhost:8080/#/note");
     if (!process.env.IS_TEST) winnote.webContents.openDevTools();

@@ -4,7 +4,7 @@ node_modules
 /data
 client_id
 notes.spst
-/en-US-8-0.bdic
+/spell
 
 # local env files
 .env.local
