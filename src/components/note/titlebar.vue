@@ -105,6 +105,53 @@ export default {
         this.exportnote();
       }
     });
+    document.addEventListener("drop", e => {
+      if (document.getElementById("draw") != "block") {
+        let files = e.dataTransfer.files;
+        let images = [
+          "apng",
+          "bmp",
+          "ico",
+          "cur",
+          "jpg",
+          "jpeg",
+          "jfif",
+          "pjpeg",
+          "pjp",
+          "png",
+          "svg",
+          "webp"
+        ];
+        let audios = ["mp3", "MP3", "wav", "WAV", "ogg", "OGG"];
+        let videos = [
+          "mp4",
+          "MP4",
+          "webm",
+          "WEBM",
+          "WebM",
+          "ogg",
+          "OGG",
+          "Ogg"
+        ];
+        for (let file of files) {
+          images.forEach(image => {
+            if (new RegExp("." + image).test(file.path)) {
+              this.image(file.path);
+            }
+          });
+          videos.forEach(video => {
+            if (new RegExp("." + video).test(file.path)) {
+              this.video(file.path);
+            }
+          });
+          audios.forEach(audio => {
+            if (new RegExp("." + audio).test(file.path)) {
+              this.audio(file.path);
+            }
+          });
+        }
+      }
+    });
   },
 
   // Functions
@@ -261,7 +308,7 @@ export default {
     async exportnote() {
       let { ipcRenderer } = require("electron");
       let notes = await ipcRenderer.invoke("exportnote");
-      if (note.filePath != undefined) {
+      if (note.filePath) {
         let data;
         if (document.getElementById("draw").style.display != "block") {
           data = document.querySelector(".ql-snow .ql-editor").innerHTML;
@@ -296,53 +343,65 @@ export default {
     },
 
     // Add image To Note
+    image(img) {
+      try {
+        document.querySelector(
+          ".ql-snow .ql-editor"
+        ).innerHTML += `<img src="file:///${img}" style="max-width: 100%;height: auto;">`;
+      } catch {
+        let swal = require("sweetalert");
+        swal("Not Supported");
+      }
+    },
+
     async clickimage() {
       let { ipcRenderer } = require("electron");
       let images = await ipcRenderer.invoke("image");
-      if (images.filePaths[0]) {
-        try {
-          document.querySelector(
-            ".ql-snow .ql-editor"
-          ).innerHTML += `<img src="file:///${images.filePaths[0]}" style="max-width: 100%;height: auto;">`;
-        } catch {
-          let swal = require("sweetalert");
-          swal("Not Supported");
-        }
-      }
+      images.filePaths.forEach(image => {
+        this.image(image);
+      });
     },
 
     // Add Audio To Note
-    async clicksong() {
-      let { ipcRenderer } = require("electron");
-      let audios = await ipcRenderer.invoke("audio");
-      if (audios.filePaths[0]) {
-        try {
-          document.querySelector(
-            ".ql-snow .ql-editor"
-          ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///${audios.filePaths[0]}' controls></audio>"></iframe>`;
-        } catch {
-          let swal = require("sweetalert");
+    audio(audio) {
+      try {
+        document.querySelector(
+          ".ql-snow .ql-editor"
+        ).innerHTML += `<iframe id="audio" srcdoc="<audio src='file:///${audio}' controls></audio>"></iframe>`;
+      } catch {
+        let swal = require("sweetalert");
 
-          swal("Not Supported");
-        }
+        swal("Not Supported");
       }
     },
 
+    async clicksong() {
+      let { ipcRenderer } = require("electron");
+      let audios = await ipcRenderer.invoke("audio");
+      audios.filePaths.forEach(audio => {
+        this.audio(audio);
+      });
+    },
+
     // Add Video To Note
+    video(video) {
+      try {
+        document.querySelector(
+          ".ql-snow .ql-editor"
+        ).innerHTML += `<iframe srcdoc="<video src='file:///${video}' height='150px' controls preload='none'></video>" id="video"></iframe>`;
+      } catch {
+        let swal = require("sweetalert");
+
+        swal("Not Supported");
+      }
+    },
+
     async clickvideo() {
       let { ipcRenderer } = require("electron");
       let videos = await ipcRenderer.invoke("video");
-      if (videos.filePaths[0]) {
-        try {
-          document.querySelector(
-            ".ql-snow .ql-editor"
-          ).innerHTML += `<iframe srcdoc="<video src='file:///${videos.filePaths[0]}' height='150px' controls preload='none'></video>" id="video"></iframe>`;
-        } catch {
-          let swal = require("sweetalert");
-
-          swal("Not Supported");
-        }
-      }
+      videos.filePaths.forEach(video => {
+        this.video(video);
+      });
     }
   }
 };

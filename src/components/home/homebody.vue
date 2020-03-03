@@ -462,7 +462,6 @@ export default {
       fs.readFile("data/profile", async (e, d) => {
         let profile = d;
         let notes = await ipcRenderer.invoke("importnotes");
-        console.log(notes);
         if (notes.filePaths[0]) {
           fs.readFile(notes.filePaths[0], (e, d) => {
             if (e) {
@@ -512,7 +511,7 @@ export default {
         let profile = d;
         if (document.getElementById("notetext")) {
           let notes = await ipcRenderer.invoke("exportnotes");
-          if (notes.filePath != undefined) {
+          if (notes.filePath) {
             let data = "";
             fs.readdir("data/" + profile + "/notes/", function(e, files) {
               if (e) {
