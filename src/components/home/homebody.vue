@@ -428,34 +428,29 @@ export default {
             icon: "warning",
             buttons: true,
             dangerMode: true
-          }).then(ok => {
+          }).then(async ok => {
             if (ok) {
-              fs.writeFile(
-                "data/" + profile + "/closed",
+              await fs.promises.writeFile(
+                "data/" + d + "/closed",
                 JSON.stringify({ closed: "yes" }),
-                async e => {
-                  await fs.promises.writeFile("data/profile", "default", e => {
-                    let deleteFolder = path => {
-                      fs.readdir(path, (e, files) => {
-                        files.forEach(file => {
-                          let curPath = path + "/" + file;
-                          fs.lstat(curPath, (e, r) => {
-                            if (r.isDirectory()) {
-                              deleteFolder(curPath);
-                            } else {
-                              fs.unlink(curPath, e => {});
-                            }
-                          });
-                        });
-                      });
-                      fs.rmdir(path, e => {});
-                    };
-                    deleteFolder("data/" + d);
-                    ipcRenderer.invoke("reload");
-                  });
-                }
+                e => {}
               );
-            } else {
+              await fs.promises.writeFile("data/profile", "default", e => {});
+              let deleteFolder = path => {
+                fs.readdir(path, (e, files) => {
+                  files.forEach(file => {
+                    let curPath = path + "/" + file;
+                    if (fs.lstatSync(curPath).isDirectory()) {
+                      deleteFolder(curPath);
+                    } else {
+                      fs.unlink(curPath, e => {});
+                    }
+                  });
+                  fs.rmdir(path, e => {});
+                });
+              };
+              deleteFolder("data/" + d);
+              ipcRenderer.invoke("reload");
             }
           });
         }
