@@ -55,6 +55,20 @@ SOFTWARE.
       <div id="editor"></div>
     </div>
     <div id="backc"></div>
+    <div id="candit">
+      <button id="paintclear" class="button1">Clear</button>
+      <span class="info">2</span
+      ><input
+        type="range"
+        value="2"
+        min="2"
+        max="50"
+        id="paintwidth"
+        class="brushwidth"
+      />
+      <input type="color" value="#000" id="paintcolor" />
+    </div>
+    <canvas id="draw"></canvas>
   </div>
 </template>
 
@@ -65,6 +79,7 @@ import Quill from "quill";
 import fs from "fs";
 import { Picker } from "emoji-mart-vue";
 import { ipcRenderer } from "electron";
+import { fabric } from "../../assets/script/fabric";
 
 // Vue Class
 export default {
@@ -86,6 +101,39 @@ export default {
     fs.readFile("data/profile", (e, d) => {
       profile = d;
     });
+
+    // draw
+    let canvas = new fabric.Canvas("draw", {
+      backgroundColor: "transparent",
+      freeDrawingCursor: "pointer",
+      isDrawingMode: true
+    });
+    let drawingColorEl = document.getElementById("paintcolor");
+    let drawingLineWidthEl = document.getElementById("paintwidth");
+    document.getElementById("paintclear").onclick = function() {
+      canvas.clear();
+    };
+    drawingColorEl.onchange = function() {
+      canvas.freeDrawingBrush.color = drawingColorEl.value;
+    };
+    drawingLineWidthEl.onchange = function() {
+      canvas.freeDrawingBrush.width =
+        parseInt(drawingLineWidthEl.value, 10) || 1;
+      drawingLineWidthEl.previousSibling.innerHTML = drawingLineWidthEl.value;
+    };
+    if (canvas.freeDrawingBrush) {
+      canvas.freeDrawingBrush.color = drawingColorEl.value;
+      canvas.freeDrawingBrush.width =
+        parseInt(drawingLineWidthEl.value, 10) || 1;
+    }
+    function resizeCanvas() {
+      canvas.setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    }
+    window.addEventListener("resize", resizeCanvas, false);
+    resizeCanvas();
 
     window.setTimeout(() => {
       window.setInterval(() => {
@@ -160,7 +208,17 @@ export default {
         theme: "snow"
       });
       document.getElementById("undo").addEventListener("click", () => {
-        quill.history.undo();
+        if (document.getElementById("draw").style.display != "block") {
+          quill.history.undo();
+        } else {
+          if (
+            canvas.item(canvas.getObjects().length - 1) &&
+            canvas.item(canvas.getObjects().length - 1).get("type") === "path"
+          ) {
+            canvas.remove(canvas.item(canvas.getObjects().length - 1));
+            canvas.renderAll();
+          }
+        }
       });
       document.getElementById("redo").addEventListener("click", () => {
         quill.history.redo();
@@ -170,6 +228,47 @@ export default {
           quill.history.redo();
         }
       });
+
+      // Restore Saved Note
+      fs.readFile("data/" + profile + "/id", (e, d) => {
+        if (e) {
+        } else {
+          fs.readFile(
+            "data/" + profile + "/notes/" + JSON.parse(d).ids,
+            (e, r) => {
+              if (e) {
+                window.resizeTo(300, 325);
+                document.querySelector(".ql-toolbar").style.backgroundColor =
+                  "#FFF2AB";
+              } else {
+                let text = JSON.parse(r);
+                if (!text.first) {
+                  document.getElementById("mouch").click();
+                  canvas.setBackgroundImage(
+                    text.image,
+                    canvas.renderAll.bind(canvas),
+                    {
+                      originX: "left",
+                      originY: "top"
+                    }
+                  );
+                } else {
+                  document.querySelector(".ql-snow .ql-editor").innerHTML =
+                    text.first;
+                }
+                document.querySelector(".ql-toolbar").style.backgroundColor =
+                  text.back;
+                window.resizeTo(Number(text.wid), Number(text.hei));
+                document.getElementById("lightYellow").style.backgroundColor =
+                  text.back;
+                document.getElementById("titlebar").style.backgroundColor =
+                  text.title;
+              }
+            }
+          );
+        }
+      });
+
       let func = obj => {
         // Delete Note
         document.getElementById("deletenote1").addEventListener("click", () => {
@@ -211,6 +310,7 @@ export default {
 
         let repeafunc = () => {
           let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
+          let url = document.querySelector(".lower-canvas").toDataURL();
           let color1 = window
             .getComputedStyle(document.getElementById("lightYellow"))
             .getPropertyValue("background-color");
@@ -228,14 +328,31 @@ export default {
           } else {
             lock = "no";
           }
-          if (
-            document.querySelector(".ql-snow .ql-editor").innerHTML !=
-            "<p><br></p>"
-          ) {
+          if (document.getElementById("lightYellow").style.display != "none") {
+            if (
+              document.querySelector(".ql-snow .ql-editor").innerHTML !=
+              "<p><br></p>"
+            ) {
+              fs.writeFile(
+                "data/" + profile + "/notes/" + obj.toString(),
+                JSON.stringify({
+                  first: text,
+                  back: color1,
+                  title: color2,
+                  wid: winwidth,
+                  hei: winheight,
+                  deleted: "no",
+                  closed: "no",
+                  locked: lock
+                }),
+                e => {}
+              );
+            }
+          } else {
             fs.writeFile(
               "data/" + profile + "/notes/" + obj.toString(),
               JSON.stringify({
-                first: text,
+                image: url,
                 back: color1,
                 title: color2,
                 wid: winwidth,
@@ -251,6 +368,7 @@ export default {
         window.onbeforeunload = e => {
           e.returnValue = true;
           let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
+          let url = document.querySelector(".lower-canvas").toDataURL();
           let color1 = window
             .getComputedStyle(document.getElementById("lightYellow"))
             .getPropertyValue("background-color");
@@ -274,13 +392,40 @@ export default {
               if (e || JSON.parse(d).deleted == "no") {
                 let { ipcRenderer } = require("electron");
                 if (
-                  document.querySelector(".ql-snow .ql-editor").innerHTML !=
-                  "<p><br></p>"
+                  document.getElementById("lightYellow").style.display != "none"
                 ) {
+                  if (
+                    document.querySelector(".ql-snow .ql-editor").innerHTML !=
+                    "<p><br></p>"
+                  ) {
+                    fs.writeFile(
+                      "data/" + profile + "/notes/" + obj.toString(),
+                      JSON.stringify({
+                        first: text,
+                        back: color1,
+                        title: color2,
+                        wid: winwidth,
+                        hei: winheight,
+                        deleted: "no",
+                        closed: "yes",
+                        locked: lock
+                      }),
+                      e => {
+                        ipcRenderer.invoke("destroy");
+                      }
+                    );
+                  } else {
+                    fs.unlink(
+                      "data/" + profile + "/notes/" + obj.toString(),
+                      e => {}
+                    );
+                    ipcRenderer.invoke("destroy");
+                  }
+                } else {
                   fs.writeFile(
                     "data/" + profile + "/notes/" + obj.toString(),
                     JSON.stringify({
-                      first: text,
+                      image: url,
                       back: color1,
                       title: color2,
                       wid: winwidth,
@@ -293,12 +438,6 @@ export default {
                       ipcRenderer.invoke("destroy");
                     }
                   );
-                } else {
-                  fs.unlink(
-                    "data/" + profile + "/notes/" + obj.toString(),
-                    e => {}
-                  );
-                  ipcRenderer.invoke("destroy");
                 }
               }
             }
@@ -395,8 +534,21 @@ export default {
         document
           .getElementById("locks")
           .addEventListener("click", () => repeafunc());
+        document
+          .getElementById("note")
+          .addEventListener("mouseup", () => repeafunc());
+        document
+          .getElementById("note")
+          .addEventListener("touchend", () => repeafunc(), false);
+        document
+          .getElementById("note")
+          .addEventListener("touchcancel", () => repeafunc(), false);
+        document
+          .getElementById("note")
+          .addEventListener("touchleave", () => repeafunc(), false);
         window.addEventListener("resize", () => repeafunc());
       };
+
       fs.readFile("data/" + profile + "/id", (e, d) => {
         if (e) {
           let id = 1;

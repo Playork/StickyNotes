@@ -142,8 +142,6 @@ SOFTWARE. */
 }
 #draw {
   display: none;
-  cursor: pointer;
-  touch-action: none;
   position: absolute;
   left: 0;
   right: 0;
@@ -227,37 +225,23 @@ SOFTWARE. */
   color: white;
 }
 #paintcolor {
-  background: #000;
+  background: transparent;
 }
-#paintcolor span {
-  font-size: 20px;
-  font-family: "segoe";
-  color: #fff;
-}
-#brushwidth {
+
+.brushwidth {
   -webkit-appearance: none;
   height: 5px;
-  width: 93%;
   border-radius: 5px;
   background: #000;
   outline: none;
-  position: absolute;
-  top: 55px;
-  margin: 0;
-  padding: 0;
 }
-#brushwidth::-webkit-slider-thumb {
+.brushwidth::-webkit-slider-thumb {
   appearance: none;
   width: 20px;
   height: 20px;
   border-radius: 50%;
   background: #fff;
   cursor: pointer;
-}
-#widthvalue {
-  position: absolute;
-  top: 30px;
-  right: 0;
 }
 #restore,
 #backup,
@@ -347,4 +331,19 @@ SOFTWARE. */
 }
 .link-quill:active {
   color: violet;
+}
+#candit {
+  display: none;
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  height: 40px;
+  z-index: 7;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0);
+}
+.upper-canvas {
+  display: none;
+  z-index: 6;
 }

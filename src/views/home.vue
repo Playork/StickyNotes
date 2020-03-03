@@ -386,7 +386,10 @@ export default {
                                       );
                                     } else {
                                       d = JSON.parse(d);
-                                      if (js.first != d.first) {
+                                      if (
+                                        js.first != d.first ||
+                                        js.image != d.image
+                                      ) {
                                         let g = new Date().getTime();
                                         let id = Number(d[i]) * g;
                                         fs.writeFile(
@@ -447,11 +450,17 @@ export default {
                       if (e) {
                       } else {
                         let value = JSON.parse(d);
+                        let content;
+                        if (value.first == undefined) {
+                          content = `<img src="${value.image}" style="max-width:90%;"`;
+                        } else {
+                          content = value.first;
+                        }
                         document
                           .getElementById("notes")
                           .insertAdjacentHTML(
                             "afterbegin",
-                            `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span><div id="cont">${value.first}</div></div>`
+                            `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span><div id="cont">${content}</div></div>`
                           );
                         if (document.getElementById("search").value != "") {
                           let cont = document.getElementById("cont").innerHTML;

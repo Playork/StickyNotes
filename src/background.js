@@ -82,8 +82,9 @@ function createNote() {
       nodeIntegration: true
     }
   });
-  winnote.webContents.session.setSpellCheckerLanguages["en-US"];
-  winnote.webContents.session.setSpellCheckerDictionaryDownloadURL("file://" + path.resolve("./"))
+  winnote.webContents.session.setSpellCheckerLanguages(["en-US"]);
+  createProtocol("app");
+  winnote.webContents.session.setSpellCheckerDictionaryDownloadURL("app://./")
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     winnote.loadURL("http://localhost:8080/#/note");
     if (!process.env.IS_TEST) winnote.webContents.openDevTools();
@@ -147,13 +148,6 @@ function createNote() {
         if (p.editFlags.canRedo) {
           menu.append(new MenuItem({ role: "redo" }));
         }
-        menu.append(new MenuItem({ type: "separator" }));
-        menu.append(new MenuItem({ label: "New Note", click: () => { createNote() }, accelerator: "Control+N" }));
-        menu.append(new MenuItem({ label: "Emoji", click: () => { BrowserWindow.getFocusedWindow().webContents.send("emoji") } }));
-        menu.append(new MenuItem({ label: "Lock", click: () => { BrowserWindow.getFocusedWindow().webContents.send("lock") } }));
-        menu.append(new MenuItem({ label: "Import", click: () => { BrowserWindow.getFocusedWindow().webContents.send("import") } }));
-        menu.append(new MenuItem({ label: "Export", click: () => { BrowserWindow.getFocusedWindow().webContents.send("export") } }));
-        menu.append(new MenuItem({ label: "Delete", click: () => { BrowserWindow.getFocusedWindow().webContents.send("delete") } }));
       }
       menu.popup(winnote, p.x, p.y);
     },

@@ -12,9 +12,10 @@
   },
   "dependencies": {
     "dropbox": "^4.0.17",
+    "emoji-mart-vue": "latest",
+    "jsdom": "latest",
     "quill": "latest",
-    "sweetalert": "latest",
-    "emoji-mart-vue": "latest"
+    "sweetalert": "latest"
   },
   "devDependencies": {
     "@vue/cli-service": "latest",
