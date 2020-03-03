@@ -54,7 +54,7 @@ SOFTWARE.
               <a title="Select Video" id="audio1" v-on:click="clicksong">
                 <span>&#xE8D6;</span>Add Audio
               </a>
-              <a v-on:click="importnote" id="import" title="Import Note">
+              <a id="import" title="Import Note">
                 <span>&#xE8B5;</span>Import
               </a>
               <a v-on:click="exportnote" id="export" title="Export Note">
@@ -255,40 +255,6 @@ export default {
     //Menu Show And Hide Function
     menu() {
       document.getElementById("menu-content").classList.toggle("show");
-    },
-
-    // Import Note Function
-    async importnote() {
-      let { ipcRenderer } = require("electron");
-      let notes = await ipcRenderer.invoke("importnote");
-      if (note.filePaths[0]) {
-        let fs = require("fs");
-        fs.readFile(note.filePaths[0], (e, d) => {
-          if (e) {
-            let swal = require("sweetalert");
-            swal("Not Supported");
-          } else {
-            d = d.toString().split("\n");
-            if (
-              document.querySelector(".lower-canvas").style.display != "block"
-            ) {
-              document.querySelector(".ql-snow .ql-editor").innerHTML = d[0];
-              window.resizeTo(Number(d[3]), Number([4]));
-            } else {
-              window.resizeTo(Number(d[3]), Number([4]));
-              let canvas = document.querySelector(".lower-canvas");
-              let ctx = canvas.getContext("2d");
-              let img = new Image();
-              img.src = d[0];
-              img.onload = function() {
-                ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
-              };
-            }
-            document.getElementById("lightYellow").style.backgroundColor = d[1];
-            document.getElementById("titlebar").style.backgroundColor = d[2];
-          }
-        });
-      }
     },
 
     // Exportb Note Function

@@ -159,28 +159,27 @@ export default {
 
     // Start New Note
     note() {
-      let profile;
       fs.readFile("data/profile", (e, d) => {
-        profile = d;
+        let profile = d;
+        let func = obj => {
+          obj++;
+          fs.writeFile(
+            "data/" + profile + "/id",
+            JSON.stringify({ ids: obj.toString() }),
+            e => {}
+          );
+        };
+        fs.readFile("data/" + profile + "/id", (e, d) => {
+          if (e) {
+            let id = 1;
+            func(id);
+          } else {
+            let id = Number(JSON.parse(d).ids);
+            func(id);
+          }
+        });
+        ipcRenderer.send("create-new-instance");
       });
-      let func = obj => {
-        obj++;
-        fs.writeFile(
-          "data/" + profile + "/id",
-          JSON.stringify({ ids: obj.toString() }),
-          e => {}
-        );
-      };
-      fs.readFile("data/" + profile + "/id", (e, d) => {
-        if (e) {
-          let id = 1;
-          func(id);
-        } else {
-          let id = Number(JSON.parse(d).ids);
-          func(id);
-        }
-      });
-      ipcRenderer.send("create-new-instance");
     },
 
     // Minimize Function

@@ -458,83 +458,84 @@ export default {
     },
 
     // Import Notes
-    async importnotes() {
-      let profile;
-      fs.readFile("data/profile", (e, d) => {
-        profile = d;
-      });
-      let notes = await ipcRenderer.invoke("importnotes");
-      console.log(notes);
-      if (notes.filePaths[0]) {
-        fs.readFile(notes.filePaths[0], (e, d) => {
-          if (e) {
-            let swal = require("sweetalert");
-            swal("Not Supported");
-          } else {
-            if (d != "") {
-              d = d.toString().split("\n");
-              for (let i = 0; i < d.length; i++) {
-                if (i % 2 == 0 && d[i] != "") {
-                  let js = JSON.parse(d[i + 1]);
-                  fs.readFile("data/" + profile + "/notes/" + d[i], (e, d) => {
-                    if (e) {
-                      fs.writeFile(
-                        "data/" + profile + "/notes/" + d[i],
-                        JSON.stringify(js),
-                        e => {}
-                      );
-                    } else {
-                      d = JSON.parse(d);
-                      if (js.first != d.first || js.image != d.image) {
-                        let g = new Date().getTime();
-                        let id = Number(d[i]) * g;
-                        fs.writeFile(
-                          "data/" + profile + "/notes/" + id.toString(),
-                          JSON.stringify(js),
-                          e => {}
-                        );
+    importnotes() {
+      fs.readFile("data/profile", async (e, d) => {
+        let profile = d;
+        let notes = await ipcRenderer.invoke("importnotes");
+        console.log(notes);
+        if (notes.filePaths[0]) {
+          fs.readFile(notes.filePaths[0], (e, d) => {
+            if (e) {
+              let swal = require("sweetalert");
+              swal("Not Supported");
+            } else {
+              if (d != "") {
+                d = d.toString().split("\n");
+                for (let i = 0; i < d.length; i++) {
+                  if (i % 2 == 0 && d[i] != "") {
+                    let js = JSON.parse(d[i + 1]);
+                    fs.readFile(
+                      "data/" + profile + "/notes/" + d[i],
+                      (e, d) => {
+                        if (e) {
+                          fs.writeFile(
+                            "data/" + profile + "/notes/" + d[i],
+                            JSON.stringify(js),
+                            e => {}
+                          );
+                        } else {
+                          d = JSON.parse(d);
+                          if (js.first != d.first || js.image != d.image) {
+                            let g = new Date().getTime();
+                            let id = Number(d[i]) * g;
+                            fs.writeFile(
+                              "data/" + profile + "/notes/" + id.toString(),
+                              JSON.stringify(js),
+                              e => {}
+                            );
+                          }
+                        }
                       }
-                    }
-                  });
+                    );
+                  }
                 }
               }
             }
-          }
-        });
-      }
+          });
+        }
+      });
     },
 
     // Export Notes
-    async exportnotes() {
-      let profile;
-      fs.readFile("data/profile", (e, d) => {
-        profile = d;
-      });
-      if (document.getElementById("notetext")) {
-        let notes = await ipcRenderer.invoke("exportnotes");
-        if (notes.filePath != undefined) {
-          let data = "";
-          fs.readdir("data/" + profile + "/notes/", function(e, files) {
-            if (e) {
-            } else {
-              files.forEach(function(key, index) {
-                fs.readFile("data/" + profile + "/notes/" + key, (e, d) => {
-                  let value = JSON.parse(d);
-                  data = data + key + "\n" + JSON.stringify(value) + "\n";
+    exportnotes() {
+      fs.readFile("data/profile", async (e, d) => {
+        let profile = d;
+        if (document.getElementById("notetext")) {
+          let notes = await ipcRenderer.invoke("exportnotes");
+          if (notes.filePath != undefined) {
+            let data = "";
+            fs.readdir("data/" + profile + "/notes/", function(e, files) {
+              if (e) {
+              } else {
+                files.forEach(function(key, index) {
+                  fs.readFile("data/" + profile + "/notes/" + key, (e, d) => {
+                    let value = JSON.parse(d);
+                    data = data + key + "\n" + JSON.stringify(value) + "\n";
+                  });
                 });
-              });
-            }
-          });
-          fs.writeFile(notes.filePath, data, e => {
-            if (e) {
-              swal("Not Supported");
-            }
-          });
+              }
+            });
+            fs.writeFile(notes.filePath, data, e => {
+              if (e) {
+                swal("Not Supported");
+              }
+            });
+          }
+        } else {
+          let swal = require("sweetalert");
+          swal("Nothing To Export");
         }
-      } else {
-        let swal = require("sweetalert");
-        swal("Nothing To Export");
-      }
+      });
     },
 
     // Report Bug
@@ -547,61 +548,62 @@ export default {
 
     // Delete All Note Function
     deleteall() {
-      let profile;
       fs.readFile("data/profile", (e, d) => {
-        profile = d;
+        let profile = d;
+        if (document.getElementById("notetext")) {
+          let swal = require("sweetalert");
+          swal({
+            title: "Are you sure?",
+            text: "Want To Delete All Notes!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+          }).then(willDelete => {
+            if (willDelete) {
+              fs.writeFile(
+                "data/" + profile + "/closed",
+                JSON.stringify({ closed: "yes" }),
+                e => {
+                  window.setTimeout(() => {
+                    fs.readdir("data/" + profile + "/notes/", function(
+                      e,
+                      files
+                    ) {
+                      if (e) {
+                      } else {
+                        fs.unlink("data/" + profile + "/closed", e => {});
+                        files.forEach(function(key, index) {
+                          fs.readFile(
+                            "data/" + profile + "/notes/" + key,
+                            (e, d) => {
+                              let value = JSON.parse(d);
+                              fs.unlink(
+                                "data/" + profile + "/notes/" + key,
+                                e => {}
+                              );
+                            }
+                          );
+                        });
+                      }
+                    });
+                  }, 800);
+                }
+              );
+            }
+          });
+        } else {
+          let swal = require("sweetalert");
+          swal("Nothing To Delete");
+        }
       });
-      if (document.getElementById("notetext")) {
-        let swal = require("sweetalert");
-        swal({
-          title: "Are you sure?",
-          text: "Want To Delete All Notes!",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true
-        }).then(willDelete => {
-          if (willDelete) {
-            fs.writeFile(
-              "data/" + profile + "/closed",
-              JSON.stringify({ closed: "yes" }),
-              e => {
-                window.setTimeout(() => {
-                  fs.readdir("data/" + profile + "/notes/", function(e, files) {
-                    if (e) {
-                    } else {
-                      fs.unlink("data/" + profile + "/closed", e => {});
-                      files.forEach(function(key, index) {
-                        fs.readFile(
-                          "data/" + profile + "/notes/" + key,
-                          (e, d) => {
-                            let value = JSON.parse(d);
-                            fs.unlink(
-                              "data/" + profile + "/notes/" + key,
-                              e => {}
-                            );
-                          }
-                        );
-                      });
-                    }
-                  });
-                }, 800);
-              }
-            );
-          }
-        });
-      } else {
-        let swal = require("sweetalert");
-        swal("Nothing To Delete");
-      }
     },
 
     // Sign Out
     out() {
-      let profile;
       fs.readFile("data/profile", (e, d) => {
-        profile = d;
+        let profile = d;
+        fs.unlink("data/" + profile + "/.access", e => {});
       });
-      fs.unlink("data/" + profile + "/.access", e => {});
     },
 
     // Show About Page Function
@@ -631,90 +633,93 @@ export default {
 
     // Change Password
     pass() {
-      let profile;
       fs.readFile("data/profile", (e, d) => {
-        profile = d;
-      });
-      let pass = () => {
-        fs.readFile("data/" + profile + "/pass", (error, data) => {
-          if (error) {
-            fs.readFile("data/" + profile + "/.pass", (e, d) => {
-              let swal = require("sweetalert");
-              if (e) {
-                swal({
-                  title: "Create Password For Protection(Recommend)",
-                  text: "If You Want No Password Leave This Input Blank",
-                  content: {
-                    element: "input",
-                    attributes: {
-                      placeholder: "Type your password",
-                      type: "password"
+        let profile = d;
+        let pass = () => {
+          fs.readFile("data/" + profile + "/pass", (error, data) => {
+            if (error) {
+              fs.readFile("data/" + profile + "/.pass", (e, d) => {
+                let swal = require("sweetalert");
+                if (e) {
+                  swal({
+                    title: "Create Password For Protection(Recommend)",
+                    text: "If You Want No Password Leave This Input Blank",
+                    content: {
+                      element: "input",
+                      attributes: {
+                        placeholder: "Type your password",
+                        type: "password"
+                      }
+                    },
+                    closeOnClickOutside: false
+                  }).then(value => {
+                    if (value) {
+                      fs.writeFile(
+                        "data/" + profile + "/.pass",
+                        value,
+                        e => {}
+                      );
+                    } else {
+                      fs.writeFile("data/" + profile + "/pass", "", e => {});
                     }
-                  },
-                  closeOnClickOutside: false
-                }).then(value => {
-                  if (value) {
-                    fs.writeFile("data/" + profile + "/.pass", value, e => {});
-                  } else {
-                    fs.writeFile("data/" + profile + "/pass", "", e => {});
-                  }
-                });
-              } else {
-                swal({
-                  title: "Type Password To Enter",
-                  content: {
-                    element: "input",
-                    attributes: {
-                      placeholder: "Type your password",
-                      type: "password"
-                    }
-                  },
-                  closeOnClickOutside: false
-                }).then(value => {
-                  if (value == d) {
-                    swal({
-                      title: "Change Password",
-                      text:
-                        "If You Do Not Want To Change Password Leave This Input Blank",
-                      content: {
-                        element: "input",
-                        attributes: {
-                          placeholder: "Type your password",
-                          type: "password"
+                  });
+                } else {
+                  swal({
+                    title: "Type Password To Enter",
+                    content: {
+                      element: "input",
+                      attributes: {
+                        placeholder: "Type your password",
+                        type: "password"
+                      }
+                    },
+                    closeOnClickOutside: false
+                  }).then(value => {
+                    if (value == d) {
+                      swal({
+                        title: "Change Password",
+                        text:
+                          "If You Do Not Want To Change Password Leave This Input Blank",
+                        content: {
+                          element: "input",
+                          attributes: {
+                            placeholder: "Type your password",
+                            type: "password"
+                          }
+                        },
+                        closeOnClickOutside: false
+                      }).then(value => {
+                        if (value) {
+                          fs.writeFile(
+                            "data/" + profile + "/.pass",
+                            value,
+                            e => {}
+                          );
+                        } else {
                         }
-                      },
-                      closeOnClickOutside: false
-                    }).then(value => {
-                      if (value) {
-                        fs.writeFile(
-                          "data/" + profile + "/.pass",
-                          value,
-                          e => {}
-                        );
-                      } else {
-                      }
-                    });
-                  } else {
-                    swal({
-                      title: "Wrong Password",
-                      text: "Do You Do Not Want To Change Password?",
-                      icon: "warning",
-                      buttons: true,
-                      dangerMode: true
-                    }).then(ok => {
-                      if (ok) {
-                      } else {
-                        pass();
-                      }
-                    });
-                  }
-                });
-              }
-            });
-          }
-        });
-      };
-      pass();
+                      });
+                    } else {
+                      swal({
+                        title: "Wrong Password",
+                        text: "Do You Do Not Want To Change Password?",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true
+                      }).then(ok => {
+                        if (ok) {
+                        } else {
+                          pass();
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
+        };
+        pass();
+      });
     },
 
     // Hide About Page Function

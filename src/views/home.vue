@@ -579,63 +579,63 @@ export default {
   methods: {
     // Close Function
     close() {
-      let profile;
       fs.readFile("data/profile", (e, d) => {
-        profile = d;
-      });
-      if (document.getElementById("deleteall").style.pointerEvents != "none") {
-        fs.unlink("data/" + profile + "/sign", e => {});
-        fs.readdir("data/" + profile + "/notes/", function(e, files) {
-          if (e) {
-          } else {
-            files.forEach(function(key, index) {
-              fs.readFile("data/" + profile + "/notes/" + key, (e, d) => {
-                let value = JSON.parse(d);
-                if (value.first == "<p><br></p>") {
-                  fs.unlink("data/" + profile + "/notes/" + key, e => {});
-                }
+        let profile = d;
+        if (
+          document.getElementById("deleteall").style.pointerEvents != "none"
+        ) {
+          fs.unlink("data/" + profile + "/sign", e => {});
+          fs.readdir("data/" + profile + "/notes/", function(e, files) {
+            if (e) {
+            } else {
+              files.forEach(function(key, index) {
+                fs.readFile("data/" + profile + "/notes/" + key, (e, d) => {
+                  let value = JSON.parse(d);
+                  if (value.first == "<p><br></p>") {
+                    fs.unlink("data/" + profile + "/notes/" + key, e => {});
+                  }
+                });
               });
-            });
-          }
-        });
-        fs.writeFile(
-          "data/" + profile + "/closed",
-          JSON.stringify({ closed: "yes" }),
-          e => {}
-        );
-        window.setTimeout(() => {
-          ipcRenderer.invoke("close");
-        }, 400);
-      } else {
-        let swal = require("sweetalert");
-        swal("Can't Close Note Is Locked");
-      }
+            }
+          });
+          fs.writeFile(
+            "data/" + profile + "/closed",
+            JSON.stringify({ closed: "yes" }),
+            e => {}
+          );
+          window.setTimeout(() => {
+            ipcRenderer.invoke("close");
+          }, 400);
+        } else {
+          let swal = require("sweetalert");
+          swal("Can't Close Note Is Locked");
+        }
+      });
     },
 
     // Start New Note
     note() {
-      let profile;
       fs.readFile("data/profile", (e, d) => {
-        profile = d;
+        let profile = d;
+        let func = async obj => {
+          obj++;
+          fs.writeFile(
+            "data/" + profile + "/id",
+            JSON.stringify({ ids: obj.toString() }),
+            e => {}
+          );
+        };
+        fs.readFile("data/" + profile + "/id", (e, d) => {
+          if (e) {
+            let id = 1;
+            func(id);
+          } else {
+            let id = Number(JSON.parse(d).ids);
+            func(id);
+          }
+        });
+        ipcRenderer.send("create-new-instance");
       });
-      let func = obj => {
-        obj++;
-        fs.writeFile(
-          "data/" + profile + "/id",
-          JSON.stringify({ ids: obj.toString() }),
-          e => {}
-        );
-      };
-      fs.readFile("data/" + profile + "/id", (e, d) => {
-        if (e) {
-          let id = 1;
-          func(id);
-        } else {
-          let id = Number(JSON.parse(d).ids);
-          func(id);
-        }
-      });
-      ipcRenderer.send("create-new-instance");
     },
 
     // Minimize Window

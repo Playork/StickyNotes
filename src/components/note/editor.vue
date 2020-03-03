@@ -269,6 +269,37 @@ export default {
         }
       });
 
+      // Import Note Function
+      document.getElementById("import").addEventListener("click", async () => {
+        let notes = await ipcRenderer.invoke("importnote");
+        if (note.filePaths[0]) {
+          let fs = require("fs");
+          fs.readFile(note.filePaths[0], (e, d) => {
+            if (e) {
+              let swal = require("sweetalert");
+              swal("Not Supported");
+            } else {
+              d = d.toString().split("\n");
+              if (
+                document.querySelector(".lower-canvas").style.display != "block"
+              ) {
+                document.querySelector(".ql-snow .ql-editor").innerHTML = d[0];
+                window.resizeTo(Number(d[3]), Number([4]));
+              } else {
+                window.resizeTo(Number(d[3]), Number([4]));
+                canvas.setBackgroundImage(d[0], canvas.renderAll.bind(canvas), {
+                  originX: "left",
+                  originY: "top"
+                });
+              }
+              document.getElementById("lightYellow").style.backgroundColor =
+                d[1];
+              document.getElementById("titlebar").style.backgroundColor = d[2];
+            }
+          });
+        }
+      });
+
       let func = obj => {
         // Delete Note
         document.getElementById("deletenote1").addEventListener("click", () => {
