@@ -127,7 +127,7 @@ function createNote() {
           })
         );
       }
-      if (p.editFlags.canCut || p.editFlags.canCopy || p.editFlags.canPaste || p.editFlags.canUndo || p.editFlags.canRedo) {
+      if (p.editFlags.canCut || p.editFlags.canCopy || p.editFlags.canPaste) {
         if (p.misspelledWord) {
           menu.append(new MenuItem({ type: "separator" }));
         }
@@ -140,12 +140,6 @@ function createNote() {
         }
         if (p.editFlags.canPaste) {
           menu.append(new MenuItem({ role: "paste" }));
-        }
-        if (p.editFlags.canUndo) {
-          menu.append(new MenuItem({ role: "undo" }));
-        }
-        if (p.editFlags.canRedo) {
-          menu.append(new MenuItem({ role: "redo" }));
         }
       }
       menu.popup(winnote, p.x, p.y);

@@ -165,6 +165,7 @@ export default {
               { size: ["10px", "18px", "27px", "37px"] },
               "bold",
               "italic",
+              "underline",
               "strike",
               { script: "super" },
               { script: "sub" },
@@ -227,7 +228,17 @@ export default {
       });
       document.addEventListener("keydown", k => {
         if (k.key == "y" && k.ctrlKey) {
-          quill.history.redo();
+          if (document.getElementById("draw").style.display != "block") {
+            quill.history.undo();
+          } else {
+            if (
+              canvas.item(canvas.getObjects().length - 1) &&
+              canvas.item(canvas.getObjects().length - 1).get("type") === "path"
+            ) {
+              canvas.remove(canvas.item(canvas.getObjects().length - 1));
+              canvas.renderAll();
+            }
+          }
         }
       });
 
