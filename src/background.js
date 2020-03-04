@@ -77,15 +77,14 @@ function createNote() {
     transparent: true,
     title: "Playork Sticky Notes",
     frame: false,
+    spellcheck: true,
     show: false,
     webPreferences: {
       webSecurity: false,
-      spellcheck: true,
       nodeIntegration: true
     }
   });
-  winnote.webContents.session.setSpellCheckerLanguages(["en-US"]);
-  winnote.webContents.session.setSpellCheckerDictionaryDownloadURL("app://./spell/")
+  winnote.webContents.session.setSpellCheckerLanguages["en-US"];
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     winnote.loadURL("http://localhost:8080/#/note");
     if (!process.env.IS_TEST) winnote.webContents.openDevTools();
