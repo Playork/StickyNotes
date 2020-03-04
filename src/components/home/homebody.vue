@@ -170,7 +170,9 @@ export default {
       fs.readFile("data/profile", async (e, d) => {
         profile = d;
         document.getElementById("profile").value = d;
+      });
 
+      window.setTimeout(() => {
         // Profiles
         fs.readdir("data", (e, files) => {
           files.forEach(file => {
@@ -357,7 +359,7 @@ export default {
             }
           );
         };
-      });
+      }, 1000);
     }, 2000);
   },
 
