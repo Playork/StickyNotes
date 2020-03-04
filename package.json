@@ -13,7 +13,7 @@
   "dependencies": {
     "dropbox": "^4.0.17",
     "emoji-mart-vue": "latest",
-    "jsdom": "latest",
+    "fabric": "latest",
     "quill": "latest",
     "sweetalert": "latest"
   },

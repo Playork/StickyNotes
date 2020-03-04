@@ -79,7 +79,7 @@ import Quill from "quill";
 import fs from "fs";
 import { Picker } from "emoji-mart-vue";
 import { ipcRenderer } from "electron";
-import { fabric } from "../../assets/script/fabric";
+import { fabric } from "fabric";
 
 // Vue Class
 export default {

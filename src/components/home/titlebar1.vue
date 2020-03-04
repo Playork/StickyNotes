@@ -32,7 +32,7 @@ SOFTWARE.
           <span id="add">&#xE710;</span>
         </div>
         <div id="profiles">
-          <select id="profile">
+          <select title="Select Profile" id="profile">
             <option value="default">default</option>
           </select>
         </div>
