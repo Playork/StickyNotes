@@ -126,7 +126,8 @@ button {
   color: #fff;
   font-family: "segoe";
 }
-#theme {
+#theme,
+#spelllang {
   font-family: "Lobster";
   font-size: 15px;
   color: #fff;
@@ -140,7 +141,8 @@ button {
   margin-left: -40px;
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }
-#theme option {
+#theme option,
+#spelllang option {
   margin: 10px;
 }
 #sync {
@@ -230,4 +232,50 @@ button {
 #deleteprofile {
   color: blue;
   cursor: pointer;
+}
+.container {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.checkmark {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  margin-top: -35px;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
+}
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+.container input:checked ~ .checkmark {
+  background-color: #0078d7;
+}
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
 }

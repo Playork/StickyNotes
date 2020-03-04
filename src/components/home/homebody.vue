@@ -82,6 +82,17 @@ SOFTWARE.
               <option value="Dark" selected>Dark</option>
               <option value="Light">Light</option>
             </select>
+            <br />
+            <h2>Spellcheck</h2>
+            <br />
+            <p>Use Spellcheck</p>
+            <label class="container">
+              <input type="checkbox" id="spellswitch" checked="checked" />
+              <span class="checkmark"></span>
+            </label>
+            <p>Language</p>
+            <select name="spelllang" id="spelllang"> </select>
+            <br />
             <h2>Keyboard Shortcuts</h2>
             <br />
             <p>Select All</p>
@@ -192,6 +203,104 @@ export default {
             }
           });
         });
+
+        // Spellcheck
+        fs.readFile("data/spell", (e, d) => {
+          if (e) {
+            document.getElementById("spellswitch").checked = true;
+            fs.writeFile("data/" + profile + "/emoji", "yes", e => {});
+          } else {
+            if (d == "yes") {
+              document.getElementById("spellswitch").checked = true;
+            } else {
+              document.getElementById("spellswitch").checked = false;
+            }
+          }
+        });
+        document.getElementById("spellswitch").onclick = () => {
+          if (document.getElementById("spellswitch").checked == true) {
+            fs.writeFile("data/spell", "yes", e => {});
+          } else {
+            fs.writeFile("data/spell", "no", e => {});
+          }
+        };
+
+        // Spellcheck Language
+        let lang = [
+          "af",
+          "bg",
+          "ca",
+          "cs",
+          "cy",
+          "da",
+          "de",
+          "el",
+          "en-AU",
+          "en-CA",
+          "en-GB",
+          "en-US",
+          "es",
+          "es-419",
+          "es-AR",
+          "es-ES",
+          "es-MX",
+          "es-US",
+          "et",
+          "fa",
+          "fo",
+          "fr",
+          "he",
+          "hi",
+          "hr",
+          "hu",
+          "hy",
+          "id",
+          "it",
+          "ko",
+          "lt",
+          "lv",
+          "nb",
+          "nl",
+          "pl",
+          "pt-BR",
+          "pt-PT",
+          "ro",
+          "ru",
+          "sh",
+          "sk",
+          "sl",
+          "sq",
+          "sr",
+          "sv",
+          "ta",
+          "tg",
+          "tr",
+          "uk",
+          "vi"
+        ];
+        lang.forEach(lan => {
+          document
+            .getElementById("spelllang")
+            .insertAdjacentHTML(
+              "beforeend",
+              `<option value="${lan}">${lan}</option>`
+            );
+        });
+        fs.readFile("/data/spelllang", (e, d) => {
+          if (e) {
+            fs.writeFile("/data/spelllang", "en-US", e => {});
+            document.getElementById("spelllang").value = "en-US";
+          } else {
+            document.getElementById("spelllang").value = d;
+          }
+        });
+        document.getElementById("spelllang").onchange = () => {
+          fs.writeFile(
+            "/data/spelllang",
+            document.getElementById("spelllang").value,
+            e => {}
+          );
+        };
 
         let { Dropbox } = require("dropbox");
         let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
