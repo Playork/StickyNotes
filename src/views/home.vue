@@ -166,6 +166,7 @@ export default {
                 }
               }
             }
+            fs.unlink("./restore.spst");
           }
         });
       } catch {}
@@ -205,11 +206,11 @@ export default {
           }
         });
         dbx
-          .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
+          .filesDeleteV2({ path: "/Playork Sticky Notes/notessync.spst" })
           .then(() => {
             dbx
               .filesUpload({
-                path: "/Playork Sticky Notes/notes.spst",
+                path: "/Playork Sticky Notes/notessync.spst",
                 contents: notes,
                 mode: "overwrite"
               })
@@ -219,7 +220,7 @@ export default {
             if (e) {
               dbx
                 .filesUpload({
-                  path: "/Playork Sticky Notes/notes.spst",
+                  path: "/Playork Sticky Notes/notessync.spst",
                   contents: notes,
                   mode: "overwrite"
                 })
@@ -231,10 +232,10 @@ export default {
       // Sync Restore
       let dbx = new Dropbox({ fetch, accessToken: accesst });
       dbx
-        .filesGetTemporaryLink({ path: "/Playork Sticky Notes/notes.spst" })
+        .filesGetTemporaryLink({ path: "/Playork Sticky Notes/notessync.spst" })
         .then(data => {
           let https = require("https");
-          let file = fs.createWriteStream("notes.spst");
+          let file = fs.createWriteStream("notessync.spst");
           let request = https.get(data.link, function(response) {
             response.pipe(file);
             file.on("finish", function() {
@@ -242,7 +243,7 @@ export default {
             });
           });
           window.setTimeout(() => {
-            fs.readFile("./notes.spst", "binary", (e, d) => {
+            fs.readFile("./notessync.spst", "binary", (e, d) => {
               if (e) {
                 console.log(e);
               } else {
@@ -355,7 +356,7 @@ export default {
                 let dbx = new Dropbox({ fetch, accessToken: accesst });
                 dbx
                   .filesUpload({
-                    path: "/Playork Sticky Notes/notes.spst",
+                    path: "/Playork Sticky Notes/notessync.spst",
                     contents: notes,
                     mode: "overwrite"
                   })
@@ -382,11 +383,11 @@ export default {
                 let dbx = new Dropbox({ fetch, accessToken: accesst });
                 dbx
                   .filesGetTemporaryLink({
-                    path: "/Playork Sticky Notes/notes.spst"
+                    path: "/Playork Sticky Notes/notessync.spst"
                   })
                   .then(data => {
                     let https = require("https");
-                    let file = fs.createWriteStream("notes.spst");
+                    let file = fs.createWriteStream("notessync.spst");
                     let request = https.get(data.link, function(response) {
                       response.pipe(file);
                       file.on("finish", function() {
@@ -394,7 +395,7 @@ export default {
                       });
                     });
                     window.setTimeout(() => {
-                      fs.readFile("./notes.spst", "binary", (e, d) => {
+                      fs.readFile("./notessync.spst", "binary", (e, d) => {
                         if (e) {
                           console.log(e);
                         } else {

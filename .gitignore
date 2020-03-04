@@ -3,8 +3,8 @@ node_modules
 /dist
 /data
 client_id
-notes.spst
-/spell
+notessync.spst
+spell
 
 # local env files
 .env.local

@@ -60,8 +60,13 @@ function createWindow() {
   });
 }
 
-app.on("ready", async () => {
+app.on("ready", () => {
   createWindow();
+  globalShortcut.register("Control+N", () => {
+    if (BrowserWindow.getFocusedWindow()) {
+      createNote();
+    }
+  })
 });
 
 app.commandLine.appendSwitch("disable-web-security");
@@ -146,14 +151,6 @@ function createNote() {
     false
   );
 }
-
-app.whenReady().then(() => {
-  globalShortcut.register("Control+N", () => {
-    if (BrowserWindow.getFocusedWindow()) {
-      createNote();
-    }
-  })
-})
 
 ipcMain.on("create-new-instance", () => {
   createNote();
