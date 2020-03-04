@@ -23,7 +23,6 @@ SOFTWARE. */
 "use strict";
 let { app, BrowserWindow, ipcMain, Menu, MenuItem, globalShortcut } = require("electron");
 let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
-let path = require("path");
 
 let win;
 function createWindow() {

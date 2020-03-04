@@ -74,35 +74,6 @@ export default {
       }
     });
 
-    // TODO:backup
-    try {
-      fs.readFile("./restore.spst", "binary", (e, d) => {
-        if (e) {
-        } else {
-          if (d != "") {
-            d = d.toString().split("\n");
-            for (let i = 0; i < d.length; i++) {
-              if (i % 2 == 0 && d[i] != "") {
-                if (d[i] == "access") {
-                  fs.writeFile(
-                    "data/" + profile + "/.access",
-                    d[i + 1],
-                    e => {}
-                  );
-                } else {
-                  fs.writeFile(
-                    "data/" + profile + "/notes/" + d[i],
-                    d[i + 1],
-                    e => {}
-                  );
-                }
-              }
-            }
-          }
-        }
-      });
-    } catch {}
-
     window.setTimeout(() => {
       // Create Password
       let pass = () => {
@@ -169,6 +140,35 @@ export default {
         });
       };
       pass();
+
+      // TODO:backup
+      try {
+        fs.readFile("./restore.spst", "binary", (e, d) => {
+          if (e) {
+          } else {
+            if (d != "") {
+              d = d.toString().split("\n");
+              for (let i = 0; i < d.length; i++) {
+                if (i % 2 == 0 && d[i] != "") {
+                  if (d[i] == "access") {
+                    fs.writeFile(
+                      "data/" + profile + "/.access",
+                      d[i + 1],
+                      e => {}
+                    );
+                  } else {
+                    fs.writeFile(
+                      "data/" + profile + "/notes/" + d[i],
+                      d[i + 1],
+                      e => {}
+                    );
+                  }
+                }
+              }
+            }
+          }
+        });
+      } catch {}
 
       // Sync Seup
       let accesst;

@@ -60,12 +60,9 @@ export default {
   // Do On Start
   mounted() {
     //  Profile
-    let profile;
     fs.readFile("data/profile", (e, d) => {
-      profile = d;
-    });
+      let profile = d;
 
-    window.setTimeout(() => {
       // Close For Main Process Close
       ipcRenderer.on("closenote", () => {
         ipcRenderer.invoke("close");
@@ -147,7 +144,7 @@ export default {
           }
         });
       });
-    }, 1000);
+    });
   },
 
   // Functions

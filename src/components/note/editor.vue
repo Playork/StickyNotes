@@ -97,45 +97,42 @@ export default {
     });
 
     //  Profile
-    let profile;
     fs.readFile("data/profile", (e, d) => {
-      profile = d;
-    });
+      let profile = d;
 
-    // draw
-    let canvas = new fabric.Canvas("draw", {
-      backgroundColor: "transparent",
-      freeDrawingCursor: "pointer",
-      isDrawingMode: true
-    });
-    let drawingColorEl = document.getElementById("paintcolor");
-    let drawingLineWidthEl = document.getElementById("paintwidth");
-    document.getElementById("paintclear").onclick = function() {
-      canvas.clear();
-    };
-    drawingColorEl.onchange = function() {
-      canvas.freeDrawingBrush.color = drawingColorEl.value;
-    };
-    drawingLineWidthEl.onchange = function() {
-      canvas.freeDrawingBrush.width =
-        parseInt(drawingLineWidthEl.value, 10) || 1;
-      drawingLineWidthEl.previousSibling.innerHTML = drawingLineWidthEl.value;
-    };
-    if (canvas.freeDrawingBrush) {
-      canvas.freeDrawingBrush.color = drawingColorEl.value;
-      canvas.freeDrawingBrush.width =
-        parseInt(drawingLineWidthEl.value, 10) || 1;
-    }
-    function resizeCanvas() {
-      canvas.setDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight
+      // draw
+      let canvas = new fabric.Canvas("draw", {
+        backgroundColor: "transparent",
+        freeDrawingCursor: "pointer",
+        isDrawingMode: true
       });
-    }
-    window.addEventListener("resize", resizeCanvas, false);
-    resizeCanvas();
+      let drawingColorEl = document.getElementById("paintcolor");
+      let drawingLineWidthEl = document.getElementById("paintwidth");
+      document.getElementById("paintclear").onclick = function() {
+        canvas.clear();
+      };
+      drawingColorEl.onchange = function() {
+        canvas.freeDrawingBrush.color = drawingColorEl.value;
+      };
+      drawingLineWidthEl.onchange = function() {
+        canvas.freeDrawingBrush.width =
+          parseInt(drawingLineWidthEl.value, 10) || 1;
+        drawingLineWidthEl.previousSibling.innerHTML = drawingLineWidthEl.value;
+      };
+      if (canvas.freeDrawingBrush) {
+        canvas.freeDrawingBrush.color = drawingColorEl.value;
+        canvas.freeDrawingBrush.width =
+          parseInt(drawingLineWidthEl.value, 10) || 1;
+      }
+      function resizeCanvas() {
+        canvas.setDimensions({
+          width: window.innerWidth,
+          height: window.innerHeight
+        });
+      }
+      window.addEventListener("resize", resizeCanvas, false);
+      resizeCanvas();
 
-    window.setTimeout(() => {
       window.setInterval(() => {
         let color1 = window
           .getComputedStyle(document.getElementById("lightYellow"))
@@ -627,7 +624,7 @@ export default {
           func(id);
         }
       });
-    }, 1000);
+    });
   },
   methods: {
     // Add emoji

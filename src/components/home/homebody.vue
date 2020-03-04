@@ -170,63 +170,62 @@ export default {
       fs.readFile("data/profile", async (e, d) => {
         profile = d;
         document.getElementById("profile").value = d;
-      });
 
-      // Profiles
-      fs.readdir("data", (e, files) => {
-        files.forEach(file => {
-          if (
-            fs.lstatSync("data/" + file).isDirectory() &&
-            file != "default" &&
-            !new RegExp(`<option value="${file}">${file}</option>`).test(
-              document.getElementById("profile").innerHTML
-            )
-          ) {
-            document
-              .getElementById("profile")
-              .insertAdjacentHTML(
-                "beforeend",
-                `<option value="${file}">${file}</option>`
-              );
-          }
+        // Profiles
+        fs.readdir("data", (e, files) => {
+          files.forEach(file => {
+            if (
+              fs.lstatSync("data/" + file).isDirectory() &&
+              file != "default" &&
+              !new RegExp(`<option value="${file}">${file}</option>`).test(
+                document.getElementById("profile").innerHTML
+              )
+            ) {
+              document
+                .getElementById("profile")
+                .insertAdjacentHTML(
+                  "beforeend",
+                  `<option value="${file}">${file}</option>`
+                );
+            }
+          });
         });
-      });
 
-      let { Dropbox } = require("dropbox");
-      let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
-      let url = dbx.getAuthenticationUrl("app://./auth.html");
-      document.getElementById("drb").addEventListener("click", () => {
-        ipcRenderer.invoke("syncwindow", url);
-      });
-      ipcRenderer.on("closedsync", (e, u) => {
-        let hash = u.split("#");
-        let pair = hash[1].split("&");
-        let val = pair[0].split("=");
-        fs.writeFile("data/" + profile + "/.access", val[1], e => {});
-        fs.writeFile(
-          "data/" + profile + "/sync",
-          JSON.stringify({ sync: "yes" }),
-          e => {}
-        );
-      });
-      window.setTimeout(() => {
-        fs.readFile("data/" + profile + "/theme", (e, d) => {
-          if (e) {
-            document.getElementById("theme").selectedIndex = 0;
-            fs.writeFile(
-              "data/" + profile + "/theme",
-              JSON.stringify({ on: 0 }),
-              e => {}
-            );
-          } else {
-            d = JSON.parse(d);
-            let num = d.on;
-            document.getElementById("theme").selectedIndex = num;
-            if (num == 1) {
-              let lith = document.createElement("style");
-              lith.type = "text/css";
-              lith.id = "lighttheme";
-              lith.innerText = `
+        let { Dropbox } = require("dropbox");
+        let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
+        let url = dbx.getAuthenticationUrl("app://./auth.html");
+        document.getElementById("drb").addEventListener("click", () => {
+          ipcRenderer.invoke("syncwindow", url);
+        });
+        ipcRenderer.on("closedsync", (e, u) => {
+          let hash = u.split("#");
+          let pair = hash[1].split("&");
+          let val = pair[0].split("=");
+          fs.writeFile("data/" + profile + "/.access", val[1], e => {});
+          fs.writeFile(
+            "data/" + profile + "/sync",
+            JSON.stringify({ sync: "yes" }),
+            e => {}
+          );
+        });
+        window.setTimeout(() => {
+          fs.readFile("data/" + profile + "/theme", (e, d) => {
+            if (e) {
+              document.getElementById("theme").selectedIndex = 0;
+              fs.writeFile(
+                "data/" + profile + "/theme",
+                JSON.stringify({ on: 0 }),
+                e => {}
+              );
+            } else {
+              d = JSON.parse(d);
+              let num = d.on;
+              document.getElementById("theme").selectedIndex = num;
+              if (num == 1) {
+                let lith = document.createElement("style");
+                lith.type = "text/css";
+                lith.id = "lighttheme";
+                lith.innerText = `
   #home {
     background: #ffffffee;
   }
@@ -270,24 +269,24 @@ export default {
   #window-title2 span:hover {
     color: #000 !important;
   }`;
-              document.head.appendChild(lith);
+                document.head.appendChild(lith);
+              }
             }
-          }
-        });
-      }, 1000);
-      document.getElementById("theme").onchange = () => {
-        let num = document.getElementById("theme").selectedIndex;
-        fs.writeFile(
-          "data/" + profile + "/theme",
-          JSON.stringify({ on: num }),
-          e => {}
-        );
+          });
+        }, 1000);
+        document.getElementById("theme").onchange = () => {
+          let num = document.getElementById("theme").selectedIndex;
+          fs.writeFile(
+            "data/" + profile + "/theme",
+            JSON.stringify({ on: num }),
+            e => {}
+          );
 
-        if (num == 1) {
-          let lith = document.createElement("style");
-          lith.type = "text/css";
-          lith.id = "lighttheme";
-          lith.innerText = `#note,
+          if (num == 1) {
+            let lith = document.createElement("style");
+            lith.type = "text/css";
+            lith.id = "lighttheme";
+            lith.innerText = `#note,
   #home {
     background: #ffffffee;
   }
@@ -344,20 +343,21 @@ export default {
   #window-title2 span:hover {
     color: #000 !important;
   }`;
-          document.head.appendChild(lith);
-        } else {
-          document.head.removeChild(document.getElementById("lighttheme"));
-        }
-      };
-      document.getElementById("profile").onchange = () => {
-        fs.writeFile(
-          "data/profile",
-          document.getElementById("profile").value,
-          e => {
-            ipcRenderer.invoke("reload");
+            document.head.appendChild(lith);
+          } else {
+            document.head.removeChild(document.getElementById("lighttheme"));
           }
-        );
-      };
+        };
+        document.getElementById("profile").onchange = () => {
+          fs.writeFile(
+            "data/profile",
+            document.getElementById("profile").value,
+            e => {
+              ipcRenderer.invoke("reload");
+            }
+          );
+        };
+      });
     }, 2000);
   },
 
