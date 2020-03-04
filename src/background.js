@@ -29,7 +29,6 @@ function createWindow() {
   win = new BrowserWindow({
     width: 350,
     height: 600,
-    icon: "public/favicon.png",
     transparent: true,
     title: "Playork Sticky Notes",
     frame: false,
@@ -75,7 +74,6 @@ function createNote() {
   winnote = new BrowserWindow({
     width: 300,
     height: 325,
-    icon: "public/favicon.png",
     transparent: true,
     title: "Playork Sticky Notes",
     frame: false,
@@ -201,7 +199,6 @@ ipcMain.handle("syncwindow", (e, url) => {
   let syncwindow = new BrowserWindow({
     width: 800,
     height: 600,
-    icon: "public/favicon.png",
     backgroundColor: "#202020",
     title: "Playork Sticky Notes",
     resizable: false,
