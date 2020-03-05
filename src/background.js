@@ -26,7 +26,7 @@ let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
 let fs = require("fs")
 
 let win;
-function createWindow() {
+let createWindow = () => {
   win = new BrowserWindow({
     width: 350,
     height: 600,
@@ -71,10 +71,10 @@ app.on("ready", () => {
 
 app.commandLine.appendSwitch("disable-web-security");
 let winnote;
-function createNote() {
+let createNote = async () => {
   let spell;
   let spelllang;
-  fs.readFile("/data/spell", (e, d) => {
+  await fs.promises.readFile("data/spell", (e, d) => {
     if (e) {
       console.log(e)
     } else {
@@ -89,87 +89,87 @@ function createNote() {
         })
       } else {
         spell = false
-      } winnote = new BrowserWindow({
-        width: 300,
-        height: 325,
-        transparent: true,
-        title: "Playork Sticky Notes",
-        frame: false,
-        show: false,
-        spellcheck: spell,
-        webPreferences: {
-          webSecurity: false,
-          nodeIntegration: true
-        }
-      });
-      if (spell) {
-        winnote.webContents.session.setSpellCheckerLanguages[spelllang];
       }
-      if (process.env.WEBPACK_DEV_SERVER_URL) {
-        winnote.loadURL("http://localhost:8080/#/note");
-        if (!process.env.IS_TEST) winnote.webContents.openDevTools();
-      } else {
-        winnote.loadURL("app://./index.html#note");
-      }
-      winnote.on("ready-to-show", () => {
-        winnote.show();
-        winnote.focus();
-      });
-      winnote.setMinimumSize(300, 325);
-      winnote.on("close", () => {
-        win.webContents.send("closenote", "closeit");
-      });
 
-      winnote.webContents.on(
-        "context-menu",
-        (e, p) => {
-          e.preventDefault();
-          let menu = new Menu();
-          if (p.misspelledWord && spell) {
-            p.dictionarySuggestions.forEach(d => {
-              menu.append(
-                new MenuItem({
-                  label: d,
-                  click: () => {
-                    winnote.webContents.replaceMisspelling(d);
-                  }
-                })
-              );
-            });
-            menu.append(new MenuItem({ type: "separator" }));
-            menu.append(
-              new MenuItem({
-                label: "Add Word To Dictionary",
-                click: () => {
-                  winnote.webContents.session.addWordToSpellCheckerDictionary(
-                    p.misspelledWord
-                  );
-                }
-              })
-            );
-          }
-          if (p.editFlags.canCut || p.editFlags.canCopy || p.editFlags.canPaste) {
-            if (p.misspelledWord && spell) {
-              menu.append(new MenuItem({ type: "separator" }));
-            }
-            menu.append(new MenuItem({ role: "selectall" }));
-            if (p.editFlags.canCut) {
-              menu.append(new MenuItem({ role: "cut" }));
-            }
-            if (p.editFlags.canCopy) {
-              menu.append(new MenuItem({ role: "copy" }));
-            }
-            if (p.editFlags.canPaste) {
-              menu.append(new MenuItem({ role: "paste" }));
-            }
-          }
-          menu.popup(winnote, p.x, p.y);
-        },
-        false
-      );
     }
   })
-
+  winnote = new BrowserWindow({
+    width: 300,
+    height: 325,
+    transparent: true,
+    title: "Playork Sticky Notes",
+    frame: false,
+    show: false,
+    webPreferences: {
+      webSecurity: false,
+      spellcheck: spell,
+      nodeIntegration: true
+    }
+  });
+  if (spell) {
+    winnote.webContents.session.setSpellCheckerLanguages([spelllang]);
+  }
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    winnote.loadURL("http://localhost:8080/#/note");
+    if (!process.env.IS_TEST) winnote.webContents.openDevTools();
+  } else {
+    winnote.loadURL("app://./index.html#note");
+  }
+  winnote.on("ready-to-show", () => {
+    winnote.show();
+    winnote.focus();
+  });
+  winnote.setMinimumSize(300, 325);
+  winnote.on("close", () => {
+    win.webContents.send("closenote", "closeit");
+  });
+  winnote.webContents.on(
+    "context-menu",
+    (e, p) => {
+      e.preventDefault();
+      let menu = new Menu();
+      if (p.misspelledWord && spell) {
+        p.dictionarySuggestions.forEach(d => {
+          menu.append(
+            new MenuItem({
+              label: d,
+              click: () => {
+                winnote.webContents.replaceMisspelling(d);
+              }
+            })
+          );
+        });
+        menu.append(new MenuItem({ type: "separator" }));
+        menu.append(
+          new MenuItem({
+            label: "Add Word To Dictionary",
+            click: () => {
+              winnote.webContents.session.addWordToSpellCheckerDictionary(
+                p.misspelledWord
+              );
+            }
+          })
+        );
+      }
+      if (p.editFlags.canCut || p.editFlags.canCopy || p.editFlags.canPaste) {
+        if (p.misspelledWord && spell) {
+          menu.append(new MenuItem({ type: "separator" }));
+        }
+        menu.append(new MenuItem({ role: "selectall" }));
+        if (p.editFlags.canCut) {
+          menu.append(new MenuItem({ role: "cut" }));
+        }
+        if (p.editFlags.canCopy) {
+          menu.append(new MenuItem({ role: "copy" }));
+        }
+        if (p.editFlags.canPaste) {
+          menu.append(new MenuItem({ role: "paste" }));
+        }
+      }
+      menu.popup(winnote, p.x, p.y);
+    },
+    false
+  );
 }
 
 ipcMain.on("create-new-instance", () => {
