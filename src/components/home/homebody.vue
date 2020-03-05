@@ -82,7 +82,6 @@ SOFTWARE.
               <option value="Dark" selected>Dark</option>
               <option value="Light">Light</option>
             </select>
-            <br />
             <h2>Spellcheck</h2>
             <br />
             <p>Use Spellcheck</p>
@@ -92,7 +91,6 @@ SOFTWARE.
             </label>
             <p>Language</p>
             <select name="spelllang" id="spelllang"> </select>
-            <br />
             <h2>Keyboard Shortcuts</h2>
             <br />
             <p>Select All</p>
@@ -208,7 +206,7 @@ export default {
         fs.readFile("data/spell", (e, d) => {
           if (e) {
             document.getElementById("spellswitch").checked = true;
-            fs.writeFile("data/" + profile + "/emoji", "yes", e => {});
+            fs.writeFile("data/spell", "yes", e => {});
           } else {
             if (d == "yes") {
               document.getElementById("spellswitch").checked = true;
@@ -286,9 +284,9 @@ export default {
               `<option value="${lan}">${lan}</option>`
             );
         });
-        fs.readFile("/data/spelllang", (e, d) => {
+        fs.readFile("data/spelllang", (e, d) => {
           if (e) {
-            fs.writeFile("/data/spelllang", "en-US", e => {});
+            fs.writeFile("data/spelllang", "en-US", e => {});
             document.getElementById("spelllang").value = "en-US";
           } else {
             document.getElementById("spelllang").value = d;
@@ -296,7 +294,7 @@ export default {
         });
         document.getElementById("spelllang").onchange = () => {
           fs.writeFile(
-            "/data/spelllang",
+            "data/spelllang",
             document.getElementById("spelllang").value,
             e => {}
           );
