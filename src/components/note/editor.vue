@@ -76,7 +76,7 @@ SOFTWARE.
 <script>
 // Import Required Packages
 import Quill from "quill";
-import fs from "fs";
+import fs, { link } from "fs";
 import { Picker } from "emoji-mart-vue";
 import { ipcRenderer } from "electron";
 import { fabric } from "fabric";
@@ -651,6 +651,120 @@ export default {
           }
         }
       }, 2000);
+      document.addEventListener("paste", () => {
+        if (
+          /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/im.test(
+            document.querySelector(".ql-snow .ql-editor").innerHTML
+          )
+        ) {
+          let narr = document
+            .querySelector(".ql-snow .ql-editor")
+            .innerHTML.matchAll(
+              /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim
+            );
+          let matches = Array.from(narr);
+          if (matches != []) {
+            for (let match in matches) {
+              if (!links.includes(matches[match][0])) {
+                let cont = document.querySelector(".ql-snow .ql-editor")
+                  .innerHTML;
+                document.querySelector(".ql-snow .ql-editor").innerHTML =
+                  cont.substring(0, matches[match]["index"]) +
+                  `<a target="_blank" class="link-quill" href="${matches[match][0]}">${matches[match][0]}</a>` +
+                  cont.substring(
+                    matches[match]["index"] + matches[match][0].length
+                  );
+                links.push(matches[match][0]);
+                document
+                  .querySelectorAll('a[href^="http"][target="_blank"]')
+                  .forEach(a => {
+                    let { shell } = require("electron");
+                    a.addEventListener("input", e => {
+                      let old = e.srcElement.href;
+                      if (e.srcElement.innerHTML == "") {
+                        links = links.map(function(x) {
+                          return x.replace(
+                            new RegExp(old, "i"),
+                            e.srcElement.innerHTML
+                          );
+                        });
+                      } else {
+                        links = links.map(x => {
+                          if (x != old) {
+                            return x;
+                          }
+                        });
+                      }
+                      e.srcElement.href = e.srcElement.innerHTML;
+                    });
+                    a.addEventListener("click", function(e) {
+                      e.preventDefault();
+                      shell.openExternal(e.srcElement.innerHTML);
+                    });
+                  });
+              }
+            }
+          }
+        } else {
+          links = [];
+        }
+        if (
+          /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/im.test(
+            document.querySelector(".ql-snow .ql-editor").innerHTML
+          )
+        ) {
+          let narr = document
+            .querySelector(".ql-snow .ql-editor")
+            .innerHTML.matchAll(
+              /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/gim
+            );
+          let matches = Array.from(narr);
+          if (matches != []) {
+            for (let match in matches) {
+              if (!mails.includes(matches[match][0])) {
+                let cont = document.querySelector(".ql-snow .ql-editor")
+                  .innerHTML;
+                document.querySelector(".ql-snow .ql-editor").innerHTML =
+                  cont.substring(0, matches[match]["index"]) +
+                  `<a target="_blank" class="link-quill" href="${matches[match][0]}">${matches[match][0]}</a>` +
+                  cont.substring(
+                    matches[match]["index"] + matches[match][0].length
+                  );
+                mails.push(matches[match][0]);
+                document
+                  .querySelectorAll('a[href^="mailto"][target="_blank"]')
+                  .forEach(a => {
+                    let { shell } = require("electron");
+                    a.addEventListener("input", e => {
+                      let old = e.srcElement.href;
+                      if (e.srcElement.innerHTML == "") {
+                        mails = mails.map(function(x) {
+                          return x.replace(
+                            new RegExp(old, "i"),
+                            `mailto:${e.srcElement.innerHTML}`
+                          );
+                        });
+                      } else {
+                        mails = mails.map(x => {
+                          if (`mailto:${x}` != old) {
+                            return x;
+                          }
+                        });
+                      }
+                      e.srcElement.href = `mailto:${e.srcElement.innerHTML}`;
+                    });
+                    a.addEventListener("click", function(e) {
+                      e.preventDefault();
+                      shell.openExternal(`mailto:${e.srcElement.innerHTML}`);
+                    });
+                  });
+              }
+            }
+          }
+        } else {
+          mails = [];
+        }
+      });
       document
         .querySelector(".ql-snow .ql-editor")
         .addEventListener("keyup", e => {
@@ -685,19 +799,18 @@ export default {
                 );
               let matches = Array.from(narr);
               if (matches != []) {
+                console.log(matches);
                 for (let match in matches) {
                   if (!links.includes(matches[match][0])) {
-                    document.querySelector(
-                      ".ql-snow .ql-editor"
-                    ).innerHTML = document
-                      .querySelector(".ql-snow .ql-editor")
-                      .innerHTML.replace(
-                        new RegExp(matches[match][0], "im"),
-                        u => {
-                          links.push(u);
-                          return `<a target="_blank" class="link-quill" href="${u}">${u}</a>`;
-                        }
+                    let cont = document.querySelector(".ql-snow .ql-editor")
+                      .innerHTML;
+                    document.querySelector(".ql-snow .ql-editor").innerHTML =
+                      cont.substring(0, matches[match]["index"]) +
+                      `<a target="_blank" class="link-quill" href="${matches[match][0]}">${matches[match][0]}</a>` +
+                      cont.substring(
+                        matches[match]["index"] + matches[match][0].length
                       );
+                    links.push(matches[match][0]);
                     document
                       .querySelectorAll('a[href^="http"][target="_blank"]')
                       .forEach(a => {
@@ -745,17 +858,15 @@ export default {
               if (matches != []) {
                 for (let match in matches) {
                   if (!mails.includes(matches[match][0])) {
-                    document.querySelector(
-                      ".ql-snow .ql-editor"
-                    ).innerHTML = document
-                      .querySelector(".ql-snow .ql-editor")
-                      .innerHTML.replace(
-                        new RegExp(matches[match][0], "im"),
-                        u => {
-                          mails.push(u);
-                          return `<a target="_blank" class="link-quill" href="mailto:${u}">${u}</a>`;
-                        }
+                    let cont = document.querySelector(".ql-snow .ql-editor")
+                      .innerHTML;
+                    document.querySelector(".ql-snow .ql-editor").innerHTML =
+                      cont.substring(0, matches[match]["index"]) +
+                      `<a target="_blank" class="link-quill" href="${matches[match][0]}">${matches[match][0]}</a>` +
+                      cont.substring(
+                        matches[match]["index"] + matches[match][0].length
                       );
+                    mails.push(matches[match][0]);
                     document
                       .querySelectorAll('a[href^="mailto"][target="_blank"]')
                       .forEach(a => {
