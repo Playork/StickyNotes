@@ -24,6 +24,7 @@ SOFTWARE. */
 let { app, BrowserWindow, ipcMain, Menu, MenuItem, globalShortcut } = require("electron");
 let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
 let fs = require("fs")
+let { setTimeout } = require("timers")
 
 let win;
 let createWindow = () => {
@@ -71,17 +72,25 @@ app.on("ready", () => {
 
 app.commandLine.appendSwitch("disable-web-security");
 let winnote;
-let createNote = async () => {
-  let spell = true;
-  await fs.promises.readFile("data/spell", (e, d) => {
+let createNote = () => {
+  let spell;
+  let spelllang;
+  fs.readFile("data/spell", (e, d) => {
     if (d == "no") {
       spell = false
+    } else {
+      spell = true
     }
-  }).then(async () => {
-    let spelllang = "en-US";
-    await fs.promises.readFile("data/spelllang", (e, d) => {
-      spelllang = d
-    }).then(() => {
+  })
+  fs.readFile("data/spelllang", (e, d) => {
+    spelllang = d.toString('utf8')
+  })
+  let start = () => {
+    if (spell == undefined || spelllang == undefined) {
+      setTimeout(() => {
+        start()
+      }, 500)
+    } else {
       winnote = new BrowserWindow({
         width: 300,
         height: 325,
@@ -156,7 +165,6 @@ let createNote = async () => {
               menu.append(new MenuItem({ label: "Custom Words", submenu: submenu }));
               menu.append(new MenuItem({ type: "separator" }));
             }
-
             if (p.editFlags.canCut || p.editFlags.canCopy || p.editFlags.canPaste) {
               menu.append(new MenuItem({ role: "selectall" }));
               if (p.editFlags.canCut) {
@@ -174,8 +182,9 @@ let createNote = async () => {
         },
         false
       );
-    })
-  })
+    }
+  }
+  start()
 }
 
 ipcMain.on("create-new-instance", () => {
