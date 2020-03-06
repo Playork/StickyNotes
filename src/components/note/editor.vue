@@ -408,103 +408,111 @@ export default {
         };
         window.onbeforeunload = e => {
           e.returnValue = true;
-          links.forEach(u => {
-            document
-              .querySelector(".ql-snow .ql-editor")
-              .innerHTML.replace(
-                new RegExp(
-                  `<a target="_blank" class="link-quill" href="${u}">${u}</a>`,
-                  "im"
-                ),
-                u
-              );
-          });
-          mails.forEach(u => {
-            document
-              .querySelector(".ql-snow .ql-editor")
-              .innerHTML.replace(
-                new RegExp(
-                  `<a target="_blank" class="link-quill" href="mailto:${u}">${u}</a>`,
-                  "im"
-                ),
-                u
-              );
-          });
-          let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
-          let url = document.querySelector(".lower-canvas").toDataURL();
-          let color1 = window
-            .getComputedStyle(document.getElementById("lightYellow"))
-            .getPropertyValue("background-color");
-          let color2 = window
-            .getComputedStyle(document.getElementById("titlebar"))
-            .getPropertyValue("background-color");
-          let winwidth = window.innerWidth.toString();
-          let winheight = window.innerHeight.toString();
-          let lock;
-          if (
-            document.getElementById("close-button").style.pointerEvents ==
-            "none"
-          ) {
-            lock = "yes";
-          } else {
-            lock = "no";
-          }
-          fs.readFile(
-            "data/" + profile + "/notes/" + obj.toString(),
-            (e, d) => {
-              if (e || JSON.parse(d).deleted == "no") {
-                let { ipcRenderer } = require("electron");
-                if (
-                  document.getElementById("lightYellow").style.display != "none"
-                ) {
+          links
+            .forEach(u => {
+              document
+                .querySelector(".ql-snow .ql-editor")
+                .innerHTML.replace(
+                  new RegExp(
+                    `<a target="_blank" class="link-quill" href="${u}">${u}</a>`,
+                    "im"
+                  ),
+                  u
+                );
+            })
+            .then(() => {
+              mails
+                .forEach(u => {
+                  document
+                    .querySelector(".ql-snow .ql-editor")
+                    .innerHTML.replace(
+                      new RegExp(
+                        `<a target="_blank" class="link-quill" href="mailto:${u}">${u}</a>`,
+                        "im"
+                      ),
+                      u
+                    );
+                })
+                .then(() => {
+                  let text = document.querySelector(".ql-snow .ql-editor")
+                    .innerHTML;
+                  let url = document.querySelector(".lower-canvas").toDataURL();
+                  let color1 = window
+                    .getComputedStyle(document.getElementById("lightYellow"))
+                    .getPropertyValue("background-color");
+                  let color2 = window
+                    .getComputedStyle(document.getElementById("titlebar"))
+                    .getPropertyValue("background-color");
+                  let winwidth = window.innerWidth.toString();
+                  let winheight = window.innerHeight.toString();
+                  let lock;
                   if (
-                    document.querySelector(".ql-snow .ql-editor").innerHTML !=
-                    "<p><br></p>"
+                    document.getElementById("close-button").style
+                      .pointerEvents == "none"
                   ) {
-                    fs.writeFile(
-                      "data/" + profile + "/notes/" + obj.toString(),
-                      JSON.stringify({
-                        first: text,
-                        back: color1,
-                        title: color2,
-                        wid: winwidth,
-                        hei: winheight,
-                        deleted: "no",
-                        closed: "yes",
-                        locked: lock
-                      }),
-                      e => {
-                        ipcRenderer.invoke("destroy");
-                      }
-                    );
+                    lock = "yes";
                   } else {
-                    fs.unlink(
-                      "data/" + profile + "/notes/" + obj.toString(),
-                      e => {}
-                    );
-                    ipcRenderer.invoke("destroy");
+                    lock = "no";
                   }
-                } else {
-                  fs.writeFile(
+                  fs.readFile(
                     "data/" + profile + "/notes/" + obj.toString(),
-                    JSON.stringify({
-                      image: url,
-                      back: color1,
-                      title: color2,
-                      wid: winwidth,
-                      hei: winheight,
-                      deleted: "no",
-                      closed: "yes",
-                      locked: lock
-                    }),
-                    e => {
-                      ipcRenderer.invoke("destroy");
+                    (e, d) => {
+                      if (e || JSON.parse(d).deleted == "no") {
+                        let { ipcRenderer } = require("electron");
+                        if (
+                          document.getElementById("lightYellow").style
+                            .display != "none"
+                        ) {
+                          if (
+                            document.querySelector(".ql-snow .ql-editor")
+                              .innerHTML != "<p><br></p>"
+                          ) {
+                            fs.writeFile(
+                              "data/" + profile + "/notes/" + obj.toString(),
+                              JSON.stringify({
+                                first: text,
+                                back: color1,
+                                title: color2,
+                                wid: winwidth,
+                                hei: winheight,
+                                deleted: "no",
+                                closed: "yes",
+                                locked: lock
+                              }),
+                              e => {
+                                ipcRenderer.invoke("destroy");
+                              }
+                            );
+                          } else {
+                            fs.unlink(
+                              "data/" + profile + "/notes/" + obj.toString(),
+                              e => {}
+                            );
+                            ipcRenderer.invoke("destroy");
+                          }
+                        } else {
+                          fs.writeFile(
+                            "data/" + profile + "/notes/" + obj.toString(),
+                            JSON.stringify({
+                              image: url,
+                              back: color1,
+                              title: color2,
+                              wid: winwidth,
+                              hei: winheight,
+                              deleted: "no",
+                              closed: "yes",
+                              locked: lock
+                            }),
+                            e => {
+                              ipcRenderer.invoke("destroy");
+                            }
+                          );
+                        }
+                      }
                     }
                   );
-                }
-              }
-            }
-          );
+                });
+            });
         };
         fs.watch("data/" + profile + "/notes/", (e, r) => {
           fs.readFile(
@@ -615,6 +623,25 @@ export default {
                   links.push(u);
                   return `<a target="_blank" class="link-quill" href="${u}">${u}</a>`;
                 });
+              document
+                .querySelectorAll('a[href^="http"][target="_blank"]')
+                .forEach(a => {
+                  let { shell } = require("electron");
+                  a.addEventListener("input", e => {
+                    let old = e.srcElement.href;
+                    links = links.map(function(x) {
+                      return x.replace(
+                        new RegExp(old, "i"),
+                        e.srcElement.innerHTML
+                      );
+                    });
+                    e.srcElement.href = e.srcElement.innerHTML;
+                  });
+                  a.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    shell.openExternal(e.srcElement.innerHTML);
+                  });
+                });
             }
           }
         }
@@ -643,24 +670,31 @@ export default {
                   mails.push(u);
                   return `<a target="_blank" class="link-quill" href="mailto:${u}">${u}</a>`;
                 });
+              document
+                .querySelectorAll('a[href^="http"][target="_blank"]')
+                .forEach(a => {
+                  let { shell } = require("electron");
+                  a.addEventListener("input", e => {
+                    let old = e.srcElement.href;
+                    links = links.map(function(x) {
+                      return x.replace(
+                        new RegExp(old, "i"),
+                        `mailto:${e.srcElement.innerHTML}`
+                      );
+                    });
+                    e.srcElement.href = `mailto:${e.srcElement.innerHTML}`;
+                  });
+                  a.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    shell.openExternal(`mailto:${e.srcElement.innerHTML}`);
+                  });
+                });
             }
           }
         }
       } else {
         mails = [];
       }
-      document
-        .querySelectorAll('a[href^="http"][target="_blank"]')
-        .forEach(a => {
-          let { shell } = require("electron");
-          a.addEventListener("input", e => {
-            e.srcElement.href = e.srcElement.innerHTML;
-          });
-          a.addEventListener("click", function(e) {
-            e.preventDefault();
-            shell.openExternal(e.srcElement.href);
-          });
-        });
       document
         .querySelector(".ql-snow .ql-editor")
         .addEventListener("keyup", e => {
@@ -708,19 +742,28 @@ export default {
                           return `<a target="_blank" class="link-quill" href="${u}">${u}</a>`;
                         }
                       );
+                    document
+                      .querySelectorAll('a[href^="http"][target="_blank"]')
+                      .forEach(a => {
+                        let { shell } = require("electron");
+                        a.addEventListener("input", e => {
+                          let old = e.srcElement.href;
+                          links = links.map(function(x) {
+                            return x.replace(
+                              new RegExp(old, "i"),
+                              e.srcElement.innerHTML
+                            );
+                          });
+                          e.srcElement.href = e.srcElement.innerHTML;
+                        });
+                        a.addEventListener("click", function(e) {
+                          e.preventDefault();
+                          shell.openExternal(e.srcElement.innerHTML);
+                        });
+                      });
                   }
                 }
               }
-              document
-                .querySelectorAll('a[href^="http"][target="_blank"]')
-                .forEach(a =>
-                  a.addEventListener("click", function(e) {
-                    console.log(e);
-                    e.preventDefault();
-                    let { shell } = require("electron");
-                    shell.openExternal(e.srcElement.href);
-                  })
-                );
             } else {
               links = [];
             }
@@ -749,35 +792,34 @@ export default {
                           return `<a target="_blank" class="link-quill" href="mailto:${u}">${u}</a>`;
                         }
                       );
+                    document
+                      .querySelectorAll('a[href^="http"][target="_blank"]')
+                      .forEach(a => {
+                        let { shell } = require("electron");
+                        a.addEventListener("input", e => {
+                          let old = e.srcElement.href;
+                          links = links.map(function(x) {
+                            return x.replace(
+                              new RegExp(old, "i"),
+                              `mailto:${e.srcElement.innerHTML}`
+                            );
+                          });
+                          e.srcElement.href = `mailto:${e.srcElement.innerHTML}`;
+                        });
+                        a.addEventListener("click", function(e) {
+                          e.preventDefault();
+                          shell.openExternal(
+                            `mailto:${e.srcElement.innerHTML}`
+                          );
+                        });
+                      });
                   }
                 }
               }
-              document
-                .querySelectorAll('a[href^="http"][target="_blank"]')
-                .forEach(a =>
-                  a.addEventListener("click", function(e) {
-                    console.log(e);
-                    e.preventDefault();
-                    let { shell } = require("electron");
-                    shell.openExternal(e.srcElement.href);
-                  })
-                );
             } else {
               mails = [];
             }
           }
-          document
-            .querySelectorAll('a[href^="http"][target="_blank"]')
-            .forEach(a => {
-              let { shell } = require("electron");
-              a.addEventListener("input", e => {
-                e.srcElement.href = e.srcElement.innerHTML;
-              });
-              a.addEventListener("click", function(e) {
-                e.preventDefault();
-                shell.openExternal(e.srcElement.href);
-              });
-            });
         });
     });
   },
