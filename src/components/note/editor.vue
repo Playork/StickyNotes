@@ -571,60 +571,86 @@ export default {
       });
       let links = [];
       let mails = [];
-      document
-        .querySelectorAll('a[href^="http"][target="_blank"]')
-        .forEach(a => {
-          let { shell } = require("electron");
-          a.addEventListener("input", e => {
-            let old = e.srcElement.href;
-            links = links.map(function(x) {
-              return x.replace(new RegExp(old, "i"), e.srcElement.innerHTML);
+      window.setTimeout(() => {
+        document
+          .querySelectorAll('a[href^="http"][target="_blank"]')
+          .forEach(a => {
+            let { shell } = require("electron");
+            a.addEventListener("input", e => {
+              let old = e.srcElement.href;
+              if (e.srcElement.innerHTML == "") {
+                links = links.map(function(x) {
+                  return x.replace(
+                    new RegExp(old, "i"),
+                    e.srcElement.innerHTML
+                  );
+                });
+              } else {
+                links = links.map(x => {
+                  if (x != old) {
+                    return x;
+                  }
+                });
+              }
+              e.srcElement.href = e.srcElement.innerHTML;
             });
-            e.srcElement.href = e.srcElement.innerHTML;
-          });
-          a.addEventListener("click", function(e) {
-            e.preventDefault();
-            shell.openExternal(e.srcElement.innerHTML);
-          });
-        });
-      document
-        .querySelectorAll('a[href^="mailto"][target="_blank"]')
-        .forEach(a => {
-          let { shell } = require("electron");
-          a.addEventListener("input", e => {
-            let old = e.srcElement.href;
-            links = links.map(function(x) {
-              return x.replace(
-                new RegExp(old, "i"),
-                `mailto:${e.srcElement.innerHTML}`
-              );
+            a.addEventListener("click", function(e) {
+              e.preventDefault();
+              shell.openExternal(e.srcElement.innerHTML);
             });
-            e.srcElement.href = `mailto:${e.srcElement.innerHTML}`;
           });
-          a.addEventListener("click", function(e) {
-            e.preventDefault();
-            shell.openExternal(`mailto:${e.srcElement.innerHTML}`);
+        document
+          .querySelectorAll('a[href^="mailto"][target="_blank"]')
+          .forEach(a => {
+            let { shell } = require("electron");
+            a.addEventListener("input", e => {
+              let old = e.srcElement.href;
+              if (e.srcElement.innerHTML == "") {
+                mails = mails.map(function(x) {
+                  return x.replace(
+                    new RegExp(old, "i"),
+                    `mailto:${e.srcElement.innerHTML}`
+                  );
+                });
+              } else {
+                mails = mails.map(x => {
+                  if (`mailto:${x}` != old) {
+                    return x;
+                  }
+                });
+              }
+              e.srcElement.href = `mailto:${e.srcElement.innerHTML}`;
+            });
+            a.addEventListener("click", function(e) {
+              e.preventDefault();
+              shell.openExternal(`mailto:${e.srcElement.innerHTML}`);
+            });
           });
-        });
-        let matchesl = Array.from(document
-          .querySelector(".ql-snow .ql-editor")
-          .innerHTML.matchAll(
-            /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim
-          ));
-          for (let matchl in matchesl) {
-            if (!links.includes(matchesl[matchl][0])) {
-              links.push(matchesl[matchl][0]);
-            }
-        let matchesm = Array.from(document
-          .querySelector(".ql-snow .ql-editor")
-          .innerHTML.matchAll(
-            /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/gim
-          ));
-          for (let matchm in matchesm) {
-            if (!mailsm.includes(matchesm[matchm][0])) {
-              mails.push(matchesm[matchm][0]);
-            }
+        let matchesl = Array.from(
+          document
+            .querySelector(".ql-snow .ql-editor")
+            .innerHTML.matchAll(
+              /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim
+            )
+        );
+        for (let matchl in matchesl) {
+          if (!links.includes(matchesl[matchl][0])) {
+            links.push(matchesl[matchl][0]);
           }
+        }
+        let matchesm = Array.from(
+          document
+            .querySelector(".ql-snow .ql-editor")
+            .innerHTML.matchAll(
+              /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/gim
+            )
+        );
+        for (let matchm in matchesm) {
+          if (!mailsm.includes(matchesm[matchm][0])) {
+            mails.push(matchesm[matchm][0]);
+          }
+        }
+      }, 2000);
       document
         .querySelector(".ql-snow .ql-editor")
         .addEventListener("keyup", e => {
@@ -678,12 +704,20 @@ export default {
                         let { shell } = require("electron");
                         a.addEventListener("input", e => {
                           let old = e.srcElement.href;
-                          links = links.map(function(x) {
-                            return x.replace(
-                              new RegExp(old, "i"),
-                              e.srcElement.innerHTML
-                            );
-                          });
+                          if (e.srcElement.innerHTML == "") {
+                            links = links.map(function(x) {
+                              return x.replace(
+                                new RegExp(old, "i"),
+                                e.srcElement.innerHTML
+                              );
+                            });
+                          } else {
+                            links = links.map(x => {
+                              if (x != old) {
+                                return x;
+                              }
+                            });
+                          }
                           e.srcElement.href = e.srcElement.innerHTML;
                         });
                         a.addEventListener("click", function(e) {
@@ -728,12 +762,20 @@ export default {
                         let { shell } = require("electron");
                         a.addEventListener("input", e => {
                           let old = e.srcElement.href;
-                          links = links.map(function(x) {
-                            return x.replace(
-                              new RegExp(old, "i"),
-                              `mailto:${e.srcElement.innerHTML}`
-                            );
-                          });
+                          if (e.srcElement.innerHTML == "") {
+                            mails = mails.map(function(x) {
+                              return x.replace(
+                                new RegExp(old, "i"),
+                                `mailto:${e.srcElement.innerHTML}`
+                              );
+                            });
+                          } else {
+                            mails = mails.map(x => {
+                              if (`mailto:${x}` != old) {
+                                return x;
+                              }
+                            });
+                          }
                           e.srcElement.href = `mailto:${e.srcElement.innerHTML}`;
                         });
                         a.addEventListener("click", function(e) {
