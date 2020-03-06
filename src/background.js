@@ -72,104 +72,110 @@ app.on("ready", () => {
 app.commandLine.appendSwitch("disable-web-security");
 let winnote;
 let createNote = async () => {
-  let spell;
-  let spelllang;
+  let spell = true;
   await fs.promises.readFile("data/spell", (e, d) => {
-    if (e) {
-      console.log(e)
-    } else {
-      if (d == "yes") {
-        spell = true
-        fs.readFile("data/spelllang", (e, d) => {
-          if (e) {
-            console.log(e)
-          } else {
-            spelllang = d
-          }
-        })
-      } else {
-        spell = false
+    if (d == "no") {
+      spell = false
+    }
+  }).then(async () => {
+    let spelllang = "en-US";
+    await fs.promises.readFile("data/spelllang", (e, d) => {
+      spelllang = d
+    }).then(() => {
+      winnote = new BrowserWindow({
+        width: 300,
+        height: 325,
+        transparent: true,
+        title: "Playork Sticky Notes",
+        frame: false,
+        show: false,
+        webPreferences: {
+          webSecurity: false,
+          spellcheck: spell,
+          nodeIntegration: true
+        }
+      });
+      if (spell) {
+        winnote.webContents.session.setSpellCheckerLanguages([spelllang]);
       }
-
-    }
-  })
-  winnote = new BrowserWindow({
-    width: 300,
-    height: 325,
-    transparent: true,
-    title: "Playork Sticky Notes",
-    frame: false,
-    show: false,
-    webPreferences: {
-      webSecurity: false,
-      spellcheck: spell,
-      nodeIntegration: true
-    }
-  });
-  if (spell) {
-    winnote.webContents.session.setSpellCheckerLanguages([spelllang]);
-  }
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    winnote.loadURL("http://localhost:8080/#/note");
-    if (!process.env.IS_TEST) winnote.webContents.openDevTools();
-  } else {
-    winnote.loadURL("app://./index.html#note");
-  }
-  winnote.on("ready-to-show", () => {
-    winnote.show();
-    winnote.focus();
-  });
-  winnote.setMinimumSize(300, 325);
-  winnote.on("close", () => {
-    win.webContents.send("closenote", "closeit");
-  });
-  winnote.webContents.on(
-    "context-menu",
-    (e, p) => {
-      e.preventDefault();
-      let menu = new Menu();
-      if (p.misspelledWord && spell) {
-        p.dictionarySuggestions.forEach(d => {
-          menu.append(
-            new MenuItem({
-              label: d,
-              click: () => {
-                winnote.webContents.replaceMisspelling(d);
-              }
+      if (process.env.WEBPACK_DEV_SERVER_URL) {
+        winnote.loadURL("http://localhost:8080/#/note");
+        if (!process.env.IS_TEST) winnote.webContents.openDevTools();
+      } else {
+        winnote.loadURL("app://./index.html#note");
+      }
+      winnote.on("ready-to-show", () => {
+        winnote.show();
+        winnote.focus();
+      });
+      winnote.setMinimumSize(300, 325);
+      winnote.on("close", () => {
+        win.webContents.send("closenote", "closeit");
+      });
+      winnote.webContents.on(
+        "context-menu",
+        (e, p) => {
+          e.preventDefault();
+          let submenu = []
+          winnote.webContents.session.listWordsInSpellCheckerDictionary().then((words) => {
+            words.forEach(word => {
+              submenu.push({
+                label: word, click: () => {
+                  console.log(winnote.webContents.session.removeWordFromSpellCheckerDictionary)
+                }
+              })
             })
-          );
-        });
-        menu.append(new MenuItem({ type: "separator" }));
-        menu.append(
-          new MenuItem({
-            label: "Add Word To Dictionary",
-            click: () => {
-              winnote.webContents.session.addWordToSpellCheckerDictionary(
-                p.misspelledWord
+            let menu = new Menu();
+            if (p.misspelledWord && spell) {
+              p.dictionarySuggestions.forEach(d => {
+                menu.append(
+                  new MenuItem({
+                    label: d,
+                    click: () => {
+                      winnote.webContents.replaceMisspelling(d);
+                    }
+                  })
+                );
+              });
+              menu.append(new MenuItem({ type: "separator" }));
+              menu.append(
+                new MenuItem({
+                  label: "Add Word To Dictionary",
+                  click: () => {
+                    winnote.webContents.session.addWordToSpellCheckerDictionary(
+                      p.misspelledWord
+                    );
+                  }
+                })
               );
             }
+            if (spell) {
+              if (p.misspelledWord) {
+                menu.append(new MenuItem({ type: "separator" }));
+              }
+              menu.append(new MenuItem({ label: "Custom Words", submenu: submenu }));
+              menu.append(new MenuItem({ type: "separator" }));
+            }
+
+            if (p.editFlags.canCut || p.editFlags.canCopy || p.editFlags.canPaste) {
+              menu.append(new MenuItem({ role: "selectall" }));
+              if (p.editFlags.canCut) {
+                menu.append(new MenuItem({ role: "cut" }));
+              }
+              if (p.editFlags.canCopy) {
+                menu.append(new MenuItem({ role: "copy" }));
+              }
+              if (p.editFlags.canPaste) {
+                menu.append(new MenuItem({ role: "paste" }));
+              }
+            }
+            menu.popup(winnote, p.x, p.y);
           })
-        );
-      }
-      if (p.editFlags.canCut || p.editFlags.canCopy || p.editFlags.canPaste) {
-        if (p.misspelledWord && spell) {
-          menu.append(new MenuItem({ type: "separator" }));
-        }
-        menu.append(new MenuItem({ role: "selectall" }));
-        if (p.editFlags.canCut) {
-          menu.append(new MenuItem({ role: "cut" }));
-        }
-        if (p.editFlags.canCopy) {
-          menu.append(new MenuItem({ role: "copy" }));
-        }
-        if (p.editFlags.canPaste) {
-          menu.append(new MenuItem({ role: "paste" }));
-        }
-      }
-      menu.popup(winnote, p.x, p.y);
-    },
-    false
-  );
+        },
+        false
+      );
+    })
+  })
 }
 
 ipcMain.on("create-new-instance", () => {

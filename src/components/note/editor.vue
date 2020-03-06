@@ -408,6 +408,28 @@ export default {
         };
         window.onbeforeunload = e => {
           e.returnValue = true;
+          links.forEach(u => {
+            document
+              .querySelector(".ql-snow .ql-editor")
+              .innerHTML.replace(
+                new RegExp(
+                  `<a target="_blank" class="link-quill" href="${u}">${u}</a>`,
+                  "im"
+                ),
+                u
+              );
+          });
+          mails.forEach(u => {
+            document
+              .querySelector(".ql-snow .ql-editor")
+              .innerHTML.replace(
+                new RegExp(
+                  `<a target="_blank" class="link-quill" href="mailto:${u}">${u}</a>`,
+                  "im"
+                ),
+                u
+              );
+          });
           let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
           let url = document.querySelector(".lower-canvas").toDataURL();
           let color1 = window
@@ -509,61 +531,6 @@ export default {
           );
         });
         quill.on("text-change", () => {
-          // if (
-          //   /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/gm.test(
-          //     document.querySelector(".ql-snow .ql-editor").innerHTML
-          //   )
-          // ) {
-          //   document.querySelector(
-          //     ".ql-snow .ql-editor"
-          //   ).innerHTML = document
-          //     .querySelector(".ql-snow .ql-editor")
-          //     .innerHTML.replace(
-          //       /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/gm,
-          //       x => {
-          //         if (
-          //           new RegExp('link-quill">' + x).test(
-          //             document.querySelector(".ql-snow .ql-editor").innerHTML
-          //           ) ||
-          //           new RegExp(x + '" class').test(
-          //             document.querySelector(".ql-snow .ql-editor").innerHTML
-          //           )
-          //         ) {
-          //           return x;
-          //         } else {
-          //           return `<a onClick="this.contentEditable='true';" href="mailto:${x}" class="link-quill">${x}</a>`;
-          //         }
-          //       }
-          //     );
-          // }
-          // if (
-          //   /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim.test(
-          //     document.querySelector(".ql-snow .ql-editor").innerHTML
-          //   )
-          // ) {
-          //   document.querySelector(
-          //     ".ql-snow .ql-editor"
-          //   ).innerHTML = document
-          //     .querySelector(".ql-snow .ql-editor")
-          //     .innerHTML.replace(
-          //       /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim,
-          //       x => {
-          //         if (
-          //           new RegExp(x + "</a>").test(
-          //             document.querySelector(".ql-snow .ql-editor").innerHTML
-          //           ) ||
-          //           new RegExp(x + '" target').test(
-          //             document.querySelector(".ql-snow .ql-editor").innerHTML
-          //           )
-          //         ) {
-          //           return x;
-          //         } else {
-          //           return `<a onClick="this.contentEditable='true';" href="${x}" target="_blank" class="link-quill">${x}</a>`;
-          //           rag;
-          //         }
-          //       }
-          //     );
-          // }
           repeafunc();
         });
         document
@@ -624,6 +591,194 @@ export default {
           func(id);
         }
       });
+      let links = [];
+      let mails = [];
+      if (
+        /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/im.test(
+          document.querySelector(".ql-snow .ql-editor").innerHTML
+        )
+      ) {
+        let narr = document
+          .querySelector(".ql-snow .ql-editor")
+          .innerHTML.matchAll(
+            /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim
+          );
+        let matches = Array.from(narr);
+        if (matches != []) {
+          for (let match in matches) {
+            if (!links.includes(matches[match][0])) {
+              document.querySelector(
+                ".ql-snow .ql-editor"
+              ).innerHTML = document
+                .querySelector(".ql-snow .ql-editor")
+                .innerHTML.replace(new RegExp(matches[match][0], "im"), u => {
+                  links.push(u);
+                  return `<a target="_blank" class="link-quill" href="${u}">${u}</a>`;
+                });
+            }
+          }
+        }
+      } else {
+        links = [];
+      }
+      if (
+        /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/im.test(
+          document.querySelector(".ql-snow .ql-editor").innerHTML
+        )
+      ) {
+        let narr = document
+          .querySelector(".ql-snow .ql-editor")
+          .innerHTML.matchAll(
+            /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/gim
+          );
+        let matches = Array.from(narr);
+        if (matches != []) {
+          for (let match in matches) {
+            if (!mails.includes(matches[match][0])) {
+              document.querySelector(
+                ".ql-snow .ql-editor"
+              ).innerHTML = document
+                .querySelector(".ql-snow .ql-editor")
+                .innerHTML.replace(new RegExp(matches[match][0], "im"), u => {
+                  mails.push(u);
+                  return `<a target="_blank" class="link-quill" href="mailto:${u}">${u}</a>`;
+                });
+            }
+          }
+        }
+      } else {
+        mails = [];
+      }
+      document
+        .querySelectorAll('a[href^="http"][target="_blank"]')
+        .forEach(a => {
+          let { shell } = require("electron");
+          a.addEventListener("input", e => {
+            e.srcElement.href = e.srcElement.innerHTML;
+          });
+          a.addEventListener("click", function(e) {
+            e.preventDefault();
+            shell.openExternal(e.srcElement.href);
+          });
+        });
+      document
+        .querySelector(".ql-snow .ql-editor")
+        .addEventListener("keyup", e => {
+          if (
+            e.keyCode == 8 &&
+            e.keyCode !== 9 &&
+            e.keyCode !== 13 &&
+            e.keyCode !== 32 &&
+            e.keyCode !== 46
+          ) {
+            return;
+          }
+          if (e.keyCode == 17) {
+            return;
+          }
+          if (
+            e.keyCode == 13 ||
+            e.keyCode == 10 ||
+            e.keyCode == 9 ||
+            e.keyCode == 32 ||
+            e.keyCode == 46
+          ) {
+            if (
+              /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/im.test(
+                document.querySelector(".ql-snow .ql-editor").innerHTML
+              )
+            ) {
+              let narr = document
+                .querySelector(".ql-snow .ql-editor")
+                .innerHTML.matchAll(
+                  /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim
+                );
+              let matches = Array.from(narr);
+              if (matches != []) {
+                for (let match in matches) {
+                  if (!links.includes(matches[match][0])) {
+                    document.querySelector(
+                      ".ql-snow .ql-editor"
+                    ).innerHTML = document
+                      .querySelector(".ql-snow .ql-editor")
+                      .innerHTML.replace(
+                        new RegExp(matches[match][0], "im"),
+                        u => {
+                          links.push(u);
+                          return `<a target="_blank" class="link-quill" href="${u}">${u}</a>`;
+                        }
+                      );
+                  }
+                }
+              }
+              document
+                .querySelectorAll('a[href^="http"][target="_blank"]')
+                .forEach(a =>
+                  a.addEventListener("click", function(e) {
+                    console.log(e);
+                    e.preventDefault();
+                    let { shell } = require("electron");
+                    shell.openExternal(e.srcElement.href);
+                  })
+                );
+            } else {
+              links = [];
+            }
+            if (
+              /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/im.test(
+                document.querySelector(".ql-snow .ql-editor").innerHTML
+              )
+            ) {
+              let narr = document
+                .querySelector(".ql-snow .ql-editor")
+                .innerHTML.matchAll(
+                  /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/gim
+                );
+              let matches = Array.from(narr);
+              if (matches != []) {
+                for (let match in matches) {
+                  if (!mails.includes(matches[match][0])) {
+                    document.querySelector(
+                      ".ql-snow .ql-editor"
+                    ).innerHTML = document
+                      .querySelector(".ql-snow .ql-editor")
+                      .innerHTML.replace(
+                        new RegExp(matches[match][0], "im"),
+                        u => {
+                          mails.push(u);
+                          return `<a target="_blank" class="link-quill" href="mailto:${u}">${u}</a>`;
+                        }
+                      );
+                  }
+                }
+              }
+              document
+                .querySelectorAll('a[href^="http"][target="_blank"]')
+                .forEach(a =>
+                  a.addEventListener("click", function(e) {
+                    console.log(e);
+                    e.preventDefault();
+                    let { shell } = require("electron");
+                    shell.openExternal(e.srcElement.href);
+                  })
+                );
+            } else {
+              mails = [];
+            }
+          }
+          document
+            .querySelectorAll('a[href^="http"][target="_blank"]')
+            .forEach(a => {
+              let { shell } = require("electron");
+              a.addEventListener("input", e => {
+                e.srcElement.href = e.srcElement.innerHTML;
+              });
+              a.addEventListener("click", function(e) {
+                e.preventDefault();
+                shell.openExternal(e.srcElement.href);
+              });
+            });
+        });
     });
   },
   methods: {
