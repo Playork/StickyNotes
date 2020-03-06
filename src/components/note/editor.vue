@@ -406,113 +406,83 @@ export default {
             );
           }
         };
-        window.onbeforeunload = e => {
+        window.onbeforeunload = async e => {
           e.returnValue = true;
-          links
-            .forEach(u => {
-              document
-                .querySelector(".ql-snow .ql-editor")
-                .innerHTML.replace(
-                  new RegExp(
-                    `<a target="_blank" class="link-quill" href="${u}">${u}</a>`,
-                    "im"
-                  ),
-                  u
-                );
-            })
-            .then(() => {
-              mails
-                .forEach(u => {
-                  document
-                    .querySelector(".ql-snow .ql-editor")
-                    .innerHTML.replace(
-                      new RegExp(
-                        `<a target="_blank" class="link-quill" href="mailto:${u}">${u}</a>`,
-                        "im"
-                      ),
-                      u
-                    );
-                })
-                .then(() => {
-                  let text = document.querySelector(".ql-snow .ql-editor")
-                    .innerHTML;
-                  let url = document.querySelector(".lower-canvas").toDataURL();
-                  let color1 = window
-                    .getComputedStyle(document.getElementById("lightYellow"))
-                    .getPropertyValue("background-color");
-                  let color2 = window
-                    .getComputedStyle(document.getElementById("titlebar"))
-                    .getPropertyValue("background-color");
-                  let winwidth = window.innerWidth.toString();
-                  let winheight = window.innerHeight.toString();
-                  let lock;
+          let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
+          let url = document.querySelector(".lower-canvas").toDataURL();
+          let color1 = window
+            .getComputedStyle(document.getElementById("lightYellow"))
+            .getPropertyValue("background-color");
+          let color2 = window
+            .getComputedStyle(document.getElementById("titlebar"))
+            .getPropertyValue("background-color");
+          let winwidth = window.innerWidth.toString();
+          let winheight = window.innerHeight.toString();
+          let lock;
+          if (
+            document.getElementById("close-button").style.pointerEvents ==
+            "none"
+          ) {
+            lock = "yes";
+          } else {
+            lock = "no";
+          }
+          fs.readFile(
+            "data/" + profile + "/notes/" + obj.toString(),
+            (e, d) => {
+              if (e || JSON.parse(d).deleted == "no") {
+                let { ipcRenderer } = require("electron");
+                if (
+                  document.getElementById("lightYellow").style.display != "none"
+                ) {
                   if (
-                    document.getElementById("close-button").style
-                      .pointerEvents == "none"
+                    document.querySelector(".ql-snow .ql-editor").innerHTML !=
+                    "<p><br></p>"
                   ) {
-                    lock = "yes";
-                  } else {
-                    lock = "no";
-                  }
-                  fs.readFile(
-                    "data/" + profile + "/notes/" + obj.toString(),
-                    (e, d) => {
-                      if (e || JSON.parse(d).deleted == "no") {
-                        let { ipcRenderer } = require("electron");
-                        if (
-                          document.getElementById("lightYellow").style
-                            .display != "none"
-                        ) {
-                          if (
-                            document.querySelector(".ql-snow .ql-editor")
-                              .innerHTML != "<p><br></p>"
-                          ) {
-                            fs.writeFile(
-                              "data/" + profile + "/notes/" + obj.toString(),
-                              JSON.stringify({
-                                first: text,
-                                back: color1,
-                                title: color2,
-                                wid: winwidth,
-                                hei: winheight,
-                                deleted: "no",
-                                closed: "yes",
-                                locked: lock
-                              }),
-                              e => {
-                                ipcRenderer.invoke("destroy");
-                              }
-                            );
-                          } else {
-                            fs.unlink(
-                              "data/" + profile + "/notes/" + obj.toString(),
-                              e => {}
-                            );
-                            ipcRenderer.invoke("destroy");
-                          }
-                        } else {
-                          fs.writeFile(
-                            "data/" + profile + "/notes/" + obj.toString(),
-                            JSON.stringify({
-                              image: url,
-                              back: color1,
-                              title: color2,
-                              wid: winwidth,
-                              hei: winheight,
-                              deleted: "no",
-                              closed: "yes",
-                              locked: lock
-                            }),
-                            e => {
-                              ipcRenderer.invoke("destroy");
-                            }
-                          );
-                        }
+                    fs.writeFile(
+                      "data/" + profile + "/notes/" + obj.toString(),
+                      JSON.stringify({
+                        first: text,
+                        back: color1,
+                        title: color2,
+                        wid: winwidth,
+                        hei: winheight,
+                        deleted: "no",
+                        closed: "yes",
+                        locked: lock
+                      }),
+                      e => {
+                        ipcRenderer.invoke("destroy");
                       }
+                    );
+                  } else {
+                    fs.unlink(
+                      "data/" + profile + "/notes/" + obj.toString(),
+                      e => {}
+                    );
+                    ipcRenderer.invoke("destroy");
+                  }
+                } else {
+                  fs.writeFile(
+                    "data/" + profile + "/notes/" + obj.toString(),
+                    JSON.stringify({
+                      image: url,
+                      back: color1,
+                      title: color2,
+                      wid: winwidth,
+                      hei: winheight,
+                      deleted: "no",
+                      closed: "yes",
+                      locked: lock
+                    }),
+                    e => {
+                      ipcRenderer.invoke("destroy");
                     }
                   );
-                });
-            });
+                }
+              }
+            }
+          );
         };
         fs.watch("data/" + profile + "/notes/", (e, r) => {
           fs.readFile(
@@ -601,100 +571,60 @@ export default {
       });
       let links = [];
       let mails = [];
-      if (
-        /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/im.test(
-          document.querySelector(".ql-snow .ql-editor").innerHTML
-        )
-      ) {
-        let narr = document
+      document
+        .querySelectorAll('a[href^="http"][target="_blank"]')
+        .forEach(a => {
+          let { shell } = require("electron");
+          a.addEventListener("input", e => {
+            let old = e.srcElement.href;
+            links = links.map(function(x) {
+              return x.replace(new RegExp(old, "i"), e.srcElement.innerHTML);
+            });
+            e.srcElement.href = e.srcElement.innerHTML;
+          });
+          a.addEventListener("click", function(e) {
+            e.preventDefault();
+            shell.openExternal(e.srcElement.innerHTML);
+          });
+        });
+      document
+        .querySelectorAll('a[href^="mailto"][target="_blank"]')
+        .forEach(a => {
+          let { shell } = require("electron");
+          a.addEventListener("input", e => {
+            let old = e.srcElement.href;
+            links = links.map(function(x) {
+              return x.replace(
+                new RegExp(old, "i"),
+                `mailto:${e.srcElement.innerHTML}`
+              );
+            });
+            e.srcElement.href = `mailto:${e.srcElement.innerHTML}`;
+          });
+          a.addEventListener("click", function(e) {
+            e.preventDefault();
+            shell.openExternal(`mailto:${e.srcElement.innerHTML}`);
+          });
+        });
+        let matchesl = Array.from(document
           .querySelector(".ql-snow .ql-editor")
           .innerHTML.matchAll(
             /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim
-          );
-        let matches = Array.from(narr);
-        if (matches != []) {
-          for (let match in matches) {
-            if (!links.includes(matches[match][0])) {
-              document.querySelector(
-                ".ql-snow .ql-editor"
-              ).innerHTML = document
-                .querySelector(".ql-snow .ql-editor")
-                .innerHTML.replace(new RegExp(matches[match][0], "im"), u => {
-                  links.push(u);
-                  return `<a target="_blank" class="link-quill" href="${u}">${u}</a>`;
-                });
-              document
-                .querySelectorAll('a[href^="http"][target="_blank"]')
-                .forEach(a => {
-                  let { shell } = require("electron");
-                  a.addEventListener("input", e => {
-                    let old = e.srcElement.href;
-                    links = links.map(function(x) {
-                      return x.replace(
-                        new RegExp(old, "i"),
-                        e.srcElement.innerHTML
-                      );
-                    });
-                    e.srcElement.href = e.srcElement.innerHTML;
-                  });
-                  a.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    shell.openExternal(e.srcElement.innerHTML);
-                  });
-                });
+          ));
+          for (let matchl in matchesl) {
+            if (!links.includes(matchesl[matchl][0])) {
+              links.push(matchesl[matchl][0]);
             }
-          }
-        }
-      } else {
-        links = [];
-      }
-      if (
-        /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/im.test(
-          document.querySelector(".ql-snow .ql-editor").innerHTML
-        )
-      ) {
-        let narr = document
+        let matchesm = Array.from(document
           .querySelector(".ql-snow .ql-editor")
           .innerHTML.matchAll(
             /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/gim
-          );
-        let matches = Array.from(narr);
-        if (matches != []) {
-          for (let match in matches) {
-            if (!mails.includes(matches[match][0])) {
-              document.querySelector(
-                ".ql-snow .ql-editor"
-              ).innerHTML = document
-                .querySelector(".ql-snow .ql-editor")
-                .innerHTML.replace(new RegExp(matches[match][0], "im"), u => {
-                  mails.push(u);
-                  return `<a target="_blank" class="link-quill" href="mailto:${u}">${u}</a>`;
-                });
-              document
-                .querySelectorAll('a[href^="http"][target="_blank"]')
-                .forEach(a => {
-                  let { shell } = require("electron");
-                  a.addEventListener("input", e => {
-                    let old = e.srcElement.href;
-                    links = links.map(function(x) {
-                      return x.replace(
-                        new RegExp(old, "i"),
-                        `mailto:${e.srcElement.innerHTML}`
-                      );
-                    });
-                    e.srcElement.href = `mailto:${e.srcElement.innerHTML}`;
-                  });
-                  a.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    shell.openExternal(`mailto:${e.srcElement.innerHTML}`);
-                  });
-                });
+          ));
+          for (let matchm in matchesm) {
+            if (!mailsm.includes(matchesm[matchm][0])) {
+              mails.push(matchesm[matchm][0]);
             }
           }
-        }
-      } else {
-        mails = [];
-      }
       document
         .querySelector(".ql-snow .ql-editor")
         .addEventListener("keyup", e => {
@@ -793,7 +723,7 @@ export default {
                         }
                       );
                     document
-                      .querySelectorAll('a[href^="http"][target="_blank"]')
+                      .querySelectorAll('a[href^="mailto"][target="_blank"]')
                       .forEach(a => {
                         let { shell } = require("electron");
                         a.addEventListener("input", e => {
