@@ -96,11 +96,6 @@ export default {
       }
     });
     document.addEventListener("keydown", k => {
-      if (k.key == "i" && k.ctrlKey) {
-        this.importnote();
-      }
-    });
-    document.addEventListener("keydown", k => {
       if (k.key == "s" && k.ctrlKey) {
         this.exportnote();
       }
@@ -307,8 +302,8 @@ export default {
     // Exportb Note Function
     async exportnote() {
       let { ipcRenderer } = require("electron");
-      let notes = await ipcRenderer.invoke("exportnote");
-      if (note.filePath) {
+      let note = await ipcRenderer.invoke("exportnote");
+      if (note) {
         let data;
         if (document.getElementById("draw").style.display != "block") {
           data = document.querySelector(".ql-snow .ql-editor").innerHTML;
@@ -317,7 +312,7 @@ export default {
         }
         let fs = require("fs");
         fs.writeFile(
-          note.filePath,
+          note,
           data +
             "\n" +
             window
@@ -388,7 +383,7 @@ export default {
       try {
         document.querySelector(
           ".ql-snow .ql-editor"
-        ).innerHTML += `<iframe srcdoc="<video src='file:///${video}' height='150px' controls preload='none'></video>" id="video"></iframe>`;
+        ).innerHTML += `<iframe srcdoc="<video src='file:///${video}' style='width:100%;height:auto;' controls preload='none'></video>" id="video"></iframe>`;
       } catch {
         let swal = require("sweetalert");
 

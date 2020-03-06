@@ -278,13 +278,11 @@ export default {
           );
         }
       });
-
-      // Import Note Function
-      document.getElementById("import").addEventListener("click", async () => {
-        let notes = await ipcRenderer.invoke("importnote");
-        if (note.filePaths[0]) {
+      let importnote = async () => {
+        let note = await ipcRenderer.invoke("importnote");
+        if (note) {
           let fs = require("fs");
-          fs.readFile(note.filePaths[0], (e, d) => {
+          fs.readFile(note, (e, d) => {
             if (e) {
               let swal = require("sweetalert");
               swal("Not Supported");
@@ -307,6 +305,15 @@ export default {
               document.getElementById("titlebar").style.backgroundColor = d[2];
             }
           });
+        }
+      };
+      // Import Note Function
+      document.getElementById("import").addEventListener("click", () => {
+        importnote();
+      });
+      document.addEventListener("keydown", k => {
+        if (k.key == "i" && k.ctrlKey) {
+          importnote();
         }
       });
 

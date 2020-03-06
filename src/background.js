@@ -130,7 +130,7 @@ let createNote = () => {
             words.forEach(word => {
               submenu.push({
                 label: word, click: () => {
-                  console.log(winnote.webContents.session.removeWordFromSpellCheckerDictionary)
+                  winnote.webContents.session.removeWordFromSpellCheckerDictionary(word)
                 }
               })
             })
@@ -266,7 +266,7 @@ ipcMain.handle("importnotes", async event => {
     ],
     defaultPath: os.homedir() + "/note.spsd"
   });
-  return path;
+  return path.filePaths[0];
 });
 
 ipcMain.handle("exportnotes", async event => {
@@ -281,7 +281,7 @@ ipcMain.handle("exportnotes", async event => {
     ],
     defaultPath: os.homedir() + "/notes.spsd"
   });
-  return path;
+  return path.filePath;
 });
 
 ipcMain.handle("importnote", async event => {
@@ -296,7 +296,7 @@ ipcMain.handle("importnote", async event => {
     ],
     defaultPath: os.homedir() + "/note.spst"
   });
-  return path;
+  return path.filePaths[0];
 });
 
 ipcMain.handle("exportnote", async event => {
@@ -311,7 +311,7 @@ ipcMain.handle("exportnote", async event => {
     ],
     defaultPath: os.homedir() + "/note.spst"
   });
-  return path;
+  return path.filePath;
 });
 
 ipcMain.handle("image", async event => {

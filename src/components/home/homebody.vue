@@ -178,7 +178,6 @@ export default {
       let profile;
       fs.readFile("data/profile", async (e, d) => {
         profile = d;
-        document.getElementById("profile").value = d;
       });
 
       window.setTimeout(() => {
@@ -200,6 +199,9 @@ export default {
                 );
             }
           });
+          window.setTimeout(() => {
+            document.getElementById("profile").value = profile;
+          }, 500);
         });
 
         // Spellcheck
@@ -555,7 +557,9 @@ export default {
                       fs.unlink(curPath, e => {});
                     }
                   });
-                  fs.rmdir(path, e => {});
+                  window.setTimeout(() => {
+                    fs.rmdir(path);
+                  }, 500);
                 });
               };
               deleteFolder("data/" + d);
@@ -571,8 +575,8 @@ export default {
       fs.readFile("data/profile", async (e, d) => {
         let profile = d;
         let notes = await ipcRenderer.invoke("importnotes");
-        if (notes.filePaths[0]) {
-          fs.readFile(notes.filePaths[0], (e, d) => {
+        if (notes) {
+          fs.readFile(notes, (e, d) => {
             if (e) {
               let swal = require("sweetalert");
               swal("Not Supported");
@@ -620,7 +624,7 @@ export default {
         let profile = d;
         if (document.getElementById("notetext")) {
           let notes = await ipcRenderer.invoke("exportnotes");
-          if (notes.filePath) {
+          if (notes) {
             let data = "";
             fs.readdir("data/" + profile + "/notes/", function(e, files) {
               if (e) {
@@ -633,7 +637,7 @@ export default {
                 });
               }
             });
-            fs.writeFile(notes.filePath, data, e => {
+            fs.writeFile(notes, data, e => {
               if (e) {
                 swal("Not Supported");
               }
