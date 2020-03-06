@@ -637,11 +637,13 @@ export default {
                 });
               }
             });
-            fs.writeFile(notes, data, e => {
-              if (e) {
-                swal("Not Supported");
-              }
-            });
+            window.setTimeout(() => {
+              fs.writeFile(notes, data, e => {
+                if (e) {
+                  swal("Not Supported");
+                }
+              });
+            }, 2000);
           }
         } else {
           let swal = require("sweetalert");
