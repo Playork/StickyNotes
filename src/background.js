@@ -43,10 +43,10 @@ let createWindow = () => {
   });
   createProtocol("app");
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
+    win.loadURL("http://localhost:8080/#/home");
     if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
-    win.loadURL("app://./index.html");
+    win.loadURL("app://./index.html#home");
   }
   win.on("ready-to-show", () => {
     win.show();
@@ -125,7 +125,7 @@ let createNote = () => {
         "context-menu",
         (e, p) => {
           e.preventDefault();
-          let submenu = []
+          let submenu = [{ label: "Click To Delete Word" }, { type: "separator" }]
           winnote.webContents.session.listWordsInSpellCheckerDictionary().then((words) => {
             words.forEach(word => {
               submenu.push({
@@ -163,7 +163,9 @@ let createNote = () => {
                 menu.append(new MenuItem({ type: "separator" }));
               }
               menu.append(new MenuItem({ label: "Custom Words", submenu: submenu }));
-              menu.append(new MenuItem({ type: "separator" }));
+              if (p.editFlags.canCut || p.editFlags.canCopy || p.editFlags.canPaste) {
+                menu.append(new MenuItem({ type: "separator" }));
+              }
             }
             if (p.editFlags.canCut || p.editFlags.canCopy || p.editFlags.canPaste) {
               menu.append(new MenuItem({ role: "selectall" }));
@@ -193,9 +195,9 @@ ipcMain.on("create-new-instance", () => {
 
 ipcMain.handle("reload", event => {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
+    win.loadURL("http://localhost:8080/#/note");
   } else {
-    win.loadURL("app://./index.html");
+    win.loadURL("app://./index.html#home");
   }
 })
 

@@ -166,7 +166,9 @@ export default {
                 }
               }
             }
-            fs.unlink("./restore.spst");
+            window.setTimeout(() => {
+              fs.unlink("./restore.spst", e => {});
+            }, 500);
           }
         });
       } catch {}

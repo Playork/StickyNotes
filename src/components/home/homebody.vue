@@ -582,13 +582,13 @@ export default {
               swal("Not Supported");
             } else {
               if (d != "") {
-                d = d.split("\n");
+                d = d.toString().split("\n");
                 for (let i = 0; i < d.length; i++) {
                   if (i % 2 == 0 && d[i] != "") {
                     let js = JSON.parse(d[i + 1]);
                     fs.readFile(
                       "data/" + profile + "/notes/" + d[i],
-                      (e, d) => {
+                      (e, r) => {
                         if (e) {
                           fs.writeFile(
                             "data/" + profile + "/notes/" + d[i],
@@ -596,8 +596,8 @@ export default {
                             e => {}
                           );
                         } else {
-                          d = JSON.parse(d);
-                          if (js.first != d.first || js.image != d.image) {
+                          r = JSON.parse(r);
+                          if (js.first != r.first || js.image != r.image) {
                             let g = new Date().getTime();
                             let id = Number(d[i]) * g;
                             fs.writeFile(

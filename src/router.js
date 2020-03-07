@@ -22,7 +22,6 @@ SOFTWARE. */
 
 import Vue from "vue";
 import Router from "vue-router";
-import home from "./views/home.vue";
 
 Vue.use(Router);
 
@@ -30,9 +29,9 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "/",
+      path: "/home",
       name: "home",
-      component: home
+      component: () => import("./views/home.vue")
     },
     {
       path: "/note",
