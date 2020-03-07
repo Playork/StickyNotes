@@ -582,7 +582,7 @@ export default {
               swal("Not Supported");
             } else {
               if (d != "") {
-                d = d.toString().split("\n");
+                d = d.split("\n");
                 for (let i = 0; i < d.length; i++) {
                   if (i % 2 == 0 && d[i] != "") {
                     let js = JSON.parse(d[i + 1]);
