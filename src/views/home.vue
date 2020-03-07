@@ -207,19 +207,10 @@ export default {
             });
           }
         });
-        dbx
-          .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
-          .then(() => {
-            dbx
-              .filesUpload({
-                path: "/Playork Sticky Notes/notes.spst",
-                contents: notes,
-                mode: "overwrite"
-              })
-              .catch(() => {});
-          })
-          .catch(e => {
-            if (e) {
+        window.setTimeout(() => {
+          dbx
+            .filesDeleteV2({ path: "/Playork Sticky Notes/notes.spst" })
+            .then(() => {
               dbx
                 .filesUpload({
                   path: "/Playork Sticky Notes/notes.spst",
@@ -227,8 +218,19 @@ export default {
                   mode: "overwrite"
                 })
                 .catch(() => {});
-            }
-          });
+            })
+            .catch(e => {
+              if (e) {
+                dbx
+                  .filesUpload({
+                    path: "/Playork Sticky Notes/notes.spst",
+                    contents: notes,
+                    mode: "overwrite"
+                  })
+                  .catch(() => {});
+              }
+            });
+        }, 500);
       }, 4000);
 
       // Sync Restore
@@ -352,19 +354,21 @@ export default {
                 });
               }
             });
-            fs.readFile("data/" + profile + "/.access", (e, d) => {
-              if (e) {
-              } else {
-                let dbx = new Dropbox({ fetch, accessToken: accesst });
-                dbx
-                  .filesUpload({
-                    path: "/Playork Sticky Notes/notes.spst",
-                    contents: notes,
-                    mode: "overwrite"
-                  })
-                  .catch(() => {});
-              }
-            });
+            window.setTimeout(() => {
+              fs.readFile("data/" + profile + "/.access", (e, d) => {
+                if (e) {
+                } else {
+                  let dbx = new Dropbox({ fetch, accessToken: accesst });
+                  dbx
+                    .filesUpload({
+                      path: "/Playork Sticky Notes/notes.spst",
+                      contents: notes,
+                      mode: "overwrite"
+                    })
+                    .catch(() => {});
+                }
+              });
+            }, 500);
           }
         });
       });
