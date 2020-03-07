@@ -79,7 +79,7 @@ import Quill from "quill";
 import fs, { link } from "fs";
 import { Picker } from "emoji-mart-vue";
 import { ipcRenderer } from "electron";
-import { fabric } from "fabric";
+import { fabric } from "../../assets/script/fabric";
 
 // Vue Class
 export default {
@@ -102,8 +102,6 @@ export default {
 
       // draw
       let canvas = new fabric.Canvas("draw", {
-        backgroundColor: "transparent",
-        freeDrawingCursor: "pointer",
         isDrawingMode: true
       });
       let drawingColorEl = document.getElementById("paintcolor");
