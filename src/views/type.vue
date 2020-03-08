@@ -85,8 +85,8 @@ export default {
       });
 
       //theme change
-      fs.watch("data/" + profile + "/theme", (e, r) => {
-        fs.readFile("data/" + profile + "/theme", (e, d) => {
+      fs.watch("data/theme", (e, r) => {
+        fs.readFile("data/theme", (e, d) => {
           let num = JSON.parse(d).on;
           if (num == 1) {
             let lith = document.createElement("style");

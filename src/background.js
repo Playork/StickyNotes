@@ -65,7 +65,13 @@ app.on("ready", () => {
   createWindow();
   globalShortcut.register("Control+N", () => {
     if (BrowserWindow.getFocusedWindow()) {
-      createNote("type");
+      fs.readFile("data/note", (e, d) => {
+        if (d == "draw") {
+          createNote("draw");
+        } else {
+          createNote("type")
+        }
+      })
     }
   })
 });
@@ -190,7 +196,13 @@ let createNote = (url) => {
 }
 
 ipcMain.on("create-new-instance", () => {
-  createNote("draw");
+  fs.readFile("data/note", (e, d) => {
+    if (d == "draw") {
+      createNote("draw");
+    } else {
+      createNote("type")
+    }
+  })
 });
 
 ipcMain.handle("reload", event => {

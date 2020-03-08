@@ -75,12 +75,17 @@ SOFTWARE.
               Delete This Profile
             </h4>
             <br />
-            <h2>Appearance</h2>
+            <h2>Mode</h2>
             <br />
             <p>Theme</p>
             <select name="theme" id="theme">
               <option value="Dark" selected>Dark</option>
               <option value="Light">Light</option>
+            </select>
+            <p>Notes</p>
+            <select name="mode" id="mode">
+              <option value="type" selected>Type</option>
+              <option value="draw">Draw</option>
             </select>
             <h2>Spellcheck</h2>
             <br />
@@ -318,14 +323,10 @@ export default {
           );
         });
         window.setTimeout(() => {
-          fs.readFile("data/" + profile + "/theme", (e, d) => {
+          fs.readFile("data/theme", (e, d) => {
             if (e) {
               document.getElementById("theme").selectedIndex = 0;
-              fs.writeFile(
-                "data/" + profile + "/theme",
-                JSON.stringify({ on: 0 }),
-                e => {}
-              );
+              fs.writeFile("data/theme", JSON.stringify({ on: 0 }), e => {});
             } else {
               d = JSON.parse(d);
               let num = d.on;
@@ -382,14 +383,18 @@ export default {
               }
             }
           });
+          fs.readFile("data/note", (e, d) => {
+            if (e) {
+            } else {
+              if (d == "draw") {
+                document.getElementById("mode").value = "draw";
+              }
+            }
+          });
         }, 1000);
         document.getElementById("theme").onchange = () => {
           let num = document.getElementById("theme").selectedIndex;
-          fs.writeFile(
-            "data/" + profile + "/theme",
-            JSON.stringify({ on: num }),
-            e => {}
-          );
+          fs.writeFile("data/theme", JSON.stringify({ on: num }), e => {});
 
           if (num == 1) {
             let lith = document.createElement("style");
@@ -456,6 +461,13 @@ export default {
           } else {
             document.head.removeChild(document.getElementById("lighttheme"));
           }
+        };
+        document.getElementById("mode").onchange = () => {
+          fs.writeFile(
+            "data/note",
+            document.getElementById("mode").value,
+            e => {}
+          );
         };
         document.getElementById("profile").onchange = () => {
           fs.writeFile(

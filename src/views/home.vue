@@ -101,6 +101,7 @@ export default {
                     fs.writeFile("data/" + profile + "/pass", "", e => {});
                     fs.writeFile("data/" + profile + "/sign", "", e => {});
                   }
+                  fs.writeFile("data/note", "type", e => {});
                 });
               } else {
                 swal({
