@@ -97,9 +97,13 @@ export default {
       for (let i = 0; i < 7; i++) {
         document.getElementById(this.id[i]).onclick = () => {
           document.getElementById("titlebar").style.background = this.color1[i];
-          document.getElementById("lightYellow").style.background = this.color2[
-            i
-          ];
+          if (document.getElementById("lightYellow")) {
+            document.getElementById(
+              "lightYellow"
+            ).style.background = this.color2[i];
+          } else {
+            document.getElementById("backc").style.background = this.color2[i];
+          }
           for (let j = 0; j < 7; j++) {
             document.getElementById(this.select[j]).classList.remove("select");
             document.getElementById(this.select[j]).classList.add("hide");

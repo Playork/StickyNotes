@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "dropbox": "^4.0.17",
-    "emoji-mart-vue": "latest",
     "quill": "latest",
     "sweetalert": "latest"
   },

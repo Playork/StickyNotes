@@ -65,14 +65,14 @@ app.on("ready", () => {
   createWindow();
   globalShortcut.register("Control+N", () => {
     if (BrowserWindow.getFocusedWindow()) {
-      createNote();
+      createNote("type");
     }
   })
 });
 
 app.commandLine.appendSwitch("disable-web-security");
 let winnote;
-let createNote = () => {
+let createNote = (url) => {
   let spell;
   let spelllang;
   fs.readFile("data/spell", (e, d) => {
@@ -108,10 +108,10 @@ let createNote = () => {
         winnote.webContents.session.setSpellCheckerLanguages([spelllang]);
       }
       if (process.env.WEBPACK_DEV_SERVER_URL) {
-        winnote.loadURL("http://localhost:8080/#/note");
+        winnote.loadURL(`http://localhost:8080/#/${url}`);
         if (!process.env.IS_TEST) winnote.webContents.openDevTools();
       } else {
-        winnote.loadURL("app://./index.html#note");
+        winnote.loadURL(`app://./index.html#${url}`);
       }
       winnote.on("ready-to-show", () => {
         winnote.show();
@@ -190,7 +190,7 @@ let createNote = () => {
 }
 
 ipcMain.on("create-new-instance", () => {
-  createNote();
+  createNote("draw");
 });
 
 ipcMain.handle("reload", event => {
@@ -236,12 +236,6 @@ ipcMain.handle("setMaximumSize", (event, a, c) => {
 
 ipcMain.handle("syncwindow", (e, url) => {
   let syncwindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    backgroundColor: "#202020",
-    title: "Playork Sticky Notes",
-    resizable: false,
-    show: false,
     webPreferences: {
       nodeIntegration: false
     }
@@ -250,10 +244,6 @@ ipcMain.handle("syncwindow", (e, url) => {
   syncwindow.on("close", () => {
     win.webContents.send("closedsync", syncwindow.webContents.getURL());
   })
-  syncwindow.on("ready-to-show", () => {
-    syncwindow.show();
-    syncwindow.focus();
-  });
 })
 
 ipcMain.handle("importnotes", async event => {

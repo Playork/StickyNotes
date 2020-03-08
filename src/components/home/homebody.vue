@@ -107,8 +107,6 @@ SOFTWARE.
             <p>Ctrl+Y</p>
             <p>New Note</p>
             <p>Ctrl+N</p>
-            <p>Emoji</p>
-            <p>Ctrl+E</p>
             <p>Lock Note</p>
             <p>Ctrl+L</p>
             <p>Delete</p>

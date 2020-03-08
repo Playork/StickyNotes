@@ -141,7 +141,6 @@ SOFTWARE. */
   padding-top: 40px !important;
 }
 #draw {
-  display: none;
   position: absolute;
   left: 0;
   right: 0;
@@ -180,6 +179,7 @@ SOFTWARE. */
 }
 #backc {
   position: absolute;
+  background-color: #fff2ab;
   top: 0;
   bottom: 0;
   right: 0;
@@ -248,54 +248,13 @@ SOFTWARE. */
 #save {
   display: none;
 }
-.emoji-mart {
-  font-family: "Lobster" !important;
-  background: #202020ee !important;
-  visibility: hidden;
-  border: none !important;
-  border-radius: 0 !important;
-}
-.emoji-mart-category-label span {
-  background: #202020 !important;
-}
-.emoji-mart * {
-  border: none !important;
-  color: #fff !important;
-  border-radius: 20px !important;
-}
-.emoji-mart-search input {
-  color: #000 !important;
-}
-#hideemoji {
-  font-family: "segoe";
-  font-size: 15px;
-  position: absolute;
-  top: 40px;
-  right: 275px;
-  z-index: 8;
-  color: #fff;
-  padding: 14px 0 14px 10px;
-  background: #202020ee;
-  display: none;
-}
-#emoji {
-  font-family: "segoe";
-  font-size: 20px;
-  position: absolute;
-  bottom: 40px;
-  right: 0;
-  z-index: 7;
-  color: #fff;
-  padding: 5px;
-  background: #202020ee;
-}
 #undo {
   font-family: "segoe";
   font-size: 20px;
   position: absolute;
   bottom: 40px;
-  right: 60px;
-  z-index: 7;
+  right: 30px;
+  z-index: 6;
   color: #fff;
   padding: 5px;
   background: #202020ee;
@@ -305,8 +264,8 @@ SOFTWARE. */
   font-size: 20px;
   position: absolute;
   bottom: 40px;
-  right: 30px;
-  z-index: 7;
+  right: 0;
+  z-index: 6;
   color: #fff;
   padding: 5px;
   background: #202020ee;
@@ -316,8 +275,8 @@ SOFTWARE. */
   font-size: 20px;
   position: absolute;
   bottom: 40px;
-  right: 90px;
-  z-index: 7;
+  right: 60px;
+  z-index: 6;
   color: #fff;
   padding: 5px;
   background: #202020ee;
@@ -344,6 +303,5 @@ SOFTWARE. */
   background: rgba(0, 0, 0, 0);
 }
 .upper-canvas {
-  display: none;
-  z-index: 6;
+  z-index: 5;
 }

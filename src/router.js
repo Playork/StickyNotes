@@ -34,9 +34,14 @@ export default new Router({
       component: () => import("./views/home.vue")
     },
     {
-      path: "/note",
-      name: "note",
-      component: () => import("./views/note.vue")
+      path: "/type",
+      name: "type",
+      component: () => import("./views/type.vue")
+    },
+    {
+      path: "/draw",
+      name: "draw",
+      component: () => import("./views/draw.vue")
     }
   ]
 });

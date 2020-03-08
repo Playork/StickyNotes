@@ -56,7 +56,11 @@ export default {
       let titleColor = document.getElementById("color1").value;
       let backColor = document.getElementById("color2").value;
       document.getElementById("titlebar").style.background = titleColor;
-      document.getElementById("lightYellow").style.background = backColor;
+      if (document.getElementById("lightYellow")) {
+        document.getElementById("lightYellow").style.background = backColor;
+      } else {
+        document.getElementById("backc").style.background = backColor;
+      }
       document.getElementById("choosecolor").style.display = "none";
       for (let j = 0; j < 7; j++) {
         document.getElementById(this.select[j]).classList.remove("select");

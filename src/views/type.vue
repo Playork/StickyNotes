@@ -25,50 +25,20 @@ SOFTWARE.
 <!-- Editor Section Of Note Page-->
 <!-- Html -->
 <template>
-  <div>
-    <span title="Add Emoji" id="emoji" v-on:click="emoji">&#xE76E;</span>
+  <div id="note" v-on:click="showhide">
+    <titlebar
+      v-bind:close="close"
+      v-bind:note="note"
+      v-bind:minimize="minimize"
+    />
+    <colors />
+    <choosecolor />
     <span title="Undo" id="undo">&#xE7A7;</span>
     <span title="Redo" id="redo">&#xE7A6;</span>
     <span id="deletenote1" title="Delete Note">&#xE74D;</span>
-    <span title="close" id="hideemoji" v-on:click="hideemoji">&#xE8BB;</span>
-    <div id="emojip">
-      <picker
-        set="google"
-        @select="addEmoji"
-        title="Pick your emoji…"
-        emoji="point_up"
-        :style="{
-          position: 'absolute',
-          top: '40px',
-          right: '0',
-          zIndex: '7',
-          width: '275px',
-          height: '335px'
-        }"
-        :i18n="{
-          search: 'Search',
-          categories: { search: 'Results Of Your Search', recent: 'Recent' }
-        }"
-      />
-    </div>
     <div id="lightYellow">
       <div id="editor"></div>
     </div>
-    <div id="backc"></div>
-    <div id="candit">
-      <button id="paintclear" class="button1">Clear</button>
-      <span class="info">2</span
-      ><input
-        type="range"
-        value="2"
-        min="2"
-        max="50"
-        id="paintwidth"
-        class="brushwidth"
-      />
-      <input type="color" value="#000" id="paintcolor" />
-    </div>
-    <canvas id="draw"></canvas>
   </div>
 </template>
 
@@ -76,66 +46,96 @@ SOFTWARE.
 <script>
 // Import Required Packages
 import Quill from "quill";
-import fs, { link } from "fs";
-import { Picker } from "emoji-mart-vue";
+import fs from "fs";
 import { ipcRenderer } from "electron";
-import { fabric } from "../../assets/script/fabric";
+import titlebar from "../components/note/titlebar.vue";
+import colors from "../components/note/colors.vue";
+import choosecolor from "../components/note/choosecolor.vue";
 
 // Vue Class
 export default {
   // Components
   components: {
-    Picker
+    titlebar,
+    colors,
+    choosecolor
   },
 
   // Do On Start
   mounted() {
-    document.addEventListener("keydown", k => {
-      if (k.key == "e" && k.ctrlKey) {
-        this.emoji();
-      }
-    });
-
     //  Profile
     fs.readFile("data/profile", (e, d) => {
       let profile = d;
 
-      // draw
-      let canvas = new fabric.Canvas("draw", {
-        isDrawingMode: true
+      // Close For Main Process Close
+      ipcRenderer.on("closenote", () => {
+        ipcRenderer.invoke("close");
       });
-      let drawingColorEl = document.getElementById("paintcolor");
-      let drawingLineWidthEl = document.getElementById("paintwidth");
-      document.getElementById("paintclear").onclick = function() {
-        canvas.clear();
-      };
-      drawingColorEl.onchange = function() {
-        canvas.freeDrawingBrush.color = drawingColorEl.value;
-      };
-      drawingLineWidthEl.onchange = function() {
-        canvas.freeDrawingBrush.width =
-          parseInt(drawingLineWidthEl.value, 10) || 1;
-        drawingLineWidthEl.previousSibling.innerHTML = drawingLineWidthEl.value;
-      };
-      if (canvas.freeDrawingBrush) {
-        canvas.freeDrawingBrush.color = drawingColorEl.value;
-        canvas.freeDrawingBrush.width =
-          parseInt(drawingLineWidthEl.value, 10) || 1;
-      }
-      function resizeCanvas() {
-        canvas.setDimensions({
-          width: window.innerWidth,
-          height: window.innerHeight
+
+      //closing home
+      fs.watch("data/" + profile, (e, r) => {
+        fs.readFile("data/" + profile + "/closed", (e, d) => {
+          if (e) {
+          } else {
+            if (JSON.parse(d).closed == "yes") {
+              ipcRenderer.invoke("close");
+            }
+          }
         });
-      }
-      window.addEventListener("resize", resizeCanvas, false);
-      resizeCanvas();
+      });
+
+      //theme change
+      fs.watch("data/" + profile + "/theme", (e, r) => {
+        fs.readFile("data/" + profile + "/theme", (e, d) => {
+          let num = JSON.parse(d).on;
+          if (num == 1) {
+            let lith = document.createElement("style");
+            lith.type = "text/css";
+            lith.id = "lighttheme";
+            lith.innerText = `
+  #note {
+    background: #ffffffee;
+  }
+  .swal-modal {
+    background: #ffffffee !important;
+  }
+  .swal-title,
+  .swal-text {
+    color: #000 !important;
+  }
+  .dropdown-content {
+    background-color: #ffffffee !important;
+  }
+  .dropdown-content a {
+    color: #000 !important;
+  }
+  .dropdown-content a:hover {
+    background-color: #eee !important;
+  }
+  #choosecolor {
+    background: #ffffffee !important;
+    color: #000 !important;
+  }
+  #window-title2 span:hover {
+    color: #000 !important;
+  }
+ #undo,#redo,#deletenote1{
+    color:#000;
+    background:#ffffffee;
+  }`;
+            document.head.appendChild(lith);
+          } else {
+            try {
+              document.head.removeChild(document.getElementById("lighttheme"));
+            } catch {}
+          }
+        });
+      });
 
       window.setInterval(() => {
         let color1 = window
           .getComputedStyle(document.getElementById("lightYellow"))
           .getPropertyValue("background-color");
-        document.getElementById("backc").style.backgroundColor = color1;
         try {
           document.querySelector(".ql-toolbar").style.backgroundColor = color1;
         } catch {}
@@ -206,34 +206,14 @@ export default {
         theme: "snow"
       });
       document.getElementById("undo").addEventListener("click", () => {
-        if (document.getElementById("draw").style.display != "block") {
-          quill.history.undo();
-        } else {
-          if (
-            canvas.item(canvas.getObjects().length - 1) &&
-            canvas.item(canvas.getObjects().length - 1).get("type") === "path"
-          ) {
-            canvas.remove(canvas.item(canvas.getObjects().length - 1));
-            canvas.renderAll();
-          }
-        }
+        quill.history.undo();
       });
       document.getElementById("redo").addEventListener("click", () => {
         quill.history.redo();
       });
       document.addEventListener("keydown", k => {
         if (k.key == "y" && k.ctrlKey) {
-          if (document.getElementById("draw").style.display != "block") {
-            quill.history.undo();
-          } else {
-            if (
-              canvas.item(canvas.getObjects().length - 1) &&
-              canvas.item(canvas.getObjects().length - 1).get("type") === "path"
-            ) {
-              canvas.remove(canvas.item(canvas.getObjects().length - 1));
-              canvas.renderAll();
-            }
-          }
+          quill.history.redo();
         }
       });
 
@@ -250,20 +230,18 @@ export default {
                   "#FFF2AB";
               } else {
                 let text = JSON.parse(r);
-                if (!text.first) {
-                  document.getElementById("mouch").click();
-                  canvas.setBackgroundImage(
-                    text.image,
-                    canvas.renderAll.bind(canvas),
-                    {
-                      originX: "left",
-                      originY: "top"
-                    }
-                  );
-                } else {
-                  document.querySelector(".ql-snow .ql-editor").innerHTML =
-                    text.first;
-                }
+                document.getElementById("mouch").click();
+                canvas.setBackgroundImage(
+                  text.image,
+                  canvas.renderAll.bind(canvas),
+                  {
+                    originX: "left",
+                    originY: "top"
+                  }
+                );
+                document.querySelector(".ql-snow .ql-editor").innerHTML =
+                  text.first;
+
                 document.querySelector(".ql-toolbar").style.backgroundColor =
                   text.back;
                 window.resizeTo(Number(text.wid), Number(text.hei));
@@ -279,25 +257,14 @@ export default {
       let importnote = async () => {
         let note = await ipcRenderer.invoke("importnote");
         if (note) {
-          let fs = require("fs");
           fs.readFile(note, (e, d) => {
             if (e) {
               let swal = require("sweetalert");
               swal("Not Supported");
             } else {
               d = d.toString().split("\n");
-              if (
-                document.querySelector(".lower-canvas").style.display != "block"
-              ) {
-                document.querySelector(".ql-snow .ql-editor").innerHTML = d[0];
-                window.resizeTo(Number(d[3]), Number([4]));
-              } else {
-                window.resizeTo(Number(d[3]), Number([4]));
-                canvas.setBackgroundImage(d[0], canvas.renderAll.bind(canvas), {
-                  originX: "left",
-                  originY: "top"
-                });
-              }
+              document.querySelector(".ql-snow .ql-editor").innerHTML = d[0];
+              window.resizeTo(Number(d[3]), Number([4]));
               document.getElementById("lightYellow").style.backgroundColor =
                 d[1];
               document.getElementById("titlebar").style.backgroundColor = d[2];
@@ -328,7 +295,6 @@ export default {
           }).then(willDelete => {
             if (willDelete) {
               fs.unlink("data/" + profile + "/notes/" + obj.toString(), e => {
-                let { ipcRenderer } = require("electron");
                 ipcRenderer.invoke("destroy");
               });
             }
@@ -346,7 +312,6 @@ export default {
             }).then(willDelete => {
               if (willDelete) {
                 fs.unlink("data/" + profile + "/notes/" + obj.toString(), e => {
-                  let { ipcRenderer } = require("electron");
                   ipcRenderer.invoke("destroy");
                 });
               }
@@ -356,7 +321,6 @@ export default {
 
         let repeafunc = () => {
           let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
-          let url = document.querySelector(".lower-canvas").toDataURL();
           let color1 = window
             .getComputedStyle(document.getElementById("lightYellow"))
             .getPropertyValue("background-color");
@@ -374,31 +338,14 @@ export default {
           } else {
             lock = "no";
           }
-          if (document.getElementById("lightYellow").style.display != "none") {
-            if (
-              document.querySelector(".ql-snow .ql-editor").innerHTML !=
-              "<p><br></p>"
-            ) {
-              fs.writeFile(
-                "data/" + profile + "/notes/" + obj.toString(),
-                JSON.stringify({
-                  first: text,
-                  back: color1,
-                  title: color2,
-                  wid: winwidth,
-                  hei: winheight,
-                  deleted: "no",
-                  closed: "no",
-                  locked: lock
-                }),
-                e => {}
-              );
-            }
-          } else {
+          if (
+            document.querySelector(".ql-snow .ql-editor").innerHTML !=
+            "<p><br></p>"
+          ) {
             fs.writeFile(
               "data/" + profile + "/notes/" + obj.toString(),
               JSON.stringify({
-                image: url,
+                first: text,
                 back: color1,
                 title: color2,
                 wid: winwidth,
@@ -414,7 +361,6 @@ export default {
         window.onbeforeunload = async e => {
           e.returnValue = true;
           let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
-          let url = document.querySelector(".lower-canvas").toDataURL();
           let color1 = window
             .getComputedStyle(document.getElementById("lightYellow"))
             .getPropertyValue("background-color");
@@ -436,42 +382,14 @@ export default {
             "data/" + profile + "/notes/" + obj.toString(),
             (e, d) => {
               if (e || JSON.parse(d).deleted == "no") {
-                let { ipcRenderer } = require("electron");
                 if (
-                  document.getElementById("lightYellow").style.display != "none"
+                  document.querySelector(".ql-snow .ql-editor").innerHTML !=
+                  "<p><br></p>"
                 ) {
-                  if (
-                    document.querySelector(".ql-snow .ql-editor").innerHTML !=
-                    "<p><br></p>"
-                  ) {
-                    fs.writeFile(
-                      "data/" + profile + "/notes/" + obj.toString(),
-                      JSON.stringify({
-                        first: text,
-                        back: color1,
-                        title: color2,
-                        wid: winwidth,
-                        hei: winheight,
-                        deleted: "no",
-                        closed: "yes",
-                        locked: lock
-                      }),
-                      e => {
-                        ipcRenderer.invoke("destroy");
-                      }
-                    );
-                  } else {
-                    fs.unlink(
-                      "data/" + profile + "/notes/" + obj.toString(),
-                      e => {}
-                    );
-                    ipcRenderer.invoke("destroy");
-                  }
-                } else {
                   fs.writeFile(
                     "data/" + profile + "/notes/" + obj.toString(),
                     JSON.stringify({
-                      image: url,
+                      first: text,
                       back: color1,
                       title: color2,
                       wid: winwidth,
@@ -484,6 +402,12 @@ export default {
                       ipcRenderer.invoke("destroy");
                     }
                   );
+                } else {
+                  fs.unlink(
+                    "data/" + profile + "/notes/" + obj.toString(),
+                    e => {}
+                  );
+                  ipcRenderer.invoke("destroy");
                 }
               }
             }
@@ -503,7 +427,6 @@ export default {
                         if (e) {
                           console.log(e);
                         }
-                        let { ipcRenderer } = require("electron");
                         ipcRenderer.invoke("destroy");
                       }
                     );
@@ -526,44 +449,6 @@ export default {
           .getElementById("locks")
           .addEventListener("click", () => repeafunc());
         window.addEventListener("resize", () => repeafunc());
-        let rfunc = () => {
-          if (document.getElementById("draw") == "block") {
-            repeafunc();
-          }
-        };
-        document
-          .getElementById("note")
-          .addEventListener("mousemove", () => rfunc(), false);
-        document
-          .getElementById("note")
-          .addEventListener("mouseup", () => rfunc());
-        document
-          .getElementById("note")
-          .addEventListener("mouseleave", () => rfunc(), false);
-        document
-          .getElementById("note")
-          .addEventListener("mouseenter", () => rfunc(), false);
-        document
-          .getElementById("note")
-          .addEventListener("mousedown", () => rfunc(), false);
-        document
-          .getElementById("note")
-          .addEventListener("mouseout", () => rfunc(), false);
-        document
-          .getElementById("note")
-          .addEventListener("touchstart", () => rfunc(), false);
-        document
-          .getElementById("note")
-          .addEventListener("touchmove", () => rfunc(), false);
-        document
-          .getElementById("note")
-          .addEventListener("touchend", () => rfunc(), false);
-        document
-          .getElementById("note")
-          .addEventListener("touchcancel", () => rfunc(), false);
-        document
-          .getElementById("note")
-          .addEventListener("touchleave", () => rfunc(), false);
       };
       fs.readFile("data/" + profile + "/id", (e, d) => {
         if (e) {
@@ -911,24 +796,113 @@ export default {
         });
     });
   },
+  // Functions
   methods: {
-    // Add emoji
-    addEmoji(e) {
-      document.querySelector(
-        ".ql-snow .ql-editor"
-      ).lastElementChild.innerHTML += e.native;
+    close() {
+      ipcRenderer.invoke("close");
     },
-    // Add Emoji
-    emoji() {
-      document.getElementsByClassName("emoji-mart")[0].style.visibility =
-        "visible";
-      document.getElementById("hideemoji").style.display = "block";
+
+    // Start New Note
+    note() {
+      fs.readFile("data/profile", (e, d) => {
+        let profile = d;
+        let func = obj => {
+          obj++;
+          fs.writeFile(
+            "data/" + profile + "/id",
+            JSON.stringify({ ids: obj.toString() }),
+            e => {}
+          );
+        };
+        fs.readFile("data/" + profile + "/id", (e, d) => {
+          if (e) {
+            let id = 1;
+            func(id);
+          } else {
+            let id = Number(JSON.parse(d).ids);
+            func(id);
+          }
+        });
+        ipcRenderer.send("create-new-instance");
+      });
     },
-    // Hide Emoji
-    hideemoji() {
-      document.getElementsByClassName("emoji-mart")[0].style.visibility =
-        "hidden";
-      document.getElementById("hideemoji").style.display = "none";
+
+    // Minimize Function
+    minimize() {
+      ipcRenderer.invoke("minimize");
+    },
+
+    // Focus Blur Event Function
+    showhide() {
+      document.addEventListener(
+        "focus",
+        () => {
+          document.getElementById("titlebar").style.height = "32px";
+          document.getElementById("lightYellow").style.paddingTop = "30px";
+          if (
+            document.querySelector(".ql-snow.ql-toolbar").style.display !=
+            "block"
+          ) {
+            document.getElementById("color").style.height = "40px";
+          }
+          document.getElementById("redo").style.display = "block";
+          document.getElementById("lock").style.display = "flex";
+          document.getElementById("add").style.display = "flex";
+          document.getElementById("more").style.display = "flex";
+          document.getElementById("minimize").style.display = "flex";
+          document.getElementById("close").style.display = "flex";
+          document.getElementById("menu").style.display = "flex";
+          document.getElementById("undo").style.display = "block";
+          document.getElementById("deletenote1").style.display = "block";
+        },
+        true
+      );
+      document.addEventListener(
+        "click",
+        e => {
+          document.getElementById("titlebar").style.height = "32px";
+          document.getElementById("lightYellow").style.paddingTop = "30px";
+          if (
+            document.querySelector(".ql-snow.ql-toolbar").style.display !=
+            "block"
+          ) {
+            document.getElementById("color").style.height = "40px";
+          }
+          document.getElementById("redo").style.display = "block";
+          document.getElementById("lock").style.display = "flex";
+          document.getElementById("add").style.display = "flex";
+          document.getElementById("more").style.display = "flex";
+          document.getElementById("minimize").style.display = "flex";
+          document.getElementById("close").style.display = "flex";
+          document.getElementById("menu").style.display = "flex";
+          document.getElementById("undo").style.display = "block";
+          document.getElementById("deletenote1").style.display = "block";
+          if (!e.target.matches("#menus")) {
+            let dropdowns = document.getElementById("menu-content");
+            if (dropdowns.classList.contains("show")) {
+              dropdowns.classList.remove("show");
+            }
+          }
+        },
+        true
+      );
+      document.addEventListener(
+        "blur",
+        () => {
+          document.getElementById("titlebar").style.height = "0";
+          document.getElementById("color").style.height = "0";
+          document.getElementById("lock").style.display = "none";
+          document.getElementById("add").style.display = "none";
+          document.getElementById("more").style.display = "none";
+          document.getElementById("minimize").style.display = "none";
+          document.getElementById("close").style.display = "none";
+          document.getElementById("menu").style.display = "none";
+          document.getElementById("redo").style.display = "none";
+          document.getElementById("undo").style.display = "none";
+          document.getElementById("deletenote1").style.display = "none";
+        },
+        true
+      );
     }
   }
 };

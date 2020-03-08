@@ -38,13 +38,6 @@ SOFTWARE.
           <div class="button" id="menus" title="Menu">
             <span id="menu" v-on:click="menu">&#xE712;</span>
             <div id="menu-content" class="dropdown-content">
-              <a
-                id="mouch"
-                title="Change Between Touch Mode And Typing Mode"
-                v-on:click="mouch"
-              >
-                <span>&#xE815;</span>Touch Mode
-              </a>
               <a title="Select Image" id="image1" v-on:click="clickimage">
                 <span>&#xEB9F;</span>Add Image
               </a>
@@ -100,85 +93,63 @@ export default {
         this.exportnote();
       }
     });
-    document.addEventListener("drop", e => {
-      if (document.getElementById("draw") != "block") {
-        let files = e.dataTransfer.files;
-        let images = [
-          "apng",
-          "bmp",
-          "ico",
-          "cur",
-          "jpg",
-          "jpeg",
-          "jfif",
-          "pjpeg",
-          "pjp",
-          "png",
-          "svg",
-          "webp"
-        ];
-        let audios = ["mp3", "MP3", "wav", "WAV", "ogg", "OGG"];
-        let videos = [
-          "mp4",
-          "MP4",
-          "webm",
-          "WEBM",
-          "WebM",
-          "ogg",
-          "OGG",
-          "Ogg"
-        ];
-        for (let file of files) {
-          images.forEach(image => {
-            if (new RegExp("." + image).test(file.path)) {
-              this.image(file.path);
-            }
-          });
-          videos.forEach(video => {
-            if (new RegExp("." + video).test(file.path)) {
-              this.video(file.path);
-            }
-          });
-          audios.forEach(audio => {
-            if (new RegExp("." + audio).test(file.path)) {
-              this.audio(file.path);
-            }
-          });
+    if (document.getElementById("lightYellow")) {
+      document.addEventListener("drop", e => {
+        if (document.getElementById("draw") != "block") {
+          let files = e.dataTransfer.files;
+          let images = [
+            "apng",
+            "bmp",
+            "ico",
+            "cur",
+            "jpg",
+            "jpeg",
+            "jfif",
+            "pjpeg",
+            "pjp",
+            "png",
+            "svg",
+            "webp"
+          ];
+          let audios = ["mp3", "MP3", "wav", "WAV", "ogg", "OGG"];
+          let videos = [
+            "mp4",
+            "MP4",
+            "webm",
+            "WEBM",
+            "WebM",
+            "ogg",
+            "OGG",
+            "Ogg"
+          ];
+          for (let file of files) {
+            images.forEach(image => {
+              if (new RegExp("." + image).test(file.path)) {
+                this.image(file.path);
+              }
+            });
+            videos.forEach(video => {
+              if (new RegExp("." + video).test(file.path)) {
+                this.video(file.path);
+              }
+            });
+            audios.forEach(audio => {
+              if (new RegExp("." + audio).test(file.path)) {
+                this.audio(file.path);
+              }
+            });
+          }
         }
-      }
-    });
+      });
+    } else {
+      document.getElementById("image1").style.display = "none";
+      document.getElementById("video1").style.display = "none";
+      document.getElementById("audio1").style.display = "none";
+    }
   },
 
   // Functions
   methods: {
-    // Canvace Mode
-    mouch() {
-      if (/Touch Mode/.test(document.getElementById("mouch").innerHTML)) {
-        document.getElementById("mouch").innerHTML =
-          "<span>&#xE765;</span>Typing Mode";
-        document.getElementById("lightYellow").style.display = "none";
-        document.getElementById("draw").style.display = "block";
-        document.querySelector(".upper-canvas").style.display = "block";
-        document.getElementById("image1").style.display = "none";
-        document.getElementById("video1").style.display = "none";
-        document.getElementById("audio1").style.display = "none";
-        document.getElementById("redo").style.visibility = "hidden";
-        document.getElementById("emoji").style.visibility = "hidden";
-      } else {
-        document.getElementById("mouch").innerHTML =
-          "<span>&#xE815;</span>Touch Mode";
-        document.getElementById("lightYellow").style.display = "block";
-        document.getElementById("draw").style.display = "none";
-        document.querySelector(".upper-canvas").style.display = "none";
-        document.getElementById("video1").style.display = "block";
-        document.getElementById("image1").style.display = "block";
-        document.getElementById("audio1").style.display = "block";
-        document.getElementById("candit").style.display = "none";
-        document.getElementById("redo").style.visibility = "visible";
-        document.getElementById("emoji").style.visibility = "visible";
-      }
-    },
-
     // Locking Note Function
     locks() {
       let id = document.getElementById("lock");
@@ -201,13 +172,17 @@ export default {
         select.style.pointerEvents = "none";
         select0.style.pointerEvents = "none";
         select1.style.pointerEvents = "none";
-        select2.style.pointerEvents = "none";
-        select3.style.display = "none";
+        if (document.querySelector(".ql-snow.ql-toolbar")) {
+          select2.style.pointerEvents = "none";
+          select3.style.display = "none";
+        }
         select4.style.display = "none";
         select5.style.pointerEvents = "none";
-        select6.style.pointerEvents = "none";
-        select7.style.display = "none";
-        select8.style.pointerEvents = "none";
+        if (document.getElementById("candit")) {
+          select6.style.pointerEvents = "none";
+          select7.style.display = "none";
+          select8.style.pointerEvents = "none";
+        }
         let clearint = window.setInterval(() => {
           document.getElementById("color").style.height = "0";
           document.getElementById("locks").style.marginLeft = "-35px";
@@ -216,20 +191,12 @@ export default {
           document.getElementById("minimize").style.display = "none";
           document.getElementById("close").style.display = "none";
           document.getElementById("menu").style.display = "none";
-          document.getElementsByClassName("emoji-mart")[0].style.visibility =
-            "hidden";
-          document.getElementById("emoji").style.display = "none";
-          document.getElementById("undo").style.display = "none";
           document.getElementById("redo").style.display = "none";
-          document.getElementById("deletenote1").style.display = "none";
+          if (document.getElementById("lightYellow")) {
+            document.getElementById("lightYellow").style.paddingTop = "30px";
+          }
           document.getElementById("undo").style.display = "none";
-          document.getElementById("redo").style.display = "none";
           document.getElementById("deletenote1").style.display = "none";
-          document.getElementById("undo").style.display = "none";
-          document.getElementById("redo").style.display = "none";
-          document.getElementById("deletenote1").style.display = "none";
-          document.getElementById("hideemoji").style.display = "none";
-          document.getElementById("lightYellow").style.paddingTop = "30px";
           if (
             document.getElementById("menu-content").classList.contains("show")
           ) {
@@ -245,9 +212,8 @@ export default {
             document.getElementById("minimize").style.display = "flex";
             document.getElementById("close").style.display = "flex";
             document.getElementById("menu").style.display = "flex";
-            document.getElementById("emoji").style.display = "block";
-            document.getElementById("undo").style.display = "block";
             document.getElementById("redo").style.display = "block";
+            document.getElementById("undo").style.display = "block";
             document.getElementById("deletenote1").style.display = "block";
             ipcRenderer.invoke("setMaximumSize", 100000, 100000);
             clearInterval(clearint);
@@ -259,20 +225,23 @@ export default {
         id.innerHTML = "&#xE785;";
         select0.style.pointerEvents = "auto";
         select1.style.pointerEvents = "auto";
-        select2.style.pointerEvents = "auto";
+        if (document.querySelector(".ql-snow.ql-toolbar")) {
+          select2.style.pointerEvents = "auto";
+        }
         select4.style.display = "flex";
         select5.style.pointerEvents = "auto";
-        select6.style.pointerEvents = "auto";
-        select8.style.pointerEvents = "auto";
+        if (document.getElementById("candit")) {
+          select6.style.pointerEvents = "auto";
+          select8.style.pointerEvents = "auto";
+        }
       }
     },
 
     // Edinting Option Show And Hide Function
     showedit() {
-      let select = document.querySelector(".ql-snow.ql-toolbar");
       let select0 = document.getElementById("color");
-      let select1 = document.getElementById("candit");
-      if (document.getElementById("draw").style.display != "block") {
+      if (document.querySelector(".ql-snow.ql-toolbar")) {
+        let select = document.querySelector(".ql-snow.ql-toolbar");
         if (select.style.display == "none" || select.style.display == "") {
           select.style.display = "block";
           select0.style.height = "0";
@@ -283,14 +252,13 @@ export default {
           document.getElementById("lightYellow").style.paddingTop = "30px";
         }
       } else {
+        let select1 = document.getElementById("candit");
         if (select1.style.display == "none" || select1.style.display == "") {
           select1.style.display = "block";
         } else {
           select1.style.display = "none";
         }
-        select.style.display = "none";
         select0.style.height = "40px";
-        document.getElementById("lightYellow").style.paddingTop = "30px";
       }
     },
 
@@ -305,19 +273,24 @@ export default {
       let note = await ipcRenderer.invoke("exportnote");
       if (note) {
         let data;
-        if (document.getElementById("draw").style.display != "block") {
+        let color;
+        if (document.querySelector(".ql-snow .ql-editor")) {
           data = document.querySelector(".ql-snow .ql-editor").innerHTML;
+          color = window
+            .getComputedStyle(document.getElementById("lightYellow"))
+            .getPropertyValue("background-color");
         } else {
           data = document.querySelector(".lower-canvas").toDataURL();
+          color = window
+            .getComputedStyle(document.getElementById("backc"))
+            .getPropertyValue("background-color");
         }
         let fs = require("fs");
         fs.writeFile(
           note,
           data +
             "\n" +
-            window
-              .getComputedStyle(document.getElementById("lightYellow"))
-              .getPropertyValue("background-color") +
+            color +
             "\n" +
             window
               .getComputedStyle(document.getElementById("titlebar"))
