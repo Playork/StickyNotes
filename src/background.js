@@ -207,7 +207,7 @@ ipcMain.on("create-new-instance", () => {
 
 ipcMain.handle("reload", event => {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    win.loadURL("http://localhost:8080/#/note");
+    win.loadURL("http://localhost:8080/#/home");
   } else {
     win.loadURL("app://./index.html#home");
   }

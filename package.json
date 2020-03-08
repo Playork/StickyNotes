@@ -11,7 +11,8 @@
     "start": "vue-cli-service electron:serve"
   },
   "dependencies": {
-    "dropbox": "^4.0.17",
+    "dropbox": "^4.0.30",
+    "jsdom": "^16.2.0",
     "quill": "latest",
     "sweetalert": "latest"
   },
