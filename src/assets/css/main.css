@@ -127,7 +127,8 @@ button {
   font-family: "segoe";
 }
 #theme,
-#spelllang {
+#spelllang,
+#mode {
   font-family: "Lobster";
   font-size: 15px;
   color: #fff;
@@ -142,7 +143,8 @@ button {
   box-shadow: rgba(0, 0, 0, 50%) 0 0.01px 5px;
 }
 #theme option,
-#spelllang option {
+#spelllang option,
+#mode option {
   margin: 10px;
 }
 #sync {

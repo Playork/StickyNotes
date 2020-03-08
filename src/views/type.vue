@@ -230,18 +230,8 @@ export default {
                   "#FFF2AB";
               } else {
                 let text = JSON.parse(r);
-                document.getElementById("mouch").click();
-                canvas.setBackgroundImage(
-                  text.image,
-                  canvas.renderAll.bind(canvas),
-                  {
-                    originX: "left",
-                    originY: "top"
-                  }
-                );
                 document.querySelector(".ql-snow .ql-editor").innerHTML =
                   text.first;
-
                 document.querySelector(".ql-toolbar").style.backgroundColor =
                   text.back;
                 window.resizeTo(Number(text.wid), Number(text.hei));

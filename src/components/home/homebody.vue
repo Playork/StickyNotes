@@ -365,7 +365,7 @@ export default {
   #about span {
     color: #000;
   }
-  #theme,#profile {
+  #theme,#profile,#mode,#spelllang {
     background: #fff;
     color: #000;
   }
@@ -430,7 +430,7 @@ export default {
   #about span {
     color: #000;
   }
-  #theme,#profile {
+  #theme,#profile,#mode,#spelllang {
     background: #fff;
     color: #000;
   }

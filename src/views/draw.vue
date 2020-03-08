@@ -211,7 +211,6 @@ export default {
                 window.resizeTo(300, 325);
               } else {
                 let text = JSON.parse(r);
-                document.getElementById("mouch").click();
                 canvas.setBackgroundImage(
                   text.image,
                   canvas.renderAll.bind(canvas),
@@ -496,6 +495,7 @@ export default {
       document.addEventListener(
         "focus",
         () => {
+          document.getElementById("redo").style.display = "block";
           document.getElementById("titlebar").style.height = "32px";
           document.getElementById("lock").style.display = "flex";
           document.getElementById("add").style.display = "flex";
@@ -511,6 +511,7 @@ export default {
       document.addEventListener(
         "click",
         e => {
+          document.getElementById("redo").style.display = "block";
           document.getElementById("titlebar").style.height = "32px";
           document.getElementById("lock").style.display = "flex";
           document.getElementById("add").style.display = "flex";
@@ -533,6 +534,7 @@ export default {
       document.addEventListener(
         "blur",
         () => {
+          document.getElementById("redo").style.display = "none";
           document.getElementById("titlebar").style.height = "0";
           document.getElementById("color").style.height = "0";
           document.getElementById("lock").style.display = "none";
