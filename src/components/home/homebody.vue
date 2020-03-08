@@ -307,7 +307,9 @@ export default {
 
         let { Dropbox } = require("dropbox");
         let dbx = new Dropbox({ fetch, clientId: "5wj57sidlrskuzl" });
-        let url = dbx.getAuthenticationUrl("app://./auth.html");
+        let url = dbx.getAuthenticationUrl(
+          "https://playork.github.io/StickyNotes/auth.html"
+        );
         document.getElementById("drb").addEventListener("click", () => {
           ipcRenderer.invoke("syncwindow", url);
         });
@@ -322,6 +324,7 @@ export default {
             e => {}
           );
         });
+
         window.setTimeout(() => {
           fs.readFile("data/theme", (e, d) => {
             if (e) {
