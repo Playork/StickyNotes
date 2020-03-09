@@ -571,7 +571,7 @@ export default {
                     }
                   });
                   window.setTimeout(() => {
-                    fs.rmdir(path);
+                    fs.rmdir(path, e => {});
                   }, 500);
                 });
               };

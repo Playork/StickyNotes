@@ -206,11 +206,7 @@ ipcMain.on("create-new-instance", () => {
 });
 
 ipcMain.handle("reload", () => {
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    win.loadURL("http://localhost:8080/#/home");
-  } else {
-    win.loadURL("app://./index.html#home");
-  }
+  win.reload()
 })
 
 ipcMain.handle("close", event => {
