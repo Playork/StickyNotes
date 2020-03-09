@@ -571,7 +571,7 @@ export default {
                     }
                   });
                   window.setTimeout(() => {
-                    fs.rmdir(path, e => {});
+                    fs.rmdirSync(path);
                   }, 500);
                 });
               };
