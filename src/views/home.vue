@@ -339,7 +339,6 @@ export default {
               });
             }
             let notes = "";
-
             fs.readdir("data/" + profile + "/notes/", function(e, files) {
               if (e) {
               } else {
@@ -351,7 +350,6 @@ export default {
               }
             });
             window.setTimeout(() => {
-              console.log(notes);
               if (accesst) {
                 let dbx = new Dropbox({ fetch, accessToken: accesst });
                 dbx
