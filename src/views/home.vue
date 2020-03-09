@@ -183,7 +183,7 @@ export default {
           document.getElementById("out").innerHTML = "";
           document.getElementById("drb").innerHTML = "Sync With Dropbox";
         } else {
-          accesst = d;
+          accesst = d.toString("utf8");
           document.getElementById("sign").innerHTML = "Signed In(Syncing)";
           document.getElementById("out").innerHTML = "Sign Out";
           document.getElementById("drb").innerHTML =
@@ -192,13 +192,10 @@ export default {
       });
 
       // Upload
-      window.setTimeout(async () => {
+      window.setTimeout(() => {
         let dbx = new Dropbox({ fetch, accessToken: accesst });
         let notes = "";
-        await fs.promises.readdir("data/" + profile + "/notes/", function(
-          e,
-          files
-        ) {
+        fs.readdir("data/" + profile + "/notes/", function(e, files) {
           if (e) {
           } else {
             files.forEach(function(key, index) {
@@ -215,8 +212,7 @@ export default {
               dbx
                 .filesUpload({
                   path: "/Playork Sticky Notes/notes.spst",
-                  contents: notes,
-                  mode: "overwrite"
+                  contents: notes
                 })
                 .catch(() => {});
             })
@@ -225,8 +221,7 @@ export default {
                 dbx
                   .filesUpload({
                     path: "/Playork Sticky Notes/notes.spst",
-                    contents: notes,
-                    mode: "overwrite"
+                    contents: notes
                   })
                   .catch(() => {});
               }
@@ -235,61 +230,63 @@ export default {
       }, 4000);
 
       // Sync Restore
-      let dbx = new Dropbox({ fetch, accessToken: accesst });
-      dbx
-        .filesGetTemporaryLink({ path: "/Playork Sticky Notes/notes.spst" })
-        .then(data => {
-          let https = require("https");
-          let file = fs.createWriteStream("notes.spst");
-          let request = https.get(data.link, function(response) {
-            response.pipe(file);
-            file.on("finish", function() {
-              file.close();
+      window.setTimeout(() => {
+        let dbx = new Dropbox({ fetch, accessToken: accesst });
+        dbx
+          .filesGetTemporaryLink({ path: "/Playork Sticky Notes/notes.spst" })
+          .then(data => {
+            let https = require("https");
+            let file = fs.createWriteStream("notes.spst");
+            let request = https.get(data.link, function(response) {
+              response.pipe(file);
+              file.on("finish", function() {
+                file.close();
+              });
             });
-          });
-          window.setTimeout(() => {
-            fs.readFile("./notes.spst", "binary", (e, d) => {
-              if (e) {
-                console.log(e);
-              } else {
-                if (d != "") {
-                  d = d.toString().split("\n");
-                  for (let i = 0; i < d.length; i++) {
-                    if (i % 2 == 0 && d[i] != "") {
-                      let js = JSON.parse(d[i + 1]);
-                      fs.readFile(
-                        "data/" + profile + "/notes/" + d[i],
-                        (e, d) => {
-                          if (e) {
-                            fs.writeFile(
-                              "data/" + profile + "/notes/" + id[i],
-                              JSON.stringify(js),
-                              e => {}
-                            );
-                          } else {
-                            d = JSON.parse(d);
-                            if (js.first != d.first || js.image != d.image) {
-                              let g = new Date().getTime();
-                              let id = Number(d[i]) * g;
+            window.setTimeout(() => {
+              fs.readFile("./notes.spst", "binary", (e, d) => {
+                if (e) {
+                  console.log(e);
+                } else {
+                  if (d != "") {
+                    d = d.toString().split("\n");
+                    for (let i = 0; i < d.length; i++) {
+                      if (i % 2 == 0 && d[i] != "") {
+                        let js = JSON.parse(d[i + 1]);
+                        fs.readFile(
+                          "data/" + profile + "/notes/" + d[i],
+                          (e, r) => {
+                            if (e) {
                               fs.writeFile(
-                                "data/" + profile + "/notes/" + id.toString(),
+                                "data/" + profile + "/notes/" + d[i],
                                 JSON.stringify(js),
                                 e => {}
                               );
+                            } else {
+                              r = JSON.parse(r);
+                              if (js.first != r.first || js.image != r.image) {
+                                let g = new Date().getTime();
+                                let id = Number(d[i]) * g;
+                                fs.writeFile(
+                                  "data/" + profile + "/notes/" + id.toString(),
+                                  JSON.stringify(js),
+                                  e => {}
+                                );
+                              }
                             }
                           }
-                        }
-                      );
+                        );
+                      }
                     }
                   }
                 }
-              }
-            });
-          }, 2000);
-        })
-        .catch(e => {
-          if (e) console.log(e);
-        });
+              });
+            }, 2000);
+          })
+          .catch(e => {
+            if (e) console.log(e);
+          });
+      }, 500);
 
       // close on app.quit()
       ipcRenderer.on("closeall", () => {
@@ -332,7 +329,7 @@ export default {
       });
 
       // Sync
-      fs.watch("data/" + profile + "/notes/", (e, r) => {
+      window.setInterval(() => {
         fs.readFile("data/" + profile + "/sync", async (e, p) => {
           if (e || JSON.parse(p).sync == "no") {
             if (!e) {
@@ -342,10 +339,8 @@ export default {
               });
             }
             let notes = "";
-            await fs.promises.readdir("data/" + profile + "/notes/", function(
-              e,
-              files
-            ) {
+
+            fs.readdir("data/" + profile + "/notes/", function(e, files) {
               if (e) {
               } else {
                 files.forEach(function(key, index) {
@@ -356,104 +351,27 @@ export default {
               }
             });
             window.setTimeout(() => {
-              fs.readFile("data/" + profile + "/.access", (e, d) => {
-                if (e) {
-                } else {
-                  let dbx = new Dropbox({ fetch, accessToken: accesst });
-                  dbx
-                    .filesUpload({
-                      path: "/Playork Sticky Notes/notes.spst",
-                      contents: notes,
-                      mode: "overwrite"
-                    })
-                    .catch(() => {});
-                }
-              });
+              console.log(notes);
+              if (accesst) {
+                let dbx = new Dropbox({ fetch, accessToken: accesst });
+                dbx
+                  .filesUpload({
+                    path: "/Playork Sticky Notes/notes.spst",
+                    contents: notes,
+                    mode: "overwrite"
+                  })
+                  .catch(() => {});
+              }
             }, 500);
           }
         });
-      });
+      }, 2000);
 
       // Load Saved Notes
       window.setInterval(() => {
-        fs.readFile("data/" + profile + "/sign", async e => {
+        fs.readFile("data/" + profile + "/sign", e => {
           if (e) {
           } else {
-            await fs.readFile("data/" + profile + "/sync", (e, r) => {
-              if (e) {
-              } else {
-                fs.writeFile(
-                  "data/" + profile + "/sync",
-                  JSON.stringify({ sync: "no" }),
-                  e => {}
-                );
-                let dbx = new Dropbox({ fetch, accessToken: accesst });
-                dbx
-                  .filesGetTemporaryLink({
-                    path: "/Playork Sticky Notes/notes.spst"
-                  })
-                  .then(data => {
-                    let https = require("https");
-                    let file = fs.createWriteStream("notes.spst");
-                    let request = https.get(data.link, function(response) {
-                      response.pipe(file);
-                      file.on("finish", function() {
-                        file.close();
-                      });
-                    });
-                    window.setTimeout(() => {
-                      fs.readFile("./notes.spst", "binary", (e, d) => {
-                        if (e) {
-                          console.log(e);
-                        } else {
-                          if (d != "") {
-                            d = d.toString().split("\n");
-                            for (let i = 0; i < d.length; i++) {
-                              if (i % 2 == 0 && d[i] != "") {
-                                let js = JSON.parse(d[i + 1]);
-                                fs.readFile(
-                                  "data/" + profile + "/notes/" + d[i],
-                                  (e, d) => {
-                                    if (e) {
-                                      fs.writeFile(
-                                        "data/" + profile + "/notes/" + d[i],
-                                        JSON.stringify(js),
-                                        e => {
-                                          console.log(e);
-                                        }
-                                      );
-                                    } else {
-                                      d = JSON.parse(d);
-                                      if (
-                                        js.first != d.first ||
-                                        js.image != d.image
-                                      ) {
-                                        let g = new Date().getTime();
-                                        let id = Number(d[i]) * g;
-                                        fs.writeFile(
-                                          "data/" +
-                                            profile +
-                                            "/notes/" +
-                                            id.toString(),
-                                          JSON.stringify(js),
-                                          e => {}
-                                        );
-                                      }
-                                    }
-                                  }
-                                );
-                              }
-                            }
-                          }
-                        }
-                      });
-                    }, 2000);
-                  })
-                  .catch(e => {
-                    if (e) console.log(e);
-                  });
-              }
-            });
             fs.readFile("data/" + profile + "/.access", (e, d) => {
               if (e) {
                 document.getElementById("sign").innerHTML =
@@ -461,8 +379,88 @@ export default {
                 document.getElementById("out").innerHTML = "";
                 document.getElementById("drb").innerHTML = "Sync With Dropbox";
               } else {
-                if (d != accesst) {
-                  accesst = d;
+                if (accesst != d.toString("utf8")) {
+                  accesst = d.toString("utf8");
+                  fs.readFile("data/" + profile + "/sync", (e, r) => {
+                    if (e) {
+                    } else {
+                      fs.writeFile(
+                        "data/" + profile + "/sync",
+                        JSON.stringify({ sync: "no" }),
+                        e => {}
+                      );
+                      let dbx = new Dropbox({ fetch, accessToken: accesst });
+                      dbx
+                        .filesGetTemporaryLink({
+                          path: "/Playork Sticky Notes/notes.spst"
+                        })
+                        .then(data => {
+                          let https = require("https");
+                          let file = fs.createWriteStream("notes.spst");
+                          let request = https.get(data.link, function(
+                            response
+                          ) {
+                            response.pipe(file);
+                            file.on("finish", function() {
+                              file.close();
+                            });
+                          });
+                          window.setTimeout(() => {
+                            fs.readFile("./notes.spst", "binary", (e, d) => {
+                              if (e) {
+                                console.log(e);
+                              } else {
+                                if (d != "") {
+                                  d = d.toString().split("\n");
+                                  for (let i = 0; i < d.length; i++) {
+                                    if (i % 2 == 0 && d[i] != "") {
+                                      let js = JSON.parse(d[i + 1]);
+                                      fs.readFile(
+                                        "data/" + profile + "/notes/" + d[i],
+                                        (e, r) => {
+                                          if (e) {
+                                            fs.writeFile(
+                                              "data/" +
+                                                profile +
+                                                "/notes/" +
+                                                d[i],
+                                              JSON.stringify(js),
+                                              e => {
+                                                console.log(e);
+                                              }
+                                            );
+                                          } else {
+                                            r = JSON.parse(r);
+                                            if (
+                                              js.first != r.first ||
+                                              js.image != r.image
+                                            ) {
+                                              let g = new Date().getTime();
+                                              let id = Number(d[i]) * g;
+                                              fs.writeFile(
+                                                "data/" +
+                                                  profile +
+                                                  "/notes/" +
+                                                  id.toString(),
+                                                JSON.stringify(js),
+                                                e => {}
+                                              );
+                                            }
+                                          }
+                                        }
+                                      );
+                                    }
+                                  }
+                                }
+                              }
+                            });
+                          }, 2000);
+                        })
+                        .catch(e => {
+                          if (e) console.log(e);
+                        });
+                    }
+                  });
                   document.getElementById("sign").innerHTML =
                     "Signed In(Syncing)";
                   document.getElementById("out").innerHTML = "Sign Out";
@@ -655,7 +653,7 @@ export default {
     note() {
       fs.readFile("data/profile", (e, d) => {
         let profile = d;
-        let func = async obj => {
+        let func = obj => {
           obj++;
           fs.writeFile(
             "data/" + profile + "/id",
