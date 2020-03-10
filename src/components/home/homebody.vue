@@ -773,79 +773,73 @@ export default {
             if (error) {
               fs.readFile("data/" + profile + "/.pass", (e, d) => {
                 let swal = require("sweetalert");
-                if (e) {
-                  swal({
-                    title: "Create Password For Protection(Recommend)",
-                    text: "If You Want No Password Leave This Input Blank",
-                    content: {
-                      element: "input",
-                      attributes: {
-                        placeholder: "Type your password",
-                        type: "password"
-                      }
-                    },
-                    closeOnClickOutside: false
-                  }).then(value => {
-                    if (value) {
-                      fs.writeFile(
-                        "data/" + profile + "/.pass",
-                        value,
-                        e => {}
-                      );
-                    } else {
-                      fs.writeFile("data/" + profile + "/pass", "", e => {});
+                swal({
+                  title: "Type Password To Enter",
+                  content: {
+                    element: "input",
+                    attributes: {
+                      placeholder: "Type your password",
+                      type: "password"
                     }
-                  });
+                  },
+                  closeOnClickOutside: false
+                }).then(value => {
+                  if (value == d) {
+                    swal({
+                      title: "Change Password",
+                      text:
+                        "If You Do Not Want To Change Password Leave This Input Blank",
+                      content: {
+                        element: "input",
+                        attributes: {
+                          placeholder: "Type your password",
+                          type: "password"
+                        }
+                      },
+                      closeOnClickOutside: false
+                    }).then(value => {
+                      if (value) {
+                        fs.writeFile(
+                          "data/" + profile + "/.pass",
+                          value,
+                          e => {}
+                        );
+                      } else {
+                      }
+                    });
+                  } else {
+                    swal({
+                      title: "Wrong Password",
+                      text: "Do You Do Not Want To Change Password?",
+                      icon: "warning",
+                      buttons: true,
+                      dangerMode: true
+                    }).then(ok => {
+                      if (ok) {
+                      } else {
+                        pass();
+                      }
+                    });
+                  }
+                });
+              });
+            } else {
+              swal({
+                title: "Create Password For Protection(Recommend)",
+                text: "If You Want No Password Leave This Input Blank",
+                content: {
+                  element: "input",
+                  attributes: {
+                    placeholder: "Type your password",
+                    type: "password"
+                  }
+                },
+                closeOnClickOutside: false
+              }).then(value => {
+                if (value) {
+                  fs.writeFile("data/" + profile + "/.pass", value, e => {});
                 } else {
-                  swal({
-                    title: "Type Password To Enter",
-                    content: {
-                      element: "input",
-                      attributes: {
-                        placeholder: "Type your password",
-                        type: "password"
-                      }
-                    },
-                    closeOnClickOutside: false
-                  }).then(value => {
-                    if (value == d) {
-                      swal({
-                        title: "Change Password",
-                        text:
-                          "If You Do Not Want To Change Password Leave This Input Blank",
-                        content: {
-                          element: "input",
-                          attributes: {
-                            placeholder: "Type your password",
-                            type: "password"
-                          }
-                        },
-                        closeOnClickOutside: false
-                      }).then(value => {
-                        if (value) {
-                          fs.writeFile(
-                            "data/" + profile + "/.pass",
-                            value,
-                            e => {}
-                          );
-                        } else {
-                        }
-                      });
-                    } else {
-                      swal({
-                        title: "Wrong Password",
-                        text: "Do You Do Not Want To Change Password?",
-                        icon: "warning",
-                        buttons: true,
-                        dangerMode: true
-                      }).then(ok => {
-                        if (ok) {
-                        } else {
-                          pass();
-                        }
-                      });
-                    }
-                  });
+                  fs.writeFile("data/" + profile + "/pass", "", e => {});
                 }
               });
             }
