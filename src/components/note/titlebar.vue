@@ -152,38 +152,40 @@ export default {
   methods: {
     // Locking Note Function
     locks() {
-      let id = document.getElementById("lock");
-      let select = document.getElementById("close-button");
-      let select0 = document.getElementById("show");
-      let select1 = document.getElementById("color");
-      let select2 = document.getElementById("editor");
-      let select3 = document.querySelector(".ql-snow.ql-toolbar");
-      let select4 = document.getElementById("window-title1");
-      let select5 = document.getElementById("menus");
-      let select6 = document.getElementById("draw");
-      let select7 = document.getElementById("candit");
-      let select8 = document.querySelector(".upper-canvas");
-      if (
-        select.style.pointerEvents == "auto" ||
-        select.style.pointerEvents == ""
-      ) {
-        let { ipcRenderer } = require("electron");
-        id.innerHTML = "&#xE72E;";
-        select.style.pointerEvents = "none";
-        select0.style.pointerEvents = "none";
-        select1.style.pointerEvents = "none";
-        if (document.querySelector(".ql-snow.ql-toolbar")) {
-          select2.style.pointerEvents = "none";
-          select3.style.display = "none";
-        }
-        select4.style.display = "none";
-        select5.style.pointerEvents = "none";
-        if (document.getElementById("candit")) {
-          select6.style.pointerEvents = "none";
-          select7.style.display = "none";
-          select8.style.pointerEvents = "none";
-        }
-        let clearint = window.setInterval(() => {
+      let fs = require("fs");
+      fs.readFile("data/profile", async (e, d) => {
+        let profile = d;
+        let id = document.getElementById("lock");
+        let select = document.getElementById("close-button");
+        let select0 = document.getElementById("show");
+        let select1 = document.getElementById("color");
+        let select2 = document.getElementById("editor");
+        let select3 = document.querySelector(".ql-snow.ql-toolbar");
+        let select4 = document.getElementById("window-title1");
+        let select5 = document.getElementById("menus");
+        let select6 = document.getElementById("draw");
+        let select7 = document.getElementById("candit");
+        let select8 = document.querySelector(".upper-canvas");
+        if (
+          select.style.pointerEvents == "auto" ||
+          select.style.pointerEvents == ""
+        ) {
+          let { ipcRenderer } = require("electron");
+          id.innerHTML = "&#xE72E;";
+          select.style.pointerEvents = "none";
+          select0.style.pointerEvents = "none";
+          select1.style.pointerEvents = "none";
+          if (document.querySelector(".ql-snow.ql-toolbar")) {
+            select2.style.pointerEvents = "none";
+            select3.style.display = "none";
+          }
+          select4.style.display = "none";
+          select5.style.pointerEvents = "none";
+          if (document.getElementById("candit")) {
+            select6.style.pointerEvents = "none";
+            select7.style.display = "none";
+            select8.style.pointerEvents = "none";
+          }
           document.getElementById("color").style.height = "0";
           document.getElementById("locks").style.marginLeft = "-35px";
           document.getElementById("add").style.display = "none";
@@ -202,39 +204,97 @@ export default {
           ) {
             document.getElementById("menu-content").classList.remove("show");
           }
-
           ipcRenderer.invoke("setMaximumSize", 300, 325);
-          if (select.style.pointerEvents == "auto") {
-            document.getElementById("color").style.height = "40px";
-            document.getElementById("locks").style.marginLeft = "0";
-            document.getElementById("add").style.display = "flex";
-            document.getElementById("more").style.display = "flex";
-            document.getElementById("minimize").style.display = "flex";
-            document.getElementById("close").style.display = "flex";
-            document.getElementById("menu").style.display = "flex";
-            document.getElementById("redo").style.display = "block";
-            document.getElementById("undo").style.display = "block";
-            document.getElementById("deletenote1").style.display = "block";
-            ipcRenderer.invoke("setMaximumSize", 100000, 100000);
-            clearInterval(clearint);
-          }
-        }, 0.001);
-        clearint;
-      } else {
-        select.style.pointerEvents = "auto";
-        id.innerHTML = "&#xE785;";
-        select0.style.pointerEvents = "auto";
-        select1.style.pointerEvents = "auto";
-        if (document.querySelector(".ql-snow.ql-toolbar")) {
-          select2.style.pointerEvents = "auto";
+        } else {
+          let pass = () => {
+            fs.readFile("data/" + profile + "/pass", (error, data) => {
+              if (error) {
+                fs.readFile("data/" + profile + "/.pass", (e, d) => {
+                  let swal = require("sweetalert");
+                  swal({
+                    title: "Type Password To Unlock",
+                    content: {
+                      element: "input",
+                      attributes: {
+                        placeholder: "Type your password",
+                        type: "password"
+                      }
+                    },
+                    closeOnClickOutside: false
+                  }).then(value => {
+                    if (value == d) {
+                      document.getElementById("color").style.height = "40px";
+                      document.getElementById("locks").style.marginLeft = "0";
+                      document.getElementById("add").style.display = "flex";
+                      document.getElementById("more").style.display = "flex";
+                      document.getElementById("minimize").style.display =
+                        "flex";
+                      document.getElementById("close").style.display = "flex";
+                      document.getElementById("menu").style.display = "flex";
+                      document.getElementById("redo").style.display = "block";
+                      document.getElementById("undo").style.display = "block";
+                      document.getElementById("deletenote1").style.display =
+                        "block";
+                      id.innerHTML = "&#xE785;";
+                      select0.style.pointerEvents = "auto";
+                      select.style.pointerEvents = "auto";
+                      select1.style.pointerEvents = "auto";
+                      if (document.querySelector(".ql-snow.ql-toolbar")) {
+                        select2.style.pointerEvents = "auto";
+                      }
+                      select4.style.display = "flex";
+                      select5.style.pointerEvents = "auto";
+                      if (document.getElementById("candit")) {
+                        select6.style.pointerEvents = "auto";
+                        select8.style.pointerEvents = "auto";
+                      }
+                      ipcRenderer.invoke("setMaximumSize", 100000, 100000);
+                    } else {
+                      swal({
+                        title: "Wrong Password",
+                        text: "Do You Want To Cancel?",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true
+                      }).then(ok => {
+                        if (!ok) {
+                          pass();
+                        }
+                      });
+                    }
+                  });
+                });
+              } else {
+                document.getElementById("color").style.height = "40px";
+                document.getElementById("locks").style.marginLeft = "0";
+                document.getElementById("add").style.display = "flex";
+                document.getElementById("more").style.display = "flex";
+                document.getElementById("minimize").style.display = "flex";
+                document.getElementById("close").style.display = "flex";
+                document.getElementById("menu").style.display = "flex";
+                document.getElementById("redo").style.display = "block";
+                document.getElementById("undo").style.display = "block";
+                document.getElementById("deletenote1").style.display = "block";
+                id.innerHTML = "&#xE785;";
+                select0.style.pointerEvents = "auto";
+                select.style.pointerEvents = "auto";
+                select1.style.pointerEvents = "auto";
+                if (document.querySelector(".ql-snow.ql-toolbar")) {
+                  select2.style.pointerEvents = "auto";
+                }
+                select4.style.display = "flex";
+                select5.style.pointerEvents = "auto";
+                if (document.getElementById("candit")) {
+                  select6.style.pointerEvents = "auto";
+                  select8.style.pointerEvents = "auto";
+                }
+                ipcRenderer.invoke("setMaximumSize", 100000, 100000);
+              }
+            });
+          };
+          pass();
         }
-        select4.style.display = "flex";
-        select5.style.pointerEvents = "auto";
-        if (document.getElementById("candit")) {
-          select6.style.pointerEvents = "auto";
-          select8.style.pointerEvents = "auto";
-        }
-      }
+      });
     },
 
     // Edinting Option Show And Hide Function

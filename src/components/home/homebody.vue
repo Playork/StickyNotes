@@ -562,21 +562,27 @@ export default {
               await fs.promises.writeFile("data/profile", "default", e => {});
               let deleteFolder = path => {
                 fs.readdir(path, (e, files) => {
-                  files.forEach(file => {
-                    let curPath = path + "/" + file;
-                    if (fs.lstatSync(curPath).isDirectory()) {
-                      deleteFolder(curPath);
-                    } else {
-                      fs.unlink(curPath, e => {});
-                    }
-                  });
-                  window.setTimeout(() => {
-                    fs.rmdirSync(path);
-                  }, 500);
+                  if (e) {
+                    fs.rmdir(path, e => {});
+                  } else {
+                    files.forEach(file => {
+                      let curPath = path + "/" + file;
+                      if (fs.lstatSync(curPath).isDirectory()) {
+                        deleteFolder(curPath);
+                      } else {
+                        fs.unlink(curPath, e => {});
+                      }
+                    });
+                    window.setTimeout(() => {
+                      fs.rmdir(path, e => {});
+                    }, 500);
+                  }
                 });
               };
               deleteFolder("data/" + d);
-              ipcRenderer.invoke("reload");
+              window.setTimeout(() => {
+                ipcRenderer.invoke("reload");
+              }, 2000);
             }
           });
         }

@@ -827,50 +827,54 @@ export default {
       document.addEventListener(
         "focus",
         () => {
-          document.getElementById("titlebar").style.height = "32px";
-          document.getElementById("lightYellow").style.paddingTop = "30px";
-          if (
-            document.querySelector(".ql-snow.ql-toolbar").style.display !=
-            "block"
-          ) {
-            document.getElementById("color").style.height = "40px";
+          if (document.getElementById("lock") == "&#xE785;") {
+            document.getElementById("titlebar").style.height = "32px";
+            document.getElementById("lightYellow").style.paddingTop = "30px";
+            if (
+              document.querySelector(".ql-snow.ql-toolbar").style.display !=
+              "block"
+            ) {
+              document.getElementById("color").style.height = "40px";
+            }
+            document.getElementById("redo").style.display = "block";
+            document.getElementById("lock").style.display = "flex";
+            document.getElementById("add").style.display = "flex";
+            document.getElementById("more").style.display = "flex";
+            document.getElementById("minimize").style.display = "flex";
+            document.getElementById("close").style.display = "flex";
+            document.getElementById("menu").style.display = "flex";
+            document.getElementById("undo").style.display = "block";
+            document.getElementById("deletenote1").style.display = "block";
           }
-          document.getElementById("redo").style.display = "block";
-          document.getElementById("lock").style.display = "flex";
-          document.getElementById("add").style.display = "flex";
-          document.getElementById("more").style.display = "flex";
-          document.getElementById("minimize").style.display = "flex";
-          document.getElementById("close").style.display = "flex";
-          document.getElementById("menu").style.display = "flex";
-          document.getElementById("undo").style.display = "block";
-          document.getElementById("deletenote1").style.display = "block";
         },
         true
       );
       document.addEventListener(
         "click",
         e => {
-          document.getElementById("titlebar").style.height = "32px";
-          document.getElementById("lightYellow").style.paddingTop = "30px";
-          if (
-            document.querySelector(".ql-snow.ql-toolbar").style.display !=
-            "block"
-          ) {
-            document.getElementById("color").style.height = "40px";
-          }
-          document.getElementById("redo").style.display = "block";
-          document.getElementById("lock").style.display = "flex";
-          document.getElementById("add").style.display = "flex";
-          document.getElementById("more").style.display = "flex";
-          document.getElementById("minimize").style.display = "flex";
-          document.getElementById("close").style.display = "flex";
-          document.getElementById("menu").style.display = "flex";
-          document.getElementById("undo").style.display = "block";
-          document.getElementById("deletenote1").style.display = "block";
-          if (!e.target.matches("#menus")) {
-            let dropdowns = document.getElementById("menu-content");
-            if (dropdowns.classList.contains("show")) {
-              dropdowns.classList.remove("show");
+          if (document.getElementById("lock") == "&#xE785;") {
+            document.getElementById("titlebar").style.height = "32px";
+            document.getElementById("lightYellow").style.paddingTop = "30px";
+            if (
+              document.querySelector(".ql-snow.ql-toolbar").style.display !=
+              "block"
+            ) {
+              document.getElementById("color").style.height = "40px";
+            }
+            document.getElementById("redo").style.display = "block";
+            document.getElementById("lock").style.display = "flex";
+            document.getElementById("add").style.display = "flex";
+            document.getElementById("more").style.display = "flex";
+            document.getElementById("minimize").style.display = "flex";
+            document.getElementById("close").style.display = "flex";
+            document.getElementById("menu").style.display = "flex";
+            document.getElementById("undo").style.display = "block";
+            document.getElementById("deletenote1").style.display = "block";
+            if (!e.target.matches("#menus")) {
+              let dropdowns = document.getElementById("menu-content");
+              if (dropdowns.classList.contains("show")) {
+                dropdowns.classList.remove("show");
+              }
             }
           }
         },
@@ -879,17 +883,19 @@ export default {
       document.addEventListener(
         "blur",
         () => {
-          document.getElementById("titlebar").style.height = "0";
-          document.getElementById("color").style.height = "0";
-          document.getElementById("lock").style.display = "none";
-          document.getElementById("add").style.display = "none";
-          document.getElementById("more").style.display = "none";
-          document.getElementById("minimize").style.display = "none";
-          document.getElementById("close").style.display = "none";
-          document.getElementById("menu").style.display = "none";
-          document.getElementById("redo").style.display = "none";
-          document.getElementById("undo").style.display = "none";
-          document.getElementById("deletenote1").style.display = "none";
+          if (document.getElementById("lock") == "&#xE785;") {
+            document.getElementById("titlebar").style.height = "0";
+            document.getElementById("color").style.height = "0";
+            document.getElementById("lock").style.display = "none";
+            document.getElementById("add").style.display = "none";
+            document.getElementById("more").style.display = "none";
+            document.getElementById("minimize").style.display = "none";
+            document.getElementById("close").style.display = "none";
+            document.getElementById("menu").style.display = "none";
+            document.getElementById("redo").style.display = "none";
+            document.getElementById("undo").style.display = "none";
+            document.getElementById("deletenote1").style.display = "none";
+          }
         },
         true
       );
