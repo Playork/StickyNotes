@@ -827,7 +827,7 @@ export default {
       document.addEventListener(
         "focus",
         () => {
-          if (document.getElementById("lock").innerHTML == "&#xE785;") {
+          if (document.getElementById("color").style.pointerEvents != "none") {
             document.getElementById("titlebar").style.height = "32px";
             document.getElementById("lightYellow").style.paddingTop = "30px";
             if (
@@ -852,7 +852,7 @@ export default {
       document.addEventListener(
         "click",
         e => {
-          if (document.getElementById("lock").innerHTML == "&#xE785;") {
+          if (document.getElementById("color").style.pointerEvents != "none") {
             document.getElementById("titlebar").style.height = "32px";
             document.getElementById("lightYellow").style.paddingTop = "30px";
             if (
@@ -883,7 +883,7 @@ export default {
       document.addEventListener(
         "blur",
         () => {
-          if (document.getElementById("lock").innerHTML == "&#xE785;") {
+          if (document.getElementById("color").style.pointerEvents != "none") {
             document.getElementById("titlebar").style.height = "0";
             document.getElementById("color").style.height = "0";
             document.getElementById("lock").style.display = "none";

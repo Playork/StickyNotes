@@ -56,10 +56,8 @@ export default {
   mounted() {
     if (!fs.existsSync("data")) {
       fs.mkdir("data", e => {});
-      if (!fs.existsSync("data/default")) {
-        fs.mkdir("data/default", e => {});
-        fs.mkdir("data/default/notes/", e => {});
-      }
+      fs.mkdir("data/default", e => {});
+      fs.mkdir("data/default/notes/", e => {});
     }
 
     //  Profile

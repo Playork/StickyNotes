@@ -543,48 +543,111 @@ export default {
     deleteprofile() {
       let swal = require("sweetalert");
       fs.readFile("data/profile", (e, d) => {
+        let profile = d;
         if (d == "default") {
           swal("Can't Delete Default Profile");
         } else {
-          swal({
-            title: "Are You Sure?",
-            text: "Do You Want To Delete This Profile?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true
-          }).then(async ok => {
-            if (ok) {
-              await fs.promises.writeFile(
-                "data/" + d + "/closed",
-                JSON.stringify({ closed: "yes" }),
-                e => {}
-              );
-              await fs.promises.writeFile("data/profile", "default", e => {});
-              let deleteFolder = path => {
-                fs.readdir(path, (e, files) => {
-                  if (e) {
-                    fs.rmdir(path, e => {});
-                  } else {
-                    files.forEach(file => {
-                      let curPath = path + "/" + file;
-                      if (fs.lstatSync(curPath).isDirectory()) {
-                        deleteFolder(curPath);
-                      } else {
-                        fs.unlink(curPath, e => {});
+          let pass = () => {
+            fs.readFile("data/" + profile + "/pass", async (error, data) => {
+              if (error) {
+                fs.readFile("data/" + profile + "/.pass", (e, r) => {
+                  swal({
+                    title: "Type Password To Delete",
+                    content: {
+                      element: "input",
+                      attributes: {
+                        placeholder: "Type your password",
+                        type: "password"
                       }
-                    });
-                    window.setTimeout(() => {
-                      fs.rmdir(path, e => {});
-                    }, 500);
-                  }
+                    },
+                    closeOnClickOutside: false
+                  }).then(async value => {
+                    if (value == r) {
+                      await fs.promises.writeFile(
+                        "data/" + d + "/closed",
+                        JSON.stringify({ closed: "yes" }),
+                        e => {}
+                      );
+                      await fs.promises.writeFile(
+                        "data/profile",
+                        "default",
+                        e => {}
+                      );
+                      let deleteFolder = path => {
+                        fs.readdir(path, (e, files) => {
+                          if (e) {
+                            fs.rmdir(path, e => {});
+                          } else {
+                            files.forEach(file => {
+                              let curPath = path + "/" + file;
+                              if (fs.lstatSync(curPath).isDirectory()) {
+                                deleteFolder(curPath);
+                              } else {
+                                fs.unlink(curPath, e => {});
+                              }
+                            });
+                            window.setTimeout(() => {
+                              fs.rmdir(path, e => {});
+                            }, 500);
+                          }
+                        });
+                      };
+                      deleteFolder("data/" + d);
+                      window.setTimeout(() => {
+                        ipcRenderer.invoke("reload");
+                      }, 2000);
+                    } else {
+                      swal({
+                        title: "Wrong Password",
+                        text: "Do You Do Not Want To Delete Profile?",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true
+                      }).then(ok => {
+                        if (ok) {
+                        } else {
+                          pass();
+                        }
+                      });
+                    }
+                  });
                 });
-              };
-              deleteFolder("data/" + d);
-              window.setTimeout(() => {
-                ipcRenderer.invoke("reload");
-              }, 2000);
-            }
-          });
+              } else {
+                await fs.promises.writeFile(
+                  "data/" + d + "/closed",
+                  JSON.stringify({ closed: "yes" }),
+                  e => {}
+                );
+                await fs.promises.writeFile("data/profile", "default", e => {});
+                let deleteFolder = path => {
+                  fs.readdir(path, (e, files) => {
+                    if (e) {
+                      fs.rmdir(path, e => {});
+                    } else {
+                      files.forEach(file => {
+                        let curPath = path + "/" + file;
+                        if (fs.lstatSync(curPath).isDirectory()) {
+                          deleteFolder(curPath);
+                        } else {
+                          fs.unlink(curPath, e => {});
+                        }
+                      });
+                      window.setTimeout(() => {
+                        fs.rmdir(path, e => {});
+                        if (path == `data/${d}`) {
+                          window.setTimeout(() => {
+                            ipcRenderer.invoke("reload");
+                          }, 500);
+                        }
+                      }, 500);
+                    }
+                  });
+                };
+                deleteFolder("data/" + d);
+              }
+            });
+          };
+          pass();
         }
       });
     },
@@ -766,13 +829,13 @@ export default {
 
     // Change Password
     pass() {
+      let swal = require("sweetalert");
       fs.readFile("data/profile", (e, d) => {
         let profile = d;
         let pass = () => {
           fs.readFile("data/" + profile + "/pass", (error, data) => {
             if (error) {
               fs.readFile("data/" + profile + "/.pass", (e, d) => {
-                let swal = require("sweetalert");
                 swal({
                   title: "Type Password To Enter",
                   content: {
@@ -804,7 +867,7 @@ export default {
                           value,
                           e => {}
                         );
-                      } else {
+                        fs.unlink("data/" + profile + "/pass", e => {});
                       }
                     });
                   } else {
@@ -838,8 +901,7 @@ export default {
               }).then(value => {
                 if (value) {
                   fs.writeFile("data/" + profile + "/.pass", value, e => {});
-                } else {
-                  fs.writeFile("data/" + profile + "/pass", "", e => {});
+                  fs.unlink("data/" + profile + "/pass", e => {});
                 }
               });
             }
