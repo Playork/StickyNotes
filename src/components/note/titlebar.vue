@@ -205,6 +205,7 @@ export default {
             document.getElementById("menu-content").classList.remove("show");
           }
           ipcRenderer.invoke("setMaximumSize", 300, 325);
+          ipcRenderer.invoke("lock");
         } else {
           let pass = () => {
             fs.readFile("data/" + profile + "/pass", (error, data) => {

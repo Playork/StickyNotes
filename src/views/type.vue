@@ -349,59 +349,65 @@ export default {
           }
         };
         window.onbeforeunload = async e => {
-          e.returnValue = true;
-          let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
-          let color1 = window
-            .getComputedStyle(document.getElementById("lightYellow"))
-            .getPropertyValue("background-color");
-          let color2 = window
-            .getComputedStyle(document.getElementById("titlebar"))
-            .getPropertyValue("background-color");
-          let winwidth = window.innerWidth.toString();
-          let winheight = window.innerHeight.toString();
-          let lock;
-          if (
-            document.getElementById("close-button").style.pointerEvents ==
-            "none"
-          ) {
-            lock = "yes";
-          } else {
-            lock = "no";
-          }
-          fs.readFile(
-            "data/" + profile + "/notes/" + obj.toString(),
-            (e, d) => {
-              if (e || JSON.parse(d).deleted == "no") {
-                if (
-                  document.querySelector(".ql-snow .ql-editor").innerHTML !=
-                  "<p><br></p>"
-                ) {
-                  fs.writeFile(
-                    "data/" + profile + "/notes/" + obj.toString(),
-                    JSON.stringify({
-                      first: text,
-                      back: color1,
-                      title: color2,
-                      wid: winwidth,
-                      hei: winheight,
-                      deleted: "no",
-                      closed: "yes",
-                      locked: lock
-                    }),
-                    e => {
-                      ipcRenderer.invoke("destroy");
-                    }
-                  );
-                } else {
-                  fs.unlink(
-                    "data/" + profile + "/notes/" + obj.toString(),
-                    e => {}
-                  );
-                  ipcRenderer.invoke("destroy");
+          if (document.getElementById("color").style.pointerEvents != "none") {
+            e.returnValue = true;
+            let text = document.querySelector(".ql-snow .ql-editor").innerHTML;
+            let color1 = window
+              .getComputedStyle(document.getElementById("lightYellow"))
+              .getPropertyValue("background-color");
+            let color2 = window
+              .getComputedStyle(document.getElementById("titlebar"))
+              .getPropertyValue("background-color");
+            let winwidth = window.innerWidth.toString();
+            let winheight = window.innerHeight.toString();
+            let lock;
+            if (
+              document.getElementById("close-button").style.pointerEvents ==
+              "none"
+            ) {
+              lock = "yes";
+            } else {
+              lock = "no";
+            }
+            fs.readFile(
+              "data/" + profile + "/notes/" + obj.toString(),
+              (e, d) => {
+                if (e || JSON.parse(d).deleted == "no") {
+                  if (
+                    document.querySelector(".ql-snow .ql-editor").innerHTML !=
+                    "<p><br></p>"
+                  ) {
+                    fs.writeFile(
+                      "data/" + profile + "/notes/" + obj.toString(),
+                      JSON.stringify({
+                        first: text,
+                        back: color1,
+                        title: color2,
+                        wid: winwidth,
+                        hei: winheight,
+                        deleted: "no",
+                        closed: "yes",
+                        locked: lock
+                      }),
+                      e => {
+                        ipcRenderer.invoke("destroy");
+                      }
+                    );
+                  } else {
+                    fs.unlink(
+                      "data/" + profile + "/notes/" + obj.toString(),
+                      e => {}
+                    );
+                    ipcRenderer.invoke("destroy");
+                  }
                 }
               }
-            }
-          );
+            );
+          } else {
+            e.preventDefault();
+            let swal = require("sweetalert");
+            swal("Can't Close Note Is Locked");
+          }
         };
         fs.watch("data/" + profile + "/notes/", (e, r) => {
           fs.readFile(
