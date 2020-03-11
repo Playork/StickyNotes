@@ -209,6 +209,14 @@ ipcMain.handle("reload", () => {
   win.reload()
 })
 
+ipcMain.handle("lock", event => {
+  BrowserWindow.getAllWindows().forEach((b) => {
+    if (b.webContents == event.sender.webContents) {
+      b.webContents.send("lock")
+    }
+  })
+})
+
 ipcMain.handle("close", event => {
   BrowserWindow.getAllWindows().forEach((b) => {
     if (b.webContents == event.sender.webContents) {

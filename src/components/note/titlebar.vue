@@ -249,6 +249,7 @@ export default {
                         select8.style.pointerEvents = "auto";
                       }
                       ipcRenderer.invoke("setMaximumSize", 100000, 100000);
+                      ipcRenderer.invoke("lock");
                     } else {
                       swal({
                         title: "Wrong Password",
@@ -289,6 +290,7 @@ export default {
                   select8.style.pointerEvents = "auto";
                 }
                 ipcRenderer.invoke("setMaximumSize", 100000, 100000);
+                ipcRenderer.invoke("lock");
               }
             });
           };

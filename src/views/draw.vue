@@ -403,10 +403,8 @@ export default {
         document
           .getElementById("changec")
           .addEventListener("click", () => repeafunc());
-        document
-          .getElementById("locks")
-          .addEventListener("click", () => repeafunc());
         window.addEventListener("resize", () => repeafunc());
+        ipcRenderer.on("lock", () => repeafunc());
         document
           .getElementById("note")
           .addEventListener("mousemove", () => repeafunc(), false);
