@@ -173,7 +173,7 @@ let createNote = (url) => {
                 menu.append(new MenuItem({ type: "separator" }));
               }
             }
-            if (pisEditable) {
+            if (p.isEditable) {
               if (p.editFlags.canCopy) {
                 menu.append(new MenuItem({ label: "Search With Google", click: () => { shell.openExternal(`https://www.google.com/search?q=${p.selectionText}`) } }));
                 menu.append(new MenuItem({ type: "separator" }));
