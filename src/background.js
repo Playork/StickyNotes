@@ -21,7 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 "use strict";
-let { app, BrowserWindow, ipcMain, Menu, MenuItem, globalShortcut } = require("electron");
+let { app, BrowserWindow, ipcMain, Menu, MenuItem, globalShortcut, shell } = require("electron");
 let { createProtocol } = require("vue-cli-plugin-electron-builder/lib");
 let fs = require("fs")
 let { setTimeout } = require("timers")
@@ -173,8 +173,14 @@ let createNote = (url) => {
                 menu.append(new MenuItem({ type: "separator" }));
               }
             }
-            if (p.editFlags.canCut || p.editFlags.canCopy || p.editFlags.canPaste) {
-              menu.append(new MenuItem({ role: "selectall" }));
+            if (pisEditable) {
+              if (p.editFlags.canCopy) {
+                menu.append(new MenuItem({ label: "Search With Google", click: () => { shell.openExternal(`https://www.google.com/search?q=${p.selectionText}`) } }));
+                menu.append(new MenuItem({ type: "separator" }));
+              }
+              if (p.editFlags.canSelectAll) {
+                menu.append(new MenuItem({ role: "selectall" }));
+              }
               if (p.editFlags.canCut) {
                 menu.append(new MenuItem({ role: "cut" }));
               }
