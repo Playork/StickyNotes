@@ -27,6 +27,12 @@
 
 ### Undo,Redo Options
 
+### Spellcheck
+
+### Profiles
+
+### Light And Dark Theme
+
 ### If you like my App please consider buying me a coffee at [HERE!](https://www.buymeacoffee.com/playork)
 
 # Stable Release
@@ -57,13 +63,13 @@ and install dependence by
 pnpm install
 ```
 
-after this start this application by this command
+to try application or develop run application by this command
 
 ```bash
 pnpm start
 ```
 
-build for production by this command
+for daily use or production build application by this command
 
 ```bash
 pnpm run build
