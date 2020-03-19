@@ -347,6 +347,7 @@ export default {
               e => {}
             );
           }
+          ipcRenderer.invoke("updatenote")
         };
         window.onbeforeunload = async e => {
           if (document.getElementById("color").style.pointerEvents != "none") {

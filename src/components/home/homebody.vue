@@ -36,6 +36,9 @@ SOFTWARE.
     <div id="notes"></div>
     <div>
       <div id="options">
+        <span v-on:click="hideall" title="Hide Or Show all Notes"
+          >&#xED35;</span
+        >
         <span id="deleteall" v-on:click="deleteall" title="Delete All Notes"
           >&#xE74D;</span
         >
@@ -650,6 +653,11 @@ export default {
           pass();
         }
       });
+    },
+
+    // Open Notes
+    hideall() {
+      ipcRenderer.invoke("hideall");
     },
 
     // Import Notes

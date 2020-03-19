@@ -211,6 +211,21 @@ ipcMain.on("create-new-instance", () => {
   })
 });
 
+ipcMain.handle("updatenote", () => {
+  win.webContents.send("updatenote")
+})
+
+ipcMain.handle("hideall", event => {
+  BrowserWindow.getAllWindows().forEach((b) => {
+    if (b.isVisible() && b.webContents != win.webContents) {
+      b.hide()
+    } else {
+      b.showInactive()
+    }
+  })
+})
+
+
 ipcMain.handle("reload", () => {
   win.reload()
 })

@@ -364,246 +364,241 @@ export default {
       }, 2000);
 
       // Load Saved Notes
-      window.setInterval(() => {
-        fs.readFile("data/" + profile + "/sign", e => {
+      let startfunc = () => {
+        fs.readFile("data/" + profile + "/.access", (e, d) => {
           if (e) {
+            document.getElementById("sign").innerHTML =
+              "Not Signed In(Not Syncing)";
+            document.getElementById("out").innerHTML = "";
+            document.getElementById("drb").innerHTML = "Sync With Dropbox";
           } else {
-            fs.readFile("data/" + profile + "/.access", (e, d) => {
-              if (e) {
-                document.getElementById("sign").innerHTML =
-                  "Not Signed In(Not Syncing)";
-                document.getElementById("out").innerHTML = "";
-                document.getElementById("drb").innerHTML = "Sync With Dropbox";
-              } else {
-                if (accesst != d.toString("utf8")) {
-                  accesst = d.toString("utf8");
-                  fs.readFile("data/" + profile + "/sync", (e, r) => {
-                    if (e) {
-                    } else {
-                      fs.writeFile(
-                        "data/" + profile + "/sync",
-                        JSON.stringify({ sync: "no" }),
-                        e => {}
-                      );
-                      let dbx = new Dropbox({ fetch, accessToken: accesst });
-                      dbx
-                        .filesGetTemporaryLink({
-                          path: "/Playork Sticky Notes/notes.spst"
-                        })
-                        .then(data => {
-                          let https = require("https");
-                          let file = fs.createWriteStream("notes.spst");
-                          let request = https.get(data.link, function(
-                            response
-                          ) {
-                            response.pipe(file);
-                            file.on("finish", function() {
-                              file.close();
-                            });
-                          });
-                          window.setTimeout(() => {
-                            fs.readFile("./notes.spst", "binary", (e, d) => {
-                              if (e) {
-                                console.log(e);
-                              } else {
-                                if (d != "") {
-                                  d = d.toString().split("\n");
-                                  for (let i = 0; i < d.length; i++) {
-                                    if (i % 2 == 0 && d[i] != "") {
-                                      let js = JSON.parse(d[i + 1]);
-                                      fs.readFile(
-                                        "data/" + profile + "/notes/" + d[i],
-                                        (e, r) => {
-                                          if (e) {
-                                            fs.writeFile(
-                                              "data/" +
-                                                profile +
-                                                "/notes/" +
-                                                d[i],
-                                              JSON.stringify(js),
-                                              e => {
-                                                console.log(e);
-                                              }
-                                            );
-                                          } else {
-                                            r = JSON.parse(r);
-                                            if (
-                                              js.first != r.first ||
-                                              js.image != r.image
-                                            ) {
-                                              let g = new Date().getTime();
-                                              let id = Number(d[i]) * g;
-                                              fs.writeFile(
-                                                "data/" +
-                                                  profile +
-                                                  "/notes/" +
-                                                  id.toString(),
-                                                JSON.stringify(js),
-                                                e => {}
-                                              );
-                                            }
+            if (accesst != d.toString("utf8")) {
+              accesst = d.toString("utf8");
+              fs.readFile("data/" + profile + "/sync", (e, r) => {
+                if (e) {
+                } else {
+                  fs.writeFile(
+                    "data/" + profile + "/sync",
+                    JSON.stringify({ sync: "no" }),
+                    e => {}
+                  );
+                  let dbx = new Dropbox({ fetch, accessToken: accesst });
+                  dbx
+                    .filesGetTemporaryLink({
+                      path: "/Playork Sticky Notes/notes.spst"
+                    })
+                    .then(data => {
+                      let https = require("https");
+                      let file = fs.createWriteStream("notes.spst");
+                      let request = https.get(data.link, function(response) {
+                        response.pipe(file);
+                        file.on("finish", function() {
+                          file.close();
+                        });
+                      });
+                      window.setTimeout(() => {
+                        fs.readFile("./notes.spst", "binary", (e, d) => {
+                          if (e) {
+                            console.log(e);
+                          } else {
+                            if (d != "") {
+                              d = d.toString().split("\n");
+                              for (let i = 0; i < d.length; i++) {
+                                if (i % 2 == 0 && d[i] != "") {
+                                  let js = JSON.parse(d[i + 1]);
+                                  fs.readFile(
+                                    "data/" + profile + "/notes/" + d[i],
+                                    (e, r) => {
+                                      if (e) {
+                                        fs.writeFile(
+                                          "data/" + profile + "/notes/" + d[i],
+                                          JSON.stringify(js),
+                                          e => {
+                                            console.log(e);
                                           }
+                                        );
+                                      } else {
+                                        r = JSON.parse(r);
+                                        if (
+                                          js.first != r.first ||
+                                          js.image != r.image
+                                        ) {
+                                          let g = new Date().getTime();
+                                          let id = Number(d[i]) * g;
+                                          fs.writeFile(
+                                            "data/" +
+                                              profile +
+                                              "/notes/" +
+                                              id.toString(),
+                                            JSON.stringify(js),
+                                            e => {}
+                                          );
                                         }
-                                      );
+                                      }
                                     }
-                                  }
+                                  );
                                 }
                               }
-                            });
-                          }, 2000);
-                        })
-                        .catch(e => {
-                          if (e) console.log(e);
-                        });
-                    }
-                  });
-                  document.getElementById("sign").innerHTML =
-                    "Signed In(Syncing)";
-                  document.getElementById("out").innerHTML = "Sign Out";
-                  document.getElementById("drb").innerHTML =
-                    "Change Sync Dropbox Account";
-                } else {
-                  document.getElementById("sign").innerHTML =
-                    "Signed In(Syncing)";
-                  document.getElementById("out").innerHTML = "Sign Out";
-                  document.getElementById("drb").innerHTML =
-                    "Change Sync Dropbox Account";
-                }
-              }
-            });
-            fs.readdir("data/" + profile + "/notes/", function(e, files) {
-              if (e) {
-                document.getElementById("notes").innerHTML = "";
-              } else {
-                document.getElementById("notes").innerHTML = "";
-                files.forEach(function(key, index) {
-                  try {
-                    fs.readFile("data/" + profile + "/notes/" + key, (e, d) => {
-                      if (e) {
-                      } else {
-                        let value = JSON.parse(d);
-                        let content;
-                        if (value.first == undefined) {
-                          content = `<img src="${value.image}" style="max-width:90%;"`;
-                        } else {
-                          content = value.first;
-                        }
-                        document
-                          .getElementById("notes")
-                          .insertAdjacentHTML(
-                            "afterbegin",
-                            `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span><div id="cont">${content}</div></div>`
-                          );
-                        if (document.getElementById("search").value != "") {
-                          let cont = document.getElementById("cont").innerHTML;
-                          let index = cont.indexOf(
-                            document.getElementById("search").value
-                          );
-                          if (index >= 0) {
-                            let highcontent =
-                              cont.substring(0, index) +
-                              "<span style='background-color: yellow;border-radius:10px;'>" +
-                              cont.substring(
-                                index,
-                                index +
-                                  document.getElementById("search").value.length
-                              ) +
-                              "</span>" +
-                              cont.substring(
-                                index +
-                                  document.getElementById("search").value.length
-                              );
-                            document.getElementById(
-                              "cont"
-                            ).innerHTML = highcontent;
-                          } else {
-                            document.getElementById("notetext").style.display =
-                              "none";
+                            }
                           }
-                        }
+                        });
+                      }, 2000);
+                    })
+                    .catch(e => {
+                      if (e) console.log(e);
+                    });
+                }
+              });
+              document.getElementById("sign").innerHTML = "Signed In(Syncing)";
+              document.getElementById("out").innerHTML = "Sign Out";
+              document.getElementById("drb").innerHTML =
+                "Change Sync Dropbox Account";
+            } else {
+              document.getElementById("sign").innerHTML = "Signed In(Syncing)";
+              document.getElementById("out").innerHTML = "Sign Out";
+              document.getElementById("drb").innerHTML =
+                "Change Sync Dropbox Account";
+            }
+          }
+        });
+        fs.readdir("data/" + profile + "/notes/", function(e, files) {
+          if (e) {
+            document.getElementById("notes").innerHTML = "";
+          } else {
+            document.getElementById("notes").innerHTML = "";
+            files.forEach(function(key, index) {
+              try {
+                fs.readFile("data/" + profile + "/notes/" + key, (e, d) => {
+                  if (e) {
+                  } else {
+                    let value = JSON.parse(d);
+                    let content;
+                    if (value.first == undefined) {
+                      content = `<img src="${value.image}" style="max-width:90%;"`;
+                    } else {
+                      content = value.first;
+                    }
+                    document
+                      .getElementById("notes")
+                      .insertAdjacentHTML(
+                        "afterbegin",
+                        `<div id="notetext"><span id="startnote" title="Start Note">&#xE710;</span><span id="deletenote" title="Delete Note">&#xE74D;</span><div id="cont">${content}</div></div>`
+                      );
+                    if (document.getElementById("search").value != "") {
+                      let cont = document.getElementById("cont").innerHTML;
+                      let index = cont.indexOf(
+                        document.getElementById("search").value
+                      );
+                      if (index >= 0) {
+                        let highcontent =
+                          cont.substring(0, index) +
+                          "<span style='background-color: yellow;border-radius:10px;'>" +
+                          cont.substring(
+                            index,
+                            index +
+                              document.getElementById("search").value.length
+                          ) +
+                          "</span>" +
+                          cont.substring(
+                            index +
+                              document.getElementById("search").value.length
+                          );
+                        document.getElementById("cont").innerHTML = highcontent;
+                      } else {
+                        document.getElementById("notetext").style.display =
+                          "none";
+                      }
+                    }
 
-                        if (value.closed == "yes") {
-                          document.getElementById("startnote").style.display =
-                            "inline";
-                        }
+                    if (value.closed == "yes") {
+                      document.getElementById("startnote").style.display =
+                        "inline";
+                    }
+                    if (value.closed == "no") {
+                      document.getElementById("startnote").style.display =
+                        "none";
+                    }
+                    if (value.locked == "yes") {
+                      document.getElementById(
+                        "deletenote"
+                      ).style.pointerEvents = "none";
+                      document.getElementById("deleteall").style.pointerEvents =
+                        "none";
+                    }
+                    if (value.locked == "no") {
+                      document.getElementById(
+                        "deletenote"
+                      ).style.pointerEvents = "auto";
+                      document.getElementById("deleteall").style.pointerEvents =
+                        "auto";
+                    }
+                    document.getElementById("startnote").onclick = () => {
+                      let id = new Date().getTime();
+                      fs.writeFile(
+                        "data/" + profile + "/id",
+                        JSON.stringify({ ids: key }),
+                        e => {}
+                      );
+                      ipcRenderer.send("create-new-instance");
+                      window.setTimeout(() => {
                         if (value.closed == "no") {
-                          document.getElementById("startnote").style.display =
-                            "none";
-                        }
-                        if (value.locked == "yes") {
-                          document.getElementById(
-                            "deletenote"
-                          ).style.pointerEvents = "none";
-                          document.getElementById(
-                            "deleteall"
-                          ).style.pointerEvents = "none";
-                        }
-                        if (value.locked == "no") {
-                          document.getElementById(
-                            "deletenote"
-                          ).style.pointerEvents = "auto";
-                          document.getElementById(
-                            "deleteall"
-                          ).style.pointerEvents = "auto";
-                        }
-                        document.getElementById("startnote").onclick = () => {
-                          let id = new Date().getTime();
                           fs.writeFile(
                             "data/" + profile + "/id",
-                            JSON.stringify({ ids: key }),
+                            JSON.stringify({ ids: id }),
                             e => {}
                           );
-                          ipcRenderer.send("create-new-instance");
-                          window.setTimeout(() => {
-                            if (value.closed == "no") {
-                              fs.writeFile(
-                                "data/" + profile + "/id",
-                                JSON.stringify({ ids: id }),
-                                e => {}
-                              );
-                            }
-                          }, 500);
-                        };
-                        document.getElementById("deletenote").onclick = () => {
-                          let swal = require("sweetalert");
-                          swal({
-                            title: "Are you sure?",
-                            text: "Want To Delete Your Note!",
-                            icon: "warning",
-                            buttons: true,
-                            dangerMode: true
-                          }).then(willDelete => {
-                            if (willDelete) {
-                              if (value.closed == "no") {
-                                fs.writeFile(
-                                  "data/" + profile + "/notes/" + key,
-                                  JSON.stringify({ deleted: "yes" }),
-                                  e => {}
-                                );
-                              }
-                              if (value.closed == "yes") {
-                                fs.unlink(
-                                  "data/" + profile + "/notes/" + key,
-                                  e => {}
-                                );
-                              }
-                            }
-                          });
-                        };
-                        document.getElementById(
-                          "notetext"
-                        ).style.backgroundColor = value.back;
-                        document.getElementById("notetext").style.border =
-                          "5px solid " + value.title;
-                      }
-                    });
-                  } catch {}
+                        }
+                      }, 500);
+                    };
+                    document.getElementById("deletenote").onclick = () => {
+                      let swal = require("sweetalert");
+                      swal({
+                        title: "Are you sure?",
+                        text: "Want To Delete Your Note!",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true
+                      }).then(willDelete => {
+                        if (willDelete) {
+                          if (value.closed == "no") {
+                            fs.writeFile(
+                              "data/" + profile + "/notes/" + key,
+                              JSON.stringify({ deleted: "yes" }),
+                              e => {}
+                            );
+                          }
+                          if (value.closed == "yes") {
+                            fs.unlink(
+                              "data/" + profile + "/notes/" + key,
+                              e => {}
+                            );
+                          }
+                        }
+                      });
+                    };
+                    document.getElementById("notetext").style.backgroundColor =
+                      value.back;
+                    document.getElementById("notetext").style.border =
+                      "5px solid " + value.title;
+                  }
                 });
-              }
+              } catch {}
             });
           }
         });
+      };
+      let intr = window.setInterval(e => {
+        fs.readFile("data/" + profile + "/sign", e => {
+          if (e) {
+          } else {
+            startfunc();
+            clearInterval(intr);
+          }
+        });
       }, 2000);
+      ipcRenderer.on("updatenote", () => {
+        startfunc();
+      });
     }, 1000);
   },
 

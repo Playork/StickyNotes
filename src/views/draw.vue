@@ -329,6 +329,7 @@ export default {
             }),
             e => {}
           );
+          ipcRenderer.invoke("updatenote");
         };
         window.onbeforeunload = async e => {
           e.returnValue = true;
