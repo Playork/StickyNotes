@@ -80,7 +80,7 @@ app.on("ready", () => {
 
 app.commandLine.appendSwitch("disable-web-security");
 let winnote;
-let createNote = (url) => {
+let createNote = (url, id) => {
   let spell;
   let spelllang;
   fs.readFile("data/spell", (e, d) => {
@@ -123,14 +123,19 @@ let createNote = (url) => {
       }
       winnote.on("ready-to-show", () => {
         setTimeout(() => {
+          winnote.webContents.send("restorenote", id)
           winnote.show();
           winnote.focus();
+          win.webContents.send("updatenote")
         }, 500)
       });
       winnote.setMinimumSize(300, 325);
       winnote.on("close", () => {
         win.webContents.send("closenote", "closeit");
       });
+      winnote.on("closed", () => {
+        win.webContents.send("updatenote")
+      })
       winnote.webContents.on(
         "context-menu",
         (e, p) => {
@@ -205,12 +210,12 @@ let createNote = (url) => {
   start()
 }
 
-ipcMain.on("create-new-instance", () => {
+ipcMain.on("create-new-instance", (e, id) => {
   fs.readFile("data/note", (e, d) => {
     if (d == "draw") {
-      createNote("draw");
+      createNote("draw", id);
     } else {
-      createNote("type")
+      createNote("type", id)
     }
   })
 });

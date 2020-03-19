@@ -218,32 +218,30 @@ export default {
       });
 
       // Restore Saved Note
-      fs.readFile("data/" + profile + "/id", (e, d) => {
-        if (e) {
-        } else {
-          fs.readFile(
-            "data/" + profile + "/notes/" + JSON.parse(d).ids,
-            (e, r) => {
-              if (e) {
-                window.resizeTo(300, 325);
-                document.querySelector(".ql-toolbar").style.backgroundColor =
-                  "#FFF2AB";
-              } else {
-                let text = JSON.parse(r);
-                document.querySelector(".ql-snow .ql-editor").innerHTML =
-                  text.first;
-                document.querySelector(".ql-toolbar").style.backgroundColor =
-                  text.back;
-                window.resizeTo(Number(text.wid), Number(text.hei));
-                document.getElementById("lightYellow").style.backgroundColor =
-                  text.back;
-                document.getElementById("titlebar").style.backgroundColor =
-                  text.title;
-              }
+      ipcRenderer.on("restorenote", (e, id) => {
+        if (id != "") {
+          fs.readFile("data/" + profile + "/notes/" + id, (e, r) => {
+            if (e) {
+              window.resizeTo(300, 325);
+              document.querySelector(".ql-toolbar").style.backgroundColor =
+                "#FFF2AB";
+            } else {
+              let text = JSON.parse(r);
+              document.querySelector(".ql-snow .ql-editor").innerHTML =
+                text.first;
+              document.querySelector(".ql-toolbar").style.backgroundColor =
+                text.back;
+              window.resizeTo(Number(text.wid), Number(text.hei));
+              document.getElementById("lightYellow").style.backgroundColor =
+                text.back;
+              document.getElementById("titlebar").style.backgroundColor =
+                text.title;
             }
-          );
+          });
         }
       });
+
+      // Import Note
       let importnote = async () => {
         let note = await ipcRenderer.invoke("importnote");
         if (note) {
@@ -347,7 +345,7 @@ export default {
               e => {}
             );
           }
-          ipcRenderer.invoke("updatenote")
+          ipcRenderer.invoke("updatenote");
         };
         window.onbeforeunload = async e => {
           if (document.getElementById("color").style.pointerEvents != "none") {
@@ -818,7 +816,7 @@ export default {
             func(id);
           }
         });
-        ipcRenderer.send("create-new-instance");
+        ipcRenderer.send("create-new-instance", "");
       });
     },
 

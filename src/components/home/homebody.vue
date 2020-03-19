@@ -788,6 +788,9 @@ export default {
                             }
                           );
                         });
+                        window.setTimeout(() => {
+                          ipcRenderer.invoke("updatenote");
+                        }, 500);
                       }
                     });
                   }, 800);

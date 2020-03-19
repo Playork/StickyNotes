@@ -201,34 +201,29 @@ export default {
       });
 
       // Restore Saved Note
-      fs.readFile("data/" + profile + "/id", (e, d) => {
-        if (e) {
-        } else {
-          fs.readFile(
-            "data/" + profile + "/notes/" + JSON.parse(d).ids,
-            (e, r) => {
-              if (e) {
-                window.resizeTo(300, 325);
-              } else {
-                let text = JSON.parse(r);
-                canvas.setBackgroundImage(
-                  text.image,
-                  canvas.renderAll.bind(canvas),
-                  {
-                    originX: "left",
-                    originY: "top"
-                  }
-                );
-                window.resizeTo(Number(text.wid), Number(text.hei));
-                document.getElementById("backc").style.backgroundColor =
-                  text.back;
-                document.getElementById("titlebar").style.backgroundColor =
-                  text.title;
+      ipcRenderer.on("restorenote", (e, id) => {
+        fs.readFile("data/" + profile + "/notes/" + id, (e, r) => {
+          if (e) {
+            window.resizeTo(300, 325);
+          } else {
+            let text = JSON.parse(r);
+            canvas.setBackgroundImage(
+              text.image,
+              canvas.renderAll.bind(canvas),
+              {
+                originX: "left",
+                originY: "top"
               }
-            }
-          );
-        }
+            );
+            window.resizeTo(Number(text.wid), Number(text.hei));
+            document.getElementById("backc").style.backgroundColor = text.back;
+            document.getElementById("titlebar").style.backgroundColor =
+              text.title;
+          }
+        });
       });
+
+      // Import Note
       let importnote = async () => {
         let note = await ipcRenderer.invoke("importnote");
         if (note) {
@@ -480,7 +475,7 @@ export default {
             func(id);
           }
         });
-        ipcRenderer.send("create-new-instance");
+        ipcRenderer.send("create-new-instance", "");
       });
     },
 

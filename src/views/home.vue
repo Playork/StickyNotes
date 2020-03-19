@@ -533,22 +533,7 @@ export default {
                         "auto";
                     }
                     document.getElementById("startnote").onclick = () => {
-                      let id = new Date().getTime();
-                      fs.writeFile(
-                        "data/" + profile + "/id",
-                        JSON.stringify({ ids: key }),
-                        e => {}
-                      );
-                      ipcRenderer.send("create-new-instance");
-                      window.setTimeout(() => {
-                        if (value.closed == "no") {
-                          fs.writeFile(
-                            "data/" + profile + "/id",
-                            JSON.stringify({ ids: id }),
-                            e => {}
-                          );
-                        }
-                      }, 500);
+                      ipcRenderer.send("create-new-instance", key);
                     };
                     document.getElementById("deletenote").onclick = () => {
                       let swal = require("sweetalert");
@@ -566,6 +551,9 @@ export default {
                               JSON.stringify({ deleted: "yes" }),
                               e => {}
                             );
+                            window.setTimeout(() => {
+                              ipcRenderer.invoke("updatenote");
+                            }, 500);
                           }
                           if (value.closed == "yes") {
                             fs.unlink(
@@ -661,7 +649,7 @@ export default {
             func(id);
           }
         });
-        ipcRenderer.send("create-new-instance");
+        ipcRenderer.send("create-new-instance", "");
       });
     },
 
