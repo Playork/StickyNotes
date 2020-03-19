@@ -367,10 +367,10 @@ export default {
                       ipcRenderer.invoke("destroy");
                     }
                   );
+                  ipcRenderer.invoke("updatenote");
                 }
               }
             );
-            ipcRenderer.invoke("updatenote");
           } else {
             e.preventDefault();
             let swal = require("sweetalert");
