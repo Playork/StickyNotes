@@ -402,6 +402,7 @@ export default {
                 }
               }
             );
+            ipcRenderer.invoke("updatenote");
           } else {
             e.preventDefault();
             let swal = require("sweetalert");

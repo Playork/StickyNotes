@@ -133,9 +133,6 @@ let createNote = (url, id) => {
       winnote.on("close", () => {
         win.webContents.send("closenote", "closeit");
       });
-      winnote.on("closed", () => {
-        win.webContents.send("updatenote")
-      })
       winnote.webContents.on(
         "context-menu",
         (e, p) => {
