@@ -49,8 +49,10 @@ let createWindow = () => {
     win.loadURL("app://./index.html#home");
   }
   win.on("ready-to-show", () => {
-    win.show();
-    win.focus();
+    setTimeout(() => {
+      win.show();
+      win.focus();
+    }, 500)
   });
   win.on("close", e => {
     e.preventDefault();
@@ -120,8 +122,10 @@ let createNote = (url) => {
         winnote.loadURL(`app://./index.html#${url}`);
       }
       winnote.on("ready-to-show", () => {
-        winnote.show();
-        winnote.focus();
+        setTimeout(() => {
+          winnote.show();
+          winnote.focus();
+        }, 500)
       });
       winnote.setMinimumSize(300, 325);
       winnote.on("close", () => {
@@ -217,7 +221,7 @@ ipcMain.handle("updatenote", () => {
 
 ipcMain.handle("hideall", event => {
   BrowserWindow.getAllWindows().forEach((b) => {
-    if (b.isVisible() && b.webContents != win.webContents) {
+    if (b.isVisible() && b.webContents.id != win.webContents.id) {
       b.hide()
     } else {
       b.showInactive()
@@ -232,7 +236,7 @@ ipcMain.handle("reload", () => {
 
 ipcMain.handle("lock", event => {
   BrowserWindow.getAllWindows().forEach((b) => {
-    if (b.webContents == event.sender.webContents) {
+    if (b.webContents.id == event.sender.webContents.id) {
       b.webContents.send("lock")
     }
   })
@@ -240,7 +244,7 @@ ipcMain.handle("lock", event => {
 
 ipcMain.handle("close", event => {
   BrowserWindow.getAllWindows().forEach((b) => {
-    if (b.webContents == event.sender.webContents) {
+    if (b.webContents.id == event.sender.webContents.id) {
       b.close()
     }
   })
@@ -248,7 +252,7 @@ ipcMain.handle("close", event => {
 
 ipcMain.handle("minimize", event => {
   BrowserWindow.getAllWindows().forEach((b) => {
-    if (b.webContents == event.sender.webContents) {
+    if (b.webContents.id == event.sender.webContents.id) {
       b.minimize()
     }
   })
@@ -256,7 +260,7 @@ ipcMain.handle("minimize", event => {
 
 ipcMain.handle("destroy", event => {
   BrowserWindow.getAllWindows().forEach((b) => {
-    if (b.webContents == event.sender.webContents) {
+    if (b.webContents.id == event.sender.webContents.id) {
       b.destroy()
     }
   })
@@ -264,7 +268,7 @@ ipcMain.handle("destroy", event => {
 
 ipcMain.handle("setMaximumSize", (event, a, c) => {
   BrowserWindow.getAllWindows().forEach((b) => {
-    if (b.webContents == event.sender.webContents) {
+    if (b.webContents.id == event.sender.webContents.id) {
       b.setMaximumSize(a, c)
     }
   })
