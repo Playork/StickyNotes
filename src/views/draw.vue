@@ -200,29 +200,6 @@ export default {
         );
       });
 
-      // Restore Saved Note
-      ipcRenderer.on("restorenote", (e, id) => {
-        fs.readFile("data/" + profile + "/notes/" + id, (e, r) => {
-          if (e) {
-            window.resizeTo(300, 325);
-          } else {
-            let text = JSON.parse(r);
-            canvas.setBackgroundImage(
-              text.image,
-              canvas.renderAll.bind(canvas),
-              {
-                originX: "left",
-                originY: "top"
-              }
-            );
-            window.resizeTo(Number(text.wid), Number(text.hei));
-            document.getElementById("backc").style.backgroundColor = text.back;
-            document.getElementById("titlebar").style.backgroundColor =
-              text.title;
-          }
-        });
-      });
-
       // Import Note
       let importnote = async () => {
         let note = await ipcRenderer.invoke("importnote");
@@ -442,13 +419,40 @@ export default {
           .getElementById("note")
           .addEventListener("touchleave", () => repeafunc(), false);
       };
-      fs.readFile("data/" + profile + "/id", (e, d) => {
-        if (e) {
-          let id = 1;
-          func(id);
+
+      // Restore Saved Note
+      ipcRenderer.on("restorenote", (e, id) => {
+        if (id != "") {
+          fs.readFile("data/" + profile + "/notes/" + id, (e, r) => {
+            if (e) {
+              window.resizeTo(300, 325);
+            } else {
+              let text = JSON.parse(r);
+              canvas.setBackgroundImage(
+                text.image,
+                canvas.renderAll.bind(canvas),
+                {
+                  originX: "left",
+                  originY: "top"
+                }
+              );
+              window.resizeTo(Number(text.wid), Number(text.hei));
+              document.getElementById("backc").style.backgroundColor =
+                text.back;
+              document.getElementById("titlebar").style.backgroundColor =
+                text.title;
+            }
+          });
         } else {
-          let id = Number(JSON.parse(d).ids);
-          func(id);
+          fs.readFile("data/" + profile + "/id", (e, d) => {
+            if (e) {
+              let idd = 1;
+              func(idd);
+            } else {
+              let idd = Number(JSON.parse(d).ids);
+              func(idd);
+            }
+          });
         }
       });
     });

@@ -551,9 +551,6 @@ export default {
                               JSON.stringify({ deleted: "yes" }),
                               e => {}
                             );
-                            window.setTimeout(() => {
-                              ipcRenderer.invoke("updatenote");
-                            }, 500);
                           }
                           if (value.closed == "yes") {
                             fs.unlink(
@@ -561,6 +558,7 @@ export default {
                               e => {}
                             );
                           }
+                          ipcRenderer.invoke("updatenote");
                         }
                       });
                     };

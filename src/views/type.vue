@@ -217,30 +217,6 @@ export default {
         }
       });
 
-      // Restore Saved Note
-      ipcRenderer.on("restorenote", (e, id) => {
-        if (id != "") {
-          fs.readFile("data/" + profile + "/notes/" + id, (e, r) => {
-            if (e) {
-              window.resizeTo(300, 325);
-              document.querySelector(".ql-toolbar").style.backgroundColor =
-                "#FFF2AB";
-            } else {
-              let text = JSON.parse(r);
-              document.querySelector(".ql-snow .ql-editor").innerHTML =
-                text.first;
-              document.querySelector(".ql-toolbar").style.backgroundColor =
-                text.back;
-              window.resizeTo(Number(text.wid), Number(text.hei));
-              document.getElementById("lightYellow").style.backgroundColor =
-                text.back;
-              document.getElementById("titlebar").style.backgroundColor =
-                text.title;
-            }
-          });
-        }
-      });
-
       // Import Note
       let importnote = async () => {
         let note = await ipcRenderer.invoke("importnote");
@@ -444,15 +420,42 @@ export default {
         window.addEventListener("resize", () => repeafunc());
         ipcRenderer.on("lock", () => repeafunc());
       };
-      fs.readFile("data/" + profile + "/id", (e, d) => {
-        if (e) {
-          let id = 1;
+
+      // Restore Saved Note
+      ipcRenderer.on("restorenote", (e, id) => {
+        if (id != "") {
+          fs.readFile("data/" + profile + "/notes/" + id, (e, r) => {
+            if (e) {
+              window.resizeTo(300, 325);
+              document.querySelector(".ql-toolbar").style.backgroundColor =
+                "#FFF2AB";
+            } else {
+              let text = JSON.parse(r);
+              document.querySelector(".ql-snow .ql-editor").innerHTML =
+                text.first;
+              document.querySelector(".ql-toolbar").style.backgroundColor =
+                text.back;
+              window.resizeTo(Number(text.wid), Number(text.hei));
+              document.getElementById("lightYellow").style.backgroundColor =
+                text.back;
+              document.getElementById("titlebar").style.backgroundColor =
+                text.title;
+            }
+          });
           func(id);
         } else {
-          let id = Number(JSON.parse(d).ids);
-          func(id);
+          fs.readFile("data/" + profile + "/id", (e, d) => {
+            if (e) {
+              let idd = 1;
+              func(idd);
+            } else {
+              let idd = Number(JSON.parse(d).ids);
+              func(idd);
+            }
+          });
         }
       });
+
       let links = [];
       let mails = [];
       window.setTimeout(() => {
