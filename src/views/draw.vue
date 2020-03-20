@@ -267,7 +267,7 @@ export default {
             });
           }
         });
-
+        let time = new Date().getTime();
         let repeafunc = () => {
           let url = document.querySelector(".lower-canvas").toDataURL();
           let color1 = window
@@ -301,7 +301,12 @@ export default {
             }),
             e => {}
           );
-          ipcRenderer.invoke("updatenote");
+          let times = time + 2000;
+          let newtime = new Date().getTime();
+          if (times < newtime) {
+            ipcRenderer.invoke("updatenote");
+            time = newtime;
+          }
         };
         window.onbeforeunload = async e => {
           if (document.getElementById("color").style.pointerEvents != "none") {
@@ -341,10 +346,10 @@ export default {
                       locked: lock
                     }),
                     e => {
+                      ipcRenderer.invoke("updatenote");
                       ipcRenderer.invoke("destroy");
                     }
                   );
-                  ipcRenderer.invoke("updatenote");
                 }
               }
             );
@@ -387,9 +392,6 @@ export default {
         ipcRenderer.on("lock", () => repeafunc());
         document
           .getElementById("note")
-          .addEventListener("mousemove", () => repeafunc(), false);
-        document
-          .getElementById("note")
           .addEventListener("mouseup", () => repeafunc());
         document
           .getElementById("note")
@@ -399,16 +401,10 @@ export default {
           .addEventListener("mouseenter", () => repeafunc(), false);
         document
           .getElementById("note")
-          .addEventListener("mousedown", () => repeafunc(), false);
-        document
-          .getElementById("note")
           .addEventListener("mouseout", () => repeafunc(), false);
         document
           .getElementById("note")
           .addEventListener("touchstart", () => repeafunc(), false);
-        document
-          .getElementById("note")
-          .addEventListener("touchmove", () => repeafunc(), false);
         document
           .getElementById("note")
           .addEventListener("touchend", () => repeafunc(), false);
